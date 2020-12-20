@@ -1,6 +1,97 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.1.3',
+        'released' => '2020-12-17',
+        'changes'  => array(
+            array(
+                'title'       => 'Added Tax/Discount for Vendor Subscriptions [WireCard]',
+                'type'        => 'Improvement',
+                'description' => 'Added tax/discount for Vendor Subscriptions, previously only actual product price was sent to API.',
+            ),
+            array(
+                'title'       => 'Added a New Exception if Vendor Account [WireCard]',
+                'type'        => 'Improvement',
+                'description' => 'Added a new exception if vendor account is not linked with wire card, now the user will get proper error messages instead of Something went wrong.',
+            ),
+            array(
+                'title'       => 'Refund and Announcement Page Loading Problem [Dokan Admin]',
+                'type'        => 'Fix',
+                'description' => 'Refund and announcement listing loading problem and text-domain issue fixed.',
+            ),
+            array(
+                'title'       => 'Booking Addon Options are Missing [Dokan Booking]',
+                'type'        => 'Fix',
+                'description' => 'Booking addon options are missing on the Booking type product edit panel.',
+            ),
+            array(
+                'title'       => 'Variable Product Image Upload Issue with Yoast SEO [Vendor Product SEO]',
+                'type'        => 'Fix',
+                'description' => 'Variable product image upload when yoast seo plugin is active.',
+            ),
+            array(
+                'title'       => 'Added Tax Fields for Vendor Subscription [Vendor Subscription Product]',
+                'type'        => 'Fix',
+                'description' => 'Added tax fields for vendor subscription type product.',
+            ),
+            array(
+                'title'       => 'Booking Simple Product to Virtual Product [Dokan Booking]',
+                'type'        => 'Fix',
+                'description' => 'Booking simple product changes to virtual product when create a booking product from vendor area.',
+            ),
+            array(
+                'title'       => 'Stripe Recurring Issue With 3ds [Dokan Stripe]',
+                'type'        => 'Fix',
+                'description' => 'Fixed Dokan Stripe 3ds recurring issue with vendor subscription products.',
+            ),
+            array(
+                'title'       => 'Dokan Order Discount Mismatch When Recalculate',
+                'type'        => 'Fix',
+                'description' => 'Dokan order discount mismatch when recalculate from admin panel order details page.',
+            ),
+            array(
+                'title'       => 'Fixed Cart Coupon Option Disabled Multi Vendors',
+                'type'        => 'Fix',
+                'description' => 'Fixed cart coupon option disabled for multi vendors, it will be work only when single seller mode enabled form dokan settings.',
+            ),
+            array(
+                'title'       => 'Added Some New Exceptions to Display Formatted [WireCard]',
+                'type'        => 'Fix',
+                'description' => 'Added some new exceptions to display formatted errors to users.',
+            ),
+            array(
+                'title'       => 'Fixed Product Pack End Date for Vendor Subscription [WireCard]',
+                'type'        => 'Fix',
+                'description' => 'Fixed product pack end date for vendor subscription, previously this was causing subscription to get canceled automatically before subscriptions actual end date.',
+            ),
+            array(
+                'title'       => 'Fixed Decimal Issues on Product Price [WireCard]',
+                'type'        => 'Fix',
+                'description' => 'Fixed decimal issues on product price, this was causing API error due to mismatch order total.',
+            ),
+            array(
+                'title'       => 'Removed rmccue/requests Library From Vendor Folder [WireCard]',
+                'type'        => 'Fix',
+                'description' => 'Removed rmccue/requests library from vendor folder, WordPress already has this library preinstalled. This was causing a fatal error on some installations.',
+            ),
+            array(
+                'title'       => 'Fixed Limit Your Zone Selected by Default [Dokan Vendor Shipping]',
+                'type'        => 'Fix',
+                'description' => 'Limit your zone selected by default when zone created with a country.',
+            ),
+            array(
+                'title'       => 'Vendor Verification Upload Documents Folder Disallow',
+                'type'        => 'Fix',
+                'description' => 'Disallow direct access vendor verification uploaded documents folder.',
+            ),
+            array(
+                'title'       => 'Fixed Dokan Stripe Resource Missing API',
+                'type'        => 'Fix',
+                'description' => 'Fixed Dokan Stripe resource missing api error for empty source provided via api call.',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.1.2',
         'released' => '2020-12-01',
         'changes'  => array(
