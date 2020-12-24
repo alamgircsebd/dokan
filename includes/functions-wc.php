@@ -213,12 +213,7 @@ function dokan_save_variations( $post_id ) {
             }
 
             // Remove old taxonomies attributes so data is kept up to date - first get attribute key names
-            $delete_attribute_keys = $wpdb->get_col(
-                $wpdb->prepare(
-                    "SELECT meta_key FROM {$wpdb->postmeta} WHERE meta_key LIKE %s AND meta_key NOT IN ( '%s' ) AND post_id = %d;",
-                    'attribute_%%', implode( "','", $updated_attribute_keys ), $variation_id
-                )
-            );
+            $delete_attribute_keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$wpdb->postmeta} WHERE meta_key LIKE 'attribute_%%' AND meta_key NOT IN ( '" . implode( "','", $updated_attribute_keys ) . "' ) AND post_id = %d;", $variation_id ) ); //phpcs:ignore
 
             foreach ( $delete_attribute_keys as $key ) {
                 delete_post_meta( $variation_id, $key );
