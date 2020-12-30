@@ -292,6 +292,7 @@ class StripeConnect extends StripePaymentGateway {
             $this->unlock_order_payment( $renewal_order );
         } catch ( Exception $e ) {
             do_action( 'wc_gateway_stripe_process_payment_error', $e, $renewal_order );
+            dokan_log( 'caught exception on process_subscription_payment: ' . $e->getMessage() );
 
             /* translators: error message */
             $renewal_order->update_status( 'failed' );
@@ -595,7 +596,6 @@ class StripeConnect extends StripePaymentGateway {
         );
 
         $request = [
-            'source'               => $prepared_source->source,
             'amount'               => $amount ? Helper::get_stripe_amount( $amount ) : Helper::get_stripe_amount( $order->get_total() ),
             'currency'             => strtolower( $order->get_currency() ),
             'description'          => $description,
@@ -609,6 +609,10 @@ class StripeConnect extends StripePaymentGateway {
 
         if ( $prepared_source->customer ) {
             $request['customer'] = $prepared_source->customer;
+        }
+
+        if ( ! empty( $prepared_source->source ) ) {
+            $request['source'] = $prepared_source->source;
         }
 
         try {
