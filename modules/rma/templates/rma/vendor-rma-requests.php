@@ -5,8 +5,6 @@
  *  Load order related template
  *
  *  @since 2.4
- *
- *  @package dokan
  */
 ?>
 
@@ -46,12 +44,12 @@
             <article class="dokan-rma-request-area">
                 <?php  dokan_warranty_request_listing_status_filter(); ?>
 
-                <table class="table table-striped rma-request-listing-table">
+                <table class="dokan-table table table-striped rma-request-listing-table">
                     <thead>
                         <tr>
-                            <th><?php _e( 'Details', 'dokan' ) ?></th>
-                            <th><?php _e( 'Products', 'dokan' ) ?></th>
-                            <th><?php _e( 'Type', 'dokan' ) ?></th>
+                            <th><?php _e( 'Details', 'dokan' ); ?></th>
+                            <th><?php _e( 'Products', 'dokan' ); ?></th>
+                            <th><?php _e( 'Type', 'dokan' ); ?></th>
                             <th><?php _e( 'Status', 'dokan' ); ?></th>
                             <th><?php _e( 'Last Updated', 'dokan' ); ?></th>
                             <th></th>
@@ -59,13 +57,13 @@
                     </thead>
 
                     <tbody>
-                        <?php if ( $requests ): ?>
-                            <?php foreach ( $requests as $request ): ?>
+                        <?php if ( $requests ) { ?>
+                            <?php foreach ( $requests as $request ) { ?>
                                 <tr>
-                                    <td class="details">
+                                    <td class="details column-primary">
                                         <?php
                                         if ( current_user_can( 'dokan_view_order' ) ) {
-                                            $order_link = '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $request['order_id'] ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $request['order_id'] ) ) . '</strong></a>';
+                                            $order_link = '<a href="' . wp_nonce_url( add_query_arg( [ 'order_id' => $request['order_id'] ], dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $request['order_id'] ) ) . '</strong></a>';
                                         } else {
                                             $order_link = '<strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $request['order_id'] ) ) . '</strong>';
                                         }
@@ -78,14 +76,16 @@
                                                 <a href="<?php echo add_query_arg( [ 'request' => $request['id'] ], dokan_get_navigation_url( 'return-request' ) ); ?>" class="request-manage"><?php _e( 'Manage', 'dokan' ); ?></a>
                                             </span> |
                                             <span class="delete">
-                                                <a href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-delete-rma-request', 'request_id' => $request['id'] ), dokan_get_navigation_url('return-request') ), 'dokan-delete-rma-request' ); ?>" class="request-delete"><?php _e( 'Delete', 'dokan' ); ?></a>
+                                                <a href="<?php echo wp_nonce_url( add_query_arg( [ 'action' => 'dokan-delete-rma-request', 'request_id' => $request['id'] ], dokan_get_navigation_url( 'return-request' ) ), 'dokan-delete-rma-request' ); ?>" class="request-delete"><?php _e( 'Delete', 'dokan' ); ?></a>
                                             </span>
                                         </div>
 
+                                        <button type="button" class="toggle-row"></button>
                                     </td>
-                                    <td>
+                                    <td data-title="<?php _e( 'Products', 'dokan' ); ?>">
                                         <?php
                                             $product_list = [];
+
                                             foreach ( $request['items'] as $item ) {
                                                 $product_list[] = '<a href="' . $item['url'] . '">' . $item['title'] . '</a> <strong>x ' . $item['quantity'] . '</strong>';
                                             }
@@ -93,27 +93,27 @@
                                             echo implode( ', ', $product_list );
                                         ?>
                                     </td>
-                                    <td>
+                                    <td data-title="<?php _e( 'Type', 'dokan' ); ?>">
                                         <?php echo dokan_warranty_request_type( $request['type'] ); ?>
                                     </td>
-                                    <td>
+                                    <td data-title="<?php _e( 'Status', 'dokan' ); ?>">
                                         <?php echo dokan_warranty_request_status( $request['status'] ); ?>
                                     </td>
-                                    <td>
+                                    <td data-title="<?php _e( 'Last Updated', 'dokan' ); ?>">
                                         <?php echo date_i18n( get_option( 'date_format' ), strtotime( $request['created_at'] ) ); ?>
                                     </td>
-                                    <td>
+                                    <td data-title="<?php _e( 'View', 'dokan' ); ?>">
                                         <a class="dokan-btn dokan-btn-default dokan-btn-sm tips" href="<?php echo add_query_arg( [ 'request' => $request['id'] ], dokan_get_navigation_url( 'return-request' ) ); ?>" data-toggle="tooltip" title="<?php _e( 'View', 'dokan' ); ?>" data-placement="top" title="%s"><i class="fa fa-eye">&nbsp;</i></a>
                                     </td>
                                 </tr>
-                            <?php endforeach ?>
-                        <?php else: ?>
+                            <?php } ?>
+                        <?php } else { ?>
                             <tr>
                                 <td colspan="6">
                                     <?php _e( 'No request found', 'dokan' ); ?>
                                 </td>
                             </tr>
-                        <?php endif ?>
+                        <?php } ?>
 
                     </tbody>
                 </table>

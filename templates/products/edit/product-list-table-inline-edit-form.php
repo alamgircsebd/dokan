@@ -20,11 +20,11 @@
                     </label>
 
                     <select multiple="multiple" data-field-name="product_tag" id="product_tag_search" class="product_tag_search product_tags dokan-form-control dokan-select2" data-placeholder="<?php esc_attr_e( 'Select tags', 'dokan-lite' ); ?>">
-                        <?php if ( ! empty( $product_tag ) ) : ?>
-                            <?php foreach ( $product_tag as $tax_term ) : ?>
+                        <?php if ( ! empty( $product_tag ) ) { ?>
+                            <?php foreach ( $product_tag as $tax_term ) { ?>
                                 <option value="<?php echo esc_attr( $tax_term->term_id ); ?>" selected="selected" ><?php echo esc_html( $tax_term->name ); ?></option>
-                            <?php endforeach ?>
-                        <?php endif ?>
+                            <?php } ?>
+                        <?php } ?>
                     </select>
 
                     <label>
@@ -35,27 +35,27 @@
                     <label>
                         <?php esc_html_e( 'Status', 'dokan' ); ?> &nbsp;
 
-                        <?php if ( 'pending' === $post_status ) : ?>
+                        <?php if ( 'pending' === $post_status ) { ?>
                             <span class="dokan-label dokan-label-danger">
                                 <?php esc_html_e( 'Pending Review', 'dokan' ); ?>
                                 <input type="hidden" data-field-name="post_status" value="<?php echo esc_attr( 'pending' ); ?>">
                             </span>
-                        <?php else: ?>
+                        <?php } else { ?>
                             <select data-field-name="post_status" style="min-width: 100px;">
-                                <?php foreach ( $options['post_statuses'] as $post_status_slug => $post_status_label ): ?>
+                                <?php foreach ( $options['post_statuses'] as $post_status_slug => $post_status_label ) { ?>
                                     <option value="<?php echo esc_attr( $post_status_slug ); ?>"<?php selected( $post_status, $post_status_slug ); ?>>
                                         <?php echo esc_html( $post_status_label ); ?>
                                     </option>
-                                <?php endforeach; ?>
+                                <?php } ?>
                             </select>
-                        <?php endif; ?>
+                        <?php } ?>
                     </label>
 
                     <hr>
 
                     <strong class="dokan-inline-edit-section-title"><?php esc_html_e( 'Product Data', 'dokan' ); ?></strong>
 
-                    <?php if ( $options['is_sku_enabled'] ): ?>
+                    <?php if ( $options['is_sku_enabled'] ) { ?>
                         <div class="dokan-inline-edit-field-row dokan-clearfix">
                             <label class="dokan-w3">
                                 <?php esc_html_e( 'SKU', 'dokan' ); ?>
@@ -64,9 +64,9 @@
                                 <input type="text" class="dokan-form-control" data-field-name="sku" value="<?php echo esc_html( $sku ); ?>">
                             </div>
                         </div>
-                    <?php endif; ?>
+                    <?php } ?>
 
-                    <?php if ( 'simple' === $product_type ): ?>
+                    <?php if ( 'simple' === $product_type ) { ?>
                         <div class="dokan-inline-edit-field-row dokan-clearfix">
                             <label class="dokan-w3">
                                 <?php esc_html_e( 'Price', 'dokan' ); ?>
@@ -84,9 +84,9 @@
                                 <input type="text" class="dokan-form-control" data-field-name="_sale_price" value="<?php echo esc_html( $_sale_price ); ?>">
                             </div>
                         </div>
-                    <?php endif; ?>
+                    <?php } ?>
 
-                    <?php if ( $options['is_weight_enabled'] ): ?>
+                    <?php if ( $options['is_weight_enabled'] ) { ?>
                         <div class="dokan-inline-edit-field-row dokan-clearfix">
                             <label class="dokan-w3">
                                 <?php esc_html_e( 'Weight', 'dokan' ); ?>
@@ -95,9 +95,9 @@
                                 <input type="text" class="dokan-form-control" data-field-name="weight" value="<?php echo esc_html( $weight ); ?>">
                             </div>
                         </div>
-                    <?php endif; ?>
+                    <?php } ?>
 
-                    <?php if ( $options['is_dimensions_enabled'] ): ?>
+                    <?php if ( $options['is_dimensions_enabled'] ) { ?>
                         <div class="dokan-inline-edit-field-row dokan-clearfix">
                             <label class="dokan-w3">
                                 <?php esc_html_e( 'L/W/H', 'dokan' ); ?>
@@ -114,9 +114,9 @@
                                 </div>
                             </div>
                         </div>
-                    <?php endif; ?>
+                    <?php } ?>
 
-                    <?php if ( ( 'simple' === $product_type && ! $is_virtual ) || 'variable' === $product_type ): ?>
+                    <?php if ( ( 'simple' === $product_type && ! $is_virtual ) || 'variable' === $product_type ) { ?>
                         <div class="dokan-inline-edit-field-row dokan-clearfix">
                             <label class="dokan-w3">
                                 <?php esc_html_e( 'Shipping class', 'dokan' ); ?>
@@ -125,15 +125,15 @@
                                 <select data-field-name="shipping_class_id" class="dokan-form-control">
                                     <option value="_no_shipping_class"><?php esc_html_e( 'No shipping class', 'dokan' ); ?></option>
 
-                                    <?php foreach ( $options['shipping_classes'] as $shipping_class_obj ): ?>
+                                    <?php foreach ( $options['shipping_classes'] as $shipping_class_obj ) { ?>
                                         <option value="<?php echo esc_attr( $shipping_class_obj->term_id ); ?>"<?php selected( $shipping_class_id, $shipping_class_obj->term_id ); ?>>
                                             <?php echo esc_html( $shipping_class_obj->name ); ?>
                                         </option>
-                                    <?php endforeach; ?>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
-                    <?php endif; ?>
+                    <?php } ?>
 
                     <div class="dokan-inline-edit-field-row dokan-clearfix">
                         <label class="dokan-w3">
@@ -141,18 +141,18 @@
                         </label>
                         <div class="dokan-w9">
                             <select data-field-name="_visibility" class="dokan-form-control">
-                                <?php foreach ( $options['visibilities'] as $visibility_slug => $visibility_name ): ?>
+                                <?php foreach ( $options['visibilities'] as $visibility_slug => $visibility_name ) { ?>
                                     <option value="<?php echo esc_attr( $visibility_slug ); ?>"<?php selected( $_visibility, $visibility_slug ); ?>>
                                         <?php echo esc_html( $visibility_name ); ?>
                                     </option>
-                                <?php endforeach; ?>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
 
                     <hr>
 
-                    <?php if ( ( 'simple' === $product_type || 'variable' === $product_type ) && $options['can_manage_stock'] ): ?>
+                    <?php if ( ( 'simple' === $product_type || 'variable' === $product_type ) && $options['can_manage_stock'] ) { ?>
                         <label>
                             <input type="checkbox" data-field-name="manage_stock" value="open" data-field-toggler <?php checked( $manage_stock, true ); ?>> &nbsp;
                             <?php esc_html_e( 'Manage Stock', 'dokan' ); ?>
@@ -173,11 +173,11 @@
                             </label>
                             <div class="dokan-w9">
                                 <select data-field-name="stock_status" class="dokan-form-control">
-                                    <?php foreach ( $options['stock_statuses'] as $stock_status_slug => $stock_status_name ): ?>
+                                    <?php foreach ( $options['stock_statuses'] as $stock_status_slug => $stock_status_name ) { ?>
                                         <option value="<?php echo esc_attr( $stock_status_slug ); ?>"<?php selected( $stock_status, $stock_status_slug ); ?>>
                                             <?php echo esc_html( $stock_status_name ); ?>
                                         </option>
-                                    <?php endforeach; ?>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -188,30 +188,30 @@
                             </label>
                             <div class="dokan-w9">
                                 <select data-field-name="backorders" class="dokan-form-control" style="width: 100%;">
-                                    <?php foreach ( $options['backorder_options'] as $backorders_slug => $backorders_name ): ?>
+                                    <?php foreach ( $options['backorder_options'] as $backorders_slug => $backorders_name ) { ?>
                                         <option value="<?php echo esc_attr( $backorders_slug ); ?>"<?php selected( $backorders, $backorders_slug ); ?>>
                                             <?php echo esc_html( $backorders_name ); ?>
                                         </option>
-                                    <?php endforeach; ?>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
-                    <?php elseif ( 'grouped' === $product_type ): ?>
+                    <?php } elseif ( 'grouped' === $product_type ) { ?>
                         <div class="dokan-inline-edit-field-row dokan-clearfix">
                             <label class="dokan-w3">
                                 <?php esc_html_e( 'In Stock?', 'dokan' ); ?>
                             </label>
                             <div class="dokan-w9">
                                 <select data-field-name="stock_status" class="dokan-form-control">
-                                    <?php foreach ( $options['stock_statuses'] as $stock_status_slug => $stock_status_name ): ?>
+                                    <?php foreach ( $options['stock_statuses'] as $stock_status_slug => $stock_status_name ) { ?>
                                         <option value="<?php echo esc_attr( $stock_status_slug ); ?>"<?php selected( $stock_status, $stock_status_slug ); ?>>
                                             <?php echo esc_html( $stock_status_name ); ?>
                                         </option>
-                                    <?php endforeach; ?>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
-                    <?php endif; ?>
+                    <?php } ?>
                 </div>
 
                 <div class="dokan-w3 dokan-inline-edit-column">
@@ -219,28 +219,28 @@
                         <?php esc_html_e( 'Product categories', 'dokan' ); ?>
                     </label>
 
-                    <?php if ( ! $options['using_single_category_style'] ): ?>
+                    <?php if ( ! $options['using_single_category_style'] ) { ?>
                         <select data-field-name="product_cat" class="dokan-form-control" multiple>
-                            <?php foreach ( $options['categories'] as $category ): ?>
+                            <?php foreach ( $options['categories'] as $category ) { ?>
                                 <option value="<?php echo esc_attr( $category->term_id ); ?>"<?php echo in_array( $category->term_id, $product_cat ) ? ' selected' : ''; ?>>
                                     <?php echo esc_html( $category->name ); ?>
                                 </option>
-                            <?php endforeach; ?>
+                            <?php } ?>
                         </select>
-                    <?php else: ?>
+                    <?php } else { ?>
                         <select data-field-name="product_cat" class="dokan-form-control">
-                            <?php foreach ( $options['categories'] as $category ): ?>
+                            <?php foreach ( $options['categories'] as $category ) { ?>
                                 <option value="<?php echo esc_attr( $category->term_id ); ?>"<?php echo selected( $product_cat, $category->term_id ); ?>>
                                     <?php echo esc_html( $category->name ); ?>
                                 </option>
-                            <?php endforeach; ?>
+                            <?php } ?>
                         </select>
 
-                    <?php endif; ?>
+                    <?php } ?>
                 </div>
             </div>
 
-            <div class="dokan-clearfix">
+            <div class="dokan-clearfix quick-edit-submit-wrap">
                 <button type="button" class="dokan-btn dokan-btn-default inline-edit-cancel">
                     <?php _e( 'Cancel', 'dokan' ); ?>
                 </button>

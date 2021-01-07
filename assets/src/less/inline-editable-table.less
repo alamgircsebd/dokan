@@ -1,5 +1,4 @@
 .dokan-product-list-inline-edit-form {
-
     fieldset {
         padding: 0;
         margin: 0;
@@ -7,6 +6,10 @@
 
     .dokan-inline-edit-column {
         padding: 0 10px;
+
+        .select2-container {
+            width: 100% !important;
+        }
     }
 
     .dokan-inline-edit-field-row {
@@ -42,9 +45,20 @@
         }
 
         &.show-loading-animation {
-
             .dokan-spinner {
                 visibility: visible;
+            }
+        }
+    }
+
+    @media (max-width: 430px) {
+        .quick-edit-submit-wrap {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+
+            .inline-edit-submit-button {
+                margin-left: 15px;
             }
         }
     }

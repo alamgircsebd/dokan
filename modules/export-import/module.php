@@ -16,26 +16,42 @@ if ( ! class_exists( 'Dokan_WXR_Parser' ) ) {
  * @class Dokan_Product_Importer The class that holds the entire Dokan_Product_Importer plugin
  */
 class Module {
-
     public $version;
-    public $authors    = array();
-    public $posts      = array();
-    public $terms      = array();
-    public $categories = array();
-    public $tags       = array();
+
+    public $authors    = [];
+
+    public $posts      = [];
+
+    public $terms      = [];
+
+    public $categories = [];
+
+    public $tags       = [];
+
     public $base_url   = '';
+
     // mappings from old information to new
-    public $processed_authors    = array();
-    public $author_mapping       = array();
-    public $processed_terms      = array();
-    public $processed_posts      = array();
-    public $post_orphans         = array();
-    public $processed_menu_items = array();
-    public $menu_item_orphans    = array();
-    public $missing_menu_items   = array();
+    public $processed_authors    = [];
+
+    public $author_mapping       = [];
+
+    public $processed_terms      = [];
+
+    public $processed_posts      = [];
+
+    public $post_orphans         = [];
+
+    public $processed_menu_items = [];
+
+    public $menu_item_orphans    = [];
+
+    public $missing_menu_items   = [];
+
     public $fetch_attachments = true;
-    public $url_remap         = array();
-    public $featured_images   = array();
+
+    public $url_remap         = [];
+
+    public $featured_images   = [];
 
     /**
      * Constructor for the Dokan_Product_Importer class
@@ -49,44 +65,44 @@ class Module {
      * @uses add_action()
      */
     public function __construct() {
-        add_action( 'init', array( $this, 'do_product_export' ), 99 );
+        add_action( 'init', [ $this, 'do_product_export' ], 99 );
 
         define( 'DOKAN_IE_PLUGIN_VERSION', $this->version );
         define( 'DOKAN_IE_FILE', __FILE__ );
-        define( 'DOKAN_IE_DIR', dirname( __FILE__ ) );
-        define( 'DOKAN_IE_INC_DIR', dirname( __FILE__ ) . '/includes' );
+        define( 'DOKAN_IE_DIR', __DIR__ );
+        define( 'DOKAN_IE_INC_DIR', __DIR__ . '/includes' );
         define( 'DOKAN_IE_ASSETS', plugins_url( 'assets', __FILE__ ) );
 
-        add_action( 'init', array( $this, 'do_product_export' ), 99 );
+        add_action( 'init', [ $this, 'do_product_export' ], 99 );
 
         // Loads frontend scripts and styles
-        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+        add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
-        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_importer_page' ), 13, 1 );
-        add_filter( 'dokan_query_var_filter', array( $this, 'add_endpoint' ) );
-        add_filter( 'dokan_dashboard_template_render', array( $this, 'dashboard_template' ) );
-        add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
+        add_filter( 'dokan_get_dashboard_nav', [ $this, 'add_importer_page' ], 13, 1 );
+        add_filter( 'dokan_query_var_filter', [ $this, 'add_endpoint' ] );
+        add_filter( 'dokan_dashboard_template_render', [ $this, 'dashboard_template' ] );
+        add_action( 'dokan_rewrite_rules_loaded', [ $this, 'add_rewrite_rules' ] );
 
-        add_action( 'wp_ajax_woocommerce_do_ajax_product_import', array( $this, 'do_ajax_product_import' ) );
-        add_action( 'wp_ajax_woocommerce_do_ajax_product_export', array( $this, 'do_ajax_product_export' ) );
-        add_action( 'template_redirect', array( $this, 'download_export_file' ) );
+        add_action( 'wp_ajax_woocommerce_do_ajax_product_import', [ $this, 'do_ajax_product_import' ] );
+        add_action( 'wp_ajax_woocommerce_do_ajax_product_export', [ $this, 'do_ajax_product_export' ] );
+        add_action( 'template_redirect', [ $this, 'download_export_file' ] );
 
-        add_action( 'template_redirect', array( $this, 'handle_step_submission' ), 10, 1 );
+        add_action( 'template_redirect', [ $this, 'handle_step_submission' ], 10, 1 );
 
         if ( self::is_dokan_plugin() ) {
-            add_filter( 'dokan_set_template_path', array( $this, 'load_export_import_templates' ), 11, 3 );
-            add_action( 'dokan_load_custom_template', array( $this, 'load_tools_template_from_plugin' ), 12 );
+            add_filter( 'dokan_set_template_path', [ $this, 'load_export_import_templates' ], 11, 3 );
+            add_action( 'dokan_load_custom_template', [ $this, 'load_tools_template_from_plugin' ], 12 );
         }
 
-        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
-        add_action( 'dokan_after_add_product_btn', array( $this, 'render_import_export_button' ) );
-        add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_active_menu' ) );
-        add_filter( 'woocommerce_product_import_pre_insert_product_object', array( $this, 'change_product_status' ), 20, 2 );
+        add_filter( 'dokan_get_all_cap', [ $this, 'add_capabilities' ], 10 );
+        add_action( 'dokan_after_add_product_btn', [ $this, 'render_import_export_button' ] );
+        add_filter( 'dokan_dashboard_nav_active', [ $this, 'dashboard_active_menu' ] );
+        add_filter( 'woocommerce_product_import_pre_insert_product_object', [ $this, 'change_product_status' ], 20, 2 );
 
-        add_action( 'wp_footer', array( $this, 'bind_global_ajaxurl' ), 11 );
+        add_action( 'wp_footer', [ $this, 'bind_global_ajaxurl' ], 11 );
 
         // Module activation hook
-        add_action( 'dokan_activated_module_export_import', array( self::class, 'activate' ) );
+        add_action( 'dokan_activated_module_export_import', [ self::class, 'activate' ] );
         //Other Vendor data protection from csv import
         add_filter( 'woocommerce_product_import_process_item_data', [ $this, 'protect_other_vendor_product_on_csv' ] );
         //False to is_feature column
@@ -108,7 +124,8 @@ class Module {
 
     /**
      * Check is Dokan is plugin or nor
-     * @return boolean true|false
+     *
+     * @return bool true|false
      */
     public static function is_dokan_plugin() {
         return defined( 'DOKAN_PLUGIN_VERSION' );
@@ -138,12 +155,12 @@ class Module {
         $dasboard_page = get_page_by_title( 'Dashboard' );
 
         $post_id = wp_insert_post(
-            array(
+            [
                 'post_title'  => wp_strip_all_tags( 'Import' ),
                 'post_status' => 'publish',
                 'post_parent' => $dasboard_page->ID,
                 'post_type'   => 'page',
-            )
+            ]
         );
 
         update_option( 'dokan_importer_page_created', true );
@@ -177,20 +194,21 @@ class Module {
         global $wp;
 
         if ( dokan_is_seller_dashboard() && isset( $wp->query_vars['tools'] ) ) {
-            wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', array(), WC_VERSION );
+            wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', [], WC_VERSION );
         }
 
-        /**
+        /*
          * All styles goes here
          */
         wp_enqueue_style( 'dpi-styles', DOKAN_IE_ASSETS . '/css/style.css', false, date( 'Ymd' ) ); // phpcs:ignore
 
-        wp_register_script( 'wc-product-import', WC()->plugin_url() . '/assets/js/admin/wc-product-import.js', array( 'jquery' ), WC_VERSION );
-        wp_register_script( 'wc-product-export', WC()->plugin_url() . '/assets/js/admin/wc-product-export.js', array( 'jquery' ), WC_VERSION );
+        wp_register_script( 'wc-product-import', WC()->plugin_url() . '/assets/js/admin/wc-product-import.js', [ 'jquery' ], WC_VERSION );
+        wp_register_script( 'wc-product-export', WC()->plugin_url() . '/assets/js/admin/wc-product-export.js', [ 'jquery' ], WC_VERSION );
     }
 
     /**
      * Add Subscription endpoint to the end of Dashboard
+     *
      * @param array $query_var
      */
     public function add_endpoint( $query_var ) {
@@ -201,7 +219,9 @@ class Module {
 
     /**
      * Add Importer page in seller dashboard
+     *
      * @param array $urls
+     *
      * @return array $urls
      */
     public function add_importer_page( $urls ) {
@@ -213,18 +233,18 @@ class Module {
             $installed_version = get_option( 'dokan_theme_version' );
 
             if ( $installed_version >= '2.4' ) {
-                $urls['tools'] = array(
+                $urls['tools'] = [
                     'title' => __( 'Tools', 'dokan' ),
                     'icon'  => '<i class="fa fa-wrench"></i>',
                     'url'   => dokan_get_navigation_url( 'tools' ),
                     'pos'   => 182,
-                );
+                ];
             } else {
-                $urls['tools'] = array(
+                $urls['tools'] = [
                     'title' => __( 'Tools', 'dokan' ),
                     'icon'  => '<i class="fa fa-wrench"></i>',
                     'url'   => dokan_get_navigation_url( 'tools' ),
-                );
+                ];
             }
         }
 
@@ -232,28 +252,29 @@ class Module {
     }
 
     public function dashboard_template( $template_part ) {
-        dokan_get_template_part( 'export-import/template_importer', '', array( 'is_export_import' => true ) );
+        dokan_get_template_part( 'export-import/template_importer', '', [ 'is_export_import' => true ] );
+
         return;
     }
 
     /**
-    * Get plugin path
-    *
-    * @since 2.8
-    *
-    * @return void
-    **/
+     * Get plugin path
+     *
+     * @since 2.8
+     *
+     * @return void
+     **/
     public function plugin_path() {
         return untrailingslashit( plugin_dir_path( __FILE__ ) );
     }
 
     /**
-    * Load Dokan Export-Import templates
-    *
-    * @since 2.8
-    *
-    * @return void
-    **/
+     * Load Dokan Export-Import templates
+     *
+     * @since 2.8
+     *
+     * @return void
+     **/
     public function load_export_import_templates( $template_path, $template, $args ) {
         if ( isset( $args['is_export_import'] ) && $args['is_export_import'] ) {
             return $this->plugin_path() . '/templates';
@@ -267,7 +288,7 @@ class Module {
      *
      * @since  0.4
      *
-     * @param  array $query_vars
+     * @param array $query_vars
      *
      * @return string
      */
@@ -275,10 +296,10 @@ class Module {
         if ( isset( $query_vars['tools'] ) ) {
             if ( ! current_user_can( 'dokan_view_tools_menu' ) ) {
                 dokan_get_template_part(
-                    'global/dokan-error', '', array(
+                    'global/dokan-error', '', [
                         'deleted' => false,
                         'message' => __( 'You have no permission to view this tool page', 'dokan' ),
-                    )
+                    ]
                 );
             } else {
                 switch ( $query_vars['tools'] ) {
@@ -292,9 +313,9 @@ class Module {
 
                     case 'csv-export':
                         wp_localize_script(
-                            'wc-product-export', 'wc_product_export_params', array(
-								'export_nonce' => wp_create_nonce( 'wc-product-export' ),
-                            )
+                            'wc-product-export', 'wc_product_export_params', [
+                                'export_nonce' => wp_create_nonce( 'wc-product-export' ),
+                            ]
                         );
                         $this->product_exporter();
 
@@ -302,10 +323,11 @@ class Module {
 
                     default:
                         $installed_version = get_option( 'dokan_theme_version' );
+
                         if ( $installed_version >= '2.4' ) {
-                            dokan_get_template_part( 'export-import/template_importer_new', '', array( 'is_export_import' => true ) );
+                            dokan_get_template_part( 'export-import/template_importer_new', '', [ 'is_export_import' => true ] );
                         } else {
-                            dokan_get_template_part( 'export-import/template_importer', '', array( 'is_export_import' => true ) );
+                            dokan_get_template_part( 'export-import/template_importer', '', [ 'is_export_import' => true ] );
                         }
 
                         break;
@@ -330,9 +352,9 @@ class Module {
     /**
      * Load Importer page templates in template directory
      *
-     * @param  string $file
+     * @param string $file
      *
-     * @return  string $file
+     * @return string $file
      */
     public function importer_page_template( $file ) {
         $page_id = get_option( 'dokan_importer_page_id' );
@@ -372,8 +394,8 @@ class Module {
      * @param string $file Path to the WXR file for importing
      */
     public function import( $file ) {
-        add_filter( 'import_post_meta_key', array( $this, 'is_valid_meta_key' ) );
-        add_filter( 'http_request_timeout', array( &$this, 'bump_request_timeout' ) );
+        add_filter( 'import_post_meta_key', [ $this, 'is_valid_meta_key' ] );
+        add_filter( 'http_request_timeout', [ &$this, 'bump_request_timeout' ] );
 
         require_once ABSPATH . 'wp-admin/includes/image.php';
 
@@ -411,10 +433,12 @@ class Module {
         foreach ( $this->categories as $cat ) {
             // if the category already exists leave it alone
             $term_id = term_exists( $cat['category_nicename'], 'category' );
+
             if ( $term_id ) {
                 if ( is_array( $term_id ) ) {
                     $term_id = $term_id['term_id'];
                 }
+
                 if ( isset( $cat['term_id'] ) ) {
                     $this->processed_terms[ intval( $cat['term_id'] ) ] = (int) $term_id;
                 }
@@ -423,14 +447,15 @@ class Module {
 
             $category_parent      = empty( $cat['category_parent'] ) ? 0 : category_exists( $cat['category_parent'] );
             $category_description = isset( $cat['category_description'] ) ? $cat['category_description'] : '';
-            $catarr               = array(
+            $catarr               = [
                 'category_nicename'    => $cat['category_nicename'],
                 'category_parent'      => $category_parent,
                 'cat_name'             => $cat['cat_name'],
                 'category_description' => $category_description,
-            );
+            ];
 
             $id = wp_insert_category( $catarr );
+
             if ( ! is_wp_error( $id ) ) {
                 if ( isset( $cat['term_id'] ) ) {
                     $this->processed_terms[ intval( $cat['term_id'] ) ] = $id;
@@ -438,6 +463,7 @@ class Module {
             } else {
                 // translators: %s: category name
                 printf( __( 'Failed to import category %s', 'dokan' ), esc_html( $cat['category_nicename'] ) );
+
                 if ( defined( 'IMPORT_DEBUG' ) && IMPORT_DEBUG ) {
                     echo ': ' . $id->get_error_message();
                 }
@@ -464,10 +490,12 @@ class Module {
         foreach ( $this->tags as $tag ) {
             // if the tag already exists leave it alone
             $term_id = term_exists( $tag['tag_slug'], 'post_tag' );
+
             if ( $term_id ) {
                 if ( is_array( $term_id ) ) {
                     $term_id = $term_id['term_id'];
                 }
+
                 if ( isset( $tag['term_id'] ) ) {
                     $this->processed_terms[ intval( $tag['term_id'] ) ] = (int) $term_id;
                 }
@@ -475,12 +503,13 @@ class Module {
             }
 
             $tag_desc = isset( $tag['tag_description'] ) ? $tag['tag_description'] : '';
-            $tagarr   = array(
-				'slug' => $tag['tag_slug'],
-				'description' => $tag_desc,
-			);
+            $tagarr   = [
+                'slug'        => $tag['tag_slug'],
+                'description' => $tag_desc,
+            ];
 
             $id = wp_insert_term( $tag['tag_name'], 'post_tag', $tagarr );
+
             if ( ! is_wp_error( $id ) ) {
                 if ( isset( $tag['term_id'] ) ) {
                     $this->processed_terms[ intval( $tag['term_id'] ) ] = $id['term_id'];
@@ -488,6 +517,7 @@ class Module {
             } else {
                 // translators: %s: post tag name
                 printf( __( 'Failed to import post tag %s', 'dokan' ), esc_html( $tag['tag_name'] ) );
+
                 if ( defined( 'IMPORT_DEBUG' ) && IMPORT_DEBUG ) {
                     echo ': ' . $id->get_error_message();
                 }
@@ -514,10 +544,12 @@ class Module {
         foreach ( $this->terms as $term ) {
             // if the term already exists in the correct taxonomy leave it alone
             $term_id = term_exists( $term['slug'], $term['term_taxonomy'] );
+
             if ( $term_id ) {
                 if ( is_array( $term_id ) ) {
                     $term_id = $term_id['term_id'];
                 }
+
                 if ( isset( $term['term_id'] ) ) {
                     $this->processed_terms[ intval( $term['term_id'] ) ] = (int) $term_id;
                 }
@@ -528,18 +560,20 @@ class Module {
                 $parent = 0;
             } else {
                 $parent = term_exists( $term['term_parent'], $term['term_taxonomy'] );
+
                 if ( is_array( $parent ) ) {
                     $parent = $parent['term_id'];
                 }
             }
             $description = isset( $term['term_description'] ) ? $term['term_description'] : '';
-            $termarr     = array(
-                'slug' => $term['slug'],
+            $termarr     = [
+                'slug'        => $term['slug'],
                 'description' => $description,
-                'parent' => intval( $parent ),
-			);
+                'parent'      => intval( $parent ),
+            ];
 
             $id = wp_insert_term( $term['term_name'], $term['term_taxonomy'], $termarr );
+
             if ( ! is_wp_error( $id ) ) {
                 if ( isset( $term['term_id'] ) ) {
                     $this->processed_terms[ intval( $term['term_id'] ) ] = $id['term_id'];
@@ -547,6 +581,7 @@ class Module {
             } else {
                 // translators: 1: taxnomy name, 2: term name
                 printf( __( 'Failed to import %1$s %2$s', 'dokan' ), esc_html( $term['term_taxonomy'] ), esc_html( $term['term_name'] ) );
+
                 if ( defined( 'IMPORT_DEBUG' ) && IMPORT_DEBUG ) {
                     echo ': ' . $id->get_error_message();
                 }
@@ -589,6 +624,7 @@ class Module {
             $post_type_object = get_post_type_object( $post['post_type'] );
 
             $post_exists = $this->post_exists( $post['post_title'], '', $post['post_date'] );
+
             if ( $post_exists && get_post_type( $post_exists ) === $post['post_type'] ) {
                 // translators: 1: singular label name, 2: post title
                 printf( __( '%1$s &#8220;%2$s&#8221; already exists.', 'dokan' ), $post_type_object->labels->singular_name, esc_html( $post['post_title'] ) );
@@ -597,14 +633,15 @@ class Module {
                 $comment_post_id = $post_id;
             } else {
                 $post_parent = (int) $post['post_parent'];
+
                 if ( $post_parent ) {
                     // if we already know the parent, map it to the new local ID
                     if ( isset( $this->processed_posts[ $post_parent ] ) ) {
                         $post_parent = $this->processed_posts[ $post_parent ];
-                        // otherwise record the parent for later
+                    // otherwise record the parent for later
                     } else {
                         $this->post_orphans[ intval( $post['post_id'] ) ] = $post_parent;
-                        $post_parent                                  = 0;
+                        $post_parent                                      = 0;
                     }
                 }
 
@@ -616,7 +653,7 @@ class Module {
                     $post_status = ( 'publish' === $post['status'] ) ? dokan_get_option( 'product_status', 'dokan_selling' ) : $post['status'];
                 }
 
-                $postdata = array(
+                $postdata = [
                     'import_id'      => $post['post_id'],
                     'post_author'    => $author,
                     'post_date'      => $post['post_date'],
@@ -633,7 +670,7 @@ class Module {
                     'menu_order'     => $post['menu_order'],
                     'post_type'      => $post['post_type'],
                     'post_password'  => $post['post_password'],
-                );
+                ];
 
                 $original_post_id = $post['post_id'];
                 $postdata         = apply_filters( 'wp_import_post_data_processed', $postdata, $post );
@@ -644,6 +681,7 @@ class Module {
                     // try to use _wp_attached file for upload folder placement to ensure the same location as the export site
                     // e.g. location is 2003/05/image.jpg but the attachment post_date is 2010/09, see media_handle_upload()
                     $postdata['upload_date'] = $post['post_date'];
+
                     if ( isset( $post['postmeta'] ) ) {
                         foreach ( $post['postmeta'] as $meta ) {
                             if ( '_wp_attached_file' === $meta['key'] ) {
@@ -666,6 +704,7 @@ class Module {
                 if ( is_wp_error( $post_id ) ) {
                     // translators: 1: singular label name, 2: post title
                     printf( __( 'Failed to import %1$s &#8220;%2$s&#8221;', 'dokan' ), $post_type_object->labels->singular_name, esc_html( $post['post_title'] ) );
+
                     if ( defined( 'IMPORT_DEBUG' ) && IMPORT_DEBUG ) {
                         echo ': ' . $post_id->get_error_message();
                     }
@@ -682,27 +721,31 @@ class Module {
             $this->processed_posts[ intval( $post['post_id'] ) ] = (int) $post_id;
 
             if ( ! isset( $post['terms'] ) ) {
-                $post['terms'] = array();
+                $post['terms'] = [];
             }
 
             $post['terms'] = apply_filters( 'wp_import_post_terms', $post['terms'], $post_id, $post );
 
             // add categories, tags and other terms
             if ( ! empty( $post['terms'] ) ) {
-                $terms_to_set = array();
+                $terms_to_set = [];
+
                 foreach ( $post['terms'] as $term ) {
                     // back compat with WXR 1.0 map 'tag' to 'post_tag'
                     $taxonomy    = ( 'tag' === $term['domain'] ) ? 'post_tag' : $term['domain'];
                     $term_exists = term_exists( $term['slug'], $taxonomy );
                     $term_id     = is_array( $term_exists ) ? $term_exists['term_id'] : $term_exists;
+
                     if ( ! $term_id ) {
-                        $t = wp_insert_term( $term['name'], $taxonomy, array( 'slug' => $term['slug'] ) );
+                        $t = wp_insert_term( $term['name'], $taxonomy, [ 'slug' => $term['slug'] ] );
+
                         if ( ! is_wp_error( $t ) ) {
                             $term_id = $t['term_id'];
                             do_action( 'wp_import_insert_term', $t, $term, $post_id, $post );
                         } else {
                             // translators: 1: taxonomy name, 2: term name
                             printf( __( 'Failed to import %1$s %2$s', 'dokan' ), esc_html( $taxonomy ), esc_html( $term['name'] ) );
+
                             if ( defined( 'IMPORT_DEBUG' ) && IMPORT_DEBUG ) {
                                 echo ': ' . $t->get_error_message();
                             }
@@ -722,7 +765,7 @@ class Module {
             }
 
             if ( ! isset( $post['comments'] ) ) {
-                $post['comments'] = array();
+                $post['comments'] = [];
             }
 
             $post['comments'] = apply_filters( 'wp_import_post_comments', $post['comments'], $post_id, $post );
@@ -730,7 +773,8 @@ class Module {
             // add/update comments
             if ( ! empty( $post['comments'] ) ) {
                 $num_comments      = 0;
-                $inserted_comments = array();
+                $inserted_comments = [];
+
                 foreach ( $post['comments'] as $comment ) {
                     $comment_id                                         = $comment['comment_id'];
                     $newcomments[ $comment_id ]['comment_post_ID']      = $comment_post_id;
@@ -744,7 +788,8 @@ class Module {
                     $newcomments[ $comment_id ]['comment_approved']     = $comment['comment_approved'];
                     $newcomments[ $comment_id ]['comment_type']         = $comment['comment_type'];
                     $newcomments[ $comment_id ]['comment_parent']       = $comment['comment_parent'];
-                    $newcomments[ $comment_id ]['commentmeta']          = isset( $comment['commentmeta'] ) ? $comment['commentmeta'] : array();
+                    $newcomments[ $comment_id ]['commentmeta']          = isset( $comment['commentmeta'] ) ? $comment['commentmeta'] : [];
+
                     if ( isset( $this->processed_authors[ $comment['comment_user_id'] ] ) ) {
                         $newcomments[ $comment_id ]['user_id'] = $this->processed_authors[ $comment['comment_user_id'] ];
                     }
@@ -773,7 +818,7 @@ class Module {
             }
 
             if ( ! isset( $post['postmeta'] ) ) {
-                $post['postmeta'] = array();
+                $post['postmeta'] = [];
             }
 
             $post['postmeta'] = apply_filters( 'wp_import_post_meta', $post['postmeta'], $post_id, $post );
@@ -788,7 +833,7 @@ class Module {
                         if ( isset( $this->processed_authors[ intval( $meta['value'] ) ] ) ) {
                             $value = $this->processed_authors[ intval( $meta['value'] ) ];
                         } else {
-							$key = false;
+                            $key = false;
                         }
                     }
 
@@ -816,8 +861,9 @@ class Module {
     /**
      * If fetching attachments is enabled then attempt to create a new attachment
      *
-     * @param array $post Attachment post details from WXR
-     * @param string $url URL to fetch attachment from
+     * @param array  $post Attachment post details from WXR
+     * @param string $url  URL to fetch attachment from
+     *
      * @return int|WP_Error Post ID on success, WP_Error otherwise
      */
     public function process_attachment( $post, $url ) {
@@ -841,7 +887,7 @@ class Module {
         if ( $info ) {
             $post['post_mime_type'] = $info['type'];
         } else {
-			return new \WP_Error( 'attachment_processing_error', __( 'Invalid file type', 'dokan' ) );
+            return new \WP_Error( 'attachment_processing_error', __( 'Invalid file type', 'dokan' ) );
         }
 
         $post['guid'] = $upload['url'];
@@ -867,8 +913,9 @@ class Module {
     /**
      * Attempt to download a remote file attachment
      *
-     * @param string $url URL of item to fetch
-     * @param array $post Attachment details
+     * @param string $url  URL of item to fetch
+     * @param array  $post Attachment details
+     *
      * @return array|WP_Error Local file location details on success, WP_Error otherwise
      */
     public function fetch_remote_file( $url, $post ) {
@@ -877,6 +924,7 @@ class Module {
 
         // get placeholder file in the upload dir with a unique, sanitized filename
         $upload = wp_upload_bits( $file_name, 0, '', $post['upload_date'] ); // phpcs:ignore
+
         if ( $upload['error'] ) {
             return new \WP_Error( 'upload_dir_error', $upload['error'] );
         }
@@ -887,6 +935,7 @@ class Module {
         // request failed
         if ( ! $headers ) {
             @unlink( $upload['file'] );
+
             return new \WP_Error( 'import_file_error', __( 'Remote server did not respond', 'dokan' ) );
         }
 
@@ -901,15 +950,18 @@ class Module {
 
         if ( isset( $headers['content-length'] ) && $filesize !== $headers['content-length'] ) {
             @unlink( $upload['file'] );
+
             return new \WP_Error( 'import_file_error', __( 'Remote file is incorrect size', 'dokan' ) );
         }
 
         if ( 0 === $filesize ) {
             @unlink( $upload['file'] );
+
             return new \WP_Error( 'import_file_error', __( 'Zero size file downloaded', 'dokan' ) );
         }
 
         $max_size = (int) $this->max_attachment_size();
+
         if ( ! empty( $max_size ) && $filesize > $max_size ) {
             @unlink( $upload['file'] );
             // translators: %s: show max size
@@ -932,6 +984,7 @@ class Module {
      */
     public function import_end() {
         wp_cache_flush();
+
         foreach ( get_taxonomies() as $tax ) {
             delete_option( "{$tax}_children" );
             _get_term_hierarchy( $tax );
@@ -995,20 +1048,23 @@ class Module {
         foreach ( $this->post_orphans as $child_id => $parent_id ) {
             $local_parent_id = false;
             $local_child_id  = false;
+
             if ( isset( $this->processed_posts[ $child_id ] ) ) {
                 $local_child_id = $this->processed_posts[ $child_id ];
             }
+
             if ( isset( $this->processed_posts[ $parent_id ] ) ) {
                 $local_parent_id = $this->processed_posts[ $parent_id ];
             }
 
             if ( $local_child_id && $local_parent_id ) {
-                $wpdb->update( $wpdb->posts, array( 'post_parent' => $local_parent_id ), array( 'ID' => $local_child_id ), '%d', '%d' );
+                $wpdb->update( $wpdb->posts, [ 'post_parent' => $local_parent_id ], [ 'ID' => $local_child_id ], '%d', '%d' );
             }
         }
 
         // all other posts/terms are imported, retry menu items with missing associated object
         $missing_menu_items = $this->missing_menu_items;
+
         foreach ( $missing_menu_items as $item ) {
             $this->process_menu_item( $item );
         }
@@ -1017,9 +1073,11 @@ class Module {
         foreach ( $this->menu_item_orphans as $child_id => $parent_id ) {
             $local_parent_id = 0;
             $local_child_id  = 0;
+
             if ( isset( $this->processed_menu_items[ $child_id ] ) ) {
                 $local_child_id = $this->processed_menu_items[ $child_id ];
             }
+
             if ( isset( $this->processed_menu_items[ $parent_id ] ) ) {
                 $local_parent_id = $this->processed_menu_items[ $parent_id ];
             }
@@ -1036,7 +1094,7 @@ class Module {
     public function backfill_attachment_urls() {
         global $wpdb;
         // make sure we do the longest urls first, in case one is a substring of another
-        uksort( $this->url_remap, array( &$this, 'cmpr_strlen' ) );
+        uksort( $this->url_remap, [ &$this, 'cmpr_strlen' ] );
 
         foreach ( $this->url_remap as $from_url => $to_url ) {
             // remap urls in post_content
@@ -1066,19 +1124,22 @@ class Module {
      * Decide if the given meta key maps to information we will want to import
      *
      * @param string $key The meta key to check
+     *
      * @return string|bool The key if we do want to import, false if not
      */
     public function is_valid_meta_key( $key ) {
         // skip attachment metadata since we'll regenerate it from scratch
         // skip _edit_lock as not relevant for import
-        if ( in_array( $key, array( '_wp_attached_file', '_wp_attachment_metadata', '_edit_lock' ), true ) ) {
+        if ( in_array( $key, [ '_wp_attached_file', '_wp_attachment_metadata', '_edit_lock' ], true ) ) {
             return false;
         }
+
         return $key;
     }
 
     /**
      * Added to http_request_timeout filter to force timeout at 60 seconds during import
+     *
      * @return int 60
      */
     public function bump_request_timeout() {
@@ -1088,11 +1149,11 @@ class Module {
     /**
      * Check if psot exists or not
      *
-     * @param  string $title   [description]
-     * @param  string $content [description]
-     * @param  string $date    [description]
+     * @param string $title   [description]
+     * @param string $content [description]
+     * @param string $date    [description]
      *
-     * @return [type]          [description]
+     * @return [type] [description]
      */
     public function post_exists( $title, $content = '', $date = '' ) {
         global $wpdb;
@@ -1102,20 +1163,20 @@ class Module {
         $post_date    = wp_unslash( sanitize_post_field( 'post_date', $date, 0, 'db' ) );
 
         $query = "SELECT ID FROM $wpdb->posts WHERE 1=1";
-        $args  = array();
+        $args  = [];
 
         if ( ! empty( $date ) ) {
-            $query  .= ' AND post_date = %s';
+            $query .= ' AND post_date = %s';
             $args[] = $post_date;
         }
 
         if ( ! empty( $title ) ) {
-            $query  .= ' AND post_title = %s';
+            $query .= ' AND post_title = %s';
             $args[] = $post_title;
         }
 
         if ( ! empty( $content ) ) {
-            $query  .= 'AND post_content = %s';
+            $query .= 'AND post_content = %s';
             $args[] = $post_content;
         }
 
@@ -1130,11 +1191,13 @@ class Module {
      * Determine if a comment exists based on author and date.
      *
      * @since 2.0.0
+     *
      * @uses $wpdb
      *
      * @param string $comment_author Author of the comment
-     * @param string $comment_date Date of the comment
-     * @return mixed Comment post ID on success.
+     * @param string $comment_date   Date of the comment
+     *
+     * @return mixed comment post ID on success
      */
     public function comment_exists( $comment_author, $comment_date ) {
         global $wpdb;
@@ -1181,20 +1244,20 @@ class Module {
         include_once WC_ABSPATH . 'includes/import/class-wc-product-csv-importer.php';
 
         $file   = wc_clean( $post_data['file'] );
-        $params = array(
+        $params = [
             'delimiter'       => ! empty( $post_data['delimiter'] ) ? wc_clean( $post_data['delimiter'] ) : ',',
             'start_pos'       => isset( $post_data['position'] ) ? absint( $post_data['position'] ) : 0,
-            'mapping'         => isset( $post_data['mapping'] ) ? (array) $post_data['mapping'] : array(),
+            'mapping'         => isset( $post_data['mapping'] ) ? (array) $post_data['mapping'] : [],
             'update_existing' => isset( $post_data['update_existing'] ) ? (bool) $post_data['update_existing'] : false,
             'lines'           => apply_filters( 'woocommerce_product_import_batch_size', 30 ),
             'parse'           => true,
-        );
+        ];
 
         // Log failures.
         if ( 0 !== $params['start_pos'] ) {
             $error_log = array_filter( (array) get_user_option( 'product_import_error_log' ) );
         } else {
-            $error_log = array();
+            $error_log = [];
         }
 
         $importer         = \WC_Product_CSV_Importer_Controller::get_importer( $file, $params );
@@ -1206,7 +1269,7 @@ class Module {
 
         if ( 100 === $percent_complete ) {
             // Clear temp meta.
-            $wpdb->delete( $wpdb->postmeta, array( 'meta_key' => '_original_id' ) );
+            $wpdb->delete( $wpdb->postmeta, [ 'meta_key' => '_original_id' ] );
             $wpdb->query(
                 "
                             DELETE {$wpdb->posts}, {$wpdb->postmeta}, {$wpdb->term_relationships}
@@ -1222,7 +1285,7 @@ class Module {
 
             // Send success.
             wp_send_json_success(
-                array(
+                [
                     'position'   => 'done',
                     'percentage' => 100,
                     'url'        => dokan_get_navigation_url() . 'tools/csv-import?step=done',
@@ -1230,18 +1293,18 @@ class Module {
                     'failed'     => count( $results['failed'] ),
                     'updated'    => count( $results['updated'] ),
                     'skipped'    => count( $results['skipped'] ),
-                )
+                ]
             );
         } else {
             wp_send_json_success(
-                array(
+                [
                     'position'   => $importer->get_file_position(),
                     'percentage' => $percent_complete,
                     'imported'   => count( $results['imported'] ),
                     'failed'     => count( $results['failed'] ),
                     'updated'    => count( $results['updated'] ),
                     'skipped'    => count( $results['skipped'] ),
-                )
+                ]
             );
         }
     }
@@ -1305,24 +1368,24 @@ class Module {
 
         if ( 100 === $exporter->get_percent_complete() ) {
             wp_send_json_success(
-                array(
+                [
                     'step'       => 'done',
                     'percentage' => 100,
                     'url'        => add_query_arg(
-                        array(
-                            'nonce' => wp_create_nonce( 'product-csv' ),
+                        [
+                            'nonce'  => wp_create_nonce( 'product-csv' ),
                             'action' => 'download_product_csv',
-                        ), dokan_get_navigation_url( 'tools/csv-export/' ) . '?product_exporter'
+                        ], dokan_get_navigation_url( 'tools/csv-export/' ) . '?product_exporter'
                     ),
-                )
+                ]
             );
         } else {
             wp_send_json_success(
-                array(
+                [
                     'step'       => ++$step,
                     'percentage' => $exporter->get_percent_complete(),
                     'columns'    => $exporter->get_column_names(),
-                )
+                ]
             );
         }
     }
@@ -1332,13 +1395,13 @@ class Module {
      */
     public function render_import_export_button() {
         ?>
-        <?php if ( current_user_can( 'dokan_import_product' ) ) : ?>
-            <a href="<?php echo dokan_get_navigation_url( 'tools/csv-import' ); ?>" class="dokan-btn dokan-btn-theme">
+        <?php if ( current_user_can( 'dokan_import_product' ) ) { ?>
+            <a href="<?php echo dokan_get_navigation_url( 'tools/csv-import' ); ?>" class="dokan-btn">
                 <?php esc_html_e( 'Import', 'dokan' ); ?>
             </a>
-        <?php endif ?>
+        <?php } ?>
         <?php if ( current_user_can( 'dokan_export_product' ) && apply_filters( 'dokan_csv_export_enabled', true ) ) { ?>
-            <a href="<?php echo dokan_get_navigation_url( 'tools/csv-export' ); ?>" class="dokan-btn dokan-btn-theme">
+            <a href="<?php echo dokan_get_navigation_url( 'tools/csv-export' ); ?>" class="dokan-btn">
                 <?php esc_html_e( 'Export', 'dokan' ); ?>
             </a>
         <?php } ?>
@@ -1348,7 +1411,7 @@ class Module {
     /**
      * Set auction active menu in dokan dashboard
      *
-     * @param  string $active_menu
+     * @param string $active_menu
      *
      * @return string
      */
@@ -1356,14 +1419,15 @@ class Module {
         if ( 'tools/csv-import' === $active_menu || 'tools/csv-export' === $active_menu ) {
             $active_menu = 'tools';
         }
+
         return $active_menu;
     }
 
     /**
      * Change imported product status
      *
-     * @param  object $object
-     * @param  array $item
+     * @param object $object
+     * @param array  $item
      *
      * @since  2.8.3
      *
@@ -1454,6 +1518,7 @@ class Module {
 
     /**
      * Non scalar to scalar due to wc export escape non-scalar value
+     *
      * @param $meta_value
      * @param $meta
      *

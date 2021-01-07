@@ -10,6 +10,7 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0.0
  */
 class VendorSettings {
+
     /**
      * Constructor method
      *
@@ -34,9 +35,8 @@ class VendorSettings {
     /**
      * Register live caht seller settings on seller dashboard
      *
-     * @param  int $user_id
-     *
-     * @param  object $profile
+     * @param int    $user_id
+     * @param object $profile
      *
      * @since 1.0.0
      *
@@ -49,9 +49,7 @@ class VendorSettings {
 
         $is_messenger = 'messenger' === AdminSettings::get_provider();
         $enable_chat  = isset( $profile['live_chat'] ) ? $profile['live_chat'] : 'no';
-        $fb_page_id   = ! empty( $profile['fb_page_id'] ) ? $profile['fb_page_id'] : '';
-
-        ?>
+        $fb_page_id   = ! empty( $profile['fb_page_id'] ) ? $profile['fb_page_id'] : ''; ?>
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label"><?php esc_html_e( 'Enable Live Chat', 'dokan' ); ?></label>
             <div class="dokan-w5 dokan-text-left">
@@ -99,7 +97,7 @@ class VendorSettings {
     /**
      * Save dokan live chat seller settings
      *
-     * @param  string $user_id
+     * @param string $user_id
      *
      * @return void
      */

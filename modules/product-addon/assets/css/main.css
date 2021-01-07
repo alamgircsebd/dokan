@@ -387,6 +387,23 @@ a.wc-pao-expand-all:active, a.wc-pao-expand-all:focus {
 	padding: 0 15px 15px 15px;
 }
 
+@media (max-width: 430px) {
+    .wc-pao-addon-content-price-header {
+        margin-left: -15px;
+    }
+
+    .wc-pao-addon-content-headers, .wc-pao-addon-option-row {
+        display: block;
+    }
+
+    .wc-pao-addon-content-label,
+    .wc-pao-addon-content-price-type,
+    .wc-pao-addon-content-price {
+        margin-bottom: 8px;
+    }
+
+}
+
 .wc-pao-addon-option-row .wc-pao-addon-sort-handle {
 	align-self: center;
 	cursor: move;
