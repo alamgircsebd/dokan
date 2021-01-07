@@ -214,7 +214,7 @@
                         <ul class="counts">
                             <li class="commision">
                                 <span class="count" v-html="getEearningRate"></span>
-                                <span class="subhead">{{ __( 'Admin Commission', 'dokan' ) }}</span>
+                                <span class="subhead">{{ __( 'Admin Commission Rate', 'dokan' ) }}</span>
                             </li>
                             <li class="balance">
                                 <span class="count">
