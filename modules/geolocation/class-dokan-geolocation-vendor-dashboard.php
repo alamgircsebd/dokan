@@ -157,7 +157,7 @@ class Dokan_Geolocation_Vendor_Dashboard {
      * @return void
      */
     public function update_product_settings( $post_id ) {
-        $store_id            = dokan_get_current_user_id();
+        $store_id            = ! empty( $_POST['dokan_product_author_override'] ) ? intval( $_POST['dokan_product_author_override'] ) : dokan_get_current_user_id();
         $dokan_geo_latitude  = get_user_meta( $store_id, 'dokan_geo_latitude', true );
         $dokan_geo_longitude = get_user_meta( $store_id, 'dokan_geo_longitude', true );
         $dokan_geo_public    = get_user_meta( $store_id, 'dokan_geo_public', true );
