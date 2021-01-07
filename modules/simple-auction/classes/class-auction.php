@@ -416,6 +416,11 @@ class Dokan_Template_Auction {
             $product_shipping_class = ( isset( $_POST['product_shipping_class'] ) && $_POST['product_shipping_class'] > 0 && 'external' !== $product_type ) ? absint( $_POST['product_shipping_class'] ) : '';
             wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );
 
+            // Update SKU
+            if ( isset( $_POST['_sku'] ) ) {
+                update_post_meta( $post_id, '_sku', ( '' === $_POST['_sku'] ) ? '' : sanitize_text_field( wp_unslash( $_POST['_sku'] ) )  );
+            }
+
             do_action( 'dokan_update_auction_product', $post_id );
 
             $edit_url = add_query_arg( array('product_id' => $post_id, 'action' => 'edit' ), dokan_get_navigation_url('auction') );
