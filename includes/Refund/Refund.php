@@ -547,7 +547,8 @@ class Refund extends DokanModel {
      *
      * @since 3.0.0
      *
-     * @return \WeDevs\DokanPro\Refund\Refund
+     * @return \WeDevs\DokanPro\Refund\Refund|WP_Error
+     * @throws \Exception
      */
     public function approve() {
         global $wpdb;
@@ -724,6 +725,20 @@ class Refund extends DokanModel {
         if ( isset( $order_data->order_total, $order_data->net_amount ) ) {
             $new_total_amount = $order_data->order_total - $this->get_refund_amount();
             $new_net_amount   = $order_data->net_amount - $vendor_refund;
+
+            // we are not including gateway fee to net_amount, so this value is getting deducted
+            /**
+             * Issues with stripe refund:
+             * 1. we are not deducting gateway fee from refund amount, so total refund amount for a
+             * particular order number is greater than actual order amount stored in dokan_vendor_balance table
+             * 2. We are storing net amount which vendor got from a particular order (eg: after deducting commission, gateway fee etc)
+             * but in case of refund we are not deducting gateway fee, so net_amount fee is a negative value, hence it was effecting
+             * calculation in various places.
+             * 3. setting net_amount value to zero in case of negative balance solved this issue temporarily.
+             * 4. In future we need to consider this gateway fee in case of refund and needs to use proper formatting to display refunded
+             * amount both for gateway fees and application fees.
+             */
+            $new_net_amount = ($new_net_amount < 0 ) ? 0.00 : $new_net_amount;
 
             // insert on dokan sync table
             $wpdb->update(

@@ -351,11 +351,12 @@ class ProductSubscription extends StripePaymentGateway {
      */
     protected function create_subscription( $subscription_args ) {
         try {
-            // Lets carge the vendor while creating new subscription
-            $prepared_source = $this->prepare_source( get_current_user_id() );
-            $this->validate_source( $prepared_source );
-            $this->stripe_customer = $prepared_source->customer;
-
+            // Lets charge the vendor while creating new subscription
+            if ( empty( $this->stripe_customer ) ) {
+                $prepared_source = $this->prepare_source( get_current_user_id() );
+                $this->validate_source( $prepared_source );
+                $this->stripe_customer = $prepared_source->customer;
+            }
             $subscription_args['expand']    = [ 'latest_invoice.payment_intent' ];
             $subscription_args['customer']  = $this->stripe_customer;
             $subscription = Subscription::create( $subscription_args );

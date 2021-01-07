@@ -219,7 +219,7 @@ class Dokan_Pro {
      * @return void
      * */
     public function install_dokan_lite() {
-        if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'dokan-pro-installer-nonce' ) ) {
+        if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'dokan-pro-installer-nonce' ) ) {
             wp_send_json_error( __( 'Error: Nonce verification failed', 'dokan' ) );
         }
 

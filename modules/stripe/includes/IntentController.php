@@ -43,9 +43,11 @@ class IntentController extends StripePaymentGateway {
      * @return WC_Order
      */
     protected function get_order_from_request() {
-        if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_key( $_GET['nonce'] ), 'dokan_stripe_confirm_pi' ) ) {
+        /*
+        if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'], 'dokan_stripe_confirm_pi' ) ) {
             throw new DokanException( 'missing-nonce', __( 'CSRF verification failed.', 'dokan' ) );
         }
+        */
 
         $order_id = null;
 
@@ -57,6 +59,10 @@ class IntentController extends StripePaymentGateway {
 
         if ( ! $order ) {
             throw new DokanException( 'missing-order', __( 'Missing order ID for payment confirmation', 'dokan' ) );
+        }
+
+        if ( ! isset( $_GET['key'] ) || $order->get_order_key() !== sanitize_text_field( wp_unslash( $_GET['key'] ) ) ) {
+            throw new DokanException( 'missing-order-key', __( 'Invalid order id. Plase try again.', 'dokan' ) );
         }
 
         return $order;
@@ -279,6 +285,7 @@ class IntentController extends StripePaymentGateway {
                 $stripe_fee_for_vendor = Helper::calculate_processing_fee_for_suborder( $stripe_fee, $tmp_order, $order );
                 $vendor_raw_earning    = $vendor_raw_earning - $stripe_fee_for_vendor;
 
+                $tmp_order->update_meta_data( 'dokan_gateway_stripe_fee', $stripe_fee_for_vendor );
                 $tmp_order->update_meta_data( 'dokan_gateway_fee_paid_by', 'seller' );
             }
 
@@ -286,6 +293,7 @@ class IntentController extends StripePaymentGateway {
 
             if ( ! $connected_vendor_id ) {
                 $tmp_order->add_order_note( sprintf( __( 'Vendor\'s payment will be transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
+                $tmp_order->save_meta_data();
                 continue;
             }
 

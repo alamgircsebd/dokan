@@ -38,7 +38,6 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * @return object
      */
     public function prepare_source( $user_id, $force_save_source = false, $existing_customer_id = null ) {
-        global $woocommerce;
 
         $customer = new Customer( $user_id );
 
@@ -58,7 +57,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
         if ( ! empty( $posted['stripe_source'] ) ) {
             $source_object    = $this->get_source_object( wc_clean( $posted['stripe_source'] ) );
             $source_id        = $source_object->id;
-            $maybe_saved_card = ! empty( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] );
+            $maybe_saved_card = isset( $_POST[ 'wc-' . $payment_method . '-new-payment-method' ] ) && ! empty( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] );
             /**
              * This is true if the user wants to store the card to their account.
              * Criteria to save to file is they are logged in, they opted to save or product requirements and the source is
@@ -66,6 +65,9 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
              */
             if ( ( $user_id && Helper::save_cards() && $maybe_saved_card && 'reusable' === $source_object->usage ) || $force_save_source ) {
                 $response           = $customer->add_source( $source_object->id );
+                if ( ! empty( $response->error ) ) {
+                    throw new DokanException( print_r( $response, true ), Helper::get_localized_error_message_from_response( $response ) );
+                }
                 $setup_future_usage = true;
             }
 
@@ -85,9 +87,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             }
         } elseif ( ! empty( $posted['stripe_token' ] ) && 'new' !== $posted['stripe_token'] ) {
             $stripe_token     = wc_clean( $posted['stripe_token'] );
-            $source_id        = $stripe_token;
             $is_token         = true;
-            $maybe_saved_card = ! empty( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] );
+            $maybe_saved_card = isset( $_POST[ 'wc-' . $payment_method . '-new-payment-method' ] ) && ! empty( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] );
 
             /**
              * This is true if the user wants to store the card to their account.
@@ -95,22 +96,37 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
              * actually reusable. Either that or force_save_source is true.
              */
             if ( ( $user_id && Helper::save_cards() && $maybe_saved_card ) || $force_save_source ) {
-                $response           = $customer->add_source( $stripe_token );
+                $response = $customer->add_source( $stripe_token );
+                if ( ! empty( $response->error ) ) {
+                    throw new DokanException( print_r( $response, true ), $response->error->message );
+                }
+                $source_id    = $response;
                 $setup_future_usage = true;
+            } else {
+                $source_id    = $stripe_token;
+                $is_token     = true;
             }
         }
 
         $customer_id = $customer->get_id();
 
+        /**
+         * note: we need to add source while adding/updating a customer, because admin make change
+         * non3ds to 3ds and vice-versa, it that case, if we don't attach source to a customer, then
+         * payment wont work.
+         */
         if ( ! $customer_id ) {
-            $customer->set_id( $customer->create_customer( [ 'source' => $source_id ] ) );
+            if ( $source_id ) {
+                $customer->set_id( $customer->create_customer( [ 'source' => $source_id ] ) );
+            } else {
+                $customer->set_id( $customer->create_customer() );
+            }
             $customer_id = $customer->get_id();
         } else {
-            try {
+            if ( $source_id ) {
                 $customer->update_customer( [ 'source' => $source_id ] );
-            } catch ( Exception $exception ) {
-                $customer->set_id( $customer->create_customer( [ 'source' => $source_id ] ) );
-                $customer_id = $customer->get_id();
+            } else {
+                $customer->update_customer();
             }
         }
 

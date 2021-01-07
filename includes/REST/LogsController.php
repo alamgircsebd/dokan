@@ -98,7 +98,7 @@ class LogsController extends DokanRESTAdminController {
 
             $order_total    = $order->get_total();
             $has_refund     = $order->get_total_refunded() ? true : false;
-            $total_shipping = $order->get_total_shipping() ? $order->get_total_shipping() : 0;
+            $total_shipping = $order->get_shipping_total() ? $order->get_shipping_total() : 0;
 
             $tax_totals = 0;
             if ( $order->get_tax_totals() ) :
@@ -109,12 +109,21 @@ class LogsController extends DokanRESTAdminController {
 
             /**
              * Payment gateway fee minus from admin commission earning
+             * net amount is excluding gateway fee, so we need to deduct it from admin commission
+             * otherwise admin commission will be including gateway fees
              */
             $processing_fee = $order->get_meta( 'dokan_gateway_fee' );
             $commission     = $is_subscription_product ? $result->order_total : $result->order_total - $result->net_amount;
 
             if ( $processing_fee && $processing_fee > 0 ) {
-                $commission = $is_subscription_product ? $result->order_total : ( $result->order_total - $result->net_amount ) - $processing_fee;
+                $commission = $is_subscription_product ? $result->order_total : $commission - $processing_fee;
+            }
+
+            /**
+             * In case of refund, we are not excluding gateway fee, in case of stripe full/partial refund net amount can be negative
+             */
+            if ( $commission < 0 ) {
+                $commission = 0;
             }
 
             $dp = 2; // 2 decimal points

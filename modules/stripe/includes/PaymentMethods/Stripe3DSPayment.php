@@ -40,53 +40,92 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
      * @return array
      */
     public function pay() {
-        $order              = $this->order;
-        $stripe_customer_id = null;
-        $force_save_source  = true;
+        try {
+            $order = $this->order;
+            $stripe_customer_id = null;
+            $force_save_source = false;
 
-        // If it's a recurring subscription order.
-        if ( Helper::is_subscription_order( $order ) ) {
-            $order_items        = $order->get_items();
-            $product_pack_item  = reset( $order_items );
-            $product_pack       = wc_get_product( $product_pack_item->get_product_id() );
-            $dokan_subscription = dokan()->subscription->get( $product_pack->get_id() );
-
-            if ( $dokan_subscription->is_recurring() ) {
-                update_user_meta( get_current_user_id(), 'product_order_id', $order->get_id() );
-                $order->add_order_note( sprintf( __( 'Order payment is completed via stripe with 3d secure', 'dokan' ) ) );
-                $order->payment_complete();
-
-                return [
-                    'result'   => 'success',
-                    'redirect' => $this->get_return_url( $order )
-                ];
+            // check if this is a subscription product
+            if (Helper::has_subscription($order->get_id())) {
+                $force_save_source = true;
             }
+
+            // If it's a recurring subscription order.
+            if (Helper::is_subscription_order($order)) {
+                $force_save_source = true;
+                $order_items = $order->get_items();
+                $product_pack_item = reset($order_items);
+                $product_pack = wc_get_product($product_pack_item->get_product_id());
+                $dokan_subscription = dokan()->subscription->get($product_pack->get_id());
+
+                if ($dokan_subscription->is_recurring()) {
+                    update_user_meta(get_current_user_id(), 'product_order_id', $order->get_id());
+                    $order->add_order_note(sprintf(__('Order payment is completed via stripe with 3d secure', 'dokan')));
+                    $order->payment_complete();
+
+                    return [
+                        'result' => 'success',
+                        'redirect' => $this->get_return_url($order)
+                    ];
+                }
+            }
+
+            $this->validate_minimum_order_amount($order);
+
+            // Check whether there is an existing intent.
+            $intent = $this->get_intent_from_order($order);
+
+            if (!empty($intent->customer)) {
+                $stripe_customer_id = $intent->customer;
+            }
+
+            $prepared_source = $this->prepare_source(get_current_user_id(), $force_save_source, $stripe_customer_id);
+
+            $this->validate_source($prepared_source);
+
+            if ($force_save_source) {
+                $this->save_source_to_order($order, $prepared_source);
+            }
+
+            if ( $intent ) {
+                try {
+                    $intent = $this->update_existing_intent($intent, $order, $prepared_source);
+                } catch ( DokanException $e ) {
+                    dokan_log( __( 'Error: updating payment intent error: ', 'dokan' ) .  $e->get_message() );
+                    $intent = $this->create_intent($order, $prepared_source);
+                }
+            } else {
+                $intent = $this->create_intent($order, $prepared_source);
+            }
+
+            return $this->process_intent_status($intent, $prepared_source, $order);
+        } catch ( DokanException $e ) {
+            $order->add_order_note( sprintf( __( 'Stripe Payment Error: %s', 'dokan' ), $e->getMessage() ) );
+            wc_add_notice( __( 'Error: ', 'dokan' ) . $e->getMessage(), 'error'  );
+            dokan_log( 'Stripe 3ds Payment Error: Order ID: ' . $order->get_id()  . ', Error Message: ' . $e->getMessage() . ', Response Data: ' . $e->get_error_code() );
+            do_action( 'dokan_gateway_stripe_process_payment_error', $e, $order );
+
+            /* translators: error message */
+            $order->update_status( 'failed' );
+
+            return array(
+                'result'   => 'fail',
+                'redirect' => '',
+            );
+        } catch ( Exception $e ) {
+            $order->add_order_note( sprintf( __( 'Stripe Payment Error: %s', 'dokan' ), $e->getMessage() ) );
+            wc_add_notice( __( 'Error: ', 'dokan' ) . $e->getMessage(), 'error'  );
+
+            do_action( 'dokan_gateway_stripe_process_payment_error', $e, $order );
+
+            /* translators: error message */
+            $order->update_status( 'failed' );
+
+            return array(
+                'result'   => 'fail',
+                'redirect' => '',
+            );
         }
-
-        $this->validate_minimum_order_amount( $order );
-
-        // Check whether there is an existing intent.
-        $intent = $this->get_intent_from_order( $order );
-
-        if ( ! empty( $intent->customer ) ) {
-            $stripe_customer_id = $intent->customer;
-        }
-
-        $prepared_source = $this->prepare_source( get_current_user_id(), $force_save_source, $stripe_customer_id );
-
-        $this->validate_source( $prepared_source );
-
-        if ( $force_save_source ) {
-            $this->save_source_to_order( $order, $prepared_source );
-        }
-
-        if ( $intent ) {
-            $intent = $this->update_existing_intent( $intent, $order, $prepared_source );
-        } else {
-            $intent = $this->create_intent( $order, $prepared_source );
-        }
-
-        return $this->process_intent_status( $intent, $prepared_source, $order );
     }
 
     /**
@@ -239,7 +278,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
                 $request
             );
         } catch ( Exception $e ) {
-            throw new Exception( 'payment_intent_error', $e->getMessage() );
+            throw new DokanException( 'payment_intent_error', $e->getMessage() );
         }
 
         return $intent;

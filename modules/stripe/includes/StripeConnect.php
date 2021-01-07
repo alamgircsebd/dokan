@@ -155,7 +155,7 @@ class StripeConnect extends StripePaymentGateway {
             if ( $amount * 100 < $this->get_minimum_amount() ) {
                 /* translators: minimum amount */
                 $message = sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'dokan' ), wc_price( $this->get_minimum_amount() / 100 ) );
-                throw new Exception(
+                throw new DokanException(
                     'Error while processing renewal order ' . $renewal_order->get_id() . ' : ' . $message,
                     $message
                 );
@@ -206,7 +206,7 @@ class StripeConnect extends StripePaymentGateway {
             $source_object   = $prepared_source->source_object;
 
             if ( ! $prepared_source->customer ) {
-                throw new Exception(
+                throw new DokanException(
                     'Failed to process renewal for order ' . $renewal_order->get_id() . '. Stripe customer id is missing in the order',
                     __( 'Customer not found', 'dokan' )
                 );
@@ -248,21 +248,15 @@ class StripeConnect extends StripePaymentGateway {
                     } else {
                         $localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'dokan' );
                         $renewal_order->add_order_note( $localized_message );
-                        throw new Exception( print_r( $response, true ), $localized_message );
+                        throw new DokanException( print_r( $response, true ), $localized_message );
                     }
                 }
 
-                $localized_messages = Helper::get_localized_messages();
-
-                if ( 'card_error' === $response->error->type ) {
-                    $localized_message = isset( $localized_messages[ $response->error->code ] ) ? $localized_messages[ $response->error->code ] : $response->error->message;
-                } else {
-                    $localized_message = isset( $localized_messages[ $response->error->type ] ) ? $localized_messages[ $response->error->type ] : $response->error->message;
-                }
+                $localized_message = Helper::get_localized_error_message_from_response( $response );
 
                 $renewal_order->add_order_note( $localized_message );
 
-                throw new Exception( print_r( $response, true ), $localized_message );
+                throw new DokanException( print_r( $response, true ), $localized_message );
             }
 
             // Either the charge was successfully captured, or it requires further authentication.
@@ -290,6 +284,12 @@ class StripeConnect extends StripePaymentGateway {
             }
 
             $this->unlock_order_payment( $renewal_order );
+        } catch ( DokanException $e ) {
+            do_action( 'wc_gateway_stripe_process_payment_error', $e, $renewal_order );
+            dokan_log( 'caught exception on process_subscription_payment, code: ' . $e->get_error_code() . ', message: ' . $e->getMessage() );
+
+            /* translators: error message */
+            $renewal_order->update_status( 'failed' );
         } catch ( Exception $e ) {
             do_action( 'wc_gateway_stripe_process_payment_error', $e, $renewal_order );
             dokan_log( 'caught exception on process_subscription_payment: ' . $e->getMessage() );
@@ -798,7 +798,14 @@ class StripeConnect extends StripePaymentGateway {
 
             case 'setup_intents':
                 try {
-                    $intent = SetupIntent::retrieve( $intent_id );
+                    $intent = SetupIntent::retrieve(
+                        $intent_id,
+                        [
+                            'expand' => [
+                                'charges.data.balance_transaction',
+                            ],
+                        ]
+                    );
                 } catch( Exception $e ) {
                     return false;
                 }
@@ -1155,11 +1162,15 @@ class StripeConnect extends StripePaymentGateway {
             return $result;
         }
 
+        // get order object
+        $order = wc_get_order( $order_id );
+
         // Put the final thank you page redirect into the verification URL.
         $verification_url = add_query_arg(
             [
                 'order'       => $order_id,
                 'nonce'       => wp_create_nonce( 'dokan_stripe_confirm_pi' ),
+                'key'         => $order->get_order_key(),
                 'redirect_to' => rawurlencode( $result['redirect'] ),
             ],
             WC_AJAX::get_endpoint( 'dokan_stripe_verify_intent' )

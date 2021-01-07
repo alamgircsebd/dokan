@@ -104,9 +104,14 @@ jQuery( function($) {
             dokan_stripe_connect_params.token_done = true;
             $( '.stripe_token').remove();
 
-            $form.unbind( 'checkout_place_order_dokan-stripe-connect' );
+            $form.off( 'checkout_place_order_dokan-stripe-connect' );
             $form.append("<input type='hidden' class='stripe_token' name='stripe_token' value='" + token + "'/>");
             $form.submit();
+
+            //in case of error from stripe end, we need to create stripe token again.
+            $form.on('checkout_place_order_dokan-stripe-connect', function( event ) {
+                return stripeFormHandler();
+            });
         }
     }
 

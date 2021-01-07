@@ -63,10 +63,7 @@ class PaymentTokens {
     public function get_customer_payment_tokens( $tokens = [], $customer_id, $gateway_id ) {
         if ( is_user_logged_in() && class_exists( 'WC_Payment_Token_CC' ) ) {
             $stored_tokens = [];
-
-            foreach ( $tokens as $token ) {
-                $stored_tokens[] = $token->get_token();
-            }
+            $stripe_stored_tokens = [];
 
             if ( $this->gateway_id !== $gateway_id ) {
                 return $tokens;
@@ -75,8 +72,19 @@ class PaymentTokens {
             $stripe_customer = new Customer( $customer_id );
             $stripe_sources  = $stripe_customer->get_sources();
 
-            if ( is_array( $stripe_sources ) && empty( $stripe_sources ) ) {
-                return $stripe_sources;
+            // get all stripe sources
+            foreach ( $stripe_sources as $source ) {
+                $stripe_stored_tokens[] = $source->id;
+            }
+
+            // delete from local token reference if source doesn't exists on stripe end.
+            foreach ( $tokens as $token ) {
+                if ( ! in_array( $token->get_token(), $stripe_stored_tokens ) ) {
+                    $token->delete( true );
+                    continue;
+                }
+
+                $stored_tokens[] = $token->get_token();
             }
 
             foreach ( $stripe_sources as $source ) {

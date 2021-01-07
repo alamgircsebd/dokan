@@ -99,6 +99,10 @@ class Manager {
             return new WP_Error( 'dokan_pro_refund_create', sprintf( __( 'There is a pending refund request exists associated with the order_id %d', 'dokan' ), $args['order_id'] ) );
         }
 
+        if ( ! $this->is_approvable( $args['order_id'] ) ) {
+            return new WP_Error( 'dokan_pro_refund_error_create', __( 'Refund requests can not be made due to a mismatch on withdrawal options selected on admin settings. Please check Order Status for Withdraw option from Dokan --> Settings --> Withdraw Options.', 'dokan' ) );
+        }
+
         $refund = new Refund( $args );
 
         return $refund->save();
