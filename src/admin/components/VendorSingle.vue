@@ -507,10 +507,16 @@ export default {
             }
 
             this.store.admin_additional_fee = accounting.formatNumber( this.store.admin_additional_fee, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format );
-            this.store.admin_commission = this.store.admin_commission_type == 'flat' ? accounting.formatNumber( this.store.admin_commission, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format ) : this.store.admin_commission;
 
-            if (this.store.admin_commission === accounting.formatNumber( 0.00, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format )) {
-                this.store.admin_commission = '';
+            /**
+             * if admin commission type is flat and no admin commission is set then it will not not set
+             *
+             * if admin commission type is flat and admin commission is set to 0 then it will show 0
+             *
+             * blank string is for not set
+             */
+            if (this.store.admin_commission_type === 'flat' && this.store.admin_commission !== '') {
+                this.store.admin_commission = accounting.formatNumber( this.store.admin_commission, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format );
             }
         },
 
