@@ -103,34 +103,49 @@ class Dokan_Vendor_Analytics_Reports {
     /**
      * Get dokan vendor analytics
      *
+     * @param string $start_date
+     * @param string $end_date
+     * @param string $metrics
+     * @param bool $dimensions
+     * @param bool $sort
+     * @param bool $filter
+     * @param bool $limit
+     *
      * @since 1.0.0
      *
-     * @return array
+     * @return Dokan_Service_Analytics_GaData|WP_Error|null
      */
-    public function dokan_get_vendor_analytics( $start_date = '30daysAgo', $end_date = 'yesterday', $metrics = 'ga:users', $dimensions = false, $sort = false, $filter = false, $limit = false  ){
+    public function dokan_get_vendor_analytics( $start_date = '30daysAgo', $end_date = 'yesterday', $metrics = 'ga:users', $dimensions = false, $sort = false, $filter = false, $limit = false ) {
+        try {
+            $params = [];
 
-        $params = array();
+            if ( $dimensions ) {
+                $params['dimensions'] = $dimensions;
+            }
+            if ( $sort ) {
+                $params['sort'] = $sort;
+            }
+            if ( $limit ) {
+                $params['max-results'] = $limit;
+            }
+            $params['filters'] = $this->filter_page_path( $filter );
 
-        if ( $dimensions ) {
-            $params['dimensions'] = $dimensions;
+            $dokan_analytics = $this->load_dokan_vendor_analytics();
+
+            if ( empty( $dokan_analytics['client'] ) ) {
+                return null;
+            }
+
+            $service = new Dokan_Service_Analytics( $dokan_analytics['client'] );
+            $result  = $service->data_ga->get( $dokan_analytics['profile_id'], $start_date, $end_date, $metrics, $params );
+
+            return $result;
+        } catch ( Exception $e ) {
+            return new WP_Error(
+                'dokan_get_vendor_analytics',
+                $e->getMessage()
+            );
         }
-        if ( $sort ) {
-            $params['sort'] = $sort;
-        }
-        if ( $limit ) {
-            $params['max-results'] = $limit;
-        }
-        $params['filters'] = $this->filter_page_path( $filter );
-
-        $dokan_analytics = $this->load_dokan_vendor_analytics();
-
-        if ( empty( $dokan_analytics['client'] ) ) {
-            return null;
-        }
-
-        $service = new Dokan_Service_Analytics( $dokan_analytics['client'] );
-        $result = $service->data_ga->get( $dokan_analytics['profile_id'], $start_date, $end_date, $metrics, $params );
-        return $result;
     }
 
     /**

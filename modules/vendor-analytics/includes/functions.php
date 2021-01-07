@@ -84,7 +84,7 @@ function dokan_analytics_date_form( $start_date, $end_date ) {
  * Returns general analytics
  *
  * @since 1.0
- * @return array
+ * @return void
  */
 function dokan_general_analytics() {
     $metrics    = 'ga:users,ga:sessions,ga:users,ga:pageviews,ga:bounceRate,ga:newUsers,ga:sessionDuration';
@@ -640,7 +640,12 @@ function dokan_vendor_analytics_api_get_profiles() {
 
         $profiles      = [];
         $profiles_map  = [];
+
         $profile_items = $service->management_accountSummaries->listManagementAccountSummaries()->getItems();
+
+        if ( empty( $profile_items ) ) {
+            return $profiles;
+        }
 
         if ( ! empty( $profile_items ) ) {
             foreach ( $profile_items as $item ) {

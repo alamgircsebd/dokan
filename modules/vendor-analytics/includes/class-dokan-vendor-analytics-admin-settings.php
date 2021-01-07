@@ -17,6 +17,7 @@ class Dokan_Vendor_Analytics_Admin_Settings {
         add_filter( 'dokan_settings_fields', array( $this, 'add_settings_fields' ) );
         add_filter( 'dokan_settings_refresh_option_dokan_vendor_analytics_profile', array( $this, 'refresh_admin_settings_option_profile' ) );
         add_action( 'wp_head', array( $this, 'add_tracking_code' ), 0 );
+        add_action( 'woocommerce_api_disconnect-google-analytics-profile', [ $this, 'disconnect_google_analytics_profile' ] );
     }
 
     /**
@@ -107,7 +108,13 @@ class Dokan_Vendor_Analytics_Admin_Settings {
         } else {
             if ( empty( $profiles ) ) {
                 $profiles = dokan_vendor_analytics_api_get_profiles();
+
+                if ( is_wp_error( $profiles ) ) {
+                    $profiles = [];
+                }
             }
+
+            $disconnect_url = site_url( 'wc-api/disconnect-google-analytics-profile' ) . '?nonce=' . wp_create_nonce( 'disconnect-google-analytics-profile' );
 
             $analytics_fields = array(
                 'profile'  => array(
@@ -117,6 +124,7 @@ class Dokan_Vendor_Analytics_Admin_Settings {
                     'placeholder' => __( 'Select your profile', 'dokan' ),
                     'grouped'     => true,
                     'options'     => $profiles,
+                    'desc'  => sprintf( '<a class="button button-danger" href="%s">%s</a>', $disconnect_url, __( 'Disconnect', 'dokan' ) ),
                     'refresh_options' => array(
                         'messages' => array(
                             'refreshing' => __( 'Refreshing profile list', 'dokan' ),
@@ -152,16 +160,20 @@ class Dokan_Vendor_Analytics_Admin_Settings {
      * @return array
      */
     public function refresh_admin_settings_option_profile() {
-        $profiles = dokan_vendor_analytics_api_get_profiles();
+        try {
+            $profiles = dokan_vendor_analytics_api_get_profiles();
 
-        if ( is_wp_error( $profiles ) ) {
-            throw new DokanException(
-                $profiles->get_error_code(),
-                $profiles->get_error_message()
-            );
+            if ( is_wp_error( $profiles ) ) {
+                throw new DokanException(
+                    $profiles->get_error_code(),
+                    $profiles->get_error_message()
+                );
+            }
+
+            return $profiles;
+        } catch ( Exception $e ) {
+            return [];
         }
-
-        return $profiles;
     }
 
     /**
@@ -193,5 +205,33 @@ class Dokan_Vendor_Analytics_Admin_Settings {
         dokan_vendor_analytics_get_template( 'tracking-code', array(
             'web_properties_id' => $api_data['profiles_map'][ $profile ],
         ) );
+    }
+
+    /**
+     * Disconnect google analytics profile
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function disconnect_google_analytics_profile() {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return;
+        }
+
+        $nonce = sanitize_text_field( $_GET['nonce'] );
+
+        if ( isset( $_GET['nonce'] ) && ! wp_verify_nonce( $nonce, 'disconnect-google-analytics-profile' ) ) {
+            return;
+        }
+
+        $api_data = get_option( 'dokan_vendor_analytics_google_api_data', [] );
+
+        if ( $api_data ) {
+            delete_option( 'dokan_vendor_analytics_google_api_data' );
+            wp_safe_redirect( admin_url( 'admin.php?page=dokan#/settings' ) );
+        }
+
+        exit;
     }
 }
