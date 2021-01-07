@@ -170,7 +170,7 @@ Class SocialLogin {
             /**
              * Hold information about provider when user clicks on Sign In.
              */
-            $provider = ! empty( $_GET['dokan_reg'] ) ? $_GET['dokan_reg'] : '';
+            $provider = ! empty( $_GET['vendor_social_reg'] ) ? $_GET['vendor_social_reg'] : '';
 
             if ( $provider ) {
                 $storage->set( 'provider', $provider );
