@@ -327,15 +327,11 @@ class WC_Product_CSV_Importer extends WC_Product_Importer {
                 $term = term_exists( $_term, 'product_cat', $parent );
                 // @codingStandardsIgnoreEnd
 
+                if ( ! $term ) {
+                    continue; //skipping this because we dont give vendor to create category
+                }
+
                 if ( is_array( $term ) ) {
-                    $term_id = $term['term_id'];
-                } else {
-                    $term = wp_insert_term( $_term, 'product_cat', array( 'parent' => intval( $parent ) ) );
-
-                    if ( is_wp_error( $term ) ) {
-                        break; // We cannot continue if the term cannot be inserted.
-                    }
-
                     $term_id = $term['term_id'];
                 }
 
@@ -370,7 +366,7 @@ class WC_Product_CSV_Importer extends WC_Product_Importer {
             $term = get_term_by( 'name', $name, 'product_tag' );
 
             if ( !$term || is_wp_error( $term ) ) {
-                $term = (object) wp_insert_term( $name, 'product_tag' );
+                continue; //skipping this because we dont give vendor to create tags
             }
 
             if ( !is_wp_error( $term ) ) {
