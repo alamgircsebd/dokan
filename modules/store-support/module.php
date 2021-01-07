@@ -264,7 +264,17 @@ class Module {
      * @return void
      */
     public function ajax_handler() {
-        switch ( $_POST['data'] ) {
+        $get_data = $_POST['data'];
+
+        if ( is_user_logged_in() && 'login_form' === $get_data ) {
+            $get_data = 'get_support_form';
+        }
+
+        if ( ! is_user_logged_in() && 'get_support_form' === $get_data ) {
+            $get_data = 'login_form';
+        }
+
+        switch ( $get_data ) {
             case 'login_form':
                 wp_send_json_success( $this->login_form() );
                 break;

@@ -100,7 +100,13 @@ class StoreSupportButton extends DokanButton {
      * @return string
      */
     protected function get_button_class() {
-        return 'dokan-store-support-btn';
+        $user_logged_class = 'user_logged_out';
+        
+        if ( is_user_logged_in() ) {
+            $user_logged_class = 'user_logged';
+        }
+        
+        return 'dokan-store-support-btn ' . $user_logged_class;
     }
 
     /**
