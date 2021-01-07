@@ -1484,17 +1484,12 @@ class Module {
 
         if ( empty( $data['id'] ) && ! empty( $data['sku'] ) ) {
             $product_id = wc_get_product_id_by_sku( $data['sku'] );
-
-            $post_author = absint( get_post_field( 'post_author', $product_id ) );
-
-            if ( (int) $post_author === (int) $current_user ) {
-                $data['sku'] = 0;
-            }
         }
 
         $post_author = absint( get_post_field( 'post_author', $product_id ) );
 
-        if ( (int) $post_author === (int) $current_user ) {
+        if ( (int) $post_author !== (int) $current_user ) {
+            $data['sku'] = 0;
             $data['id'] = 0;
         }
 
