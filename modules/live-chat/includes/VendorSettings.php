@@ -53,12 +53,12 @@ class VendorSettings {
 
         ?>
         <div class="dokan-form-group">
-            <label class="dokan-w3 dokan-control-label"><?php _e( 'Enable Live Chat' , 'dokan' ) ?></label>
+            <label class="dokan-w3 dokan-control-label"><?php esc_html_e( 'Enable Live Chat', 'dokan' ); ?></label>
             <div class="dokan-w5 dokan-text-left">
                 <div class="checkbox">
                     <label>
                         <input type="hidden" name="live_chat" value="no">
-                        <input type="checkbox" id="live_chat" name="live_chat" value="yes" <?php checked( $enable_chat, 'yes' ); ?>><?php  _e( 'Enable Live Chat', 'dokan'); ?>
+                        <input type="checkbox" id="live_chat" name="live_chat" value="yes" <?php checked( $enable_chat, 'yes' ); ?>><?php esc_html_e( 'Enable Live Chat', 'dokan' ); ?>
                     </label>
                 </div>
             </div>
@@ -68,7 +68,7 @@ class VendorSettings {
         if ( $is_messenger ) {
             ?>
             <div class="dokan-form-group dokan-live-chat-settings">
-                <label for="fb_page_id" class="dokan-w3 dokan-control-label"><?php esc_html_e( 'Facebook Page ID' , 'dokan' ) ?></label>
+                <label for="fb_page_id" class="dokan-w3 dokan-control-label"><?php esc_html_e( 'Facebook Page ID', 'dokan' ); ?></label>
                 <div class="dokan-w5 dokan-text-left">
                     <input type="text" id="fb_page_id" name="fb_page_id" value=<?php echo esc_attr( $fb_page_id ); ?>>
                     <a
@@ -78,6 +78,18 @@ class VendorSettings {
                         class="get-fb-page-id">
                         <?php esc_html_e( 'Get Facebook page id', 'dokan' ); ?>
                     </a>
+                    <p>
+                        <small>
+                            <?php esc_html_e( 'Setup Facebook Messenger Chat', 'dokan' ); ?>   
+                        <a
+                            href="<?php echo esc_url( 'https://wedevs.com/docs/dokan/modules/dokan-live-chat/' ); ?>"
+                            style="text-decoration: underline !important;font-weight: bold;color: gray;"
+                            target="_blank"
+                            class="get-fb-page-id">
+                            <?php esc_html_e( 'Get Help', 'dokan' ); ?>
+                        </a>
+                        </small> 
+                    </p>
                 </div>
             </div>
             <?php
@@ -92,15 +104,17 @@ class VendorSettings {
      * @return void
      */
     public function dokan_live_chat_save_seller_settings( $user_id ) {
-        if ( ! isset( $_POST['live_chat'] ) ) {
+        $get_postdata = wp_unslash( $_POST ); // phpcs:ignore
+
+        if ( ! isset( $get_postdata['live_chat'] ) ) {
             return;
         }
 
         $store_info               = dokan_get_store_info( $user_id );
-        $store_info['live_chat']  = wc_clean( $_POST['live_chat'] );
+        $store_info['live_chat']  = wc_clean( $get_postdata['live_chat'] );
 
-        if ( ! empty( $_POST['fb_page_id'] ) ) {
-            $store_info['fb_page_id'] = wc_clean( $_POST['fb_page_id'] );
+        if ( ! empty( $get_postdata['fb_page_id'] ) ) {
+            $store_info['fb_page_id'] = wc_clean( $get_postdata['fb_page_id'] );
         }
 
         update_user_meta( $user_id, 'dokan_profile_settings', $store_info );

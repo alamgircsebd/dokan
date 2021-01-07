@@ -7,10 +7,10 @@ use WP_Error;
 defined( 'ABSPATH' ) || exit;
 
 class Messenger {
-    const VERSION = 'v8.0';
+    const VERSION = 'v9.0';
 
     public function __construct() {
-        add_action( 'init', [ $this, 'register_shortcode'] );
+        add_action( 'init', [ $this, 'register_shortcode' ] );
 
         // chat button on vendor store page
         add_action( 'dokan_after_store_tabs', [ $this, 'render_live_chat_button' ] );
@@ -113,7 +113,7 @@ class Messenger {
     }
 
     public function render_live_chat_button_product_page() {
-        if ( ! AdminSettings::show_chat_above_product_tab()  ) {
+        if ( ! AdminSettings::show_chat_above_product_tab() ) {
             return;
         }
 
