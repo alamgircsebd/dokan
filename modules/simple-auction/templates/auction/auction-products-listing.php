@@ -103,7 +103,7 @@
                                             <?php } ?>
 
                                             <?php if ( current_user_can( 'dokan_delete_auction_product' ) ) { ?>
-                                                <span class="delete"><a onclick="return confirm('Are you sure?');" href="<?php echo wp_nonce_url( add_query_arg( [ 'action' => 'dokan-delete-auction-product', 'product_id' => $post->ID ], dokan_get_navigation_url( 'auction' ) ), 'dokan-delete-auction-product' ); ?>"><?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
+                                                <span class="delete"><a onclick="return confirm('<?php esc_attr_e( 'Are you sure want to delete?', 'dokan' ); ?>');" href="<?php echo wp_nonce_url( add_query_arg( [ 'action' => 'dokan-delete-auction-product', 'product_id' => $post->ID ], dokan_get_navigation_url( 'auction' ) ), 'dokan-delete-auction-product' ); ?>"><?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
                                             <?php } ?>
 
                                             <span class="view"><a href="<?php echo get_permalink( $product->get_id() ); ?>" rel="permalink"><?php _e( 'View', 'dokan' ); ?></a></span>
