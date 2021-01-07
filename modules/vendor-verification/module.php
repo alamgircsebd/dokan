@@ -865,15 +865,26 @@ class Module {
      * Creates .htaccess & index.html files if not exists that prevent direct folder access
      */
     public function disallow_direct_access() {
-        if ( get_transient( 'dokan_vendor_verification_access_check' ) ) {
-            return;
-        }
-
         $uploads_dir   = trailingslashit( wp_upload_dir()['basedir'] ) . 'verification';
         $file_htaccess = $uploads_dir . '/.htaccess';
         $file_html     = $uploads_dir . '/index.html';
+        $rule = <<<EOD
+Options -Indexes
+deny from all
+<FilesMatch '\.(jpg|jpeg|png|gif|mp3|ogg)$'>
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+EOD;
 
-        $rule = 'deny from all';
+        if ( ( file_exists( $file_htaccess ) && file_get_contents( $file_htaccess ) === 'deny from all' ) || ! file_exists( $file_htaccess ) )  {
+            file_put_contents( $file_htaccess, '' ); // phpcs:ignore
+            file_put_contents( $file_htaccess, $rule ); // phpcs:ignore
+        }
+
+        if ( get_transient( 'dokan_vendor_verification_access_check' ) ) {
+            return;
+        }
 
         if ( ! is_dir( $uploads_dir ) ) {
             wp_mkdir_p( $uploads_dir );
