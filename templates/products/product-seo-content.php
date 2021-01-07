@@ -41,6 +41,14 @@
                     <div class="dokan-btn snippet-btn"><i class="fa fa-edit"></i> <?php esc_html_e( 'Edit Snippet', 'dokan' ); ?></div>
                 </div>
 
+                <?php
+                if ( version_compare( WPSEO_VERSION, '15.1', '>' ) ) {
+                    $get_title_separator = YoastSEO()->helpers->options->get_title_separator();
+                } elseif ( version_compare( WPSEO_VERSION, '15.2', '<' ) ) {
+                    $get_title_separator = WPSEO_Utils::get_title_separator();
+                }
+                ?>
+
                 <div class="dokan-seo-snippet-edit-wrap" style="display:none">
                     <div class="dokan-form-group" style="position: relative;">
                         <label class="dokan-control-label" for="_yoast_wpseo_title"><?php esc_html_e( 'SEO Title', 'dokan' ); ?></label>
@@ -53,7 +61,7 @@
                             </select>
                         </div>
                         <?php echo get_bloginfo(); ?>
-                        <input type="text" name="_yoast_wpseo_title" data-class=".seo-title" data-sitename="<?php echo get_bloginfo(); ?>" data-sep="<?php echo WPSEO_Utils::get_title_separator(); ?>" data-title="<?php echo get_the_title( $post_id ); ?>" id="wpseo_title" value="<?php echo $seo_title; ?>" class="dokan-form-control wpseo-title-input" placeholder="<?php esc_html_e( 'SEO Title', 'dokan' ); ?>">
+                        <input type="text" name="_yoast_wpseo_title" data-class=".seo-title" data-sitename="<?php echo get_bloginfo(); ?>" data-sep="<?php echo $get_title_separator; ?>" data-title="<?php echo get_the_title( $post_id ); ?>" id="wpseo_title" value="<?php echo $seo_title; ?>" class="dokan-form-control wpseo-title-input" placeholder="<?php esc_html_e( 'SEO Title', 'dokan' ); ?>">
                     </div>
                     <div class="dokan-form-group" style="position: relative;">
                         <label class="dokan-control-label" for="slug"><?php esc_html_e( 'Slug', 'dokan' ); ?></label>
@@ -69,7 +77,7 @@
                                 <option value="[sitename]"><?php esc_html_e( 'Site Title', 'dokan' ); ?></option>
                             </select>
                         </div>
-                        <textarea name="_yoast_wpseo_metadesc"  data-class=".seo-meta" data-sitename="<?php echo get_bloginfo(); ?>" data-sep="<?php echo WPSEO_Utils::get_title_separator(); ?>" data-title="<?php echo get_the_title( $post_id ); ?>" id="wpseo_meta" rows="4" class="dokan-form-control wpseo-meta-input" placeholder="<?php esc_html_e( 'Meta description', 'dokan' ); ?>"><?php echo $seo_metadesc; ?></textarea>
+                        <textarea name="_yoast_wpseo_metadesc"  data-class=".seo-meta" data-sitename="<?php echo get_bloginfo(); ?>" data-sep="<?php echo $get_title_separator; ?>" data-title="<?php echo get_the_title( $post_id ); ?>" id="wpseo_meta" rows="4" class="dokan-form-control wpseo-meta-input" placeholder="<?php esc_html_e( 'Meta description', 'dokan' ); ?>"><?php echo $seo_metadesc; ?></textarea>
                     </div>
                     <div class="dokan-clearfix"></div>
                 </div>
