@@ -161,9 +161,9 @@ function dokan_pa_addons_cmp( $a, $b ) {
     return ( $a['position'] < $b['position'] ) ? -1 : 1;
 }
 
-function get_vendor_staff() {
+function dokan_get_vendor_staff( $vendor_id = null ) {
     $author_in    = [];
-    $current_user = get_current_user_id();
+    $current_user = empty( $vendor_id ) ? get_current_user_id() : absint( $vendor_id );
 
     array_push( $author_in, $current_user );
 
@@ -209,5 +209,5 @@ function get_staff_ids( $user_id ) {
 }
 
 function dokan_pa_view_addon_for_vendor_staff_vendor( $query ) {
-    $query->set( 'author__in', get_vendor_staff() );
+    $query->set( 'author__in', dokan_get_vendor_staff() );
 }

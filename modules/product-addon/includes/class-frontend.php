@@ -264,6 +264,23 @@ class Dokan_Product_Addon_Frontend {
                     'product_cat' => $objects,
                 ),
             ), $reference, $objects ) );
+
+            /*
+                We are checking if the vendor addon is created by staff,
+                if true, we are replacing the post_author with the staff's respective vendor,
+                because while checkout woocommerce handles the addons by addon author matched with product author
+            */
+            if ( current_user_can( 'vendor_staff' ) ) {
+                $vendor_id                = get_user_meta( get_current_user_id(), '_vendor_id', true );
+                $edit_post['ID']          = $edit_id;
+                $edit_post['post_author'] = $vendor_id;
+
+                wp_update_post( $edit_post );
+
+                update_post_meta( $edit_id, '_dokan_vendor_staff_addon_author', get_current_user_id() );
+            }
+
+
         }
 
         if ( in_array( 0, $objects ) ) {

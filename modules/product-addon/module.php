@@ -36,8 +36,9 @@ class Module {
     public function __construct() {
         $this->depends_on['WC_Product_Addons'] = [
             'name'   => 'WC_Product_Addons',
-            /* translators: 1: tag start with href, 2: tag end */
-            'notice' => sprintf( __( '<b>Dokan Product Addon </b> requires %1$sWooCommerce Product addons plugin%2$s to be installed & activated first !', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/product-add-ons/">', '</a>'
+            'notice' => sprintf(
+                /* translators: 1: tag start with href, 2: tag end */
+                __( '<b>Dokan Product Addon </b> requires %1$sWooCommerce Product addons plugin%2$s to be installed & activated first !', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/product-add-ons/">', '</a>'
             ),
         ];
 
@@ -299,6 +300,8 @@ class Module {
      *
      * @param $query
      *
+     * @since DOKAN_PRO_SINCE
+     *
      * @return void
      */
     public function set_author_in_for_vendor_staff( $query ) {
@@ -306,15 +309,17 @@ class Module {
             global $post;
 
             remove_action( 'pre_get_posts', [ $this, 'set_author_in_for_vendor_staff' ] );
-            $vendor = dokan_get_vendor_by_product( $post->ID );
 
-            if ( ! in_array( $vendor->get_id(), get_vendor_staff(), true ) ) {
+            $vendor        = dokan_get_vendor_by_product( $post->ID );
+            $vendor_staffs = dokan_get_vendor_staff( $vendor->get_id() );
+
+            if ( ! in_array( $vendor->get_id(), $vendor_staffs, true ) ) {
                 return;
             }
 
             add_action( 'pre_get_posts', [ $this, 'set_author_in_for_vendor_staff' ] );
 
-            $query->set( 'author__in', get_vendor_staff() );
+            $query->set( 'author__in', $vendor_staffs );
         }
     }
 
