@@ -644,7 +644,7 @@ class Hooks {
 
         if ( $title ) {
             if ( ! empty( $query ) ) {
-                if ( empty( $post_data['post_id'] ) || $post_data['post_id'] !== $query[0]->ID ) { // phpcs:ignore
+                if ( empty( $post_data['post_id'] ) || (int) $post_data['post_id'] !== $query[0]->ID ) {
                     return $errors->add( 'duplicate', __( 'Coupon title already exists', 'dokan' ) );
                 }
             }
