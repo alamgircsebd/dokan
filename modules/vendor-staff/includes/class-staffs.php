@@ -147,7 +147,6 @@ class Dokan_Staffs {
 
         remove_filter( 'pre_user_display_name', 'dokan_seller_displayname' );
         $user = wp_insert_user( $userdata );
-        add_filter( 'pre_user_display_name', 'dokan_seller_displayname' );
 
         if ( is_wp_error( $user ) ) {
             self::$errors[] = $user;

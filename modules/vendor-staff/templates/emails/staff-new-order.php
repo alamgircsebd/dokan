@@ -16,22 +16,43 @@
  * @version 2.5.0
  */
 
- if ( ! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
     exit;
- }
+}
 
 $text_align = is_rtl() ? 'right' : 'left';
 
- /**
-  * @hooked WC_Emails::email_header() Output the email header
-  */
- do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
+/**
+ * @hooked WC_Emails::email_header() Output the email header
+ */
+do_action( 'woocommerce_email_header', $email_heading, $email );
 
- <p><?php printf( __( 'You have received an order from %s.', 'dokan' ), $order->get_formatted_billing_full_name() ); ?></p>
-
- <?php
-
+$order_url = esc_url(
+    add_query_arg(
+        array(
+			'order_id'   => $order->get_order_number(),
+			'_view_mode' => 'email',
+			'permission' => '1',
+        ), dokan_get_navigation_url( 'orders' )
+    )
+);
 ?>
+
+<p>
+    <?php
+    /* translators: %s: Customer billing full name. */
+    printf( __( 'You have received an order from %s.', 'dokan' ), $order->get_formatted_billing_full_name() );
+    ?>
+</p>
+
+<h2>
+    <?php
+    $before = '<a class="link" href="' . esc_url( $order_url ) . '">';
+    $after  = '</a>';
+    /* translators: %s: Order ID. */
+    echo wp_kses_post( $before . sprintf( __( '[Order #%s]', 'dokan' ) . $after . ' (<time datetime="%s">%s</time>)', $order->get_order_number(), $order->get_date_created()->format( 'c' ), wc_format_datetime( $order->get_date_created() ) ) );
+    ?>
+</h2>
 
 <div style="margin-bottom: 40px;">
     <table class="td" cellspacing="0" cellpadding="6" style="width: 100%; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;" border="1">
@@ -48,11 +69,11 @@ $text_align = is_rtl() ? 'right' : 'left';
         <?php $total_price = array(); ?>
         <?php foreach ( $order_info as $value ) : ?>
             <tr class="order_item">
-            <?php foreach ( $value as $key => $info ) :?>
+            <?php foreach ( $value as $key => $info ) : ?>
                 <?php
-                    if ( $key == 'total' ) {
-                        array_push( $total_price, $info );
-                    }
+				if ( 'total' === $key ) {
+					array_push( $total_price, $info );
+				}
                 ?>
 
                 <td class="td" style="text-align: left;vertical-align: middle;font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;color: #636363;border: 1px solid #e5e5e5;padding: 12px"><?php echo $info; ?></td>
@@ -86,13 +107,13 @@ $text_align = is_rtl() ? 'right' : 'left';
 </div>
 
 <?php
- /**
-  * @hooked WC_Emails::customer_details() Shows customer details
-  * @hooked WC_Emails::email_address() Shows email address
-  */
- do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
+/**
+ * @hooked WC_Emails::customer_details() Shows customer details
+ * @hooked WC_Emails::email_address() Shows email address
+ */
+do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
 
- /**
-  * @hooked WC_Emails::email_footer() Output the email footer
-  */
- do_action( 'woocommerce_email_footer', $email );
+/**
+ * @hooked WC_Emails::email_footer() Output the email footer
+ */
+do_action( 'woocommerce_email_footer', $email );

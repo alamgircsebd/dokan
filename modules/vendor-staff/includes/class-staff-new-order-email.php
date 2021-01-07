@@ -105,7 +105,7 @@ if ( ! class_exists( 'Dokan_Staff_New_Order' ) ) :
             }
 
             foreach ( $staff_ids as $staff_id ) {
-                if ( user_can( $staff_id, 'dokan_view_order' ) ) {
+                if ( user_can( $staff_id, 'dokan_view_order' ) || user_can( $staff_id, 'dokan_manage_order' ) || user_can( $staff_id, 'dokan_manage_order_note' ) ) {
                     $staff            = get_userdata( $staff_id );
                     $email            = $staff->user_email;
                     $this->order_info = dokan_get_staff_order_details( $order_id, $staff_id );
