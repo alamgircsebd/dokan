@@ -102,6 +102,7 @@ class Module {
         // insert bookable porduct type
         add_filter( 'dokan_get_product_types', array( $this, 'insert_bookable_product_type' ) );
         add_filter( 'dokan_get_coupon_types', [ $this, 'add_booking_discount' ] );
+        add_filter( 'dokan_get_edit_product_url', [ $this, 'modify_edit_product_url' ], 10, 2 );
     }
 
     /**
@@ -1189,5 +1190,25 @@ class Module {
         $types['booking_person'] = __( 'Booking Person Discount (Amount Off Per Person)', 'dokan' );
 
         return $types;
+    }
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @param $url
+     * @param $product
+     *
+     * @return mixed|string
+     */
+    public function modify_edit_product_url( $url, $product ) {
+        if ( $product->get_type() === 'booking' ) {
+            $url = add_query_arg(
+                [
+                    'product_id' => $product->get_id(),
+                    'action'     => 'edit',
+                ],
+                dokan_get_navigation_url( 'booking' ) . '/edit/'
+            );
+        }
+        return $url;
     }
 }

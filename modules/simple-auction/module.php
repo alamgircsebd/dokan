@@ -71,6 +71,8 @@ class Module {
         add_filter( 'dokan_localized_args', array( $this, 'set_localized_args' ) );
 
         add_action( 'dokan_activated_module_auction', array( self::class, 'activate' ) );
+
+        add_filter( 'dokan_get_edit_product_url', [ $this, 'modify_edit_product_url' ], 10, 2 );
     }
 
     /**
@@ -537,5 +539,25 @@ class Module {
         ];
 
         return array_merge( $args, $auction_args );
+    }
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @param $url
+     * @param $product
+     *
+     * @return mixed|string
+     */
+    public function modify_edit_product_url( $url, $product ) {
+        if ( $product->get_type() === 'auction' ) {
+            $url = add_query_arg(
+                [
+                    'product_id' => $product->get_id(),
+                    'action'     => 'edit',
+                ],
+                dokan_get_navigation_url( 'auction' )
+            );
+        }
+        return $url;
     }
 }
