@@ -82,6 +82,8 @@ class Module {
         add_filter( 'woocommerce_order_item_needs_processing', array( $this, 'order_needs_processing' ), 10, 2 );
         add_filter( 'woocommerce_add_to_cart_redirect', [ __CLASS__, 'add_to_cart_redirect' ] );
         add_filter( 'woocommerce_add_to_cart_validation', [ __CLASS__, 'maybe_empty_cart' ], 10, 3 );
+        add_filter( 'woocommerce_add_to_cart_validation', [ __CLASS__, 'remove_addons_validation' ], 1, 3 );
+        
         add_action( 'woocommerce_order_status_changed', array( $this, 'process_order_pack_product' ), 10, 3 );
 
         add_action( 'template_redirect', array( $this, 'maybe_cancel_or_activate_subscription' ) );
@@ -809,6 +811,22 @@ class Module {
             wc_add_notice( __( 'A subscription has been removed from your cart. Due to payment gateway restrictions, products and subscriptions can not be purchased at the same time.', 'dokan' ) );
         }
 
+        return $valid;
+    }
+
+    /**
+     * Remove addon required validation for dokan subscription product
+     *
+     * @param bool $valid
+     * @param int $product_id
+     * @param int $quantity
+     * @return bool
+     */
+    public static function remove_addons_validation( $valid, $product_id, $quantity ) {
+        if ( Helper::is_subscription_product( $product_id ) && class_exists( 'WC_Product_Addons_Cart' ) ) {
+            remove_filter( 'woocommerce_add_to_cart_validation', array( $GLOBALS['Product_Addon_Cart'], 'validate_add_cart_item' ), 999 );
+        }
+        
         return $valid;
     }
 
