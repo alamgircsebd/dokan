@@ -52,7 +52,7 @@ class InvoicePaymentSucceeded implements WebhookHandleable {
         $order_id     = get_user_meta( $vendor_id, 'product_order_id', true );
         $product_id   = get_user_meta( $vendor_id, 'product_package_id', true );
 
-        if ( ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
+        if ( ! class_exists( 'SubscriptionHelper' ) || ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
             return;
         }
 

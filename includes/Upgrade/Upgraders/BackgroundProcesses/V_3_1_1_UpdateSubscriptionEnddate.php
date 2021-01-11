@@ -8,13 +8,24 @@ use DokanPro\Modules\Subscription\Helper;
 class V_3_1_1_UpdateSubscriptionEnddate extends DokanBackgroundProcesses {
 
     /**
+     * Action
+     *
+     * Override this action in your processor class
+     *
+     * @since 3.1.4
+     *
+     * @var string
+     */
+    protected $action = 'dokan_pro_bg_action_3_1_1';
+
+    /**
      * Sync the missing shipping locations data
      *
      * @since 3.1.1
      *
      * @param int $page
      *
-     * @return int|bool
+     * @return bool
      */
     public function task( $subscription_data ) {
         if ( ! isset( $subscription_data['id'] ) ) {
@@ -55,7 +66,17 @@ class V_3_1_1_UpdateSubscriptionEnddate extends DokanBackgroundProcesses {
             return false;
         }
 
-        update_user_meta( $user_id, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
+        // only update product pack enddate if product type is recurring
+        if ( ! Helper::is_recurring_pack( $vendor_subscription->get_id() ) ) {
+            return false;
+        }
+
+        $old_subscription_enddate   = get_user_meta( $user_id, 'product_pack_enddate', true );
+        $subscription_enddate       = $vendor_subscription->get_product_pack_end_date();
+
+        if ( ! $vendor_subscription->has_active_cancelled_subscrption() && 'unlimited' === $subscription_enddate && $old_subscription_enddate !== $subscription_enddate ) {
+            update_user_meta( $user_id, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
+        }
 
         return false;
     }

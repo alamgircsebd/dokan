@@ -400,8 +400,8 @@ class Helper {
      * @param string $message
      */
     public static function log( $message ) {
-        $message = sprintf( "[%s] %s\n", date( 'd.m.Y h:i:s' ), $message );
-        error_log( $message, 3, dirname( __FILE__ ) . '/debug.log' );
+        $message = sprintf( "[%s] %s: %s", date( 'd.m.Y h:i:s' ), __( 'Dokan Vendor Subscription: ', 'dokan' ), $message );
+        dokan_log( $message );
     }
 
     /**
@@ -426,6 +426,11 @@ class Helper {
         delete_user_meta( $customer_id, 'can_post_product' );
         delete_user_meta( $customer_id, 'dokan_admin_percentage' );
         delete_user_meta( $customer_id, 'dokan_has_active_cancelled_subscrption' );
+
+        // make product status draft after subcsriptions is got cancelled.
+        if ( Helper::check_vendor_has_existing_product( $customer_id ) ) {
+            Helper::make_product_draft( $customer_id );
+        }
     }
 
     /**

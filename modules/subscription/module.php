@@ -83,7 +83,7 @@ class Module {
         add_filter( 'woocommerce_add_to_cart_redirect', [ __CLASS__, 'add_to_cart_redirect' ] );
         add_filter( 'woocommerce_add_to_cart_validation', [ __CLASS__, 'maybe_empty_cart' ], 10, 3 );
         add_filter( 'woocommerce_add_to_cart_validation', [ __CLASS__, 'remove_addons_validation' ], 1, 3 );
-        
+
         add_action( 'woocommerce_order_status_changed', array( $this, 'process_order_pack_product' ), 10, 3 );
 
         add_action( 'template_redirect', array( $this, 'maybe_cancel_or_activate_subscription' ) );
@@ -270,6 +270,7 @@ class Module {
     /**
      * Add Subscription endpoint to the end of Dashboard
      * @param array $query_var
+     * @return array
      */
     public static function add_subscription_endpoint( $query_var ) {
         $query_var[] = 'subscription';
@@ -675,13 +676,6 @@ class Module {
                 continue;
             }
 
-            $current_enddate = get_user_meta( $user->ID, 'product_pack_enddate', true );
-            $actual_enddate = $vendor_subscription->get_product_pack_end_date();
-
-            if ( $current_enddate !== $actual_enddate ) {
-                update_user_meta( $user->ID, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
-            }
-
             if ( Helper::maybe_cancel_subscription( $user->ID ) ) {
                 if ( Helper::check_vendor_has_existing_product( $user->ID ) ) {
                     Helper::make_product_draft( $user->ID );
@@ -778,7 +772,8 @@ class Module {
     /**
      * Redirect after add product into cart
      *
-     * @param string  $url url
+     * @param string $url url
+     * @return string $url
      */
     public static function add_to_cart_redirect( $url ) {
         $product_id = isset( $_REQUEST['add-to-cart'] ) ? (int) $_REQUEST['add-to-cart'] : 0;
@@ -826,7 +821,7 @@ class Module {
         if ( Helper::is_subscription_product( $product_id ) && class_exists( 'WC_Product_Addons_Cart' ) ) {
             remove_filter( 'woocommerce_add_to_cart_validation', array( $GLOBALS['Product_Addon_Cart'], 'validate_add_cart_item' ), 999 );
         }
-        
+
         return $valid;
     }
 
@@ -1016,8 +1011,8 @@ class Module {
     /**
      * Import number of allowed products
      *
-     * @param  object $object
-     *
+     * @param object $object
+     * @throws \ReflectionException
      * @return object
      */
     public static function import_products( $object ) {
@@ -1185,9 +1180,9 @@ class Module {
     /**
      * Restric product import on csv if category restriction enable
      *
-     * @since 3.1.0
-     *
      * @param $data
+     * @since 3.1.0
+     * @throws \Exception
      */
     public function restrict_category_on_csv_import( $data ) {
         $categories         = $data['category_ids'];
