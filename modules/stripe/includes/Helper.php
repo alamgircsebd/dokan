@@ -488,7 +488,7 @@ class Helper {
     /**
      * Localize Stripe messages based on code
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.4
      * @return array
      */
     public static function get_localized_messages() {
@@ -520,7 +520,7 @@ class Helper {
     /**
      * Generates a localized message for an error from a response.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.4
      *
      * @param stdClass $response The response from the Stripe API.
      *

@@ -542,7 +542,7 @@ class Module {
     }
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.4
      * @param $url
      * @param $product
      *

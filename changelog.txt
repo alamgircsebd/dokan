@@ -1,3 +1,28 @@
+v3.1.4 Jan 11, 2021
+----------------------------------
+
+* update: Added disconnect button on dokan admin setting and some issues fixed on vendor analytics
+* update: Product add-on module template override does not work
+* update: Changed social login sign in URL from dokan_reg to vendor_social_reg  on query param
+* fix: Import option allows vendors to create categories
+* fix: If admin commission for flat type commission is set to zero it was showing not set
+* fix: Text-domain missing on confirmation alert
+* fix: Default attribute was not displaying when variation product edit form vendor dashboard
+* fix: Vendor details admin commission label changed on the admin area
+* fix: Fixed vendor staff was not receiving new order email issue
+* fix: Fixed Variations was not saving correctly
+* fix: Fixed store support form showing wrong with Elementor
+* fix: Replaced WP SEO deprecated functions
+* fix: Fixed product location mismatch if created from admin
+* fix: Vendor verification image breaks after upload and the uploaded file is not accessible
+* fix: Auction product SKU is not updating or saving
+* fix: Single Product Multiple Vendor redirection for auction and booking type product
+* fix: Updated stripe codebase and fixed some issues with Stripe modules
+* fix: Responsive dashboard product and order table
+* fix: Removed addon validation for Dokan Subscription product
+* fix: Vendor updates other vendor product if SKU/ID is same, instead of creating a new product for requesting vendor
+* fix: Make product status draft after a vendor/admin immediately cancels their subscriptions
+
 v3.1.3 Dec 20, 2020
 ----------------------------------
 
