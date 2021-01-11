@@ -20,9 +20,10 @@ $product_addons = array_filter( (array) $product->get_meta( '_product_addons' ) 
         <?php
         dokan_get_template_part(
             'product-addon/html-addon-panel', '', array(
-				'is_product_addon' => true,
-				'exists'           => $exists,
-				'product_addons'   => $product_addons,
+                'is_product_addon' => true,
+                'exists'           => $exists,
+                'product_addons'   => $product_addons,
+                'exclude_global'   => $exclude_global,
             )
         );
         ?>
