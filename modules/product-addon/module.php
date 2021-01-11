@@ -300,7 +300,7 @@ class Module {
      *
      * @param $query
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.4
      *
      * @return void
      */

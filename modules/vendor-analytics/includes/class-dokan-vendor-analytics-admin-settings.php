@@ -210,7 +210,7 @@ class Dokan_Vendor_Analytics_Admin_Settings {
     /**
      * Disconnect google analytics profile
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.4
      *
      * @return void
      */
