@@ -1,6 +1,112 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.1.4',
+        'released' => '2021-01-11',
+        'changes'  => array(
+            array(
+                'title'       => 'Added Disconnect Button and Some Issues Fixed [Vendor Analytics]',
+                'type'        => 'Improvement',
+                'description' => 'Added disconnect button on dokan admin setting page, also fixed some issues.',
+            ),
+            array(
+                'title'       => 'Product Add-on Module Template Override [Product Addon]',
+                'type'        => 'Improvement',
+                'description' => 'Product add-on module template override does not work with theme folder issue fixed.',
+            ),
+            array(
+                'title'       => 'Changed Social Login Sign in URL Change [Vendor Social Login]',
+                'type'        => 'Improvement',
+                'description' => 'Changed social login sign in URL from dokan_reg to vendor_social_reg  on query param.',
+            ),
+            array(
+                'title'       => 'Import Option Allows Vendors to Create Categories',
+                'type'        => 'Fix',
+                'description' => 'Import option allows vendors to create categories issue fixed, now vendor not able to create new category when import csv.',
+            ),
+            array(
+                'title'       => 'If Admin Commission for Flat Type Commission is Set to Zero Was Showing Not Set [Vendor Commission]',
+                'type'        => 'Fix',
+                'description' => 'If admin commission for flat type commission is set to zero it was showing not set.',
+            ),
+            array(
+                'title'       => 'Text-domain Missing on Confirmation Alert',
+                'type'        => 'Fix',
+                'description' => 'Text-domain missing on confirmation alert. Now it fixed all alert confirmation on vendor dashboard.',
+            ),
+            array(
+                'title'       => 'Default Attribute Was Not Displaying [Vendor Product Update]',
+                'type'        => 'Fix',
+                'description' => 'Default attribute was not displaying when variation product edit from vendor dashboard issue fixed.',
+            ),
+            array(
+                'title'       => 'Vendor Details Admin Commission Label Changed',
+                'type'        => 'Fix',
+                'description' => 'Vendor details admin commission label changed to commission rate on the admin area dokan vendor details page.',
+            ),
+            array(
+                'title'       => 'Fixed Vendor Staff Was Not Receiving New Order Email [Vendor Staff]',
+                'type'        => 'Fix',
+                'description' => 'Fixed vendor staff was not receiving new order email issue fixed now.',
+            ),
+            array(
+                'title'       => 'Fixed Variations Was Not Saving Correctly [Vendor Product]',
+                'type'        => 'Fix',
+                'description' => 'Fixed Variations was not saving correctly from vendor dashboard when try to use multiples attributes.',
+            ),
+            array(
+                'title'       => 'Fixed Store Support Form Showing Wrong With Elementor [Elementor]',
+                'type'        => 'Fix',
+                'description' => 'Fixed store support form showing wrong with Elementor if still have logged out users.',
+            ),
+            array(
+                'title'       => 'Replaced WP SEO Deprecated Functions [Product SEO]',
+                'type'        => 'Fix',
+                'description' => 'Replaced WP SEO deprecated functions, now product seo capable with latest wp seo plugin.',
+            ),
+            array(
+                'title'       => 'Fixed Product Location Mismatch [Geolocation]',
+                'type'        => 'Fix',
+                'description' => 'Fixed product location mismatch if created from admin and try to reassign a vendor on a product.',
+            ),
+            array(
+                'title'       => 'Auction Product SKU is Not Updating [Auction]',
+                'type'        => 'Fix',
+                'description' => 'Auction product SKU is not updating or saving now fixed.',
+            ),
+            array(
+                'title'       => 'Single Product Multiple Vendor Redirection [Auction]',
+                'type'        => 'Fix',
+                'description' => 'Single Product Multiple Vendor redirection for auction and booking type product.',
+            ),
+            array(
+                'title'       => 'Updated Stripe Codebase and Fixed Some Issues [Dokan Stripe]',
+                'type'        => 'Fix',
+                'description' => 'Updated stripe codebase and fixed some issues with Stripe modules.',
+            ),
+            array(
+                'title'       => 'Responsive Dashboard Product and Order Table',
+                'type'        => 'Fix',
+                'description' => 'Responsive dashboard product and order table now fixed.',
+            ),
+            array(
+                'title'       => 'Removed Addon Validation for Dokan Subscription [Dokan Subscription]',
+                'type'        => 'Fix',
+                'description' => 'Removed addon validation for Dokan Subscription product.',
+            ),
+            array(
+                'title'       => 'Vendor Updates Other Vendor Product',
+                'type'        => 'Fix',
+                'description' => 'Vendor updates other vendor product if SKU/ID is same, instead of creating a new product for requesting vendor.',
+            ),
+            array(
+                'title'       => 'Make Product Status Draft After a Vendor Cancels Their Subscriptions [Dokan Subscriptions]',
+                'type'        => 'Fix',
+                'description' => 'Make product status draft after a vendor/admin immediately cancels their subscriptions.',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.1.3',
         'released' => '2020-12-17',
         'changes'  => array(
