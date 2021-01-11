@@ -47,7 +47,7 @@ class InvoicePaymentActionRequired implements WebhookHandleable {
         $vendor_id  = Helper::get_vendor_id_by_subscription( $invoice->subscription );
         $product_id = get_user_meta( $vendor_id, 'product_package_id', true );
 
-        if ( ! class_exists( 'SubscriptionHelper' ) || ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
+        if ( ! class_exists( SubscriptionHelper::class ) || ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
             return;
         }
 

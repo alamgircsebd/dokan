@@ -48,7 +48,7 @@ class SubscriptionUpdated implements WebhookHandleable {
         $period_start = date( 'Y-m-d H:i:s', $subscription->current_period_start ); // phpcs:ignore
         $product_id   = get_user_meta( $vendor_id, 'product_package_id', true );
 
-        if ( ! class_exists( 'SubscriptionHelper' ) || ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
+        if ( ! class_exists( SubscriptionHelper::class ) || ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
             return;
         }
 
