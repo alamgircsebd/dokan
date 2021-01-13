@@ -36,8 +36,9 @@ class Module {
 
         if ( ! empty( $dokan_appearance['gmap_api_key'] ) && 'google_maps' === $dokan_appearance['map_api_source'] ) {
             $this->has_map_api_key = true;
-        } else if ( ! empty( $dokan_appearance['mapbox_access_token'] ) && 'mapbox' === $dokan_appearance['map_api_source'] ) {
+        } elseif ( ! empty( $dokan_appearance['mapbox_access_token'] ) && 'mapbox' === $dokan_appearance['map_api_source'] ) {
             $this->has_map_api_key = true;
+            add_action( 'wp_footer', array( $this, 'render_mapbox_script' ), 30 );
         }
 
         $this->define_constants();
@@ -56,10 +57,10 @@ class Module {
      * @return void
      */
     private function define_constants() {
-        define( 'DOKAN_GEOLOCATION_VERSION' , $this->version );
-        define( 'DOKAN_GEOLOCATION_PATH' , dirname( __FILE__ ) );
-        define( 'DOKAN_GEOLOCATION_URL' , plugins_url( '', __FILE__ ) );
-        define( 'DOKAN_GEOLOCATION_ASSETS' , DOKAN_GEOLOCATION_URL . '/assets' );
+        define( 'DOKAN_GEOLOCATION_VERSION', $this->version );
+        define( 'DOKAN_GEOLOCATION_PATH', dirname( __FILE__ ) );
+        define( 'DOKAN_GEOLOCATION_URL', plugins_url( '', __FILE__ ) );
+        define( 'DOKAN_GEOLOCATION_ASSETS', DOKAN_GEOLOCATION_URL . '/assets' );
         define( 'DOKAN_GEOLOCATION_VIEWS', DOKAN_GEOLOCATION_PATH . '/views' );
     }
 
@@ -202,5 +203,24 @@ class Module {
      */
     public function admin_notices() {
         dokan_geo_get_template( 'admin-notices' );
+    }
+
+    /**
+     * Show mapbox some extra scripts only for RTL
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function render_mapbox_script() {
+        if ( is_rtl() ) {
+            ?>
+            <style type="text/css">
+                .mapboxgl-map {
+                    text-align: inherit;
+                }
+            </style>
+            <?php
+        }
     }
 }
