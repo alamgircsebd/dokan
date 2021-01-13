@@ -305,7 +305,7 @@ class Module {
      * @return void
      */
     public function set_author_in_for_vendor_staff( $query ) {
-        if ( $query->query['post_type'] === 'global_product_addon' ) {
+        if ( isset( $query->query['post_type'] ) && $query->query['post_type'] === 'global_product_addon' ) {
             global $post;
 
             remove_action( 'pre_get_posts', [ $this, 'set_author_in_for_vendor_staff' ] );
