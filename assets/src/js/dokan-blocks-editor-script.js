@@ -4,7 +4,6 @@
     var Button = components.Button;
     var TextControl = components.TextControl;
     var __ = i18n.__;
-    var dokanShortcodes = window.dokan_shortcodes;
 
     function getDokanIcon( svgProps ) {
         svgProps = svgProps || {};
@@ -79,6 +78,7 @@
             var editMode = props.attributes.editMode;
             var tableRow = '';
             var bottomControls = '';
+            var dokanShortcodes = window.dokan_shortcodes;
 
 
             function insertShortCode( shortcode ) {
