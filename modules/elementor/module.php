@@ -45,12 +45,12 @@ final class Module {
      * @return void
      */
     private function define_constants() {
-        define( 'DOKAN_ELEMENTOR_VERSION' , $this->version );
-        define( 'DOKAN_ELEMENTOR_FILE' , __FILE__ );
-        define( 'DOKAN_ELEMENTOR_PATH' , dirname( DOKAN_ELEMENTOR_FILE ) );
-        define( 'DOKAN_ELEMENTOR_INCLUDES' , DOKAN_ELEMENTOR_PATH . '/includes' );
-        define( 'DOKAN_ELEMENTOR_URL' , plugins_url( '', DOKAN_ELEMENTOR_FILE ) );
-        define( 'DOKAN_ELEMENTOR_ASSETS' , DOKAN_ELEMENTOR_URL . '/assets' );
+        define( 'DOKAN_ELEMENTOR_VERSION', $this->version );
+        define( 'DOKAN_ELEMENTOR_FILE', __FILE__ );
+        define( 'DOKAN_ELEMENTOR_PATH', dirname( DOKAN_ELEMENTOR_FILE ) );
+        define( 'DOKAN_ELEMENTOR_INCLUDES', DOKAN_ELEMENTOR_PATH . '/includes' );
+        define( 'DOKAN_ELEMENTOR_URL', plugins_url( '', DOKAN_ELEMENTOR_FILE ) );
+        define( 'DOKAN_ELEMENTOR_ASSETS', DOKAN_ELEMENTOR_URL . '/assets' );
         define( 'DOKAN_ELEMENTOR_VIEWS', DOKAN_ELEMENTOR_PATH . '/views' );
     }
 
@@ -78,23 +78,16 @@ final class Module {
         $notice = '';
 
         if ( ! class_exists( '\Elementor\Plugin' ) || ! class_exists( '\ElementorPro\Plugin' ) ) {
-            $notice = sprintf(
-                __( 'Dokan Elementor module requires both %s and %s to be activated', 'dokan' ),
-                '<strong>Elementor</strong>',
-                '<strong>Elementor Pro</strong>'
-            );
+            // translators: %2: elementor plugin name
+            $notice = sprintf( __( 'Dokan Elementor module requires both %1$s and %2$s to be activated', 'dokan' ), '<strong>Elementor</strong>', '<strong>Elementor Pro</strong>' );
         }
 
-        if ( defined( 'ELEMENTOR_VERSION' ) && version_compare( ELEMENTOR_VERSION , '2.5.15', '<' ) ) {
-            $notice = sprintf(
-                __( 'Dokan Elementor module requires atleast %s.', 'dokan' ),
-                '<strong>Elementor v2.5.15</strong>'
-            );
-        } else if ( defined( 'ELEMENTOR_PRO_VERSION' ) && version_compare( ELEMENTOR_PRO_VERSION , '2.5.3', '<' ) ) {
-            $notice = sprintf(
-                __( 'Dokan Elementor module requires atleast %s.', 'dokan' ),
-                '<strong>Elementor Pro v2.5.3</strong>'
-            );
+        if ( defined( 'ELEMENTOR_VERSION' ) && version_compare( ELEMENTOR_VERSION, '2.5.15', '<' ) ) {
+            // translators: %s: elemenotor requires version
+            $notice = sprintf( __( 'Dokan Elementor module requires atleast %s.', 'dokan' ), '<strong>Elementor v2.5.15</strong>' );
+        } elseif ( defined( 'ELEMENTOR_PRO_VERSION' ) && version_compare( ELEMENTOR_PRO_VERSION, '2.5.3', '<' ) ) {
+            // translators: %s: elemenotor pro requires version
+            $notice = sprintf( __( 'Dokan Elementor module requires atleast %s.', 'dokan' ), '<strong>Elementor Pro v2.5.3</strong>' );
         }
 
         if ( $notice ) {
@@ -124,10 +117,12 @@ final class Module {
         $is_edit_mode    = $this->elementor()->editor->is_edit_mode();
         $is_preview_mode = $this->elementor()->preview->is_preview_mode();
 
+        $get_data = wp_unslash( $_REQUEST ); // phpcs:ignore
+
         if ( empty( $is_edit_mode ) && empty( $is_preview_mode ) ) {
-            if ( ! empty( $_REQUEST['action'] ) && ! empty( $_REQUEST['editor_post_id'] ) ) {
+            if ( ! empty( $get_data['action'] ) && ! empty( $get_data['editor_post_id'] ) ) {
                 $is_edit_mode = true;
-            } else if ( ! empty( $_REQUEST['preview'] ) && $_REQUEST['preview'] && ! empty( $_REQUEST['theme_template_id'] ) ) {
+            } elseif ( ! empty( $get_data['preview'] ) && $get_data['preview'] && ! empty( $get_data['theme_template_id'] ) ) {
                 $is_preview_mode = true;
             }
         }
