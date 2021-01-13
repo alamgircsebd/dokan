@@ -421,7 +421,7 @@ class Dokan_Template_Auction {
                 update_post_meta( $post_id, '_sku', ( '' === $_POST['_sku'] ) ? '' : sanitize_text_field( wp_unslash( $_POST['_sku'] ) )  );
             }
 
-            do_action( 'dokan_update_auction_product', $post_id );
+            do_action( 'dokan_update_auction_product', $post_id, wp_unslash( $_POST ) );
 
             $edit_url = add_query_arg( array('product_id' => $post_id, 'action' => 'edit' ), dokan_get_navigation_url('auction') );
             wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
