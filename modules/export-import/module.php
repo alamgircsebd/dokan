@@ -1520,10 +1520,12 @@ class Module {
      * @return $string
      */
     public function non_neumeric_wholesale_handle( $meta_value, $meta ) {
-        if ( ! is_scalar( $meta_value ) ) {
+        if ( ! is_scalar( $meta_value ) && $meta->key === '_dokan_wholesale_meta' ) {
             if ( $meta_value['enable_wholesale'] ) {
-                return 'price:' . $meta_value['price'] . ',' . 'quantity:' . $meta_value['quantity']; // phpcs:ignore
+                $meta_value =  'price:' . $meta_value['price'] . ',' . 'quantity:' . $meta_value['quantity'] ;
             }
         }
+
+        return $meta_value;
     }
 }
