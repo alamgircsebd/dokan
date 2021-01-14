@@ -412,6 +412,17 @@ class Dokan_Template_Auction {
             update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : ''  ) );
             update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : ''  ) );
 
+            // Update auction date
+            $auction_dates_to   = isset( $_POST['_auction_dates_to'] ) ? sanitize_text_field( wp_unslash( $_POST['_auction_dates_to'] ) ) : '';
+            $auction_dates_from = isset( $_POST['_auction_dates_from'] ) ? sanitize_text_field( wp_unslash( $_POST['_auction_dates_from'] ) ) : '';
+            
+            update_post_meta( $post_id, '_auction_dates_to', $auction_dates_to );
+            update_post_meta( $post_id, '_auction_dates_from', $auction_dates_from );
+
+            if ( strtotime( $auction_dates_to ) >= time() ) {
+                delete_post_meta( $post_id, '_auction_closed' );
+            }
+
             // Save shipping class
             $product_shipping_class = ( isset( $_POST['product_shipping_class'] ) && $_POST['product_shipping_class'] > 0 && 'external' !== $product_type ) ? absint( $_POST['product_shipping_class'] ) : '';
             wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );

@@ -36,4 +36,10 @@ i.order {color: transparent;-webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 0 rgba
 .product-edit-new-container {
     margin-bottom: 20px;
 }
-
+.dokan-auction-relist-button {
+    margin-top: -36px;
+    float: right;
+}
+.dokan-auction-date-relist {
+    display: none;
+}
