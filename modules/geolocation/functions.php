@@ -110,27 +110,32 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
     wp_enqueue_style( 'dokan-geo-filters' );
     wp_enqueue_script( 'dokan-geo-filters' );
 
+    $get_data = wp_unslash( $_GET ); // phpcs:ignore
+
     $s             = get_query_var( 's', '' );
-    $seller_s      = $search_query = isset( $_GET['do_seller_search'] ) ? sanitize_text_field( $_GET['do_seller_search'] ) : '';
-    $latitude      = isset( $_GET['latitude'] ) ? $_GET['latitude'] : null;
-    $longitude     = isset( $_GET['longitude'] ) ? $_GET['longitude'] : null;
-    $address       = isset( $_GET['address'] ) ? $_GET['address'] : '';
+    $seller_s      = isset( $get_data['do_seller_search'] ) ? sanitize_text_field( $get_data['do_seller_search'] ) : '';
+    $search_query  = $seller_s;
+    $latitude      = isset( $get_data['latitude'] ) ? sanitize_text_field( $get_data['latitude'] ) : null;
+    $longitude     = isset( $get_data['longitude'] ) ? sanitize_text_field( $get_data['longitude'] ) : null;
+    $address       = isset( $get_data['address'] ) ? sanitize_text_field( $get_data['address'] ) : '';
     $distance_min  = dokan_get_option( 'distance_min', 'dokan_geolocation', 0 );
     $distance_max  = dokan_get_option( 'distance_max', 'dokan_geolocation', 10 );
     $distance_unit = dokan_get_option( 'distance_unit', 'dokan_geolocation', 'km' );
-    $distance      = isset( $_GET['distance'] ) ? $_GET['distance'] : $distance_max;
+    $distance      = isset( $get_data['distance'] ) ? sanitize_text_field( $get_data['distance'] ) : $distance_max;
 
     /**
-     * wc_product_dropdown_categories argument filter
+     * Add wc_product_dropdown_categories argument filter
      *
      * @since 1.0.0
      *
      * @param array $args
      */
-    $wc_categories_args = apply_filters( 'dokan_geolocation_product_dropdown_categories_args', array(
-        'pad_counts' => 0,
-        'show_count' => 0,
-    ) );
+    $wc_categories_args = apply_filters(
+        'dokan_geolocation_product_dropdown_categories_args', array(
+            'pad_counts' => 0,
+            'show_count' => 0,
+        )
+    );
 
     $store_listing_page = dokan_get_permalink( 'store_listing' );
     $wc_shop_page       = get_permalink( wc_get_page_id( 'shop' ) );
@@ -161,12 +166,14 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
     );
 
     if ( dokan_is_store_categories_feature_on() ) {
-        $args['categories'] = get_terms( array(
-            'taxonomy'   => 'store_category',
-            'hide_empty' => false,
-        ) );
+        $args['categories'] = get_terms(
+            array(
+                'taxonomy'   => 'store_category',
+                'hide_empty' => false,
+            )
+        );
 
-        $args['store_category'] = ! empty( $_GET['store_categories'] ) ? sanitize_text_field( $_GET['store_categories'] ) : null;
+        $args['store_category'] = ! empty( $get_data['store_categories'] ) ? sanitize_text_field( $get_data['store_categories'] ) : null;
     }
 
     $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
@@ -199,7 +206,7 @@ function dokan_geo_product_location() {
     dokan_geo_enqueue_locations_map();
 
     $args = array(
-        'address' => $product->get_meta( 'dokan_geo_address', true )
+        'address' => $product->get_meta( 'dokan_geo_address', true ),
     );
 
     dokan_geo_get_template( 'product-location', $args );
@@ -213,9 +220,11 @@ function dokan_geo_product_location() {
  * @return void
  */
 function dokan_geo_remove_seller_listing_footer_content_hook() {
-    add_action( 'dokan_seller_listing_footer_content', function () {
-        remove_action( 'dokan_seller_listing_footer_content', array( Dokan_Geolocation_Vendor_View::class, 'seller_listing_footer_content' ) );
-    }, 9 );
+    add_action(
+        'dokan_seller_listing_footer_content', function () {
+            remove_action( 'dokan_seller_listing_footer_content', array( Dokan_Geolocation_Vendor_View::class, 'seller_listing_footer_content' ) );
+        }, 9
+    );
 }
 
 /**
@@ -242,13 +251,15 @@ function dokan_geo_store_lists_filter_form() {
     wp_enqueue_style( 'dokan-geo-filters' );
     wp_enqueue_script( 'dokan-geo-filters-store-lists' );
 
-    $latitude      = isset( $_GET['latitude'] ) ? $_GET['latitude'] : null;
-    $longitude     = isset( $_GET['longitude'] ) ? $_GET['longitude'] : null;
-    $address       = isset( $_GET['address'] ) ? $_GET['address'] : '';
+    $get_data = wp_unslash( $_GET ); // phpcs:ignore
+
+    $latitude      = isset( $get_data['latitude'] ) ? sanitize_text_field( $get_data['latitude'] ) : null;
+    $longitude     = isset( $get_data['longitude'] ) ? sanitize_text_field( $get_data['longitude'] ) : null;
+    $address       = isset( $get_data['address'] ) ? sanitize_text_field( $get_data['address'] ) : '';
     $distance_min  = dokan_get_option( 'distance_min', 'dokan_geolocation', 0 );
     $distance_max  = dokan_get_option( 'distance_max', 'dokan_geolocation', 10 );
     $distance_unit = dokan_get_option( 'distance_unit', 'dokan_geolocation', 'km' );
-    $distance      = isset( $_GET['distance'] ) ? $_GET['distance'] : $distance_max;
+    $distance      = isset( $get_data['distance'] ) ? sanitize_text_field( $get_data['distance'] ) : $distance_max;
 
     $args = [
         'latitude'  => $latitude,
