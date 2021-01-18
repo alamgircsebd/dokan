@@ -98,6 +98,9 @@ class Dokan_Template_Auction {
             return;
         }
 
+        $data = wp_unslash( $_POST );
+        $data['product_type'] = 'auction';
+
         global $woocommerce_auctions;
 
         if ( isset( $_POST['add_auction_product'] ) && wp_verify_nonce( $_POST['dokan_add_new_auction_product_nonce'], 'dokan_add_new_auction_product' ) ) {
@@ -173,6 +176,8 @@ class Dokan_Template_Auction {
                     do_action( 'dokan_new_auction_product_added', $product_id, $post_data );
 
                     // dokan()->email->new_product_added( $product_id, $product_status );
+
+                    do_action( 'dokan_new_product_added', $product_id, $data );
 
                     if ( current_user_can( 'dokan_edit_auction_product' ) ) {
                         $redirect_url = add_query_arg( array('product_id' => $product_id, 'action' => 'edit', 'message' => 'success' ), dokan_get_navigation_url('auction') );
@@ -433,6 +438,8 @@ class Dokan_Template_Auction {
             }
 
             do_action( 'dokan_update_auction_product', $post_id, wp_unslash( $_POST ) );
+
+            do_action( 'dokan_product_updated', $post_id, $data );
 
             $edit_url = add_query_arg( array('product_id' => $post_id, 'action' => 'edit' ), dokan_get_navigation_url('auction') );
             wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );

@@ -105,7 +105,9 @@ class Dokan_VSP_Product {
     public function handle_subscription_metadata( $post_id ) {
         global $woocommerce, $wpdb;
 
-        if ( $_POST['product_type'] == 'subscription' ){
+        $product_type = isset( $_POST['product_type'] ) ? sanitize_text_field( wp_unslash( $_POST['product_type'] ) ) : '';
+
+        if ( 'subscription' === $product_type ) {
 
             $subscription_price = isset( $_POST['_subscription_price'] ) ? wc_format_decimal( $_POST['_subscription_price'] ) : '';
             $sale_price         = wc_format_decimal( $_POST['_sale_price'] );
@@ -193,7 +195,7 @@ class Dokan_VSP_Product {
             }
 
             update_post_meta( $post_id, WC_Subscriptions_Synchroniser::$post_meta_key, $_POST[ WC_Subscriptions_Synchroniser::$post_meta_key ] );
-        } elseif ( $_POST['product_type'] == 'variable-subscription' ) {
+        } elseif ( 'variable-subscription' === $product_type ) {
             dokan_save_variations( $post_id );
         }
     }
