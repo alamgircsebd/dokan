@@ -161,33 +161,35 @@ class DPS_Admin {
 
         <script type="text/javascript">
             ;(function($) {
-                $('#_subscription_product_admin_commission_type').on('change', function() {
-                    var self = $(this),
-                        val = self.val();
+                $(document).ready(function(){
+                    $('#_subscription_product_admin_commission_type').on('change', function() {
+                        var self = $(this),
+                            val = self.val();
 
-                    if ( 'combine' === val ) {
-                        $('.subscription_additional_fee').removeClass('dokan-hide');
-                        $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
-                    } else {
-                        $('.subscription_additional_fee').addClass('dokan-hide');
-                        $('.combine-commission-description').text( dokan_admin.default_commission_desc );
-                    }
+                        if ( 'combine' === val ) {
+                            $('.subscription_additional_fee').removeClass('dokan-hide');
+                            $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                        } else {
+                            $('.subscription_additional_fee').addClass('dokan-hide');
+                            $('.combine-commission-description').text( dokan_admin.default_commission_desc );
+                        }
 
-                    if ( 'flat' == val ) {
-                        $('input[name="_subscription_product_admin_commission"]').removeClass( 'wc_input_decimal' ).addClass( 'wc_input_price' );
-                    } else {
-                        $('input[name="_subscription_product_admin_commission"]').removeClass( 'wc_input_price' ).addClass( 'wc_input_decimal' );
-                    }
-                }).trigger('change');
+                        if ( 'flat' == val ) {
+                            $('input[name="_subscription_product_admin_commission"]').removeClass( 'wc_input_decimal' ).addClass( 'wc_input_price' );
+                        } else {
+                            $('input[name="_subscription_product_admin_commission"]').removeClass( 'wc_input_price' ).addClass( 'wc_input_decimal' );
+                        }
+                    }).trigger('change');
 
-                $('#_regular_price').on('keyup', function() {
-                    var self = $(this),
-                        val = self.val();
+                    $('#_regular_price').on('keyup', function() {
+                        var self = $(this),
+                            val = self.val();
 
-                    if ( $( 'input[name*="_regular_price"]' ).length > 1 ) {
-                        $( 'input[name*="_regular_price"]' ).val( val );
-                    }
-                }).trigger('change');
+                        if ( $( 'input[name*="_regular_price"]' ).length > 1 ) {
+                            $( 'input[name*="_regular_price"]' ).val( val );
+                        }
+                    }).trigger('change');
+                });
             })(jQuery);
         </script>
 

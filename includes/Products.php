@@ -310,25 +310,27 @@ class Products {
 
         <script type="text/javascript">
             ;(function($) {
-                $('#_per_product_admin_commission_type').on('change', function() {
-                    if ( 'combine' === $(this).val() ) {
-                        $('.additional_fee').removeClass('dokan-hide');
-                        $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
-                        $('input[name=_per_product_admin_commission]').attr('required', true);
-                        $('input[name=_per_product_admin_additional_fee]').attr('required', true);
-                    } else {
-                        $('.additional_fee').addClass('dokan-hide');
-                        $('.combine-commission-description').text( dokan_admin.default_commission_desc );
-                        $('input[name=_per_product_admin_commission]').removeAttr('required');
-                        $('input[name=_per_product_admin_additional_fee]').removeAttr('required');
-                    }
+                $(document).ready(function(){
+                    $('#_per_product_admin_commission_type').on('change', function() {
+                        if ( 'combine' === $(this).val() ) {
+                            $('.additional_fee').removeClass('dokan-hide');
+                            $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                            $('input[name=_per_product_admin_commission]').attr('required', true);
+                            $('input[name=_per_product_admin_additional_fee]').attr('required', true);
+                        } else {
+                            $('.additional_fee').addClass('dokan-hide');
+                            $('.combine-commission-description').text( dokan_admin.default_commission_desc );
+                            $('input[name=_per_product_admin_commission]').removeAttr('required');
+                            $('input[name=_per_product_admin_additional_fee]').removeAttr('required');
+                        }
 
-                    if ( 'flat' == $(this).val() ) {
-                        $('input#admin_commission').removeClass( 'wc_input_decimal' ).addClass( 'wc_input_price' );
-                    } else {
-                        $('input#admin_commission').removeClass( 'wc_input_price' ).addClass( 'wc_input_decimal' );
-                    }
+                        if ( 'flat' == $(this).val() ) {
+                            $('input#admin_commission').removeClass( 'wc_input_decimal' ).addClass( 'wc_input_price' );
+                        } else {
+                            $('input#admin_commission').removeClass( 'wc_input_price' ).addClass( 'wc_input_decimal' );
+                        }
                 }).trigger('change');
+                });
             })(jQuery);
         </script>
         <?php
