@@ -713,7 +713,7 @@ class Module {
     }
 
     /**
-     * Process order for specipic package
+     * Process order for specific package
      *
      * @param integer $order_id
      * @param string  $old_status
@@ -755,9 +755,14 @@ class Module {
                 update_user_meta( $customer_id, '_customer_recurring_subscription', '' );
 
                 $admin_commission      = get_post_meta( $product_id, '_subscription_product_admin_commission', true );
+                $admin_additional_fee  = get_post_meta( $product_id, '_subscription_product_admin_additional_fee', true );
                 $admin_commission_type = get_post_meta( $product_id, '_subscription_product_admin_commission_type', true );
 
-                if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
+                if ( ! empty( $admin_commission ) && ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                    update_user_meta( $customer_id, 'dokan_admin_percentage', $admin_commission );
+                    update_user_meta( $customer_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                    update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
+                } elseif ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
                     update_user_meta( $customer_id, 'dokan_admin_percentage', $admin_commission );
                     update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
                 } else {
