@@ -144,6 +144,10 @@
 
         $( '.show_if_' + product_type ).show();
         $( '.hide_if_' + product_type ).hide();
+
+        if( is_downloadable ) {
+            $( '.dokan-download-options' ).show();
+        }
     }
 
     function setSubscriptionLengths(){
