@@ -19,39 +19,24 @@ class Module {
     public $version;
 
     public $authors    = [];
-
     public $posts      = [];
-
     public $terms      = [];
-
     public $categories = [];
-
     public $tags       = [];
-
     public $base_url   = '';
 
     // mappings from old information to new
     public $processed_authors    = [];
-
     public $author_mapping       = [];
-
     public $processed_terms      = [];
-
     public $processed_posts      = [];
-
     public $post_orphans         = [];
-
     public $processed_menu_items = [];
-
     public $menu_item_orphans    = [];
-
     public $missing_menu_items   = [];
-
-    public $fetch_attachments = true;
-
-    public $url_remap         = [];
-
-    public $featured_images   = [];
+    public $fetch_attachments    = true;
+    public $url_remap            = [];
+    public $featured_images      = [];
 
     /**
      * Constructor for the Dokan_Product_Importer class
@@ -638,7 +623,7 @@ class Module {
                     // if we already know the parent, map it to the new local ID
                     if ( isset( $this->processed_posts[ $post_parent ] ) ) {
                         $post_parent = $this->processed_posts[ $post_parent ];
-                    // otherwise record the parent for later
+                        // otherwise record the parent for later
                     } else {
                         $this->post_orphans[ intval( $post['post_id'] ) ] = $post_parent;
                         $post_parent                                      = 0;
@@ -1394,13 +1379,14 @@ class Module {
      * Render Import Export button on product listing
      */
     public function render_import_export_button() {
+        $product_query = dokan()->product->all( [ 'author' => dokan_get_current_user_id(), 'posts_per_page' => 1 ] );
         ?>
         <?php if ( current_user_can( 'dokan_import_product' ) ) { ?>
             <a href="<?php echo dokan_get_navigation_url( 'tools/csv-import' ); ?>" class="dokan-btn">
                 <?php esc_html_e( 'Import', 'dokan' ); ?>
             </a>
         <?php } ?>
-        <?php if ( current_user_can( 'dokan_export_product' ) && apply_filters( 'dokan_csv_export_enabled', true ) ) { ?>
+        <?php if ( current_user_can( 'dokan_export_product' ) && apply_filters( 'dokan_csv_export_enabled', true ) && $product_query->have_posts() ) { ?>
             <a href="<?php echo dokan_get_navigation_url( 'tools/csv-export' ); ?>" class="dokan-btn">
                 <?php esc_html_e( 'Export', 'dokan' ); ?>
             </a>
@@ -1522,7 +1508,7 @@ class Module {
     public function non_neumeric_wholesale_handle( $meta_value, $meta ) {
         if ( ! is_scalar( $meta_value ) && $meta->key === '_dokan_wholesale_meta' ) {
             if ( $meta_value['enable_wholesale'] ) {
-                $meta_value =  'price:' . $meta_value['price'] . ',' . 'quantity:' . $meta_value['quantity'] ;
+                $meta_value = 'price:' . $meta_value['price'] . ',quantity:' . $meta_value['quantity'];
             }
         }
 
