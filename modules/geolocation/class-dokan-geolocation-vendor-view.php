@@ -44,6 +44,10 @@ class Dokan_Geolocation_Vendor_View {
      * @return void
      */
     public static function before_seller_listing_loop() {
+        if ( ! self::is_geolocation_show_on_store_listing_page() ) {
+            return;
+        }
+
         dokan_geo_enqueue_locations_map();
 
         $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
@@ -87,6 +91,10 @@ class Dokan_Geolocation_Vendor_View {
      * @return void
      */
     public static function before_store_lists_filter_left() {
+        if ( ! self::is_geolocation_show_on_store_listing_page() ) {
+            return;
+        }
+
         $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
 
         dokan_geo_enqueue_locations_map();
@@ -102,6 +110,10 @@ class Dokan_Geolocation_Vendor_View {
      * @return void
      */
     public static function before_store_lists_filter_category() {
+        if ( ! self::is_geolocation_show_on_store_listing_page() ) {
+            return;
+        }
+
         dokan_geo_store_lists_filter_form();
     }
 
@@ -113,6 +125,10 @@ class Dokan_Geolocation_Vendor_View {
      * @return void
      */
     public static function after_seller_listing_loop() {
+        if ( ! self::is_geolocation_show_on_store_listing_page() ) {
+            return;
+        }
+
         switch ( self::$map_location ) {
             case 'right':
                 echo '</div><div class="dokan-geolocation-col-5">';
@@ -167,7 +183,7 @@ class Dokan_Geolocation_Vendor_View {
             'dokan_geo_latitude'  => $vendor->data->data->dokan_geo_latitude,
             'dokan_geo_longitude' => $vendor->data->data->dokan_geo_longitude,
             'dokan_geo_address'   => $vendor->data->data->dokan_geo_address,
-            'info'                => json_encode( $info ),
+            'info'                => wp_json_encode( $info ),
         );
 
         dokan_geo_get_template( 'item-geolocation-data', $args );
@@ -190,5 +206,22 @@ class Dokan_Geolocation_Vendor_View {
             add_filter( 'dokan_load_store_lists_filter_search_bar', '__return_false' );
             add_action( 'dokan_before_store_lists_filter_category', array( self::class, 'before_store_lists_filter_category' ) );
         }
+    }
+
+    /**
+     * Is geolocation show on store listing page
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return bool
+     */
+    public static function is_geolocation_show_on_store_listing_page() {
+        $show_map_pages = dokan_get_option( 'show_location_map_pages', 'dokan_geolocation', 'store_listing' );
+
+        if ( 'store_listing' === $show_map_pages || 'all' === $show_map_pages ) {
+            return true;
+        }
+
+        return false;
     }
 }

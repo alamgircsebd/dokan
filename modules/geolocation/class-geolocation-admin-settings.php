@@ -32,7 +32,7 @@ class Dokan_Geolocation_Admin_Settings {
         $sections['dokan_geolocation'] = array(
             'id'    => 'dokan_geolocation',
             'title' => __( 'Geolocation', 'dokan' ),
-            'icon'  => 'dashicons-location'
+            'icon'  => 'dashicons-location',
         );
 
         return $sections;
@@ -58,6 +58,19 @@ class Dokan_Geolocation_Admin_Settings {
                     'top'   => __( 'Top', 'dokan' ),
                     'left'  => __( 'Left', 'dokan' ),
                     'right' => __( 'Right', 'dokan' ),
+                ),
+            ),
+
+            'show_location_map_pages' => array(
+                'name'    => 'show_location_map_pages',
+                'label'   => __( 'Show Map', 'dokan' ),
+                'desc'    => __( 'Select where want to show the map only', 'dokan' ),
+                'type'    => 'select',
+                'default' => 'all',
+                'options' => array(
+                    'all'           => __( 'All', 'dokan' ),
+                    'store_listing' => __( 'Store Listing', 'dokan' ),
+                    'shop'          => __( 'Shop Page', 'dokan' ),
                 ),
             ),
 
@@ -123,8 +136,8 @@ class Dokan_Geolocation_Admin_Settings {
                     'latitude'  => 23.709921,
                     'longitude' => 90.40714300000002,
                     'address'   => __( 'Dhaka', 'dokan' ),
-                    'zoom'      => 10
-                ]
+                    'zoom'      => 10,
+                ],
             ),
         );
 

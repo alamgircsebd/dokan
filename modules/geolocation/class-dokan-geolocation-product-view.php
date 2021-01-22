@@ -45,7 +45,7 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function enqueue_scripts() {
-        if ( ! is_shop() && ! is_product_taxonomy() ) {
+        if ( ! $this->is_geolocation_show_on_shop_page() ) {
             return;
         }
 
@@ -60,14 +60,13 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function start_column_layout() {
-        if ( ! is_shop() && ! is_product_taxonomy() ) {
+        if ( ! $this->is_geolocation_show_on_shop_page() ) {
             return;
         }
 
         if ( 'right' === $this->map_location ) {
             echo '<div class="dokan-geolocation-row dokan-geolocation-map-right"><div class="dokan-geolocation-col-7">';
-
-        } else if ( 'left' === $this->map_location ) {
+        } elseif ( 'left' === $this->map_location ) {
             echo '<div class="dokan-geolocation-row dokan-geolocation-map-left"><div class="dokan-geolocation-col-5">';
 
             dokan_geo_get_template( 'map', array( 'layout' => 'left' ) );
@@ -84,7 +83,7 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function end_column_layout() {
-        if ( ! is_shop() && ! is_product_taxonomy() ) {
+        if ( ! $this->is_geolocation_show_on_shop_page() ) {
             return;
         }
 
@@ -95,7 +94,7 @@ class Dokan_Geolocation_Product_View {
 
             echo '</div>'; // .row
 
-        } else if ( 'left' === $this->map_location ) {
+        } elseif ( 'left' === $this->map_location ) {
             echo '</div>';  // .row
         }
     }
@@ -108,7 +107,7 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function before_shop_loop() {
-        if ( ! is_shop() && ! is_product_taxonomy() ) {
+        if ( ! $this->is_geolocation_show_on_shop_page() ) {
             return;
         }
 
@@ -131,7 +130,7 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function after_shop_loop_item() {
-        if ( ! is_shop() && ! is_product_taxonomy() ) {
+        if ( ! $this->is_geolocation_show_on_shop_page() ) {
             return;
         }
 
@@ -172,9 +171,26 @@ class Dokan_Geolocation_Product_View {
             'dokan_geo_latitude'  => $post->dokan_geo_latitude,
             'dokan_geo_longitude' => $post->dokan_geo_longitude,
             'dokan_geo_address'   => $post->dokan_geo_address,
-            'info'                => json_encode( $info ),
+            'info'                => wp_json_encode( $info ),
         );
 
         dokan_geo_get_template( 'item-geolocation-data', $args );
+    }
+
+    /**
+     * Is geolocation show on shop page
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return bool
+     */
+    public function is_geolocation_show_on_shop_page() {
+        $show_map_pages = dokan_get_option( 'show_location_map_pages', 'dokan_geolocation', 'shop' );
+
+        if ( ( is_shop() || is_product_taxonomy() ) && ( 'shop' === $show_map_pages || 'all' === $show_map_pages ) ) {
+            return true;
+        }
+
+        return false;
     }
 }
