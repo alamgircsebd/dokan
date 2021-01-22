@@ -437,7 +437,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             update_user_meta( $customer_user_id, 'product_package_id', $product_pack->get_id() );
             update_user_meta( $customer_user_id, 'product_order_id', $order_id );
             update_user_meta( $customer_user_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
-            update_user_meta( $customer_user_id, 'product_pack_startdate', gmdate( 'Y-m-d H:i:s' ) );
+            update_user_meta( $customer_user_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
             update_user_meta( $customer_user_id, 'can_post_product', '1' );
             update_user_meta( $customer_user_id, '_customer_recurring_subscription', 'active' );
             update_user_meta( $customer_user_id, 'product_pack_enddate', $dokan_subscription->get_product_pack_end_date() );
@@ -513,7 +513,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 update_user_meta( $customer_user_id, 'product_package_id', $product_pack->get_id() );
                 update_user_meta( $customer_user_id, 'product_order_id', $order_id );
                 update_user_meta( $customer_user_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
-                update_user_meta( $customer_user_id, 'product_pack_startdate', gmdate( 'Y-m-d H:i:s' ) );
+                update_user_meta( $customer_user_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
                 update_user_meta( $customer_user_id, 'can_post_product', '1' );
                 update_user_meta( $customer_user_id, '_customer_recurring_subscription', '' );
                 update_user_meta( $customer_user_id, 'product_pack_enddate', $dokan_subscription->get_product_pack_end_date() );

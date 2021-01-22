@@ -89,7 +89,7 @@ class Shortcode {
                     <p>
                         <?php
                             if ( $subscription->has_active_cancelled_subscrption() ) {
-                                $date   = date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_end_date() ) );
+                                $date   = dokan_format_date( $subscription->get_pack_end_date() );
                                 $notice = sprintf( __( 'Your subscription has been cancelled! However it\'s is still active till %s', 'dokan' ), $date );
                                 printf( "<span>{$notice}</span>" );
                             } else {
@@ -100,7 +100,7 @@ class Shortcode {
                                 } elseif ( $subscription->get_pack_end_date() === 'unlimited' ) {
                                     printf( __( 'You have a lifetime package.', 'dokan' ) );
                                 } else {
-                                    printf( __( 'Your package will expire on <span>%s</span>', 'dokan' ), date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_end_date() ) ) );
+                                    printf( __( 'Your package will expire on <span>%s</span>', 'dokan' ), dokan_format_date( $subscription->get_pack_end_date() ) );
                                 }
                             }
                         ?>
@@ -140,11 +140,11 @@ class Shortcode {
             <?php if ( $subscription_packs->have_posts() ) {
                 ?>
 
-                <?php if ( isset( $_GET['msg'] ) && 'dps_sub_cancelled' === $_GET['msg'] ) : ?>
+                <?php if ( isset( $_GET['msg'] ) && 'dps_sub_cancelled' === sanitize_text_field( wp_unslash( $_GET['msg'] ) ) ) : //phpcs:ignore ?>
                     <div class="dokan-message">
                         <?php
                             if ( $subscription && $subscription->has_active_cancelled_subscrption() ) {
-                                $date   = date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_end_date() ) );
+                                $date   = dokan_format_date( $subscription->get_pack_end_date() );
                                 $notice = sprintf( __( 'Your subscription has been cancelled! However the it\'s is still active till %s', 'dokan' ), $date );
                             } else {
                                 $notice = __( 'Your subscription has been cancelled!', 'dokan' );
@@ -155,7 +155,7 @@ class Shortcode {
                     </div>
                 <?php endif; ?>
 
-                <?php if ( isset( $_GET['msg'] ) && 'dps_sub_activated' === $_GET['msg'] ) : ?>
+                <?php if ( isset( $_GET['msg'] ) && 'dps_sub_activated' === sanitize_text_field( wp_unslash( $_GET['msg'] ) ) ) : //phpcs:ignore ?>
                     <div class="dokan-message">
                         <?php
                             esc_html_e( 'Your subscription has been re-activated!', 'dokan' );
@@ -226,7 +226,7 @@ class Shortcode {
                                     }
                                 endif; ?>
                             </div>
-                            
+
                         </div>
 
                         <div class="buy_pack_button">

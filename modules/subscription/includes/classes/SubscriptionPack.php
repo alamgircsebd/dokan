@@ -2,9 +2,7 @@
 
 namespace DokanPro\Modules\Subscription;
 
-use DateTimeZone;
 use DokanPro\Modules\Subscription\Abstracts\VendorSubscription;
-use WC_DateTime;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -224,7 +222,7 @@ class SubscriptionPack extends VendorSubscription {
             return 0;
         }
 
-        $date_time = new WC_DateTime( "+ {$length} days", new DateTimeZone( 'UTC' ) );
+        $date_time = dokan_current_datetime()->modify( "+ {$length} days" );
 
         return intval( $date_time->getTimestamp() );
     }
@@ -234,20 +232,21 @@ class SubscriptionPack extends VendorSubscription {
      */
     public function get_product_pack_end_date() {
         $end_date       = 'unlimited';
-        $subscription_length    = $this->get_period_length();
-        $subscription_period    = $this->get_period_type();
-        $pack_validity          = absint( $this->get_pack_valid_days() );
+        $subscription_length    = $this->get_period_length(); //_dokan_subscription_length : billing cycle stops
+        $subscription_period    = $this->get_period_type(); //_dokan_subscription_period : day week month year
+        $pack_validity          = absint( $this->get_pack_valid_days() ); //_pack_validity
 
         if ( $this->is_recurring() && $subscription_length > 0 ) {
             // if subscription_length is greater that zero product pack enddate will be equal to subscription_length
             try {
                 $add_s          = $subscription_length > 1 ? 's' : '';
-                $date_time      = new WC_DateTime( "+ {$subscription_length} {$subscription_period}{$add_s}", new DateTimeZone( 'UTC' ) );
+                $date_time      = dokan_current_datetime()
+                                  ->modify( "+ {$subscription_length} {$subscription_period}{$add_s}" );
 
                 // now add trial time if exists.
                 if ( $this->is_trial() ) {
                     $trial_length = $this->get_trial_period_length();
-                    $date_time->modify( "+ $trial_length days" );
+                    $date_time = $date_time->modify( "+ $trial_length days" );
                 }
                 // finally get formatted end date
                 $end_date = $date_time->format( 'Y-m-d H:i:s' );
@@ -257,7 +256,8 @@ class SubscriptionPack extends VendorSubscription {
             }
         } elseif ( ! $this->is_recurring() && $pack_validity !== 0 ) {
             try {
-                $date_time = new WC_DateTime( "+{$pack_validity} days", new DateTimeZone( 'UTC' ) );
+                $date_time = dokan_current_datetime()
+                            ->modify( "+{$pack_validity} days" );
                 $end_date = $date_time->format( 'Y-m-d H:i:s' );
             } catch ( \Exception $exception ) {
                 $end_date = 'unlimited';
@@ -322,7 +322,7 @@ class SubscriptionPack extends VendorSubscription {
      * @return int
      */
     public function get_recurring_interval() {
-        return (int) get_post_meta( $this->get_id(), '_subscription_period_interval', true );
+        return (int) get_post_meta( $this->get_id(), '_dokan_subscription_period_interval', true );
     }
 
     /**
@@ -331,7 +331,7 @@ class SubscriptionPack extends VendorSubscription {
      * @return string
      */
     public function get_period_type() {
-        return get_post_meta( $this->get_id(), '_subscription_period', true );
+        return get_post_meta( $this->get_id(), '_dokan_subscription_period', true );
     }
 
     /**
@@ -340,7 +340,7 @@ class SubscriptionPack extends VendorSubscription {
      * @return int
      */
     public function get_period_length() {
-        return absint( get_post_meta( $this->get_id(), '_subscription_length', true ) );
+        return absint( get_post_meta( $this->get_id(), '_dokan_subscription_length', true ) );
     }
 
     /**

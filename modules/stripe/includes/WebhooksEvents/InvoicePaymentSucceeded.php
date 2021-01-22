@@ -47,8 +47,8 @@ class InvoicePaymentSucceeded implements WebhookHandleable {
         $invoice      = $this->event->data->object;
         $vendor_id    = Helper::get_vendor_id_by_subscription( $invoice->subscription );
         $subscription = Subscription::retrieve( $invoice->subscription );
-        $period_start = date( 'Y-m-d H:i:s', $subscription->current_period_start );
-        $period_end   = date( 'Y-m-d H:i:s', $subscription->current_period_end );
+        $period_start = dokan_current_datetime()->setTimestamp( $subscription->current_period_start )->format( 'Y-m-d H:i:s' );
+        $period_end   = dokan_current_datetime()->setTimestamp( $subscription->current_period_end )->format( 'Y-m-d H:i:s' );
         $order_id     = get_user_meta( $vendor_id, 'product_order_id', true );
         $product_id   = get_user_meta( $vendor_id, 'product_package_id', true );
 

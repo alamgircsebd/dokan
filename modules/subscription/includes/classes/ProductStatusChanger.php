@@ -231,6 +231,9 @@ class ProductStatusChanger {
         if ( Helper::vendor_can_publish_unlimited_products( $vendor_id ) ) {
             Helper::make_product_publish( $vendor_id );
         }
+
+        // delete user meta after vendor purchased a subscription
+        delete_user_meta( $vendor_id, 'dokan_vendor_subscription_cancel_email' );
     }
 }
 

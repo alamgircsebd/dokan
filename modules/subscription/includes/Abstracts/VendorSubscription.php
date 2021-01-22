@@ -21,7 +21,7 @@ abstract class VendorSubscription {
      *
      * @return integer
      */
-    public abstract function get_vendor();
+    abstract public function get_vendor();
 
     /**
      * Get all the info of a vendor regarding subscription
@@ -83,21 +83,31 @@ abstract class VendorSubscription {
     /**
      * Check package validity for seller
      *
-     * @param integer $product_id
+     * @param int $pack_id
      *
+     * @throws \Exception
      * @return boolean
      */
     public function check_pack_validity_for_vendor( $pack_id ) {
-        $date                 = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+        $current_date         = dokan_current_datetime();
         $product_pack_enddate = $this->get_pack_end_date();
-        $validation_date      = date( 'Y-m-d', strtotime( $product_pack_enddate ) );
         $product_package_id   = $this->get_id();
 
-        if ( $product_pack_enddate == 'unlimited' && $product_package_id == $pack_id ) {
+        // if product_id is not same as current purchased package id, return false
+        if ( (int) $product_package_id !== (int) $pack_id ) {
+            return false;
+        }
+
+        if ( empty( $product_pack_enddate ) ) {
+            return false;
+        }
+
+        if ( $product_pack_enddate === 'unlimited' ) {
             return true;
         }
 
-        if ( $date < $validation_date && $product_package_id == $pack_id ) {
+        $validation_date = $current_date->modify( $product_pack_enddate );
+        if ( $current_date < $validation_date ) {
             return true;
         }
 
@@ -111,13 +121,13 @@ abstract class VendorSubscription {
      *
      * @return integer
      */
-    function get_published_product_count() {
+    public function get_published_product_count() {
         global $wpdb;
 
         $allowed_status = apply_filters( 'dps_get_product_by_seller_allowed_statuses', array( 'publish', 'pending' ) );
 
         $query = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_author = {$this->get_vendor()} AND post_type = 'product' AND post_status IN ( '" . implode( "','", $allowed_status ). "' )";
-        $count = $wpdb->get_var( $query );
+        $count = $wpdb->get_var( $query ); //phpcs:ignore
 
         return $count;
     }

@@ -197,8 +197,7 @@ class ProductSubscription extends StripePaymentGateway {
 
             if ( ! empty( $trial_period_days ) ) {
                 try {
-                    $date_time = new \WC_DateTime( "+ {$trial_period_days} days", new \DateTimeZone( 'UTC' ) );
-                    $date_time->setTime( 23, 59, 59 );
+                    $date_time = dokan_current_datetime()->modify( "+ {$trial_period_days} days" );
                     $subscription_args['trial_end'] = $date_time->getTimestamp();
                 } catch ( Exception $exception ) {
                     $subscription_args['trial_end'] = time();
@@ -218,7 +217,7 @@ class ProductSubscription extends StripePaymentGateway {
                 update_user_meta( $vendor_id, '_stripe_subscription_id', $subscription->id );
                 update_user_meta( $vendor_id, 'product_package_id', $product_pack->get_id() );
                 update_user_meta( $vendor_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
-                update_user_meta( $vendor_id, 'product_pack_startdate', gmdate( 'Y-m-d H:i:s' ) );
+                update_user_meta( $vendor_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
                 update_user_meta( $vendor_id, '_customer_recurring_subscription', 'active' );
                 update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', false );
                 update_user_meta( $vendor_id, 'product_pack_enddate', $dokan_subscription->get_product_pack_end_date() );
@@ -279,7 +278,7 @@ class ProductSubscription extends StripePaymentGateway {
             update_user_meta( $vendor_id, 'product_package_id', $product_pack->get_id() );
             update_user_meta( $vendor_id, 'product_order_id', $order->get_id() );
             update_user_meta( $vendor_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
-            update_user_meta( $vendor_id, 'product_pack_startdate', gmdate( 'Y-m-d H:i:s' ) );
+            update_user_meta( $vendor_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
             update_user_meta( $vendor_id, 'can_post_product', '1' );
             update_user_meta( $vendor_id, '_customer_recurring_subscription', false );
             update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', false );

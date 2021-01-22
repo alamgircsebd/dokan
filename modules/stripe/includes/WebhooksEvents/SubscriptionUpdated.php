@@ -45,7 +45,7 @@ class SubscriptionUpdated implements WebhookHandleable {
         }
 
         $vendor_id    = Helper::get_vendor_id_by_subscription( $subscription->id );
-        $period_start = date( 'Y-m-d H:i:s', $subscription->current_period_start ); // phpcs:ignore
+        $period_start = dokan_current_datetime()->setTimestamp( $subscription->current_period_start )->format( 'Y-m-d H:i:s' );
         $product_id   = get_user_meta( $vendor_id, 'product_package_id', true );
 
         if ( ! class_exists( SubscriptionHelper::class ) || ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
@@ -53,7 +53,7 @@ class SubscriptionUpdated implements WebhookHandleable {
         }
 
         if ( ! empty( $subscription->cancel_at ) ) {
-            update_user_meta( $vendor_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', $subscription->cancel_at ) ); // phpcs:ignore
+            update_user_meta( $vendor_id, 'product_pack_enddate', dokan_current_datetime()->setTimestamp( $subscription->cancel_at )->format( 'Y-m-d H:i:s' ) );
             update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', true );
         } else {
             update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', false );
@@ -61,7 +61,7 @@ class SubscriptionUpdated implements WebhookHandleable {
             update_user_meta( $vendor_id, 'can_post_product', '1' );
             update_user_meta( $vendor_id, 'has_pending_subscription', false );
 
-            $dokan_subscription    = dokan()->subscription->get( $product_id );
+            $dokan_subscription = dokan()->subscription->get( $product_id );
             update_user_meta( $vendor_id, 'product_pack_enddate', $dokan_subscription->get_product_pack_end_date() );
 
             do_action( 'dokan_vendor_purchased_subscription', $vendor_id );

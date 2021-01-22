@@ -35,19 +35,29 @@ class Helper {
      * @param integer $product_id
      *
      * @return boolean
+     * @throws \Exception
      */
     public static function is_vendor_subscribed_pack( $product_id ) {
         $user_id              = get_current_user_id();
-        $date                 = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+        $current_date         = dokan_current_datetime();
         $product_pack_enddate = self::get_pack_end_date( $user_id );
-        $validation_date      = date( 'Y-m-d', strtotime( $product_pack_enddate ) );
         $product_package_id   = get_user_meta( $user_id, 'product_package_id', true );
 
-        if ( $product_pack_enddate == 'unlimited' && $product_package_id == $product_id ) {
+        // if product_id is not same as current purchased package id, return false
+        if ( (int) $product_package_id !== (int) $product_id ) {
+            return false;
+        }
+
+        if ( empty( $product_pack_enddate ) ) {
+            return false;
+        }
+
+        if ( $product_pack_enddate === 'unlimited' ) {
             return true;
         }
 
-        if ( $date < $validation_date && $product_package_id == $product_id ) {
+        $validation_date = $current_date->modify( $product_pack_enddate );
+        if ( $current_date < $validation_date ) {
             return true;
         }
 
@@ -60,9 +70,37 @@ class Helper {
      * @param integer $product_id
      *
      * @return boolean
+     * @throws \Exception
      */
     public static function pack_renew_seller( $product_id ) {
+        $user_id              = dokan_get_current_user_id(); // in case user is vendor staff, we need vendor user id
+        $current_date         = dokan_current_datetime();
+        $product_pack_enddate = self::get_pack_end_date( $user_id );
+        $product_package_id   = get_user_meta( $user_id, 'product_package_id', true );
 
+        // if product_id is not same as current purchased package id, return false
+        if ( (int) $product_package_id !== (int) $product_id ) {
+            return false;
+        }
+
+        if ( empty( $product_pack_enddate ) ) {
+            return false;
+        }
+
+        // if product pack end date is unlimited, user does not need to renew their package
+        if ( $product_pack_enddate === 'unlimited' ) {
+            return false;
+        }
+
+        $validation_date = $current_date->modify( $product_pack_enddate );
+        if ( $current_date > $validation_date ) {
+            return true;
+        }
+
+        return false;
+
+        // old code is for reference only, will remove in future release
+        /*
         $date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
         $validation_date = date( 'Y-m-d', strtotime( self::get_pack_end_date( dokan_get_current_user_id() ) ) );
 
@@ -78,6 +116,7 @@ class Helper {
         }
 
         return false;
+        */
     }
 
 
@@ -243,32 +282,57 @@ class Helper {
      *
      * @return string
      */
-    public static function get_subscription_period_interval_strings() {
-        $intervals = array();
+    public static function get_subscription_period_interval_strings( $interval = '' ) {
 
-        for ( $i = 1; $i <= 30; $i++ ) {
-            $intervals[$i] = $i;
+        $intervals = array( 1 => _x( 'every', 'period interval (eg "$10 _every_ 2 weeks")', 'dokan' ) );
+
+        foreach ( range( 2, 6 ) as $i ) {
+            // translators: period interval, placeholder is ordinal (eg "$10 every _2nd/3rd/4th_", etc)
+            $intervals[ $i ] = sprintf( _x( 'every %s', 'period interval with ordinal number (e.g. "every 2nd"', 'dokan' ), self::append_numeral_suffix( $i ) );
         }
 
-        return $intervals;
+        $intervals = apply_filters( 'dokan_pro_subscription_period_interval_strings', $intervals );
+
+        if ( empty( $interval ) ) {
+            return $intervals;
+        } else {
+            return $intervals[ $interval ];
+        }
     }
 
-
     /**
-     * Return an i18n'ified associative array of all possible subscription periods.
+     * Takes a number and returns the number with its relevant suffix appended, eg. for 2, the function returns 2nd
      *
-     * @since 1.1
+     * @since 1.0
      */
-    public static function get_subscription_period_strings( $number = 1, $period = '' ) {
+    public static function append_numeral_suffix( $number ) {
 
-        $translated_periods = array(
-            'day'   => sprintf( _n( 'day(s)', '%s days', $number, 'dokan' ), $number ),
-            'week'  => sprintf( _n( 'week(s)', '%s weeks', $number, 'dokan' ), $number ),
-            'month' => sprintf( _n( 'month(s)', '%s months', $number, 'dokan' ), $number ),
-            'year'  => sprintf( _n( 'year(s)', '%s years', $number, 'dokan' ), $number )
-        );
+        // Handle teens: if the tens digit of a number is 1, then write "th" after the number. For example: 11th, 13th, 19th, 112th, 9311th. http://en.wikipedia.org/wiki/English_numerals
+        if ( strlen( $number ) > 1 && 1 == substr( $number, -2, 1 ) ) {
+            // translators: placeholder is a number, this is for the teens
+            $number_string = sprintf( __( '%sth', 'woocommerce-subscriptions' ), $number );
+        } else { // Append relevant suffix
+            switch ( substr( $number, -1 ) ) {
+                case 1:
+                    // translators: placeholder is a number, numbers ending in 1
+                    $number_string = sprintf( __( '%sst', 'woocommerce-subscriptions' ), $number );
+                    break;
+                case 2:
+                    // translators: placeholder is a number, numbers ending in 2
+                    $number_string = sprintf( __( '%snd', 'woocommerce-subscriptions' ), $number );
+                    break;
+                case 3:
+                    // translators: placeholder is a number, numbers ending in 3
+                    $number_string = sprintf( __( '%srd', 'woocommerce-subscriptions' ), $number );
+                    break;
+                default:
+                    // translators: placeholder is a number, numbers ending in 4-9, 0
+                    $number_string = sprintf( __( '%sth', 'woocommerce-subscriptions' ), $number );
+                    break;
+            }
+        }
 
-        return $translated_periods;
+        return apply_filters( 'woocommerce_numeral_suffix', $number_string, $number );
     }
 
 
@@ -281,18 +345,103 @@ class Helper {
      * M – for months; allowable range is 1 to 24
      * Y – for years; allowable range is 1 to 5
      *
-     * @param subscription_period string (optional) One of day, week, month or year. If empty, all subscription ranges are returned.
-     * @since 1.0
+     * @since DOKAN_PRO_SINCE
      */
-    public static function get_subscription_ranges( $subscription_period = '' ) {
-        $subscription_ranges = array();
-        $subscription_ranges[] = __( 'Never', 'dokan' );
+    public static function get_non_cached_subscription_ranges() {
 
-        for ( $i = 1; $i <= 30; $i++ ) {
-            $subscription_ranges[$i] = $i;
+        foreach ( array( 'day', 'week', 'month', 'year' ) as $period ) {
+
+            $subscription_lengths = array(
+                _x( 'Never expire', 'Subscription length', 'dokan' ),
+            );
+
+            switch ( $period ) {
+                case 'day':
+                    $subscription_lengths[] = _x( '1 day', 'Subscription lengths. e.g. "For 1 day..."', 'dokan' );
+                    $subscription_range = range( 2, 90 );
+                    break;
+                case 'week':
+                    $subscription_lengths[] = _x( '1 week', 'Subscription lengths. e.g. "For 1 week..."', 'dokan' );
+                    $subscription_range = range( 2, 52 );
+                    break;
+                case 'month':
+                    $subscription_lengths[] = _x( '1 month', 'Subscription lengths. e.g. "For 1 month..."', 'dokan' );
+                    $subscription_range = range( 2, 24 );
+                    break;
+                case 'year':
+                    $subscription_lengths[] = _x( '1 year', 'Subscription lengths. e.g. "For 1 year..."', 'dokan' );
+                    $subscription_range = range( 2, 5 );
+                    break;
+            }
+
+            foreach ( $subscription_range as $number ) {
+                $subscription_range[ $number ] = self::get_subscription_period_strings( $number, $period );
+            }
+
+            // Add the possible range to all time range
+            $subscription_lengths += $subscription_range;
+
+            $subscription_ranges[ $period ] = $subscription_lengths;
         }
 
         return $subscription_ranges;
+    }
+
+    /**
+     * Return an i18n'ified associative array of all possible subscription periods.
+     *
+     * @param int (optional) An interval in the range 1-6
+     * @param string (optional) One of day, week, month or year. If empty, all subscription ranges are returned.
+     * @return string|array
+     * @since 2.0
+     */
+    public static function get_subscription_period_strings( $number = 1, $period = '' ) {
+
+        // phpcs:disable Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma
+        $translated_periods = apply_filters( 'dokan_pro_subscription_periods',
+            array(
+                // translators: placeholder is number of days. (e.g. "Bill this every day / 4 days")
+                'day'   => sprintf( _nx( 'day',   '%s days',   $number, 'Subscription billing period.', 'dokan' ), $number ), // phpcs:ignore WordPress.WP.I18n.MissingSingularPlaceholder,WordPress.WP.I18n.MismatchedPlaceholders
+                // translators: placeholder is number of weeks. (e.g. "Bill this every week / 4 weeks")
+                'week'  => sprintf( _nx( 'week',  '%s weeks',  $number, 'Subscription billing period.', 'dokan' ), $number ), // phpcs:ignore WordPress.WP.I18n.MissingSingularPlaceholder,WordPress.WP.I18n.MismatchedPlaceholders
+                // translators: placeholder is number of months. (e.g. "Bill this every month / 4 months")
+                'month' => sprintf( _nx( 'month', '%s months', $number, 'Subscription billing period.', 'dokan' ), $number ), // phpcs:ignore WordPress.WP.I18n.MissingSingularPlaceholder,WordPress.WP.I18n.MismatchedPlaceholders
+                // translators: placeholder is number of years. (e.g. "Bill this every year / 4 years")
+                'year'  => sprintf( _nx( 'year',  '%s years',  $number, 'Subscription billing period.', 'dokan' ), $number ), // phpcs:ignore WordPress.WP.I18n.MissingSingularPlaceholder,WordPress.WP.I18n.MismatchedPlaceholders
+            ),
+            $number
+        );
+        // phpcs:enable
+
+        return ( ! empty( $period ) ) ? $translated_periods[ $period ] : $translated_periods;
+    }
+
+    /**
+     * Retaining the API, it makes use of the transient functionality.
+     *
+     * @param string $period
+     * @return bool|mixed
+     */
+    public static function get_subscription_ranges( $subscription_period = '' ) {
+        static $dokan_subscription_locale_ranges = array();
+
+        if ( ! is_string( $subscription_period ) ) {
+            $subscription_period = '';
+        }
+
+        $locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
+
+        if ( ! isset( $dokan_subscription_locale_ranges[ $locale ] ) ) {
+            $dokan_subscription_locale_ranges[ $locale ] = self::get_non_cached_subscription_ranges();
+        }
+
+        $subscription_ranges = apply_filters( 'woocommerce_subscription_lengths', $dokan_subscription_locale_ranges[ $locale ], $subscription_period );
+
+        if ( ! empty( $subscription_period ) ) {
+            return $subscription_ranges[ $subscription_period ];
+        } else {
+            return $subscription_ranges;
+        }
     }
 
     /**
@@ -426,8 +575,10 @@ class Helper {
         delete_user_meta( $customer_id, 'can_post_product' );
         delete_user_meta( $customer_id, 'dokan_admin_percentage' );
         delete_user_meta( $customer_id, 'dokan_has_active_cancelled_subscrption' );
+        delete_user_meta( $customer_id, 'dokan_vendor_subscription_cancel_email' );
+        delete_user_meta( $customer_id, '_paypal_subscriber_ID' );
 
-        // make product status draft after subcsriptions is got cancelled.
+        // make product status draft after subscriptions is got cancelled.
         if ( Helper::check_vendor_has_existing_product( $customer_id ) ) {
             Helper::make_product_draft( $customer_id );
         }
@@ -473,21 +624,26 @@ class Helper {
      * @return boolean
      */
     public static function alert_before_two_days( $user_id ) {
+        // check if email already sent to client
+        if ( 'yes' === get_user_meta( $user_id, 'dokan_vendor_subscription_cancel_email', true ) ) {
+            return false;
+        }
+
+        // if product pack end date is unlimited return false
         if ( 'unlimited' === self::get_pack_end_date( $user_id ) ) {
             return false;
         }
 
         $alert_days = dokan_get_option( 'no_of_days_before_mail', 'dokan_product_subscription' );
 
-        if ( $alert_days == 0 ) {
+        if ( (int) $alert_days === 0 ) {
             $alert_days = 2;
         }
 
-        $date = new \DateTime( date( 'Y-m-d h:i:s', strtotime( current_time( 'mysql', 1 ) . '+' . $alert_days . ' days' ) ) );
-        $prv_two_date = $date->format( 'Y-m-d H:i:s' );
+        $current_date   = dokan_current_datetime();
+        $alert_date     = dokan_current_datetime()->modify( self::get_pack_end_date( $user_id ) )->modify( "- $alert_days days" );
 
-        // return $prv_two_date;
-        if ( $prv_two_date == self::get_pack_end_date( $user_id ) ) {
+        if ( $current_date >= $alert_date ) {
             return true;
         }
 
@@ -513,11 +669,11 @@ class Helper {
             return false;
         }
 
-        $date            = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-        $validation_date = date( 'Y-m-d', strtotime( self::get_pack_end_date( $vendor_id ) ) );
+        $current_date    = dokan_current_datetime();
+        $validation_date = $current_date->modify( self::get_pack_end_date( $vendor_id ) );
 
-        if ( $date > $validation_date ) {
-            self::log( 'Subscription validity check ( ' . $date . ' ): checking subscription pack validity of user #' . $vendor_id . '. This users subscription pack will expire on ' . $validation_date );
+        if ( $current_date > $validation_date ) {
+            self::log( 'Subscription validity check ( ' . $current_date->format( 'Y-m-d' ) . ' ): checking subscription pack validity of user #' . $vendor_id . '. This users subscription pack will expire on ' . $validation_date->format( 'Y-m-d' ) );
             return true;
         }
 

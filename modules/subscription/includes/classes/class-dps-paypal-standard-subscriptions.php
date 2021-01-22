@@ -171,7 +171,6 @@ class DPS_PayPal_Standard_Subscriptions {
         $custom      = (array) json_decode( $paypal_args['custom'] );
         $order_id    = $custom['order_id'];
         $order_key   = $custom['order_key'];
-
         $order       = new WC_Order( $order_id );
 
         // Only one subscription allowed in the cart when PayPal Standard is active
@@ -318,9 +317,7 @@ class DPS_PayPal_Standard_Subscriptions {
     public static function process_paypal_ipn_request( $transaction_details ) {
         global $wpdb;
 
-        // $transaction_details = stripslashes_deep( $transaction_details );
-
-        Helper::log( 'Transaction details check: ' . print_r( $transaction_details, true ) );
+        //Helper::log( 'Transaction details check: ' . print_r( $transaction_details, true ) );
 
         if ( ! in_array( $transaction_details['txn_type'], array( 'subscr_signup', 'subscr_payment', 'subscr_cancel', 'subscr_eot', 'subscr_failed', 'subscr_modify' ) ) ) {
             return;
@@ -370,7 +367,7 @@ class DPS_PayPal_Standard_Subscriptions {
                 update_user_meta( $customer_id, 'product_package_id', $product['product_id'] );
                 update_user_meta( $customer_id, 'product_order_id', $order_id );
                 update_user_meta( $customer_id, 'product_no_with_pack', $no_of_product_pack );
-                update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+                update_user_meta( $customer_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
                 update_user_meta( $customer_id, 'can_post_product', '1' );
                 update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
                 update_user_meta( $customer_id, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
@@ -405,7 +402,7 @@ class DPS_PayPal_Standard_Subscriptions {
             case 'subscr_payment':
                 if ( 'completed' === strtolower( $transaction_details['payment_status'] ) ) {
                     update_user_meta( $customer_id, 'dokan_has_active_cancelled_subscrption', false );
-                    update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+                    update_user_meta( $customer_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
                     update_user_meta( $customer_id, 'can_post_product', '1' );
                     update_user_meta( $customer_id, 'has_pending_subscription', false );
                     update_user_meta( $customer_id, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
@@ -445,10 +442,10 @@ class DPS_PayPal_Standard_Subscriptions {
                 break;
 
             case 'subscr_eot':
-                $subscription_length = get_post_meta( $product['product_id'], '_subscription_length', true );
+                $subscription_length = get_post_meta( $product['product_id'], '_dokan_subscription_length', true );
 
                 // PayPal fires the 'subscr_eot' notice immediately if a subscription is only for one billing period, so ignore the request when we only have one billing period
-                if ( 1 != $subscription_length && $subscription_length != get_post_meta( $product['product_id'], '_subscription_period_interval', true ) ) {
+                if ( 1 != $subscription_length && $subscription_length != get_post_meta( $product['product_id'], '_dokan_subscription_period_interval', true ) ) {
                     self::log( 'IPN subscription end-of-term for order ' . $order_id );
 
                     // Record subscription ended
@@ -491,6 +488,7 @@ class DPS_PayPal_Standard_Subscriptions {
         if ( $response ) {
             update_user_meta( $user_id, '_dps_user_subscription_status', 'cancelled' );
             Helper::delete_subscription_pack( $user_id, $order_id );
+            delete_user_meta( $user_id, '_paypal_subscriber_ID' );
 
             $order->add_order_note( __( 'Subscription cancelled with PayPal', 'dokan' ) );
         }

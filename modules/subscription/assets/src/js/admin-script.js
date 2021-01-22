@@ -60,4 +60,42 @@
         }
     });
 
+    // Update subscription ranges when subscription period or interval is changed
+    $('#woocommerce-product-data').on('change','[name^="_dokan_subscription_period"], [name^="_dokan_subscription_period_interval"]',function(){
+        setDokanSubscriptionLengths();
+    });
+
+    function setDokanSubscriptionLengths(){
+        $('[name^="_dokan_subscription_length"]').each(function(){
+            var $lengthElement = $(this),
+                selectedLength = $lengthElement.val(),
+                hasSelectedLength = false,
+                periodSelector;
+
+            periodSelector = '#_dokan_subscription_period';
+            billingInterval = parseInt($('#_dokan_subscription_period_interval').val());
+
+            $lengthElement.empty();
+
+            $.each( dokanSubscription.subscriptionLengths[ $(periodSelector).val() ], function(length,description) {
+                if(parseInt(length) == 0 || 0 == (parseInt(length) % billingInterval)) {
+                    $lengthElement.append($('<option></option>').attr('value',length).text(description));
+                }
+            });
+
+            $lengthElement.children('option').each(function(){
+                if (this.value == selectedLength) {
+                    hasSelectedLength = true;
+                    return false;
+                }
+            });
+
+            if(hasSelectedLength){
+                $lengthElement.val(selectedLength);
+            } else {
+                $lengthElement.val(0);
+            }
+        });
+    }
+
 })(jQuery);

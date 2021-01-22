@@ -217,21 +217,12 @@ class Module {
                 $product_id = $invoice->plan->code;
                 // get wc product object
                 $product_pack = wc_get_product( $product_id );
+                $vendor_subscription = dokan()->subscription->get( $product_id );
 
                 if ( $product_pack && 'product_pack' === $product_pack->get_type() ) {
-                    $subscription_interval = get_post_meta( $product_id, '_subscription_period_interval', true );
-                    $subscription_period   = get_post_meta( $product_id, '_subscription_period', true );
-                    $add_s                 = ( $subscription_interval != 1 ) ? 's' : '';
-                    $subscription_length   = absint( get_post_meta( $product_id, '_subscription_length', true ) );
-
-                    update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+                    update_user_meta( $user_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
                     update_user_meta( $user_id, 'can_post_product', '1' );
-
-                    if ( $subscription_length > 0 ) {
-                        update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( '+' . $subscription_interval . ' ' . $subscription_period . '' . $add_s ) ) );
-                    } else {
-                        update_user_meta( $user_id, 'product_pack_enddate', 'unlimited' );
-                    }
+                    update_user_meta( $user_id, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
 
                     do_action( 'dokan_vendor_purchased_subscription', $user_id );
                 }
@@ -285,21 +276,12 @@ class Module {
             $product_id = $response->resource->plan->code;
 
             $product_pack = wc_get_product( $product_id );
+            $vendor_subscription = dokan()->subscription->get( $product_id );
 
             if ( $product_pack && 'product_pack' === $product_pack->get_type() ) {
-                $subscription_interval = get_post_meta( $product_id, '_subscription_period_interval', true );
-                $subscription_period   = get_post_meta( $product_id, '_subscription_period', true );
-                $add_s                 = ( $subscription_interval != 1 ) ? 's' : '';
-                $subscription_length   = absint( get_post_meta( $product_id, '_subscription_length', true ) );
-
-                update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+                update_user_meta( $user_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
                 update_user_meta( $user_id, 'can_post_product', '1' );
-
-                if ( $subscription_length > 0 ) {
-                    update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( '+' . $subscription_interval . ' ' . $subscription_period . '' . $add_s ) ) );
-                } else {
-                    update_user_meta( $user_id, 'product_pack_enddate', 'unlimited' );
-                }
+                update_user_meta( $user_id, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
 
                 do_action( 'dokan_vendor_purchased_subscription', $user_id );
             }

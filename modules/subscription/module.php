@@ -474,7 +474,7 @@ class Module {
      * @return void
      */
     public static function can_create_product( $errors, $data ) {
-        if ( $data['ID'] ) {
+        if ( isset( $data['ID'] ) ) {
             return;
         }
 
@@ -687,8 +687,8 @@ class Module {
                 $order_id = get_user_meta( $user->ID, 'product_order_id', true );
 
                 if ( $order_id ) {
-                    $subject = ( dokan_get_option( 'email_subject', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_subject', 'dokan_product_subscription' ) : __( 'Subscription Package Cancel notification', 'dokan' );
-                    $message = ( dokan_get_option( 'email_body', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_body', 'dokan_product_subscription' ) : __( 'Due to finish your Package validation we are canceling your Subscription Package', 'dokan' );
+                    $subject = ( dokan_get_option( 'cancelling_email_subject', 'dokan_product_subscription' ) ) ? dokan_get_option( 'cancelling_email_subject', 'dokan_product_subscription' ) : __( 'Subscription Package Cancel notification', 'dokan' );
+                    $message = ( dokan_get_option( 'cancelling_email_body', 'dokan_product_subscription' ) ) ? dokan_get_option( 'cancelling_email_body', 'dokan_product_subscription' ) : __( 'Dear subscriber, Your subscription has expired. Please renew your package to continue using it.', 'dokan' );
                     $headers = 'From: ' . get_option( 'blogname' ) . ' <' . get_option( 'admin_email' ) . '>' . "\r\n";
 
                     wp_mail( $user->user_email, $subject, $message, $headers );
@@ -705,11 +705,12 @@ class Module {
 
             if ( ! $has_recurring_pack && $is_seller_enabled && $has_subscription && $can_post_product ) {
                 if ( Helper::alert_before_two_days( $user->ID ) ) {
-                    $subject = ( dokan_get_option( 'email_subject', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_subject', 'dokan_product_subscription' ) : __( 'Package End notification alert', 'dokan' );
-                    $message = ( dokan_get_option( 'email_body', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_body', 'dokan_product_subscription' ) : __( 'Your Package validation remaining some days please confirm it', 'dokan' );
+                    $subject = ( dokan_get_option( 'alert_email_subject', 'dokan_product_subscription' ) ) ? dokan_get_option( 'alert_email_subject', 'dokan_product_subscription' ) : __( 'Subscription Ending Soon', 'dokan' );
+                    $message = ( dokan_get_option( 'alert_email_body', 'dokan_product_subscription' ) ) ? dokan_get_option( 'alert_email_body', 'dokan_product_subscription' ) : __( 'Dear subscriber, Your subscription will be ending soon. Please renew your package in a timely manner for continued usage.', 'dokan' );
                     $headers = 'From: ' . get_option( 'blogname' ) . ' <' . get_option( 'admin_email' ) . '>' . "\r\n";
 
                     wp_mail( $user->user_email, $subject, $message, $headers );
+                    update_user_meta( $user->ID, 'dokan_vendor_subscription_cancel_email', 'yes' );
                 }
             }
         }
@@ -738,7 +739,7 @@ class Module {
                     Helper::add_used_trial_pack( $customer_id, $product_id );
                 }
 
-                if ( get_post_meta( $product_id, '_enable_recurring_payment', true ) == 'yes' ) {
+                if ( Helper::is_recurring_pack( $product_id ) ) {
                     return;
                 }
 
@@ -746,12 +747,12 @@ class Module {
                 update_user_meta( $customer_id, 'product_package_id', $product_id );
                 update_user_meta( $customer_id, 'product_order_id', $order_id );
                 update_user_meta( $customer_id, 'product_no_with_pack', get_post_meta( $product_id, '_no_of_product', true ) );
-                update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+                update_user_meta( $customer_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
 
                 if ( $pack_validity == 0 ) {
                     update_user_meta( $customer_id, 'product_pack_enddate', 'unlimited' );
                 } else {
-                    update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
+                    update_user_meta( $customer_id, 'product_pack_enddate', dokan_current_datetime()->modify( "+$pack_validity days" )->format( 'Y-m-d H:i:s' ) );
                 }
 
                 update_user_meta( $customer_id, 'can_post_product', '1' );
