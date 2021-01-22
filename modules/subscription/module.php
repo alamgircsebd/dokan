@@ -68,7 +68,11 @@ class Module {
         add_filter( 'map_meta_cap', [ __CLASS__, 'filter_capability' ], 20, 2 );
 
         // filter gallery iamge uploading
-        add_filter( 'dokan_product_gallery_allow_add_images', [ __CLASS__, 'restrict_gallery_image_upload' ] );
+        add_action( 'dokan_product_gallery_image_count', [ $this, 'restrict_gallery_image_count' ] );
+        add_action( 'dokan_add_product_js_template_end', [ $this, 'restrict_gallery_image_count' ] );
+        add_action( 'woocommerce_before_single_product', [ $this, 'restrict_added_image_display' ] );
+        add_filter( 'dokan_new_product_popup_args', [ $this, 'restrict_gallery_image_on_product_create' ], 21, 2 );
+        add_filter( 'restrict_product_image_gallery_on_edit', [ $this, 'restrict_gallery_image_on_product_edit' ], 10, 1 );
 
         add_action( 'dps_schedule_pack_update', array( $this, 'schedule_task' ) );
         add_action( 'dokan_before_listing_product', array( $this, 'show_custom_subscription_info' ) );
@@ -642,21 +646,6 @@ class Module {
     }
 
     /**
-     * Restrict gallery image upload for vendor
-     *
-     * @return void
-     */
-    public static function restrict_gallery_image_upload() {
-        $vendor = dokan()->vendor->get( dokan_get_current_user_id() )->subscription;
-
-        if ( $vendor && $vendor->is_gallery_image_upload_restricted() ) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Schedule task daily update this functions
      */
     public function schedule_task() {
@@ -1144,6 +1133,142 @@ class Module {
         ];
 
         return $args;
+    }
+
+
+    /**
+     * Restrict gallery image count for new product & edit product
+     *
+     * @return void
+     */
+    public function restrict_gallery_image_count() {
+        $image_count = $this->get_restricted_image_count();
+        if ( $image_count == - 1 ) {
+            return;
+        }
+        if ( $image_count >= 0 ) { ?>
+            <script type="text/javascript">
+                ;(function () {
+                    var image_count = <?php echo json_encode( $image_count, JSON_HEX_TAG ); ?>;
+                    var observer = new MutationObserver(function () {
+                        if (document.querySelector('.attachments-browser ul')) {
+                            var selected_image = document.querySelectorAll("[aria-checked='true']").length;
+                            var added_image = document.querySelectorAll("#product_images_container .image").length;
+                            if(document.querySelector('.media-toolbar button').innerText !== 'Set featured image' ){
+                                var submit_button=document.querySelector('.media-toolbar button');
+                                if ((selected_image + added_image) > image_count || selected_image < 1) {
+                                    submit_button.disabled = true;
+                                } else {
+                                    submit_button.disabled = false;
+                                }
+                            }
+
+                            if (added_image >= image_count) {
+                                document.querySelector("#product_images_container .add-image").style.display = 'none';
+                            } else {
+                                document.querySelector("#product_images_container .add-image").style.display = '';
+                            }
+                        }
+                    });
+
+                    observer.observe(document.body,
+                        {
+                            childList: true,
+                            subtree: true,
+                        }
+                    )
+                })();
+            </script>
+
+        <?php }
+    }
+
+    /**
+     * Restrict already added gallery image using woocommerce_before_single_product
+     *
+     * @return void
+     */
+    public function restrict_added_image_display() {
+        global $product, $post;
+
+        $image_count = $this->get_restricted_image_count( $post->post_author );
+        if ( $image_count == - 1 ) {
+            return;
+        }
+
+        $product_gallery_image = $this->count_filter( $product->get_gallery_image_ids(), $image_count );
+        $product->set_gallery_image_ids( $product_gallery_image );
+    }
+
+    /**
+     * Restricted gallery image count for vendor subscription
+     *
+     * @return int
+     */
+    public function get_restricted_image_count( $vendor_id = null ) {
+        $vendor_id = ! empty( $vendor_id ) ? $vendor_id : dokan_get_current_user_id();
+        $vendor    = dokan()->vendor->get( $vendor_id )->subscription;
+
+        if ( $vendor && $vendor->is_gallery_image_upload_restricted() ) {
+            return $vendor->gallery_image_upload_count();
+        }
+
+        return -1;
+    }
+
+    /**
+     * Restrict gallery image  when creating product
+     *
+     * @param '' $errors
+     * @param array $data
+     *
+     * @return string
+     */
+    public function restrict_gallery_image_on_product_create( $errors, $data ) {
+        $gallery_image = ! empty( $data['product_image_gallery'] ) ? array_filter( explode( ',', wc_clean( $data['product_image_gallery'] ) ) ) : [];
+        $image_count   = $this->get_restricted_image_count();
+        if ( $image_count == - 1 ) {
+            return;
+        }
+        if ( count( $gallery_image ) > $image_count ) {
+            $errors = new \WP_Error( 'not-allowed', __( sprintf( 'You are not allowed to add more than %s gallery images', $image_count ), 'dokan' ) );
+
+            return $errors;
+        }
+
+    }
+
+
+    /**
+     * Restrict gallery image when editing product
+     *
+     * @param $postdata
+     *
+     * @return array
+     */
+    public function restrict_gallery_image_on_product_edit( $postdata ) {
+        $gallery_image = ! empty( $postdata['product_image_gallery'] ) ? array_filter( explode( ',', wc_clean( $postdata['product_image_gallery'] ) ) ) : [];
+        $image_count   = $this->get_restricted_image_count();
+        if ( $image_count == - 1 ) {
+            return;
+        }
+        $postdata['product_image_gallery'] = implode( ',', $this->count_filter( $gallery_image, $image_count ) );
+
+        return $postdata;
+    }
+
+    /**
+     * Count filter
+     *
+     * @param array $arr
+     * @param int $count
+     *
+     * @return array
+     */
+    public function count_filter( $arr, $count ) {
+        return array_filter( $arr, function ( $item, $key ) use ( $count ) {
+            return $key <= $count - 1;
+        }, ARRAY_FILTER_USE_BOTH );
     }
 
     /**

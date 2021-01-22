@@ -147,6 +147,17 @@ class SubscriptionPack extends VendorSubscription {
     }
 
     /**
+     * Gallary image upload count
+     *
+     * @return int
+     */
+    public function gallery_image_upload_count() {
+        $count = get_post_meta( $this->get_id(), '_gallery_image_restriction_count', true );
+
+        return ! empty($count) ? intval( $count ) : -1;
+    }
+
+    /**
      * Is trial
      *
      * @return boolean

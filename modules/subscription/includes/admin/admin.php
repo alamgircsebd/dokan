@@ -233,6 +233,43 @@ class DPS_Admin {
             )
         );
 
+        woocommerce_wp_text_input(
+            array(
+                'id'                => '_gallery_image_restriction_count',
+                'label'             => __( 'Maximum Image', 'dokan' ),
+                'placeholder'       => 'Put -1 for unlimited image',
+                'description'       => __( 'Max Image vendor can upload', 'dokan' ),
+                'type'              => 'number',
+                'custom_attributes' => array(
+                    'step' => 'any',
+                    'min'  => '-1'
+                )
+            )
+        );
+
+        ?>
+
+        <script type="text/javascript">
+            ;(function () {
+                var image_enable = document.querySelector('#_enable_gallery_restriction');
+                var image_count = document.querySelector('._gallery_image_restriction_count_field');
+                if (image_enable.checked === true) {
+                    image_count.style.display = '';
+                } else {
+                    image_count.style.display = 'none';
+                }
+                image_enable.addEventListener('click', function () {
+                    if (image_enable.checked === true) {
+                        image_count.style.display = '';
+                    } else {
+                        image_count.style.display = 'none';
+                    }
+                })
+            })();
+        </script>
+
+        <?php
+
         woocommerce_wp_checkbox(
             array(
                 'id'          => '_enable_recurring_payment',
@@ -358,6 +395,16 @@ class DPS_Admin {
 
         if ( ! empty( $woocommerce_enable_gallery_restriction ) ) {
             update_post_meta( $post_id, '_enable_gallery_restriction', wc_clean( $woocommerce_enable_gallery_restriction ) );
+        }
+
+        $gallery_image_restriction_count = ! empty( $_POST['_gallery_image_restriction_count'] ) && $_POST['_gallery_image_restriction_count'] >= 0 ? intval( wp_unslash( $_POST['_gallery_image_restriction_count'] ) ) : -1;
+
+        if ( $woocommerce_enable_gallery_restriction === 'yes' ) {
+            update_post_meta( $post_id, '_gallery_image_restriction_count', $gallery_image_restriction_count );
+        }
+
+        if ( $woocommerce_enable_gallery_restriction === 'no' ) {
+            delete_post_meta( $post_id, '_gallery_image_restriction_count' );
         }
 
         $dokan_subscription_enable_trial = isset( $_POST['dokan_subscription_enable_trial'] ) ? 'yes' : 'no';
