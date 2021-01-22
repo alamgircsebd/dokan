@@ -546,7 +546,7 @@ class Products {
             );
         }
 
-        $can_duplicate_product = current_user_can( 'dokan_duplicate_product' );
+        $can_duplicate_product = apply_filters( 'dokan_can_duplicate_product', current_user_can( 'dokan_duplicate_product' ) );
         $vendor_can_duplicate_product = dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' );
 
         if ( $can_duplicate_product && 'on' === $vendor_can_duplicate_product ) {

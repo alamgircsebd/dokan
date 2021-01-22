@@ -117,6 +117,9 @@ class Module {
 
         //For csv
         add_action( 'woocommerce_product_import_before_process_item', [ $this, 'restrict_category_on_csv_import' ] );
+
+        // Duplicating product based on subscription
+        add_filter( 'dokan_can_duplicate_product', [ $this, 'dokan_can_duplicate_product_on_subscription' ], 10, 1 );
     }
 
     /**
@@ -1214,5 +1217,33 @@ class Module {
         $allowed_categories  = $vendor_subscription->get_allowed_product_categories();
 
         return $allowed_categories;
+    }
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     *
+     * Checking the ability to duplicate product based on subscription
+     *
+     * @param $can_duplicate
+     *
+     * @return bool|mixed|null
+     */
+    public function dokan_can_duplicate_product_on_subscription( $can_duplicate ) {
+
+        if( ! $can_duplicate ) {
+            return $can_duplicate;
+        }
+
+        // If the user is vendor staff, we are getting the specific vendor for that staff
+        $user_id = (int) dokan_get_current_user_id();
+
+        /** We are getting the subscription of the vendor
+         * and checking if the vendor has remaining product based on active subscription
+         **/
+        if ( ! Helper::get_vendor_remaining_products( $user_id ) ) {
+            return false;
+        }
+
+        return true;
     }
 }
