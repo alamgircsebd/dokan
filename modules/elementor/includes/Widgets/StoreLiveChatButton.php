@@ -152,11 +152,20 @@ class StoreLiveChatButton extends DokanButton {
 
         parent::render();
 
-        if ( 'talkjs' === $chatter->get_name() ) {
-            echo do_shortcode( '[dokan-live-chat]' );
-        } else {
-            $page_id = ! empty( $store['fb_page_id'] ) ? $store['fb_page_id'] : '';
-            echo do_shortcode( sprintf( '[dokan-live-chat-messenger page_id="%s"]', $page_id ) );
+        switch ( $chatter->get_name() ) {
+            case 'talkjs' :
+                echo do_shortcode( '[dokan-live-chat]' );
+                break;
+            case 'messenger' :
+                $page_id = ! empty( $store['fb_page_id'] ) ? $store['fb_page_id'] : '';
+                echo do_shortcode( sprintf( '[dokan-live-chat-messenger page_id="%s"]', $page_id ) );
+                break;
+            case 'twakto' :
+                $twak_property_id = ! empty( $store['twakto_property_id'] ) ? $store['twakto_property_id'] : '';
+                $twak_widget_id   = ! empty( $store['twakto_widget_id'] ) ? $store['twakto_widget_id'] : '';
+
+                echo do_shortcode( sprintf( '[dokan-live-chat-twakto property_id="%s" widget_id="%s"]', $twak_property_id, $twak_widget_id ) );
+                break;
         }
     }
 }

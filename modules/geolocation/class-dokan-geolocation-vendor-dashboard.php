@@ -162,8 +162,7 @@ class Dokan_Geolocation_Vendor_Dashboard {
         $dokan_geo_longitude = get_user_meta( $store_id, 'dokan_geo_longitude', true );
         $dokan_geo_public    = get_user_meta( $store_id, 'dokan_geo_public', true );
         $dokan_geo_address   = get_user_meta( $store_id, 'dokan_geo_address', true );
-
-        $use_store_settings = 'yes';
+        $use_store_settings  = 'yes';
 
         if ( isset( $_POST['_dokan_geolocation_use_store_settings'] ) && 'yes' !== $_POST['_dokan_geolocation_use_store_settings'] ) {
             $use_store_settings = 'no';

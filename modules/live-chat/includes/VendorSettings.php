@@ -10,7 +10,6 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0.0
  */
 class VendorSettings {
-
     /**
      * Constructor method
      *
@@ -35,7 +34,8 @@ class VendorSettings {
     /**
      * Register live caht seller settings on seller dashboard
      *
-     * @param int    $user_id
+     * @param int $user_id
+     *
      * @param object $profile
      *
      * @since 1.0.0
@@ -48,49 +48,31 @@ class VendorSettings {
         }
 
         $is_messenger = 'messenger' === AdminSettings::get_provider();
+        $is_twakto    = 'twakto' === AdminSettings::get_provider();
         $enable_chat  = isset( $profile['live_chat'] ) ? $profile['live_chat'] : 'no';
-        $fb_page_id   = ! empty( $profile['fb_page_id'] ) ? $profile['fb_page_id'] : ''; ?>
-        <div class="dokan-form-group">
-            <label class="dokan-w3 dokan-control-label"><?php esc_html_e( 'Enable Live Chat', 'dokan' ); ?></label>
-            <div class="dokan-w5 dokan-text-left">
-                <div class="checkbox">
-                    <label>
-                        <input type="hidden" name="live_chat" value="no">
-                        <input type="checkbox" id="live_chat" name="live_chat" value="yes" <?php checked( $enable_chat, 'yes' ); ?>><?php esc_html_e( 'Enable Live Chat', 'dokan' ); ?>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <?php
 
+        dokan_get_template( '/vendor-settings/settings.php', [
+            'enable_chat' => $enable_chat,
+        ], DOKAN_LIVE_CHAT_TEMPLATE, DOKAN_LIVE_CHAT_TEMPLATE );
+
+        //messenger
         if ( $is_messenger ) {
-            ?>
-            <div class="dokan-form-group dokan-live-chat-settings">
-                <label for="fb_page_id" class="dokan-w3 dokan-control-label"><?php esc_html_e( 'Facebook Page ID', 'dokan' ); ?></label>
-                <div class="dokan-w5 dokan-text-left">
-                    <input type="text" id="fb_page_id" name="fb_page_id" value=<?php echo esc_attr( $fb_page_id ); ?>>
-                    <a
-                        href="<?php echo esc_url( 'https://www.facebook.com/pages/create/' ); ?>"
-                        style="font-style: italic;text-decoration: underline !important;color: gray;padding-left: 10px;"
-                        target="_blank"
-                        class="get-fb-page-id">
-                        <?php esc_html_e( 'Get Facebook page id', 'dokan' ); ?>
-                    </a>
-                    <p>
-                        <small>
-                            <?php esc_html_e( 'Setup Facebook Messenger Chat', 'dokan' ); ?>   
-                        <a
-                            href="<?php echo esc_url( 'https://wedevs.com/docs/dokan/modules/dokan-live-chat/' ); ?>"
-                            style="text-decoration: underline !important;font-weight: bold;color: gray;"
-                            target="_blank"
-                            class="get-fb-page-id">
-                            <?php esc_html_e( 'Get Help', 'dokan' ); ?>
-                        </a>
-                        </small> 
-                    </p>
-                </div>
-            </div>
-            <?php
+            $fb_page_id = ! empty( $profile['fb_page_id'] ) ? $profile['fb_page_id'] : '';
+
+            dokan_get_template( '/vendor-settings/messenger.php', [
+                'fb_page_id' => $fb_page_id,
+            ], DOKAN_LIVE_CHAT_TEMPLATE, DOKAN_LIVE_CHAT_TEMPLATE );
+        }
+
+        //twakto
+        if ( $is_twakto ) {
+            $twakto_property_id = ! empty( $profile['twakto_property_id'] ) ? $profile['twakto_property_id'] : '';
+            $twakto_widget_id   = ! empty( $profile['twakto_widget_id'] ) ? $profile['twakto_widget_id'] : '';
+
+            dokan_get_template( '/vendor-settings/twakto.php', [
+                'twakto_property_id' => $twakto_property_id,
+                'twakto_widget_id'   => $twakto_widget_id,
+            ], DOKAN_LIVE_CHAT_TEMPLATE, DOKAN_LIVE_CHAT_TEMPLATE );
         }
     }
 
@@ -108,11 +90,19 @@ class VendorSettings {
             return;
         }
 
-        $store_info               = dokan_get_store_info( $user_id );
-        $store_info['live_chat']  = wc_clean( $get_postdata['live_chat'] );
+        $store_info              = dokan_get_store_info( $user_id );
+        $store_info['live_chat'] = wc_clean( $get_postdata['live_chat'] );
 
         if ( ! empty( $get_postdata['fb_page_id'] ) ) {
             $store_info['fb_page_id'] = wc_clean( $get_postdata['fb_page_id'] );
+        }
+
+        if ( ! empty( $get_postdata['twakto_property_id'] ) ) {
+            $store_info['twakto_property_id'] = wc_clean( $get_postdata['twakto_property_id'] );
+        }
+
+        if ( ! empty( $get_postdata['twakto_widget_id'] ) ) {
+            $store_info['twakto_widget_id'] = wc_clean( $get_postdata['twakto_widget_id'] );
         }
 
         update_user_meta( $user_id, 'dokan_profile_settings', $store_info );
