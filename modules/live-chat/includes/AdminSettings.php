@@ -75,7 +75,8 @@ class AdminSettings {
                 'options'            => [
                     'messenger' => __( 'Facebook Messenger', 'dokan' ),
                     'talkjs'    => __( 'TalkJS', 'dokan' ),
-                    'twakto'    => __( 'Tawk.to', 'dokan' ),
+                    'tawkto'    => __( 'Tawk.to', 'dokan' ),
+                    'whatsapp'  => __( 'WhatsApp', 'dokan' ),
                 ],
             ],
             'theme_color'              => [
@@ -108,6 +109,33 @@ class AdminSettings {
                 'show_if' => [
                     'provider' => [
                         'equal' => 'talkjs',
+                    ],
+                ],
+            ],
+            'wa_opening_method'        => [
+                'name'    => 'wa_opening_method',
+                'label'   => __( 'Opening Pattern', 'dokan' ),
+                'type'    => 'select',
+                'default' => 'in_app',
+                'options' => [
+                    'in_browser' => __( 'Browser', 'dokan' ),
+                    'in_app'     => __( 'App', 'dokan' ),
+                ],
+                'show_if' => [
+                    'provider' => [
+                        'equal' => 'whatsapp',
+                    ],
+                ],
+            ],
+            'wa_pre_filled_message'    => [
+                'name'    => 'wa_pre_filled_message',
+                'label'   => __( 'Pre-filled Message', 'dokan' ),
+                'desc'    => __( 'Text that appears in the WhatsApp Chat window. Add variables {store_name}, {store_url} to replace with store name, store url', 'dokan' ),
+                'type'    => 'textarea',
+                'default' => __( 'Hello {store_name}, I have an enquiry regarding your store at {store_url}', 'dokan' ),
+                'show_if' => [
+                    'provider' => [
+                        'equal' => 'whatsapp',
                     ],
                 ],
             ],

@@ -160,11 +160,16 @@ class StoreLiveChatButton extends DokanButton {
                 $page_id = ! empty( $store['fb_page_id'] ) ? $store['fb_page_id'] : '';
                 echo do_shortcode( sprintf( '[dokan-live-chat-messenger page_id="%s"]', $page_id ) );
                 break;
-            case 'twakto' :
-                $twak_property_id = ! empty( $store['twakto_property_id'] ) ? $store['twakto_property_id'] : '';
-                $twak_widget_id   = ! empty( $store['twakto_widget_id'] ) ? $store['twakto_widget_id'] : '';
+            case 'tawkto' :
+                $tawk_property_id = ! empty( $store['tawkto_property_id'] ) ? $store['tawkto_property_id'] : '';
+                $tawk_widget_id   = ! empty( $store['tawkto_widget_id'] ) ? $store['tawkto_widget_id'] : '';
 
-                echo do_shortcode( sprintf( '[dokan-live-chat-twakto property_id="%s" widget_id="%s"]', $twak_property_id, $twak_widget_id ) );
+                echo do_shortcode( sprintf( '[dokan-live-chat-tawkto property_id="%s" widget_id="%s"]', $tawk_property_id, $tawk_widget_id ) );
+                break;
+            case 'whatsapp' :
+                $whatsapp_number = ! empty( $store['whatsapp_number'] ) ? $store['whatsapp_number'] : '';
+
+                echo do_shortcode( sprintf( '[dokan-live-chat-whatsapp number="%s"]', $whatsapp_number ) );
                 break;
         }
     }

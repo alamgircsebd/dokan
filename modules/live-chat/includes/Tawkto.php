@@ -7,16 +7,16 @@ use WP_Error;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class Twakto
+ * Class tawkto
  * @package WeDevs\DokanPro\Modules\LiveChat
  *
  * @since DOKAN_PRO_SINCE
  *
  * @author weDevs
  */
-class Twakto {
+class Tawkto {
     /**
-     * Twakto constructor.
+     * tawkto constructor.
      *
      * @since DOKAN_PRO_SINCE
      */
@@ -39,7 +39,7 @@ class Twakto {
      * @return void
      */
     public function register_shortcode() {
-        add_shortcode( 'dokan-live-chat-twakto', [ $this, 'shortcode' ] );
+        add_shortcode( 'dokan-live-chat-tawkto', [ $this, 'shortcode' ] );
     }
 
     /**
@@ -52,19 +52,19 @@ class Twakto {
      * @return void
      */
     public function shortcode( $atts ) {
-        $twakto_property_id = ! empty( $atts['property_id'] ) ? $atts['property_id'] : '';
-        $twakto_widget_id   = ! empty( $atts['widget_id'] ) ? $atts['widget_id'] : '';
+        $tawkto_property_id = ! empty( $atts['property_id'] ) ? $atts['property_id'] : '';
+        $tawkto_widget_id   = ! empty( $atts['widget_id'] ) ? $atts['widget_id'] : '';
 
-        if ( ! $twakto_property_id || ! $twakto_widget_id ) {
+        if ( ! $tawkto_property_id || ! $tawkto_widget_id ) {
             return;
         }
 
-        $this->enqueue_twakto_js( $twakto_property_id, $twakto_widget_id );
+        $this->enqueue_tawkto_js( $tawkto_property_id, $tawkto_widget_id );
         $this->enqueue_chat_js();
     }
 
     /**
-     * Enqueue twakto js
+     * Enqueue tawkto js
      *
      * @param $property_id
      * @param $widget_id
@@ -73,7 +73,7 @@ class Twakto {
      *
      * @return void
      */
-    public function enqueue_twakto_js( $property_id, $widget_id ) {
+    public function enqueue_tawkto_js( $property_id, $widget_id ) {
         ?>
         <!--Start of Tawk.to Script-->
         <script type="text/javascript">
@@ -122,7 +122,7 @@ class Twakto {
     public function enqueue_chat_js() {
         ?>
         <script>
-            jQuery('button.dokan-live-chat-twakto, .dokan-store-live-chat-btn').on('click', function (e) {
+            jQuery('button.dokan-live-chat-tawkto, .dokan-store-live-chat-btn').on('click', function (e) {
                 e.preventDefault();
 
                 Tawk_API.toggleVisibility();
@@ -147,19 +147,19 @@ class Twakto {
         }
 
         $store            = dokan()->vendor->get( $vendor_id )->get_shop_info();
-        $twak_property_id = ! empty( $store['twakto_property_id'] ) ? $store['twakto_property_id'] : '';
-        $twak_widget_id   = ! empty( $store['twakto_widget_id'] ) ? $store['twakto_widget_id'] : '';
+        $tawk_property_id = ! empty( $store['tawkto_property_id'] ) ? $store['tawkto_property_id'] : '';
+        $tawk_widget_id   = ! empty( $store['tawkto_widget_id'] ) ? $store['tawkto_widget_id'] : '';
 
-        if ( empty( $store['live_chat'] ) || $store['live_chat'] !== 'yes' || ! $twak_property_id || ! $twak_widget_id ) {
+        if ( empty( $store['live_chat'] ) || $store['live_chat'] !== 'yes' || ! $tawk_property_id || ! $tawk_widget_id ) {
             return;
         }
         ?>
         <li class="dokan-store-support-btn-wrap dokan-right">
-            <button class="dokan-btn dokan-btn-theme dokan-btn-sm dokan-live-chat dokan-live-chat-twakto"
+            <button class="dokan-btn dokan-btn-theme dokan-btn-sm dokan-live-chat dokan-live-chat-tawkto"
                     style="position: relative; top: 3px">
                 <?php echo esc_html__( 'Chat Now', 'dokan' ); ?>
             </button>
-            <?php echo do_shortcode( sprintf( '[dokan-live-chat-twakto property_id="%s" widget_id="%s"]', $twak_property_id, $twak_widget_id ) ); ?>
+            <?php echo do_shortcode( sprintf( '[dokan-live-chat-tawkto property_id="%s" widget_id="%s"]', $tawk_property_id, $tawk_widget_id ) ); ?>
         </li>
         <?php
     }
@@ -205,7 +205,7 @@ class Twakto {
      * @return string
      */
     public function get_name() {
-        return 'twakto';
+        return 'tawkto';
     }
 
     /**
@@ -219,14 +219,14 @@ class Twakto {
         $product_id       = get_the_ID();
         $seller_id        = get_post_field( 'post_author', $product_id );
         $store            = dokan()->vendor->get( $seller_id )->get_shop_info();
-        $twak_property_id = ! empty( $store['twakto_property_id'] ) ? $store['twakto_property_id'] : '';
-        $twak_widget_id   = ! empty( $store['twakto_widget_id'] ) ? $store['twakto_widget_id'] : '';
+        $tawk_property_id = ! empty( $store['tawkto_property_id'] ) ? $store['tawkto_property_id'] : '';
+        $tawk_widget_id   = ! empty( $store['tawkto_widget_id'] ) ? $store['tawkto_widget_id'] : '';
 
-        if ( empty( $store['live_chat'] ) || $store['live_chat'] !== 'yes' || ! $twak_property_id || ! $twak_widget_id ) {
+        if ( empty( $store['live_chat'] ) || $store['live_chat'] !== 'yes' || ! $tawk_property_id || ! $tawk_widget_id ) {
             return;
         }
 
-        echo sprintf( '<button style="margin-left: 5px;" class="dokan-live-chat dokan-live-chat-twakto button alt">%s</button>', __( 'Chat Now', 'dokan' ) );
-        echo do_shortcode( sprintf( '[dokan-live-chat-twakto property_id="%s" widget_id="%s"]', $twak_property_id, $twak_widget_id ) );
+        echo sprintf( '<button style="margin-left: 5px;" class="dokan-live-chat dokan-live-chat-tawkto button alt">%s</button>', __( 'Chat Now', 'dokan' ) );
+        echo do_shortcode( sprintf( '[dokan-live-chat-tawkto property_id="%s" widget_id="%s"]', $tawk_property_id, $tawk_widget_id ) );
     }
 }

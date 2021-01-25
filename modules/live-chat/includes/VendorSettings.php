@@ -47,8 +47,10 @@ class VendorSettings {
             return;
         }
 
-        $is_messenger = 'messenger' === AdminSettings::get_provider();
-        $is_twakto    = 'twakto' === AdminSettings::get_provider();
+        $provider     = AdminSettings::get_provider();
+        $is_messenger = 'messenger' === $provider;
+        $is_tawkto    = 'tawkto' === $provider;
+        $is_whatsapp  = 'whatsapp' === $provider;
         $enable_chat  = isset( $profile['live_chat'] ) ? $profile['live_chat'] : 'no';
 
         dokan_get_template( '/vendor-settings/settings.php', [
@@ -64,14 +66,23 @@ class VendorSettings {
             ], DOKAN_LIVE_CHAT_TEMPLATE, DOKAN_LIVE_CHAT_TEMPLATE );
         }
 
-        //twakto
-        if ( $is_twakto ) {
-            $twakto_property_id = ! empty( $profile['twakto_property_id'] ) ? $profile['twakto_property_id'] : '';
-            $twakto_widget_id   = ! empty( $profile['twakto_widget_id'] ) ? $profile['twakto_widget_id'] : '';
+        //tawkto
+        if ( $is_tawkto ) {
+            $tawkto_property_id = ! empty( $profile['tawkto_property_id'] ) ? $profile['tawkto_property_id'] : '';
+            $tawkto_widget_id   = ! empty( $profile['tawkto_widget_id'] ) ? $profile['tawkto_widget_id'] : '';
 
-            dokan_get_template( '/vendor-settings/twakto.php', [
-                'twakto_property_id' => $twakto_property_id,
-                'twakto_widget_id'   => $twakto_widget_id,
+            dokan_get_template( '/vendor-settings/tawkto.php', [
+                'tawkto_property_id' => $tawkto_property_id,
+                'tawkto_widget_id'   => $tawkto_widget_id,
+            ], DOKAN_LIVE_CHAT_TEMPLATE, DOKAN_LIVE_CHAT_TEMPLATE );
+        }
+
+        //whatsapp
+        if ( $is_whatsapp ) {
+            $whatsapp_number = ! empty( $profile['whatsapp_number'] ) ? $profile['whatsapp_number'] : '';
+
+            dokan_get_template( '/vendor-settings/whatsapp.php', [
+                'whatsapp_number' => $whatsapp_number,
             ], DOKAN_LIVE_CHAT_TEMPLATE, DOKAN_LIVE_CHAT_TEMPLATE );
         }
     }
@@ -97,12 +108,16 @@ class VendorSettings {
             $store_info['fb_page_id'] = wc_clean( $get_postdata['fb_page_id'] );
         }
 
-        if ( ! empty( $get_postdata['twakto_property_id'] ) ) {
-            $store_info['twakto_property_id'] = wc_clean( $get_postdata['twakto_property_id'] );
+        if ( ! empty( $get_postdata['tawkto_property_id'] ) ) {
+            $store_info['tawkto_property_id'] = wc_clean( $get_postdata['tawkto_property_id'] );
         }
 
-        if ( ! empty( $get_postdata['twakto_widget_id'] ) ) {
-            $store_info['twakto_widget_id'] = wc_clean( $get_postdata['twakto_widget_id'] );
+        if ( ! empty( $get_postdata['tawkto_widget_id'] ) ) {
+            $store_info['tawkto_widget_id'] = wc_clean( $get_postdata['tawkto_widget_id'] );
+        }
+
+        if ( ! empty( $get_postdata['whatsapp_number'] ) ) {
+            $store_info['whatsapp_number'] = wc_clean( $get_postdata['whatsapp_number'] );
         }
 
         update_user_meta( $user_id, 'dokan_profile_settings', $store_info );
