@@ -141,6 +141,7 @@ import MarkerClusterer from './markerclusterer';
             } );
 
             self.map.setCenter( bound.getCenter() );
+            self.map.fitBounds(bound);
 
             var i = 0, styles = [];
 
