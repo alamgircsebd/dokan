@@ -122,6 +122,9 @@ class Module {
         //For csv
         add_action( 'woocommerce_product_import_before_process_item', [ $this, 'restrict_category_on_csv_import' ] );
 
+        // for disabling email verification
+        add_filter( 'dokan_maybe_email_verification_not_needed', [ $this, 'disable_email_verification' ], 10, 1 );
+
         // Duplicating product based on subscription
         add_filter( 'dokan_can_duplicate_product', [ $this, 'dokan_can_duplicate_product_on_subscription' ], 10, 1 );
     }
@@ -1346,6 +1349,33 @@ class Module {
     }
 
     /**
+     * This method will disable email verification if vendor subscription module is on
+     * and if subscription is enabled on registration form
+     *
+     * @since DOKAN_PRO_SINCE
+     * @param bool $ret
+     * @return bool
+     */
+    public function disable_email_verification( $ret ) {
+        // if $ret is true, do not bother checking if settings if enabled or not
+        if ( $ret ) {
+            return $ret;
+        }
+
+        $enable_option = get_option( 'dokan_product_subscription', array( 'enable_subscription_pack_in_reg' => 'off' ) );
+
+        // check if subscription is enabled on registration form, we don't need to check if product subscription is enabled for vendor or not,
+        // because we are already checking this on class constructor
+        if ( (string) $enable_option['enable_subscription_pack_in_reg'] !== 'on' ) {
+            return $ret;
+        }
+
+        // if product subscription is enabled on registration form, return true,
+        // because we don't need to enable email verification if subscription module is active.
+        return true;
+    }
+
+   /**
      * @since DOKAN_PRO_SINCE
      *
      * Checking the ability to duplicate product based on subscription
@@ -1369,7 +1399,7 @@ class Module {
         if ( ! Helper::get_vendor_remaining_products( $user_id ) ) {
             return false;
         }
-
+      
         return true;
     }
 }

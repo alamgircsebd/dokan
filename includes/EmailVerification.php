@@ -1,8 +1,6 @@
 <?php
 
 namespace WeDevs\DokanPro;
-
-use DokanPro\Modules\Subscription\Helper;
 use WeDevs\Dokan\Vendor\SetupWizard;
 
 /**
@@ -374,19 +372,13 @@ Class EmailVerification {
      * @return bool
      */
     public function maybe_verification_not_needed() {
+        $ret = false;
+        // check if email verification is enabled from admin
         if ( 'on' !== dokan_get_option( 'enabled', 'dokan_email_verification' ) ) {
-            return true;
+            $ret = true;
         }
 
-        if ( ! class_exists( \WeDevs\DokanPro\Modules\Subscription\Helper::class ) ) {
-            return false;
-        }
-
-        if ( dokan_pro()->module->is_active( 'product_subscription' ) && Helper::is_subscription_enabled_on_registration() ) {
-            return true;
-        }
-
-        return false;
+        return apply_filters( 'dokan_maybe_email_verification_not_needed', $ret );
     }
 
     /**
