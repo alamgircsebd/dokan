@@ -784,7 +784,7 @@ $template_args = array(
                 var duration_unit = $( 'select#_wc_booking_duration_unit' );
                 var duration_label = $( 'span#_booking_binded_label' );
                 duration_unit.on( 'change', function () {
-                    duration_label.html( duration_unit.val() + 's' );
+                    duration_label.html( $("option:selected", this).text() );
                 } );
 
                 var restrict_field = $( '#dokan_booking_has_restricted_days_field' );
