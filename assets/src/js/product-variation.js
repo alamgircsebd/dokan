@@ -233,21 +233,30 @@ jQuery( function( $ ) {
 
 
             // Datepicker fields
-            $( '.sale_price_dates_fields', wrapper ).each( function() {
-                var dates = $( this ).find( 'input' ).datepicker({
-                    defaultDate:     '',
-                    dateFormat:      'yy-mm-dd',
-                    numberOfMonths:  1,
-                    showButtonPanel: true,
-                    onSelect:        function( selectedDate ) {
-                        var option   = $( this ).is( '.sale_price_dates_from' ) ? 'minDate' : 'maxDate',
-                            instance = $( this ).data( 'datepicker' ),
-                            date     = $.datepicker.parseDate( instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings );
+            $('.dokan-start-date').datepicker({
+                defaultDate: '',
+                dateFormat: 'yy-mm-dd',
+                numberOfMonths: 1,
+                onSelect: function(selectedDate) {
+                    let date = new Date(selectedDate);
+                    date.setDate(date.getDate() + 1);
+                    $('.dokan-end-date').datepicker('option', {
+                        minDate: date
+                    });
+                }
+            });
 
-                        dates.not( this ).datepicker( 'option', option, date );
-                        $( this ).change();
-                    }
-                });
+            $('.dokan-end-date').datepicker({
+                defaultDate: '',
+                dateFormat: 'yy-mm-dd',
+                numberOfMonths: 1,
+                onSelect: function(selectedDate) {
+                    let date = new Date(selectedDate);
+                    date.setDate(date.getDate() - 1);
+                    $('dokan-start-date').datepicker('option', {
+                        maxDate: date
+                    });
+                }
             });
 
             // Allow sorting

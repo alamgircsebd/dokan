@@ -7,6 +7,18 @@ $chosen_length       = get_post_meta( $variation->ID, '_subscription_length', tr
 $chosen_trial_length = WC_Subscriptions_Product::get_trial_length( $variation_product );
 $chosen_trial_period = WC_Subscriptions_Product::get_trial_period( $variation_product );
 
+$_sale_price_dates_from = $variation_product->get_date_on_sale_from( 'edit' ) ? $variation_product->get_date_on_sale_from( 'edit' )->getTimestamp() : false;
+$_sale_price_dates_to   = $variation_product->get_date_on_sale_to( 'edit' ) ? $variation_product->get_date_on_sale_to( 'edit' )->getTimestamp() : false;
+
+$_sale_price_dates_from = ! empty( $_sale_price_dates_from ) ? dokan_current_datetime()->setTimeStamp( $_sale_price_dates_from )->format( 'Y-m-d' ) : '';
+$_sale_price_dates_to   = ! empty( $_sale_price_dates_to ) ? dokan_current_datetime()->setTimeStamp( $_sale_price_dates_to )->format( 'Y-m-d' ) : '';
+
+$show_schedule          = false;
+
+if ( ! empty( $_sale_price_dates_from ) && ! empty( $_sale_price_dates_to ) ) {
+    $show_schedule = true;
+}
+
 // Set month as the default billing period
 // @codingStandardsIgnoreStart
 if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', true ) ) {
@@ -47,6 +59,39 @@ if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', t
                 </select>
             </div>
         </div>
+
+        <div class="content-full-part sale-price dokan-clearfix dokan-form-group">
+            <label for="_sale_price" class="form-label">
+                <?php esc_html_e( 'Sale Price (' . get_woocommerce_currency_symbol() . ')', 'dokan' ); ?>
+                <a href="#" style="font-weight: 400;" class="sale_schedule <?php echo ($show_schedule ) ? 'dokan-hide' : ''; ?>"><?php esc_html_e( 'Schedule', 'dokan' ); ?></a>
+                <a href="#" style="font-weight: 400;" class="cancel_sale_schedule <?php echo ( ! $show_schedule ) ? 'dokan-hide' : ''; ?>"><?php esc_html_e( 'Cancel', 'dokan' ); ?></a>
+            </label>
+
+            <div class="dokan-input-group" style="width: 100% !important;">
+                <span class="dokan-input-group-addon"><?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>
+
+                <input type="text" class="dokan-form-control dokan-product-sales-price" style="" name="variable_sale_price[<?php echo esc_attr( $loop );?>]" id="variable_sale_price<?php echo esc_attr( $loop ); ?>" value="<?php echo $variation_product->get_sale_price( 'edit' ); ?>" placeholder="0.00">
+            </div>
+        </div>
+
+        <div class="content-full-part subscription_sale_price">
+            <div class="sale_price_dates_fields dokan-clearfix dokan-form-group <?php echo ( ! $show_schedule ) ? 'dokan-hide' : ''; ?>">
+                <div class="content-half-part from">
+                    <div class="dokan-input-group" style="width: 100% !important;">
+                        <span class="dokan-input-group-addon"><?php esc_html_e( 'From', 'dokan' ); ?></span>
+                        <input type="text" name="variable_sale_price_dates_from[<?php echo esc_attr( $loop ); ?>]" class="dokan-form-control dokan-start-date" value="<?php echo esc_attr( $_sale_price_dates_from ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="<?php esc_html_e( 'YYYY-MM-DD', 'dokan' ); ?>">
+                    </div>
+                </div>
+
+                <div class="content-half-part to">
+                    <div class="dokan-input-group" style="width: 100% !important;">
+                        <span class="dokan-input-group-addon"><?php esc_html_e( 'To', 'dokan' ); ?></span>
+                        <input type="text" name="variable_sale_price_dates_to[<?php echo esc_attr( $loop ); ?>]" class="dokan-form-control dokan-end-date" value="<?php echo esc_attr( $_sale_price_dates_to ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="<?php esc_html_e( 'YYYY-MM-DD', 'dokan' ); ?>">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="dokan-clearfix"></div>
     </div>
 
@@ -55,6 +100,7 @@ if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', t
             <label class="form-label" for="variable_subscription_sign_up_fee[<?php echo esc_attr( $loop ); ?>]"><?php printf( esc_html__( 'Sign-up fee (%s)', 'dokan' ), esc_html( get_woocommerce_currency_symbol() ) ); ?></label>
             <input type="text" class="dokan-form-control wc_input_subscription_intial_price wc_input_subscription_initial_price wc_input_price" name="variable_subscription_sign_up_fee[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( wc_format_localized_price( get_post_meta( $variation->ID, '_subscription_sign_up_fee', true ) ) ); ?>" placeholder="<?php echo esc_attr_x( 'e.g. 9.90', 'example price', 'dokan' ); ?>">
         </div>
+
         <div class="content-half-part">
             <label class="form-label" for="variable_subscription_trial_length[<?php echo esc_attr( $loop ); ?>]"><?php esc_html_e( 'Free trial', 'dokan' ); ?></label>
             <div class="dokan-form-group dokan-clearfix">

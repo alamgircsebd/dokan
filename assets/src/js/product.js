@@ -383,7 +383,7 @@
                     onSelect: function (selectedDate) {
                         let date = new Date(selectedDate);
                         date.setDate(date.getDate() - 1);
-                        $('input[name="_sale_price_dates_from"]').datepicker('option', {'maxDate': date})
+                        // $('input[name="_sale_price_dates_from"]').datepicker('option', {'maxDate': date})
                     }
                 });
             },
