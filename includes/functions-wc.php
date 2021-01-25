@@ -829,7 +829,7 @@ function dokan_discount_for_minimum_order() {
         $is_enable_op_discount     = dokan_get_option( 'discount_edit', 'dokan_selling' );
         $is_order_discount_enabled = isset( $is_enable_op_discount['order-discount'] ) && 'order-discount' === $is_enable_op_discount['order-discount'];
 
-        if ( 'yes' === $is_order_discount_enabled && $is_min_order_discount ) {
+        if ( $is_order_discount_enabled && 'yes' === $is_min_order_discount ) {
             $min_order_discount            = isset( $seller_info['setting_minimum_order_amount'] ) ? (float) $seller_info['setting_minimum_order_amount'] : 0;
             $min_order_discount_percentage = isset( $seller_info['setting_order_percentage'] ) ? (float) $seller_info['setting_order_percentage'] : 0;
 
