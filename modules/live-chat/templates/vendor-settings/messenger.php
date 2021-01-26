@@ -1,8 +1,5 @@
 <div class="dokan-form-group dokan-live-chat-settings">
     <label for="fb_page_id" class="dokan-w3 dokan-control-label">
-        <?php esc_html_e( 'Facebook Page ID', 'dokan' ) ?>
-    </label>
-    <label for="fb_page_id" class="dokan-w3 dokan-control-label">
         <?php esc_html_e( 'Facebook Page ID', 'dokan' ); ?>
     </label>
 
