@@ -17,7 +17,7 @@ class StoreCategory {
         add_filter( 'dokan_settings_general_vendor_store_options', array( $this, 'add_admin_settings' ) );
         add_action( 'dokan_after_saving_settings', array( $this, 'set_default_category' ), 10, 2 );
         add_filter( 'dokan_admin_localize_script', array( $this, 'add_localized_data' ) );
-        add_filter( 'dokan_localized_args', array( $this, 'set_localized_data') );
+        add_filter( 'dokan_localized_args', array( $this, 'set_localized_data' ) );
 
         if ( dokan_is_store_categories_feature_on() ) {
             add_action( 'dokan_settings_after_store_name', array( $this, 'add_store_category_option' ) );
@@ -30,7 +30,6 @@ class StoreCategory {
             add_action( 'dokan_vendor_to_array', array( $this, 'add_store_categories_vendor_to_array' ), 10, 2 );
             add_action( 'dokan_rest_prepare_store_item_for_response', array( $this, 'rest_prepare_store_item_for_response' ), 10, 2 );
             add_action( 'dokan_rest_stores_update_store', array( $this, 'rest_stores_update_store_category' ), 10, 2 );
-            // add_action( 'dokan_seller_search_form', array( $this, 'add_category_dropdown_in_seller_search_form' ) );
             add_action( 'dokan_seller_listing_search_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
             add_action( 'dokan_seller_listing_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
             add_action( 'dokan_rest_get_stores_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
@@ -89,7 +88,7 @@ class StoreCategory {
                 'single'   => __( 'Single', 'dokan' ),
                 'multiple' => __( 'Multiple', 'dokan' ),
             ),
-            'default' => 'none'
+            'default' => 'none',
         );
 
         return $dokan_settings_fields;
@@ -158,10 +157,12 @@ class StoreCategory {
         // a category, if none exists.
         dokan_get_default_store_category_id();
 
-        $categories = get_terms( array(
-            'taxonomy'   => 'store_category',
-            'hide_empty' => false,
-        ) );
+        $categories = get_terms(
+            array(
+				'taxonomy'   => 'store_category',
+				'hide_empty' => false,
+            )
+        );
 
         $store_categories = wp_get_object_terms( $current_user, 'store_category', array( 'fields' => 'ids' ) );
         $category_type    = dokan_get_option( 'store_category_type', 'dokan_general', 'none' );
@@ -217,7 +218,8 @@ class StoreCategory {
      * @return void
      */
     public function after_store_profile_saved( $store_id ) {
-        $store_categories = ! empty( $_POST['dokan_store_categories'] ) ? $_POST['dokan_store_categories'] : null;
+        $get_postdata = wp_unslsh( $_POST ); // phpcs:ignore
+        $store_categories = ! empty( $get_postdata['dokan_store_categories'] ) ? sanitize_text_field( $get_postdata['dokan_store_categories'] ) : null;
 
         if ( $store_categories ) {
             dokan_set_store_categories( $store_id, $store_categories );
@@ -234,7 +236,8 @@ class StoreCategory {
      * @return void
      */
     public function after_seller_wizard_store_field_save( $wizard ) {
-        $store_categories = ! empty( $_POST['dokan_store_categories'] ) ? $_POST['dokan_store_categories'] : null;
+        $get_postdata = wp_unslsh( $_POST ); // phpcs:ignore
+        $store_categories = ! empty( $get_postdata['dokan_store_categories'] ) ? sanitize_text_field( $get_postdata['dokan_store_categories'] ) : null;
         dokan_set_store_categories( $wizard->store_id, $store_categories );
     }
 
@@ -253,6 +256,12 @@ class StoreCategory {
 
         if ( empty( $store_categories ) ) {
             dokan_set_store_categories( $vendor->get_id() );
+
+            $store_categories = wp_get_object_terms( $vendor->get_id(), 'store_category' );
+
+            if ( empty( $store_categories ) ) {
+                return;
+            }
 
             return $this->add_store_categories_in_vendor_shop_data( $shop_info, $vendor );
         }
@@ -336,9 +345,11 @@ class StoreCategory {
         $store_categories = ! empty( $request->get_param( 'categories' ) ) ? $request->get_param( 'categories' ) : null;
 
         if ( is_array( $store_categories ) ) {
-            $store_categories = array_map( function ( $category ) {
-                return $category['id'];
-            }, $store_categories );
+            $store_categories = array_map(
+                function ( $category ) {
+                    return $category['id'];
+                }, $store_categories
+            );
         }
 
         dokan_set_store_categories( $store->get_id(), $store_categories );
@@ -352,10 +363,11 @@ class StoreCategory {
      * @return void
      */
     public function add_category_dropdown_in_seller_search_form() {
-        $category_query = ! empty( $_GET['dokan_seller_category'] ) ? sanitize_text_field( $_GET['dokan_seller_category'] ) : null;
+        $get_data = wp_unslsh( $_GET );
+        $category_query = ! empty( $get_data['dokan_seller_category'] ) ? sanitize_text_field( $get_data['dokan_seller_category'] ) : null;
 
         $args = array(
-            'category_query' => $category_query
+            'category_query' => $category_query,
         );
 
         $this->add_store_category_option( 0, $args, 'seller-search-form-categories' );
