@@ -167,9 +167,10 @@
 
         init : function() {
             $('body').on( 'change', '#support_checkbox', this.toggle_name_input );
+            $('body').on( 'change', '#support_checkbox_product', this.toggle_name_input );
         },
         toggle_name_input : function() {
-            if ( $( '#support_checkbox' ).is( ':checked' ) ) {
+            if ( $( '#support_checkbox' ).is( ':checked' ) || $( '#support_checkbox_product' ).is( ':checked' ) ) {
                 $( '.support-enable-check' ).show();
             } else {
                 $( '.support-enable-check' ).hide();

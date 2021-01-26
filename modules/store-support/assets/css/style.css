@@ -2,6 +2,10 @@
   margin-top: 3px;
   width: 100%;
 }
+.dokan-store-support-btn-product {
+  width: auto;
+  margin-left: 3px !important;
+}
 .dokan-support-login-wrapper {
   width: 430px !important;
   padding: 16px !important;

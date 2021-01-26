@@ -86,9 +86,11 @@ class StoreWPWidgets {
                 echo '<p class="store-support-widget-desc">' . esc_textarea( $description ) . '</p>';
             }
 
+            $get_default_text = dokan_get_option( 'support_button_label', 'dokan_store_support_setting', __( 'Get Support', 'dokan' ) );
+
             ?>
                 <button class="dokan-store-support-btn dokan-btn dokan-btn-theme dokan-btn-sm">
-                    <?php echo esc_html_e( 'Get Support', 'dokan' ); ?>
+                    <?php echo $get_default_text; ?>
                 </button>
             <?php
 
@@ -123,12 +125,14 @@ class StoreWPWidgets {
                 echo $args['before_title'] . $title . $args['after_title'];
             }
 
-            dokan_get_template_part( 'widgets/store-contact-form', '', [
-                'seller_id'  => 0,
-                'store_info' => [],
-                'username'   => 'username',
-                'email'      => 'email@example.com',
-            ] );
+            dokan_get_template_part(
+                'widgets/store-contact-form', '', [
+					'seller_id'  => 0,
+					'store_info' => [],
+					'username'   => 'username',
+					'email'      => 'email@example.com',
+				]
+            );
 
             echo $args['after_widget'];
         }
@@ -161,10 +165,12 @@ class StoreWPWidgets {
                 echo $args['before_title'] . $title . $args['after_title'];
             }
 
-            dokan_get_template_part( 'widgets/store-map', '', [
-                'seller_id'    => 0,
-                'map_location' => '23.8374439,90.3746137',
-            ] );
+            dokan_get_template_part(
+                'widgets/store-map', '', [
+					'seller_id'    => 0,
+					'map_location' => '23.8374439,90.3746137',
+				]
+            );
 
             echo $args['after_widget'];
         }
@@ -196,15 +202,17 @@ class StoreWPWidgets {
                 echo $args['before_title'] . $title . $args['after_title'];
             }
 
-            $categories = get_terms( [
-                'taxonomy' => 'product_cat',
-                'number'   => 20,
-            ] );
+            $categories = get_terms(
+                [
+					'taxonomy' => 'product_cat',
+					'number'   => 20,
+				]
+            );
 
             $walker = new StoreCategoryWalker( 0 );
-            echo "<ul>";
+            echo '<ul>';
             echo call_user_func_array( [ &$walker, 'walk' ], [ $categories, 0, [] ] );
-            echo "</ul>";
+            echo '</ul>';
 
             echo $args['after_widget'];
         }
@@ -258,9 +266,11 @@ class StoreWPWidgets {
                 'sunday'    => $close,
             ];
 
-            dokan_get_template_part( 'widgets/store-open-close', '', [
-                'dokan_store_time' => $store_time,
-            ] );
+            dokan_get_template_part(
+                'widgets/store-open-close', '', [
+					'dokan_store_time' => $store_time,
+				]
+            );
 
             echo $args['after_widget'];
         }
@@ -315,7 +325,7 @@ class StoreWPWidgets {
                             'state'           => '',
                         ],
                     ],
-                ]
+                ],
             ];
 
             $seller_info = [
@@ -324,13 +334,15 @@ class StoreWPWidgets {
 
             $widget->set_seller_info( $seller_info );
 
-            dokan_get_template_part( 'widgets/vendor-verification', '', [
-                'pro'        => true,
-                'data'       => $args,
-                'instance'   => $instance,
-                'store_info' => $store_info,
-                'widget'     => $widget,
-            ] );
+            dokan_get_template_part(
+                'widgets/vendor-verification', '', [
+					'pro'        => true,
+					'data'       => $args,
+					'instance'   => $instance,
+					'store_info' => $store_info,
+					'widget'     => $widget,
+				]
+            );
         }
     }
 }
