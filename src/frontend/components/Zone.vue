@@ -21,15 +21,10 @@
                 </label>
                 <div class="dokan-w5 dokan-text-left">
                     <p>{{ zone.formatted_zone_location }}</p>
-
-                    <a href="#" v-if="showLimitLocationLink && this.$route.params.zoneID != 0" class="limit-location-link" @click.prevent="wantToSetLocation">
-                        <switches :enabled="wantToLimitLocation" @input="wantToSetLocation"></switches>
-                        <span>{{ __( 'Limit your zone location', 'dokan' ) }}</span>
-                    </a>
                 </div>
             </div>
 
-            <div class="dokan-form-group dokan-clearfix" v-if="wantToLimitLocation && showCountryList">
+            <div class="dokan-form-group dokan-clearfix" v-if="showCountryList">
                 <label class="dokan-w4 dokan-control-label dokan-text-right">
                     {{ __( 'Select Country', 'dokan' ) }}
                 </label>
@@ -48,9 +43,9 @@
                 </div>
             </div>
 
-            <div class="dokan-form-group dokan-clearfix" v-if="wantToLimitLocation && showStateList && stateList.length">
+            <div class="dokan-form-group dokan-clearfix" v-if="showStateList && stateList.length">
                 <label class="dokan-w4 dokan-control-label dokan-text-right" for="">
-                    {{ __( 'Select States', 'dokan' ) }}
+                    {{ __( 'Select States', 'dokan' ) }} :
                 </label>
                 <div class="dokan-w5 dokan-text-left">
                     <multiselect v-model="state" :options="stateList" :placeholder="__( 'Select States', 'dokan' )" :multiple="true" label="name" track-by="code">
@@ -64,6 +59,18 @@
                             </span>
                         </template>
                     </multiselect>
+                </div>
+            </div>
+
+            <div class="dokan-form-group dokan-clearfix" v-if="showLimitLocationLink && this.$route.params.zoneID != 0  && showPostCodeList">
+                <label class="dokan-w4 dokan-control-label dokan-text-right" for="">
+                    {{ __( 'Limit ZIP/postcodes', 'dokan' ) }} :
+                </label>
+                <div class="dokan-w5 dokan-text-left">
+                    <a href="#" v-if="showLimitLocationLink && this.$route.params.zoneID != 0" class="limit-location-link" @click.prevent="wantToSetLocation">
+                        <switches :enabled="wantToLimitLocation" @input="wantToSetLocation"></switches>
+                        <span>{{ __( 'Limit your specific ZIP/postcodes', 'dokan' ) }}</span>
+                    </a>
                 </div>
             </div>
 
@@ -351,7 +358,7 @@ export default {
                     action: 'dokan-save-zone-settings',
                     continent: self.continent,
                     country: self.country,
-                    state: self.wantToLimitLocation ? self.state: [],
+                    state: (self.state === undefined || self.state.length == 0) ? []: self.state,
                     postcode: self.wantToLimitLocation ? self.postcode : '',
                     zoneID: self.$route.params.zoneID,
                     nonce: dokan.nonce
@@ -494,7 +501,7 @@ export default {
                     if ( resp.data.locations.length > 0 ) {
                         var locationResp = _.groupBy( resp.data.locations, 'type' );
 
-                        if ( ( Object.keys( locationResp ).includes( 'country' ) && Object.keys( locationResp ).includes( 'state' ) ) || ( Object.keys( locationResp ).includes( 'country' ) && Object.keys( locationResp ).includes( 'postcode' ) ) ) {
+                        if ( ( Object.keys( locationResp ).includes( 'postcode' ) ) ) {
                             self.wantToLimitLocation = true;
                         }
 
