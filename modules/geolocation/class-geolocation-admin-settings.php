@@ -68,7 +68,7 @@ class Dokan_Geolocation_Admin_Settings {
                 'type'    => 'select',
                 'default' => 'all',
                 'options' => array(
-                    'all'           => __( 'All', 'dokan' ),
+                    'all'           => __( 'Both', 'dokan' ),
                     'store_listing' => __( 'Store Listing', 'dokan' ),
                     'shop'          => __( 'Shop Page', 'dokan' ),
                 ),
