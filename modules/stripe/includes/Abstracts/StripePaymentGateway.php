@@ -792,7 +792,12 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             $error = true;
         }
 
-        $response = $stripe_customer->add_source( $source_id );
+        try {
+            $response = $stripe_customer->add_source( $source_id );
+        } catch ( DokanException $e ) {
+            $error = true;
+            $error_msg .= $e->getMessage();
+        }
 
         if ( ! $response || is_wp_error( $response ) ) {
             $error = true;

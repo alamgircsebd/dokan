@@ -275,11 +275,21 @@ class IntentController extends StripePaymentGateway {
         }
 
         foreach ( $all_orders as $tmp_order ) {
+            //return if $tmp_order not instance of WC_Order
+            if ( ! $tmp_order instanceof \WC_Order) {
+                continue;
+            }
+
             $tmp_order_id        = $tmp_order->get_id();
             $vendor_id           = dokan_get_seller_id_by_order( $tmp_order_id );
             $vendor_raw_earning  = dokan()->commission->get_earning_by_order( $tmp_order, 'seller' );
             $connected_vendor_id = get_user_meta( $vendor_id, 'dokan_connected_vendor_id', true );
             $tmp_order_total     = $tmp_order->get_total();
+
+            if ( $tmp_order_total == 0 ) {
+                $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed', 'dokan' ), $tmp_order->get_order_number() ) );
+                continue;
+            }
 
             if ( Helper::seller_pays_the_processing_fee() && ! empty( $order_total ) && ! empty( $tmp_order_total ) && ! empty( $stripe_fee ) ) {
                 $stripe_fee_for_vendor = Helper::calculate_processing_fee_for_suborder( $stripe_fee, $tmp_order, $order );
@@ -297,7 +307,14 @@ class IntentController extends StripePaymentGateway {
                 continue;
             }
 
-            DokanStripe::transfer()->amount( $vendor_earning, $currency )->from( $charge_id )->to( $connected_vendor_id );
+            try {
+                DokanStripe::transfer()->amount( $vendor_earning, $currency )->from( $charge_id )->to( $connected_vendor_id );
+            } catch ( Exception $e ) {
+                dokan_log( 'Could not transfer amount to connected vendor account via 3ds. Order ID: ' . $tmp_order->get_id() . ', Amount tried to transfer: ' . $vendor_raw_earning . " $currency" );
+                $tmp_order->add_order_note( sprintf( __( 'Transfer Failed: Amount %s %s', 'dokan' ), $vendor_raw_earning, $currency ) );
+                $tmp_order->save_meta_data();
+                continue;
+            }
 
             if ( $order->get_id() !== $tmp_order_id ) {
                 $tmp_order->update_meta_data( 'paid_with_dokan_3ds', true );

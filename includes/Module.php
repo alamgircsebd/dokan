@@ -368,7 +368,7 @@ class Module {
                     'product_subscription' => [
                         'id'           => 'product_subscription',
                         'name'         => __( 'Vendor Subscription', 'dokan' ),
-                        'description'  => __( 'Product subscription pack add-on for Dokan vendors.', 'dokan' ),
+                        'description'  => __( 'Subscription pack add-on for Dokan vendors.', 'dokan' ),
                         'thumbnail'    => $thumbnail_dir . '/subscription.png',
                         'module_file'  => DOKAN_PRO_MODULE_DIR . '/subscription/module.php',
                         'module_class' => 'WeDevs\DokanPro\Modules\ProductSubscription\Module',
@@ -402,7 +402,7 @@ class Module {
                     ],
                     'vsp'         => [
                         'id'           => 'vsp',
-                        'name'         => __( 'Vendor Subscription Product', 'dokan' ),
+                        'name'         => __( 'Product Subscription', 'dokan' ),
                         'description'  => __( 'WooCommerce Subscription integration for Dokan', 'dokan' ),
                         'thumbnail'    => $thumbnail_dir . '/vendor-subscription-product.png',
                         'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-subscription-product/module.php',

@@ -442,19 +442,27 @@ class DPS_PayPal_Standard_Subscriptions {
                 break;
 
             case 'subscr_eot':
-                $subscription_length = get_post_meta( $product['product_id'], '_dokan_subscription_length', true );
+                // if not recurring product, return from here
+                if ( ! $vendor_subscription->is_recurring() ) {
+                    break;
+                }
+
+                $subscription_length = $vendor_subscription->get_period_length();
 
                 // PayPal fires the 'subscr_eot' notice immediately if a subscription is only for one billing period, so ignore the request when we only have one billing period
-                if ( 1 != $subscription_length && $subscription_length != get_post_meta( $product['product_id'], '_dokan_subscription_period_interval', true ) ) {
-                    self::log( 'IPN subscription end-of-term for order ' . $order_id );
-
-                    // Record subscription ended
-                    $order->add_order_note( __( 'IPN subscription end-of-term for order.', 'dokan' ) );
-
-                    // Ended due to failed payments so cancel the subscription
-                    Helper::log( 'Subscription cancel check: PayPal ( subscr_eot ) has canceled Subscription of User #' . $customer_id . ' on order #' . $order_id );
-                    Helper::delete_subscription_pack( $customer_id, $order_id );
+                if ( 1 === $subscription_length ) {
+                    break;
                 }
+
+                // cancel subscription after end of billing period
+                self::log( 'IPN subscription end-of-term for order ' . $order_id );
+
+                // Record subscription ended
+                $order->add_order_note( __( 'IPN subscription end-of-term for order.', 'dokan' ) );
+
+                // Ended due to failed payments so cancel the subscription
+                Helper::log( 'Subscription cancel check: PayPal ( subscr_eot ) has canceled Subscription of User #' . $customer_id . ' on order #' . $order_id );
+                Helper::delete_subscription_pack( $customer_id, $order_id );
 
                 break;
 

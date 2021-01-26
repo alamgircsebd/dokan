@@ -32,43 +32,53 @@ class WebhookHandler {
      * @return void
      */
     public function hooks() {
-        add_action( 'template_redirect', [ $this, 'register_webhook' ] );
         add_action( 'woocommerce_api_dokan_stripe', [ $this, 'handle_events' ] );
+    }
+
+    /**
+     * Register webhook and remove old webhook endpoints from stripe
+     *
+     * @since 3.0.3
+     * @since DOKAN_PRO_SINCE updated register webhook logic
+     *
+     * @return void
+     */
+    public function register_webhook() {
+        try {
+            // delete all webhooks if already created, this is useful for old users
+            $this->deregister_webhook();
+
+            // create required webhook
+            $response = WebhookEndpoint::create( [
+                'api_version'    => '2020-08-27',
+                'url'            => home_url( 'wc-api/dokan_stripe' ),
+                'enabled_events' => $this->get_events()
+            ] );
+        } catch ( Exception $e ) {
+            dokan_log( __( 'Could not create webhook: ', 'dokan' ) . $e->getMessage() );
+            return;
+        }
     }
 
     /**
      * Register webhook and remove old `webhook=dokan` endpoint from stripe
      *
-     * @since 3.0.3
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
-    public function register_webhook() {
-        $mode = Helper::is_test_mode() ? 'test' : 'live';
-
-        if ( get_transient( 'dokan_stripe_webhook_endpoint_is_enabled_' . $mode ) ) {
-            return;
-        }
-
+    public function deregister_webhook() {
         try {
-            $response = WebhookEndpoint::create( [
-                'url'            => home_url( 'wc-api/dokan_stripe' ),
-                'enabled_events' => $this->get_events()
-            ] );
-
             foreach ( WebhookEndpoint::all() as $hook ) {
-                if ( false !== strpos( $hook->url, 'webhook=dokan' ) ) {
+                // remove all dokan webhooks
+                if ( false !== strpos( $hook->url, 'webhook=dokan' ) || false !== strpos( $hook->url, 'wc-api/dokan_stripe' ) ) {
                     $event = WebhookEndpoint::retrieve( $hook->id );
                     $event->delete();
-                    break;
                 }
             }
         } catch ( Exception $e ) {
+            dokan_log( __( 'Could not delete webhook: ', 'dokan' ) . $e->getMessage() );
             return;
-        }
-
-        if ( ! empty( $response->status ) && 'enabled' === $response->status ) {
-            set_transient( 'dokan_stripe_webhook_endpoint_is_enabled_' . $mode, true );
         }
     }
 
@@ -81,56 +91,14 @@ class WebhookHandler {
      */
     public function get_events() {
         return apply_filters( 'dokan_get_webhook_events', [
-            'payment_intent.amount_capturable_updated',
-            'payment_intent.canceled',
-            'payment_intent.created',
-            'payment_intent.payment_failed',
-            'payment_intent.processing',
-            'payment_intent.succeeded',
-            'payment_intent.requires_action',
-            'charge.captured',
-            'charge.expired',
-            'charge.failed',
-            'charge.pending',
-            'charge.refunded',
-            'charge.succeeded',
-            'charge.updated',
             'charge.dispute.closed',
             'charge.dispute.created',
-            'charge.dispute.funds_reinstated',
-            'charge.dispute.funds_withdrawn',
-            'charge.dispute.updated',
-            'charge.refund.updated',
-            'customer.created',
-            'customer.deleted',
-            'customer.updated',
-            'customer.discount.created',
-            'customer.discount.deleted',
-            'customer.discount.updated',
-            'customer.source.created',
-            'customer.source.deleted',
-            'customer.source.expiring',
-            'customer.source.updated',
-            'customer.subscription.created',
             'customer.subscription.deleted',
-            'customer.subscription.pending_update_applied',
-            'customer.subscription.pending_update_expired',
             'customer.subscription.trial_will_end',
             'customer.subscription.updated',
-            'customer.tax_id.created',
-            'customer.tax_id.deleted',
-            'customer.tax_id.updated',
-            'invoice.created',
-            'invoice.deleted',
-            'invoice.finalized',
-            'invoice.marked_uncollectible',
             'invoice.payment_action_required',
             'invoice.payment_failed',
             'invoice.payment_succeeded',
-            'invoice.sent',
-            'invoice.upcoming',
-            'invoice.updated',
-            'invoice.voided',
         ] );
     }
 

@@ -21,6 +21,10 @@ class Module {
     public function __construct() {
         $this->define_constants();
         $this->set_controllers();
+
+        // Activation and Deactivation hook
+        add_action( 'dokan_activated_module_stripe', array( self::class, 'activate' ), 10, 1 );
+        add_action( 'dokan_deactivated_module_stripe', array( self::class, 'deactivate' ), 10, 1 );
     }
 
     /**
@@ -55,5 +59,21 @@ class Module {
         $this->container['validation']                = new Validation();
         $this->container['store_progress']            = new StoreProgress();
         $this->container['vendor_profile']            = new VendorProfile();
+    }
+
+    /**
+     *
+     * @since DOKAN_PRO_SINCE
+     */
+    public static function activate( $instance ) {
+        $instance->container['webhook']->register_webhook();
+    }
+
+    /**
+     *
+     * @since DOKAN_PRO_SINCE
+     */
+    public static function deactivate( $instance ) {
+        $instance->container['webhook']->deregister_webhook();
     }
 }

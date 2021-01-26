@@ -251,6 +251,10 @@ class Customer {
             $this->set_id( $this->create_customer() );
         }
 
+        if ( empty( $source_id ) ) {
+            return false;
+        }
+
         try {
             $response = StripeCustomer::createSource( $this->get_id(), [ 'source' => $source_id ] );
         } catch ( Exception $e ) {

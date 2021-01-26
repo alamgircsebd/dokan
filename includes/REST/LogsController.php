@@ -112,11 +112,11 @@ class LogsController extends DokanRESTAdminController {
              * net amount is excluding gateway fee, so we need to deduct it from admin commission
              * otherwise admin commission will be including gateway fees
              */
-            $processing_fee = $order->get_meta( 'dokan_gateway_fee' );
-            $commission     = $is_subscription_product ? $result->order_total : $result->order_total - $result->net_amount;
+            $processing_fee = (float) $order->get_meta( 'dokan_gateway_fee' );
+            $commission     = $is_subscription_product ? (float) $result->order_total : (float) $result->order_total - (float) $result->net_amount;
 
             if ( $processing_fee && $processing_fee > 0 ) {
-                $commission = $is_subscription_product ? $result->order_total : $commission - $processing_fee;
+                $commission = $is_subscription_product ? (float) $result->order_total : $commission - $processing_fee;
             }
 
             /**
@@ -130,7 +130,7 @@ class LogsController extends DokanRESTAdminController {
 
             $gateway_fee_paid_by = $order->get_meta( 'dokan_gateway_fee_paid_by', true );
 
-            if ( $processing_fee && empty( $gateway_fee_paid_by ) ) {
+            if ( ! empty( $processing_fee ) && empty( $gateway_fee_paid_by ) ) {
                 $gateway_fee_paid_by = 'admin';
             }
 
@@ -141,7 +141,7 @@ class LogsController extends DokanRESTAdminController {
                 'previous_order_total' => wc_format_decimal( $order_total, $dp ),
                 'order_total'          => wc_format_decimal( $result->order_total, $dp ),
                 'vendor_earning'       => $is_subscription_product ? 0 : wc_format_decimal( $result->net_amount, $dp ),
-                'commission'           => wc_format_decimal( $commission ),
+                'commission'           => wc_format_decimal( $commission, $dp ),
                 'dokan_gateway_fee'    => $processing_fee ? wc_format_decimal( $processing_fee, $dp ) : 0,
                 'gateway_fee_paid_by'  => $gateway_fee_paid_by ? $gateway_fee_paid_by : '',
                 'shipping_total'       => wc_format_decimal( $total_shipping, $dp ),
