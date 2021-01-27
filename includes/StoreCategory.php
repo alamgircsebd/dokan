@@ -236,7 +236,7 @@ class StoreCategory {
      * @return void
      */
     public function after_seller_wizard_store_field_save( $wizard ) {
-        $get_postdata = wp_unslsh( $_POST ); // phpcs:ignore
+        $get_postdata = wp_unslash( $_POST ); // phpcs:ignore
         $store_categories = ! empty( $get_postdata['dokan_store_categories'] ) ? sanitize_text_field( $get_postdata['dokan_store_categories'] ) : null;
         dokan_set_store_categories( $wizard->store_id, $store_categories );
     }
