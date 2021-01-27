@@ -3,10 +3,10 @@
 namespace WeDevs\DokanPro\Upgrade\Upgraders;
 
 use WeDevs\DokanPro\Abstracts\DokanProUpgrader;
-use WeDevs\DokanPro\Upgrade\Upgraders\BackgroundProcesses\V_3_1_5_UpdateSubscriptionMeta;
+use WeDevs\DokanPro\Upgrade\Upgraders\BackgroundProcesses\V_3_2_0_UpdateSubscriptionMeta;
 use WC_Product_Query;
 
-class V_3_1_5 extends DokanProUpgrader {
+class V_3_2_0 extends DokanProUpgrader {
 
     /**
      * Update the missing shipping zone locations table data
@@ -16,7 +16,7 @@ class V_3_1_5 extends DokanProUpgrader {
      * @return void
      */
     public static function update_dokan_subscription_meta() {
-        $processor = new V_3_1_5_UpdateSubscriptionMeta();
+        $processor = new V_3_2_0_UpdateSubscriptionMeta();
 
         // get all Dokan Subscription Products
         $query = new WC_Product_Query(

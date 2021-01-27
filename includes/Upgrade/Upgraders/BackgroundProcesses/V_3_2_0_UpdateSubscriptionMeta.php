@@ -4,7 +4,7 @@ namespace WeDevs\DokanPro\Upgrade\Upgraders\BackgroundProcesses;
 
 use WeDevs\Dokan\Abstracts\DokanBackgroundProcesses;
 
-class V_3_1_5_UpdateSubscriptionMeta extends DokanBackgroundProcesses {
+class V_3_2_0_UpdateSubscriptionMeta extends DokanBackgroundProcesses {
 
     /**
      * Action
@@ -15,7 +15,7 @@ class V_3_1_5_UpdateSubscriptionMeta extends DokanBackgroundProcesses {
      *
      * @var string
      */
-    protected $action = 'dokan_pro_bg_action_3_1_5';
+    protected $action = 'dokan_pro_bg_action_3_2_0';
 
     /**
      * Sync Dokan Subscription old meta key data with new key

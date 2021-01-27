@@ -29,8 +29,8 @@ class Upgrades {
             'upgrader' => Upgraders\V_3_1_1::class,
             'require'  => null,
         ],
-        '3.1.5' => [
-            'upgrader' => Upgraders\V_3_1_5::class,
+        '3.2.0' => [
+            'upgrader' => Upgraders\V_3_2_0::class,
             'require'  => null,
         ],
     ];
