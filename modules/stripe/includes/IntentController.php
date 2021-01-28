@@ -302,7 +302,14 @@ class IntentController extends StripePaymentGateway {
             $vendor_earning = Helper::get_stripe_amount( $vendor_raw_earning );
 
             if ( ! $connected_vendor_id ) {
-                $tmp_order->add_order_note( sprintf( __( 'Vendor\'s payment will be transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
+                // old order note for reference: Vendor's payment will be transferred to admin account since the vendor had not connected to Stripe.
+                $tmp_order->add_order_note( sprintf( __( 'Vendor payment will be transferred to the admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
+                $tmp_order->save_meta_data();
+                continue;
+            }
+
+            if ( $vendor_earning < 1 ) {
+                $tmp_order->add_order_note( sprintf( __( 'Transfer to the vendor stripe account skipped due to a negative balance: %s %s', 'dokan' ), $vendor_raw_earning, $currency ) );
                 $tmp_order->save_meta_data();
                 continue;
             }
@@ -311,7 +318,8 @@ class IntentController extends StripePaymentGateway {
                 DokanStripe::transfer()->amount( $vendor_earning, $currency )->from( $charge_id )->to( $connected_vendor_id );
             } catch ( Exception $e ) {
                 dokan_log( 'Could not transfer amount to connected vendor account via 3ds. Order ID: ' . $tmp_order->get_id() . ', Amount tried to transfer: ' . $vendor_raw_earning . " $currency" );
-                $tmp_order->add_order_note( sprintf( __( 'Transfer Failed: Amount %s %s', 'dokan' ), $vendor_raw_earning, $currency ) );
+                $tmp_order->add_order_note( __( 'Vendor payment will be transferred to the admin account since the transfer to the vendor stripe account had failed.', 'dokan' ) );
+                $tmp_order->add_order_note( sprintf( __( 'Failed Amount: %s %s', 'dokan' ), $vendor_raw_earning, $currency ) );
                 $tmp_order->save_meta_data();
                 continue;
             }
