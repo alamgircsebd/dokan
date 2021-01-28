@@ -888,13 +888,15 @@ EOD;
             wp_mkdir_p( $uploads_dir );
         }
 
-        if ( ( file_exists( $file_htaccess ) && file_get_contents( $file_htaccess ) === 'deny from all' ) || ! file_exists( $file_htaccess ) )  {
-            global $wp_filesystem;
+        global $wp_filesystem;
 
-            // protect if the the global filesystem isn't setup yet
-            if( is_null( $wp_filesystem ) )
-                WP_Filesystem();
+        // protect if the the global filesystem isn't setup yet
+        if( is_null( $wp_filesystem ) ) {
+            require_once ( ABSPATH . '/wp-admin/includes/file.php' );
+            WP_Filesystem();
+        }
 
+        if ( ( file_exists( $file_htaccess ) && $wp_filesystem->get_contents( $file_htaccess ) === 'deny from all' ) || ! file_exists( $file_htaccess ) )  {
 
             $ret = $wp_filesystem->put_contents(
                 $file_htaccess,
