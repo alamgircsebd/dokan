@@ -218,7 +218,7 @@ class StoreCategory {
      * @return void
      */
     public function after_store_profile_saved( $store_id ) {
-        $get_postdata = wp_unslsh( $_POST ); // phpcs:ignore
+        $get_postdata = wp_unslash( $_POST ); // phpcs:ignore
         $store_categories = ! empty( $get_postdata['dokan_store_categories'] ) ? sanitize_text_field( $get_postdata['dokan_store_categories'] ) : null;
 
         if ( $store_categories ) {
@@ -363,7 +363,7 @@ class StoreCategory {
      * @return void
      */
     public function add_category_dropdown_in_seller_search_form() {
-        $get_data = wp_unslsh( $_GET );
+        $get_data = wp_unslash( $_GET );
         $category_query = ! empty( $get_data['dokan_seller_category'] ) ? sanitize_text_field( $get_data['dokan_seller_category'] ) : null;
 
         $args = array(
