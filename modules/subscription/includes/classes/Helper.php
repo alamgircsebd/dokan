@@ -577,6 +577,7 @@ class Helper {
         delete_user_meta( $customer_id, 'dokan_has_active_cancelled_subscrption' );
         delete_user_meta( $customer_id, 'dokan_vendor_subscription_cancel_email' );
         delete_user_meta( $customer_id, '_paypal_subscriber_ID' );
+        delete_user_meta( $customer_id, '_customer_recurring_subscription' );
 
         // make product status draft after subscriptions is got cancelled.
         if ( Helper::check_vendor_has_existing_product( $customer_id ) ) {

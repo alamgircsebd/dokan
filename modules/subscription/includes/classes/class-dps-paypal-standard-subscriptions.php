@@ -369,8 +369,11 @@ class DPS_PayPal_Standard_Subscriptions {
                 update_user_meta( $customer_id, 'product_no_with_pack', $no_of_product_pack );
                 update_user_meta( $customer_id, 'product_pack_startdate', dokan_current_datetime()->format( 'Y-m-d H:i:s' ) );
                 update_user_meta( $customer_id, 'can_post_product', '1' );
-                update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
                 update_user_meta( $customer_id, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
+
+                if ( $vendor_subscription->is_recurring() ) {
+                    update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
+                }
 
                 // make all the existing product publish
                 Helper::make_product_publish( $customer_id );
