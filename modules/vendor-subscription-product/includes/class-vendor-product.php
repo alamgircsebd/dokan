@@ -227,6 +227,12 @@ class Dokan_VSP_Product {
             $subscription_price = wc_format_decimal( $_POST['variable_subscription_price'][ $index ] );
             update_post_meta( $variation_id, '_subscription_price', $subscription_price );
             update_post_meta( $variation_id, '_regular_price', $subscription_price );
+
+            //add sale price for variable product
+            if ( isset( $_POST['variable_sale_price'][ $index ] ) ) {
+                $sale_price = wc_format_decimal( $_POST['variable_sale_price'][ $index ] );
+                update_post_meta( $variation_id, '_sale_price', $sale_price );
+            }
         }
 
         // Make sure trial period is within allowable range
