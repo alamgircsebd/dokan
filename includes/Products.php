@@ -969,6 +969,10 @@ class Products {
             wp_send_json_error( __( 'Error updating product data', 'dokan' ), 422 );
         }
 
+        if ( isset( $posted_data['sku'] ) && ! empty( $posted_data['sku'] ) && ! wc_product_has_unique_sku( $product_id, $posted_data['sku'] ) ) {
+            wp_send_json_error( __( 'Invalid or duplicated SKU.', 'dokan' ), 422 );
+        }
+
         $product = wc_get_product( $product_id );
 
         $product_props = array(

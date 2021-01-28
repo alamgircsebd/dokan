@@ -48,7 +48,6 @@ class StoreVacationMessage extends TagBase {
      */
     public function render() {
         if ( ! dokan_pro()->module->is_active( 'seller_vacation' ) ) {
-            echo __( 'Dokan Seller Vacation module is not active', 'dokan' );
             return;
         }
 
