@@ -57,8 +57,6 @@ class Module {
         $this->includes_file();
 
         add_action( 'dokan_activated_module_vendor_verification', array( self::class, 'activate' ) );
-
-        $this->disallow_direct_access();
     }
 
     public function init_hooks() {
@@ -841,6 +839,9 @@ class Module {
 
         // @codingStandardsIgnoreLine
         if ( strpos( $_SERVER['HTTP_REFERER'], 'settings/verification' ) != false ) {
+            // apply security patch
+            $this->disallow_direct_access();
+
             $user_id = get_current_user_id();
             $user = get_user_by( 'id', $user_id );
 
@@ -876,12 +877,6 @@ deny from all
     Allow from all
 </FilesMatch>
 EOD;
-
-        if ( ( file_exists( $file_htaccess ) && file_get_contents( $file_htaccess ) === 'deny from all' ) || ! file_exists( $file_htaccess ) )  {
-            file_put_contents( $file_htaccess, '' ); // phpcs:ignore
-            file_put_contents( $file_htaccess, $rule ); // phpcs:ignore
-        }
-
         if ( get_transient( 'dokan_vendor_verification_access_check' ) ) {
             return;
         }
@@ -890,13 +885,37 @@ EOD;
             wp_mkdir_p( $uploads_dir );
         }
 
-        if ( ! file_exists( $file_htaccess ) || ! file_exists( $file_html ) ) {
-            file_put_contents( $file_htaccess, $rule ); // phpcs:ignore
-            file_put_contents( $file_html, '' ); // phpcs:ignore
-        }
+        if ( ( file_exists( $file_htaccess ) && file_get_contents( $file_htaccess ) === 'deny from all' ) || ! file_exists( $file_htaccess ) )  {
+            global $wp_filesystem;
 
-        // Sets transient for 1 day
-        set_transient( 'dokan_vendor_verification_access_check', true, 60 * 60 * 24 );
+            // protect if the the global filesystem isn't setup yet
+            if( is_null( $wp_filesystem ) )
+                WP_Filesystem();
+
+
+            $ret = $wp_filesystem->put_contents(
+                $file_htaccess,
+                '',
+                FS_CHMOD_FILE
+            ); // returns a status of success or failure
+
+            $wp_filesystem->put_contents(
+                $file_htaccess,
+                $rule,
+                FS_CHMOD_FILE
+            ); // returns a status of success or failure
+
+            $wp_filesystem->put_contents(
+                $file_html,
+                '',
+                FS_CHMOD_FILE
+            ); // returns a status of success or failure
+
+            if ( $ret ) {
+                // Sets transient for 7 days
+                set_transient( 'dokan_vendor_verification_access_check', true, DAY_IN_SECONDS * 7 );
+            }
+        }
     }
 
     /**
