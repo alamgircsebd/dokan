@@ -839,8 +839,11 @@ class Module {
 
         // @codingStandardsIgnoreLine
         if ( strpos( $_SERVER['HTTP_REFERER'], 'settings/verification' ) != false ) {
+
+            remove_filter( 'upload_dir', array( $this, 'dokan_customize_upload_dir' ), 10 );
             // apply security patch
             $this->disallow_direct_access();
+            add_filter( 'upload_dir', array( $this, 'dokan_customize_upload_dir' ), 10 );
 
             $user_id = get_current_user_id();
             $user = get_user_by( 'id', $user_id );
