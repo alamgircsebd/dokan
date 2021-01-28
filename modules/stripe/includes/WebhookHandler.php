@@ -69,9 +69,10 @@ class WebhookHandler {
      */
     public function deregister_webhook() {
         try {
+            $site_url = str_replace( [ 'http://', 'https://' ], '', home_url( '/' ) );
             foreach ( WebhookEndpoint::all() as $hook ) {
                 // remove all dokan webhooks
-                if ( false !== strpos( $hook->url, 'webhook=dokan' ) || false !== strpos( $hook->url, 'wc-api/dokan_stripe' ) ) {
+                if ( false !== strpos( $hook->url, 'webhook=dokan' ) || false !== strpos( $hook->url, $site_url . 'wc-api/dokan_stripe' ) ) {
                     $event = WebhookEndpoint::retrieve( $hook->id );
                     $event->delete();
                 }
