@@ -219,7 +219,7 @@ class StoreCategory {
      */
     public function after_store_profile_saved( $store_id ) {
         $get_postdata = wp_unslash( $_POST ); // phpcs:ignore
-        $store_categories = ! empty( $get_postdata['dokan_store_categories'] ) ? sanitize_text_field( $get_postdata['dokan_store_categories'] ) : null;
+        $store_categories = ! empty( $get_postdata['dokan_store_categories'] ) ? $get_postdata['dokan_store_categories'] : null;
 
         if ( $store_categories ) {
             dokan_set_store_categories( $store_id, $store_categories );
