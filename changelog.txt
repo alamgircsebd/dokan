@@ -1,3 +1,47 @@
+v3.2.0 Jan 29, 2021
+----------------------------------
+
+**feat** [Livechat] Added WhatsApp provider for livechat
+**feat** [Livechat] Added tawk.to provider for livechat
+**new** [Geolocation] Added new settings where admin can set whether to display the map in shop or store listing page or both page
+**new** [Store Support] Added Store support form for single product page
+**new** [Vendor Subscription] Added separate email subject and body for subscription cancellation and alert emails
+**new** [Vendor Subscription] Added Dokan upgrader to move existing vendor subscription data to new keys
+**new** [Vendor Subscription] Update Billing Cycle Stops fields if Billing Cycle Type changes
+**update** [Vendor Subscription] Changed product_pack_startdate and product_pack_enddate value from date() to current_datetime(), this will fix timezone mismatch
+**update** [Vendor Subscription] Changed _subscription_period_interval, _subscription_period, _subscription_length into _dokan_subscription_period_interval, _dokan_subscription_period, _dokan_subscription_length. This was causing conflict with WooCommerce Subscription
+**update** [Vendor Subscription] Disable email verification if subscription module is enabled in the registration form
+**fix** [Import Export]: All metadata are not exporting
+**fix** [Auction] Dokan auction product addons are not saving
+**fix** [SPMV] Fixed seller can clone product using sell this item without a subscription
+**fix** [Vendor Subscription] Product duplicate button based on active subscription
+**fix** [Booking] Booking buffer period duration unit label is not translatable
+**fix** [Vendor Subscription] Email Subscription Ending Soon email is never sent
+**fix** [Vendor Subscription] Recurring payment is not canceling if admin assigns non-recurring subscription from the admin dashboard.
+**fix** [Vendor Subscription] Subscription purchased by PayPal was canceled immediately if subscription pack is not recurring
+**fix** [Vendor Subscription] Added additional fee if commission type is combined for non-dokan payment gateways
+**fix** [Stripe] Multiple stripe webhook was creating, moved webhook creation code under activation/deactivation hooks, deactivate and active module to apply these changes
+**fix** [Stripe] Fixed fatal error if the source string is empty if users try to change payment method from my account page
+**fix** [Stripe] Fixed fatal error if the order value is less than or equal to zero for Stripe 3DS mode, this was causing the whole payment to fail.
+**fix** [Auction] Relist feature is unavailable on the vendor dashboard
+**fix** [Auction] Vendors can not add & save new tags on Auction type products
+**fix** [Elementor] Fixed Elementor module causing issue with support ticket mail
+**fix** [Geolocation] Fixed Mapbox issue with RTL supported language
+**fix** [Geolocation] Fixed Geolocation position settings left and right area
+**fix** [Geolocation] Geolocation map autozoom when getting long distance between multiples stores/products locations
+**fix** [Export/Import] Hide export button when no product found for that author
+**fix** [Vendor Analytics] Vendor analytics deprecated warning
+**fix** [Subscription] Delete recurring subscription key after a subscription has been deleted
+**fix** [Store Support] Fixed wrong order reference URL in support tickets in WooCommerce my account and Dokan vendor dashboard area
+**fix** Product add pop-up validation error message style fix
+**fix** Fixed dokan_admin js var undefined issue at add/edit product page
+**fix** Fixed undefined ID notice while creating products from vendor dashboard
+**fix** Downloadable options panel not showing
+**fix** Fixed Vendor Setting to discount on order calculation error
+**fix** Fixed product view undefined index error for post_type
+**fix** Dokan Shortcode Block returns "This block has encountered an error and cannot be previewed." error while trying to add a shortcode
+**fix** Fixed WPML conflict with menu and widget page when users try to switch between language
+
 v3.1.4 Jan 11, 2021
 ----------------------------------
 

@@ -211,7 +211,7 @@ class Dokan_Geolocation_Vendor_View {
     /**
      * Is geolocation show on store listing page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return bool
      */

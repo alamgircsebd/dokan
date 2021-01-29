@@ -85,7 +85,7 @@ class Module {
     /**
      * Add store support section in Dokan Settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @param array $sections
      *
@@ -104,7 +104,7 @@ class Module {
     /**
      * Add store support options on Dokan Settings under General section
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @param array $settings_fields
      *
@@ -326,7 +326,7 @@ class Module {
     /**
      * Prints Get support button on above tab
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      */
     public function generate_support_button_product_page() {
         $store_support_show = dokan_get_option( 'store_support_product_page', 'dokan_store_support_setting', 'above_tab' );
@@ -356,7 +356,7 @@ class Module {
     /**
      * Prints Get support button on product page inner tab
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @param obj $author
      * @param obj $store

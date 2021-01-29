@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
  * Class Whatsapp
  * @package WeDevs\DokanPro\Modules\LiveChat
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.0
  *
  * @author weDevs
  */
@@ -23,7 +23,7 @@ class Whatsapp {
     /**
      * Whatsapp constructor.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      */
     public function __construct() {
         add_action( 'init', [ $this, 'register_shortcode' ] );
@@ -41,7 +41,7 @@ class Whatsapp {
     /**
      * Register shortcode
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -54,7 +54,7 @@ class Whatsapp {
      *
      * @param $atts
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -81,7 +81,7 @@ class Whatsapp {
     /**
      * Enqueue styles
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -92,7 +92,7 @@ class Whatsapp {
     /**
      * Enqueue custom chat js
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -115,7 +115,7 @@ class Whatsapp {
      *
      * @param $seller_id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -146,7 +146,7 @@ class Whatsapp {
     /**
      * Render live chat button on product page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -164,7 +164,7 @@ class Whatsapp {
      * @param $vendor
      * @param $store
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -190,7 +190,7 @@ class Whatsapp {
     /**
      * Render on product single page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -215,7 +215,7 @@ class Whatsapp {
      *
      * @param $whatsapp_number
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return string
      */
@@ -236,7 +236,7 @@ class Whatsapp {
     /**
      * Get pre-filled message dynamically filled if variable is present
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return string
      */
@@ -266,7 +266,7 @@ class Whatsapp {
      * @param $variable
      * @param $message
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return mixed
      */
