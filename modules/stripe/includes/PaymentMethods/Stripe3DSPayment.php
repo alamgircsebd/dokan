@@ -230,10 +230,13 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     public function save_intent_to_order( $order, $intent ) {
         $order->update_meta_data( 'dokan_stripe_intent_id', $intent->id );
         $order->update_meta_data( '_stripe_customer_id', $intent->customer );
-        $order->update_meta_data( '_transaction_id', $intent->charges->first()->id );
         $order->update_meta_data( '_stripe_source_id', $intent->source );
         $order->update_meta_data( '_stripe_intent_id', $intent->id );
         $order->update_meta_data( '_stripe_charge_captured', 'yes' );
+
+        if ( isset( $intent->charges->first()->id ) ) {
+            $order->update_meta_data( '_transaction_id', $intent->charges->first()->id );
+        }
 
         if ( is_callable( [ $order, 'save' ] ) ) {
             $order->save();
