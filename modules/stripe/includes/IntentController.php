@@ -318,8 +318,8 @@ class IntentController extends StripePaymentGateway {
                 DokanStripe::transfer()->amount( $vendor_earning, $currency )->from( $charge_id )->to( $connected_vendor_id );
             } catch ( Exception $e ) {
                 dokan_log( 'Could not transfer amount to connected vendor account via 3ds. Order ID: ' . $tmp_order->get_id() . ', Amount tried to transfer: ' . $vendor_raw_earning . " $currency" );
+                $tmp_order->add_order_note( sprintf( __( 'Transfer failed to vendor account (%s)', 'dokan' ), $e->getMessage() ) );
                 $tmp_order->add_order_note( __( 'Vendor payment will be transferred to the admin account since the transfer to the vendor stripe account had failed.', 'dokan' ) );
-                $tmp_order->add_order_note( sprintf( __( 'Failed Amount: %s %s', 'dokan' ), $vendor_raw_earning, $currency ) );
                 $tmp_order->save_meta_data();
                 continue;
             }
