@@ -838,6 +838,8 @@ export default {
         },
 
         get_gateway_fee_paid_by( paid_by ) {
+            if ( ! paid_by ) { return ''; }
+
             paid_by = paid_by || 'admin';
 
             const fee_paid_by = {

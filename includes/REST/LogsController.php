@@ -131,7 +131,7 @@ class LogsController extends DokanRESTAdminController {
             $gateway_fee_paid_by = $order->get_meta( 'dokan_gateway_fee_paid_by', true );
 
             if ( ! empty( $processing_fee ) && empty( $gateway_fee_paid_by ) ) {
-                $gateway_fee_paid_by = 'admin';
+                $gateway_fee_paid_by = 'seller';
             }
 
             $logs[] = [
