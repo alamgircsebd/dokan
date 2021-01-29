@@ -63,7 +63,7 @@ class Module {
 
     /**
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      */
     public static function activate( $instance ) {
         $instance->container['webhook']->register_webhook();
@@ -71,7 +71,7 @@ class Module {
 
     /**
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      */
     public static function deactivate( $instance ) {
         $instance->container['webhook']->deregister_webhook();

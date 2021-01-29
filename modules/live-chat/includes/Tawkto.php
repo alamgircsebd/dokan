@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
  * Class tawkto
  * @package WeDevs\DokanPro\Modules\LiveChat
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.0
  *
  * @author weDevs
  */
@@ -18,7 +18,7 @@ class Tawkto {
     /**
      * tawkto constructor.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      */
     public function __construct() {
         add_action( 'init', [ $this, 'register_shortcode' ] );
@@ -34,7 +34,7 @@ class Tawkto {
     /**
      * Register shortcode
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -47,7 +47,7 @@ class Tawkto {
      *
      * @param $atts
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class Tawkto {
      * @param $property_id
      * @param $widget_id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -115,7 +115,7 @@ class Tawkto {
     /**
      * Enqueue custom chat js
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -137,7 +137,7 @@ class Tawkto {
      *
      * @param $vendor_id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -167,7 +167,7 @@ class Tawkto {
     /**
      * Render live chat button on product page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -185,7 +185,7 @@ class Tawkto {
      * @param $vendor
      * @param $store
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */
@@ -211,7 +211,7 @@ class Tawkto {
     /**
      * Render on product single page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */

@@ -39,7 +39,7 @@ class WebhookHandler {
      * Register webhook and remove old webhook endpoints from stripe
      *
      * @since 3.0.3
-     * @since DOKAN_PRO_SINCE updated register webhook logic
+     * @since 3.2.0 updated register webhook logic
      *
      * @return void
      */
@@ -63,7 +63,7 @@ class WebhookHandler {
     /**
      * Register webhook and remove old `webhook=dokan` endpoint from stripe
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return void
      */

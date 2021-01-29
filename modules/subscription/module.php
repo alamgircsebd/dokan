@@ -1352,7 +1352,7 @@ class Module {
      * This method will disable email verification if vendor subscription module is on
      * and if subscription is enabled on registration form
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      * @param bool $ret
      * @return bool
      */
@@ -1376,7 +1376,7 @@ class Module {
     }
 
    /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * Checking the ability to duplicate product based on subscription
      *

@@ -345,7 +345,7 @@ class Helper {
      * M – for months; allowable range is 1 to 24
      * Y – for years; allowable range is 1 to 5
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      */
     public static function get_non_cached_subscription_ranges() {
 

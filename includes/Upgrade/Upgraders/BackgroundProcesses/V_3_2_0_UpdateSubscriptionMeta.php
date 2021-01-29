@@ -11,7 +11,7 @@ class V_3_2_0_UpdateSubscriptionMeta extends DokanBackgroundProcesses {
      *
      * Override this action in your processor class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @var string
      */
@@ -20,7 +20,7 @@ class V_3_2_0_UpdateSubscriptionMeta extends DokanBackgroundProcesses {
     /**
      * Sync Dokan Subscription old meta key data with new key
      *
-     * @since DOKAN_PRO_SINCE1
+     * @since 3.2.01
      *
      * @param int $page
      *

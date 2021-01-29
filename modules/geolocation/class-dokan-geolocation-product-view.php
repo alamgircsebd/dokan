@@ -180,7 +180,7 @@ class Dokan_Geolocation_Product_View {
     /**
      * Is geolocation show on shop page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.0
      *
      * @return bool
      */
