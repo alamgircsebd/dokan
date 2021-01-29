@@ -1,6 +1,202 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.2.0',
+        'released' => '2021-01-29',
+        'changes'  => array(
+            array(
+                'title'       => 'Added WhatsApp Provider [Livechat]',
+                'type'        => 'Improvement',
+                'description' => 'Added WhatsApp provider for livechat [Livechat]',
+            ),
+            array(
+                'title'       => 'Added Tawk.to Provider [Livechat] ',
+                'type'        => 'Improvement',
+                'description' => 'Added tawk.to provider for livechat [Livechat] ',
+            ),
+            array(
+                'title'       => 'Added New Settings Where Admin Can Set Whether to Display the Map [Geolocation]',
+                'type'        => 'Improvement',
+                'description' => 'Added new settings where admin can set whether to display the map in shop or store listing page or both page.',
+            ),
+            array(
+                'title'       => 'Added Store Support for Single Product [Store Support]',
+                'type'        => 'Improvement',
+                'description' => 'Added Store support form for single product page.',
+            ),
+            array(
+                'title'       => 'Added Separate Email Subject and Body for Subscription Cancellation [Vendor Subscription]',
+                'type'        => 'Improvement',
+                'description' => 'Added separate email subject and body for subscription cancellation and alert emails.',
+            ),
+            array(
+                'title'       => 'Added Dokan Upgrader to Move Existing Vendor Subscription [Vendor Subscription]',
+                'type'        => 'Improvement',
+                'description' => 'Added Dokan upgrader to move existing vendor subscription data to new keys.',
+            ),
+            array(
+                'title'       => 'Update Billing Cycle Stops Fields [Vendor Subscription]',
+                'type'        => 'Improvement',
+                'description' => 'Update Billing Cycle Stops fields if Billing Cycle Type changes.',
+            ),
+            array(
+                'title'       => 'Changed Product Pack Start Date and End Date Formate [Vendor Subscription]',
+                'type'        => 'Improvement',
+                'description' => 'Changed product_pack_startdate and product_pack_enddate value from date() to current_datetime(), this will fix timezone mismatch.',
+            ),
+            array(
+                'title'       => 'Changed Some Meta Key in Subscription Data [Vendor Subscription]',
+                'type'        => 'Improvement',
+                'description' => 'Changed _subscription_period_interval, _subscription_period, _subscription_length into _dokan_subscription_period_interval, _dokan_subscription_period, _dokan_subscription_length. This was causing conflict with WooCommerce Subscription.',
+            ),
+            array(
+                'title'       => 'Disable Email Verification If Subscription Module is Enabled [Vendor Subscription]',
+                'type'        => 'Improvement',
+                'description' => 'Disable email verification if subscription module is enabled in the registration form.',
+            ),
+            array(
+                'title'       => 'All Metadata are Not Exporting [Import Export]',
+                'type'        => 'Fix',
+                'description' => 'All metadata are not exporting issue fixed.',
+            ),
+            array(
+                'title'       => 'Dokan Auction Product Addons Are Not Saving [Auction]',
+                'type'        => 'Fix',
+                'description' => 'Dokan auction product addons are not saving issue fixed.',
+            ),
+            array(
+                'title'       => 'Fixed Seller Can Clone Product Without a Subscription [SPMV]',
+                'type'        => 'Fix',
+                'description' => 'Fixed seller can clone product using sell this item without a subscription.',
+            ),
+            array(
+                'title'       => 'Product Duplicate Button Based on Active Subscription [Vendor Subscription]',
+                'type'        => 'Fix',
+                'description' => 'Product duplicate button based on active subscription issue fixed.',
+            ),
+            array(
+                'title'       => 'Booking Buffer Period Duration Label Translatable [Booking]',
+                'type'        => 'Fix',
+                'description' => 'Booking buffer period duration unit label is not translatable now fixed.',
+            ),
+            array(
+                'title'       => 'Email Subscription Ending Soon Email is Never Sent [Vendor Subscription]',
+                'type'        => 'Fix',
+                'description' => 'Email Subscription Ending Soon email is never sent issue fixed.',
+            ),
+            array(
+                'title'       => 'Recurring Payment is Not Canceling if Admin Assigns Non-recurring Subscription [Vendor Subscription]',
+                'type'        => 'Fix',
+                'description' => 'Recurring payment is not canceling if admin assigns non-recurring subscription from the admin dashboard.',
+            ),
+            array(
+                'title'       => 'Subscription Purchased by PayPal was Canceled Immediately [Vendor Subscription]',
+                'type'        => 'Fix',
+                'description' => 'Subscription purchased by PayPal was canceled immediately if subscription pack is not recurring.',
+            ),
+            array(
+                'title'       => 'Added Additional Fee if Commission Type is Combined for Non-dokan Payment [Vendor Subscription]',
+                'type'        => 'Fix',
+                'description' => 'Added additional fee if commission type is combined for non-dokan payment gateways issue fixed.',
+            ),
+            array(
+                'title'       => 'Multiple Stripe Webhook Was Creating, Moved Webhook [Stripe]',
+                'type'        => 'Fix',
+                'description' => 'Multiple stripe webhook was creating, moved webhook creation code under activation/deactivation hooks, deactivate and active module to apply these changes.',
+            ),
+            array(
+                'title'       => 'Fixed Fatal Error if the Source String is Empty if Users Try to Change Payment [Stripe]',
+                'type'        => 'Fix',
+                'description' => 'Fixed fatal error if the source string is empty if users try to change payment method from my account page.',
+            ),
+            array(
+                'title'       => 'Fixed Fatal Error if the Order Value is Less Than or Equal to Zero for Stripe 3DS Mode [Stripe]',
+                'type'        => 'Fix',
+                'description' => 'Fixed fatal error if the order value is less than or equal to zero for Stripe 3DS mode, this was causing the whole payment to fail.',
+            ),
+            array(
+                'title'       => 'Relist Feature is Unavailable on the Vendor Dashboard [Auction]',
+                'type'        => 'Fix',
+                'description' => 'Relist feature is unavailable on the vendor dashboard issue fixed.',
+            ),
+            array(
+                'title'       => 'Vendors Can not Add & Save New Tags on Auction Type Products [Auction]',
+                'type'        => 'Fix',
+                'description' => 'Vendors can not add & save new tags on Auction type products issue fixed.',
+            ),
+            array(
+                'title'       => 'Fixed Elementor Module Causing Issue with Support Ticket Mail [Elementor]',
+                'type'        => 'Fix',
+                'description' => 'Fixed Elementor module causing issue with support ticket mail issue fixed.',
+            ),
+            array(
+                'title'       => 'Fixed Mapbox Issue with RTL Supported Language [Geolocation]',
+                'type'        => 'Fix',
+                'description' => 'Fixed Mapbox issue with RTL supported language.',
+            ),
+            array(
+                'title'       => 'Fixed Geolocation Position Settings Left and Right [Geolocation]',
+                'type'        => 'Fix',
+                'description' => 'Fixed Geolocation position settings left and right area working proper.',
+            ),
+            array(
+                'title'       => 'Geolocation Map Autozoom When Getting Long Distance [Geolocation]',
+                'type'        => 'Fix',
+                'description' => 'Geolocation map autozoom when getting long distance between multiples stores/products locations.',
+            ),
+            array(
+                'title'       => 'Hide Export Button When no Product Found for That Author [Import Export]',
+                'type'        => 'Fix',
+                'description' => 'Hide export button when no product found for that author.',
+            ),
+            array(
+                'title'       => 'Vendor Analytics Deprecated Warning [Vendor Analytics]',
+                'type'        => 'Fix',
+                'description' => 'Vendor analytics deprecated warning fixed now.',
+            ),
+            array(
+                'title'       => 'Delete Recurring Subscription Key After a Subscription Has Been Deleted [Subscription]',
+                'type'        => 'Fix',
+                'description' => 'Delete recurring subscription key after a subscription has been deleted.',
+            ),
+            array(
+                'title'       => 'Fixed Wrong Order Reference URL in Support Tickets [Store Support]',
+                'type'        => 'Fix',
+                'description' => 'Fixed wrong order reference URL in support tickets in WooCommerce my account and Dokan vendor dashboard area.',
+            ),
+            array(
+                'title'       => 'Product Add pop-up Validation Error Message Style',
+                'type'        => 'Fix',
+                'description' => 'Product add pop-up validation error message style issue fixed.',
+            ),
+            array(
+                'title'       => 'Fixed dokan_admin JS var Undefined Issue',
+                'type'        => 'Fix',
+                'description' => 'Fixed dokan_admin js var undefined issue at add/edit product page.',
+            ),
+            array(
+                'title'       => 'Fixed Undefined ID Notice While Creating Products',
+                'type'        => 'Fix',
+                'description' => 'Fixed undefined ID notice while creating products from vendor dashboard.',
+            ),
+            array(
+                'title'       => 'Downloadable Options Panel Not Showing',
+                'type'        => 'Fix',
+                'description' => 'Downloadable options panel not showing.',
+            ),
+            array(
+                'title'       => 'Fixed Vendor Setting to Discount on Order Calculation Error',
+                'type'        => 'Fix',
+                'description' => 'Fixed Vendor Setting to discount on order calculation error fixed now.',
+            ),
+            array(
+                'title'       => 'Fixed WPML Conflict with Menu and Widget Page',
+                'type'        => 'Fix',
+                'description' => 'Fixed WPML conflict with menu and widget page when users try to switch between language.',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.1.4',
         'released' => '2021-01-11',
         'changes'  => array(
