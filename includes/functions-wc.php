@@ -778,7 +778,7 @@ function dokan_discount_for_lot_quantity() {
         $is_enable_op_discount       = dokan_get_option( 'discount_edit', 'dokan_selling' );
         $is_product_discount_enabled = isset( $is_enable_op_discount['product-discount'] ) && 'product-discount' === $is_enable_op_discount['product-discount'];
 
-        if ( 'yes' === $is_product_discount_enabled && $is_lot_discount ) {
+        if ( $is_product_discount_enabled && 'yes' === $is_lot_discount ) {
             $lot_discount_percentage = get_post_meta( $product_id, '_lot_discount_amount', true );
             $lot_discount_quantity   = get_post_meta( $product_id, '_lot_discount_quantity', true );
 
