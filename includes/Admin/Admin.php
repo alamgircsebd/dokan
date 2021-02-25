@@ -43,6 +43,61 @@ class Admin {
         add_action( 'dokan_seller_meta_fields_after_admin_commission', [ $this, 'add_additional_fee' ] );
         add_action( 'dokan_process_seller_meta_fields', [ $this, 'save_meta_fields' ] );
         add_action( 'user_profile_update_errors', [ $this, 'make_combine_commission_fields_mandatory' ], 10, 3 );
+
+        add_action( 'dokan_admin_setup_wizard_after_admin_commission', [ $this, 'add_additional_fee_admin_setup_wizard' ] );
+        add_action( 'dokan_admin_setup_wizard_save_step_setup_selling', [ $this, 'setup_wizard_save_step_setup_selling' ], 35, 2 );
+    }
+
+    /**
+     * Add additional fee setup wizard
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function add_additional_fee_admin_setup_wizard() {
+        $options        = get_option( 'dokan_selling', array() );
+        $additional_fee = ! empty( $options['additional_fee'] ) ? $options['additional_fee'] : '';
+        ?>
+        <span class="additional-fee" style="display: none;">
+            <?php echo esc_html( '% &nbsp;&nbsp; +' ); ?>
+            <input type="text" class="wc_input_price small-text" name="dokan_admin_additional_fee" value="<?php echo esc_attr( wc_format_localized_price( $additional_fee ) ); ?>">
+        </span>
+
+        <script type="text/javascript">
+            ;(function($) {
+                $('select[name=commission_type]').on('change', function() {
+                    if ( 'combine' === $(this).val() ) {
+                        $('span.additional-fee').show();
+                        $('.combine-commission-description').text('<?php echo esc_html__( 'Amount you will get from sales in both percentage and fixed fee', 'dokan' ); ?>');
+                        $('input[name=admin_percentage]').css( {'width': '100px', 'display': 'inline'} );
+                        $('input[name=dokan_admin_additional_fee]').css( 'width', '100px' );
+                    } else {
+                        $('span.additional-fee').hide();
+                        $('.combine-commission-description').text('<?php echo esc_html__( 'How much amount (%) you will get from each order', 'dokan' ); ?>');
+                        $('input[name=admin_percentage]').css( {'width': '100%', 'display': 'block'} );
+                        $('input[name=dokan_admin_additional_fee]').css( 'width', '100%' );
+                    }
+                }).trigger('change');
+            })(jQuery);
+        </script>
+        <?php
+    }
+
+    /**
+     * Save selling options setup wizard
+     *
+     * @param array $options
+     * @param array $post_data
+     *
+     * @return void
+     */
+    public function setup_wizard_save_step_setup_selling( $options, $post_data ) {
+        check_admin_referer( 'dokan-setup' );
+
+        $options['additional_fee'] = isset( $post_data['dokan_admin_additional_fee'] ) && $post_data['dokan_admin_additional_fee'] != '' ? wc_format_decimal( $post_data['dokan_admin_additional_fee'] ) : '';
+
+        update_option( 'dokan_selling', $options );
     }
 
     /**
@@ -109,14 +164,14 @@ class Admin {
             'label'   => __( 'Enable Terms and Condition', 'dokan' ),
             'desc'    => __( 'Enable Terms and Condition check on registration form', 'dokan' ),
             'type'    => 'checkbox',
-            'default' => 'on'
+            'default' => 'on',
         ];
         $settings_fields['enable_single_seller_mode'] = [
             'name'    => 'enable_single_seller_mode',
             'label'   => __( 'Enable Single Seller Mode', 'dokan' ),
             'desc'    => __( 'Enable single seller mode', 'dokan' ),
             'type'    => 'checkbox',
-            'default' => 'off'
+            'default' => 'off',
         ];
 
         return $settings_fields;
@@ -140,7 +195,7 @@ class Admin {
             'default' => 'pending',
             'options' => array(
                 'publish' => __( 'Published', 'dokan' ),
-                'pending' => __( 'Pending Review', 'dokan' )
+                'pending' => __( 'Pending Review', 'dokan' ),
             )
         );
 
@@ -149,7 +204,7 @@ class Admin {
             'label'   => __( 'Duplicate product', 'dokan' ),
             'desc'    => __( 'Allow vendor to duplicate their product', 'dokan' ),
             'type'    => 'checkbox',
-            'default' => 'on'
+            'default' => 'on',
         );
 
         $settings_fields['edited_product_status'] = array(
@@ -165,7 +220,7 @@ class Admin {
             'label'   => __( 'Product Mail Notification', 'dokan' ),
             'desc'    => __( 'Email notification on new product submission', 'dokan' ),
             'type'    => 'checkbox',
-            'default' => 'on'
+            'default' => 'on',
         );
 
         $settings_fields['product_category_style'] = array(
@@ -176,7 +231,7 @@ class Admin {
             'default' => 'single',
             'options' => array(
                 'single'   => __( 'Single', 'dokan' ),
-                'multiple' => __( 'Multiple', 'dokan' )
+                'multiple' => __( 'Multiple', 'dokan' ),
             )
         );
 
@@ -194,7 +249,7 @@ class Admin {
             'desc'    => __( 'Vendor can add order and product discount', 'dokan' ),
             'type'    => 'multicheck',
             'default' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) ),
-            'options' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) )
+            'options' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) ),
         );
 
         $settings_fields['hide_customer_info'] = array(
@@ -202,7 +257,7 @@ class Admin {
             'label'   => __( 'Hide Customer info', 'dokan' ),
             'desc'    => __( 'Hide customer information from order details of vendors', 'dokan' ),
             'type'    => 'checkbox',
-            'default' => 'off'
+            'default' => 'off',
         );
 
         $settings_fields['seller_review_manage'] = array(
@@ -210,7 +265,7 @@ class Admin {
             'label'   => __( 'Vendor Product Review', 'dokan' ),
             'desc'    => __( 'Vendor can change product review status from vendor dashboard', 'dokan' ),
             'type'    => 'checkbox',
-            'default' => 'on'
+            'default' => 'on',
         );
 
         return $settings_fields;
@@ -248,13 +303,13 @@ class Admin {
                 'name'    => 'store_banner_width',
                 'label'   => __( 'Store Banner width', 'dokan' ),
                 'type'    => 'text',
-                'default' => 625
+                'default' => 625,
             ),
             'store_banner_height' => array(
                 'name'    => 'store_banner_height',
                 'label'   => __( 'Store Banner height', 'dokan' ),
                 'type'    => 'text',
-                'default' => 300
+                'default' => 300,
             ),
         );
 
@@ -272,7 +327,7 @@ class Admin {
                 'desc'    => __( 'Order status for which vendor can make a withdraw request.', 'dokan' ),
                 'type'    => 'multicheck',
                 'default' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) ),
-                'options' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) )
+                'options' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) ),
             ),
             'withdraw_date_limit'   => array(
                 'name'    => 'withdraw_date_limit',
@@ -286,7 +341,7 @@ class Admin {
                 'label'   => __( 'Hide Withdraw Option', 'dokan' ),
                 'desc'    => __( 'Hide withdraw option (when vendor is getting commission automatically) ', 'dokan' ),
                 'default' => 'off',
-                'type'    => 'checkbox'
+                'type'    => 'checkbox',
             ),
         );
 
@@ -333,7 +388,7 @@ class Admin {
                         'required' => 'yes',
                         'sanitize_callback'          => 'wc_format_decimal',
                         'response_sanitize_callback' => 'wc_format_localized_price',
-                    ]
+                    ],
                 ],
                 'min'     => '0',
                 'step'    => 'any',
@@ -341,12 +396,12 @@ class Admin {
                 'condition' => [
                     'type' => 'show',
                     'logic' => [
-                        'commission_type' => [ 'combine' ]
-                    ]
+                        'commission_type' => [ 'combine' ],
+                    ],
                 ],
                 'sanitize_callback'          => 'wc_format_decimal',
                 'response_sanitize_callback' => 'wc_format_localized_price',
-            ]
+            ],
         ];
     }
 
@@ -378,31 +433,31 @@ class Admin {
         $routes[] = array(
             'path'      => '/vendors/:id',
             'name'      => 'VendorSingle',
-            'component' => 'VendorSingle'
+            'component' => 'VendorSingle',
         );
 
         $routes[] = array(
             'path'      => '/announcement',
             'name'      => 'Announcement',
-            'component' => 'Announcement'
+            'component' => 'Announcement',
         );
 
         $routes[] = array(
             'path'      => '/announcement/new',
             'name'      => 'NewAnnouncement',
-            'component' => 'NewAnnouncement'
+            'component' => 'NewAnnouncement',
         );
 
         $routes[] = array(
             'path'      => '/announcement/:id/edit',
             'name'      => 'EditAnnouncement',
-            'component' => 'EditAnnouncement'
+            'component' => 'EditAnnouncement',
         );
 
         $routes[] = array(
             'path'      => '/refund',
             'name'      => 'Refund',
-            'component' => 'Refund'
+            'component' => 'Refund',
         );
 
         $routes[] = array(
@@ -417,9 +472,9 @@ class Admin {
                         [
                             'path' => 'status/:status',
                             'name' => 'ModulesStatus',
-                            'component' => 'Modules'
-                        ]
-                    ]
+                            'component' => 'Modules',
+                        ],
+                    ],
                 ],
             ]
         );
@@ -440,13 +495,13 @@ class Admin {
         $routes[] = array(
             'path'      => '/tools',
             'name'      => 'Tools',
-            'component' => 'Tools'
+            'component' => 'Tools',
         );
 
         $routes[] = array(
             'path'      => '/reports',
             'name'      => 'Reports',
-            'component' => 'Reports'
+            'component' => 'Reports',
         );
 
         return $routes;
@@ -484,16 +539,16 @@ class Admin {
                 'post_title' => __( 'Dashboard', 'dokan' ),
                 'slug'       => 'dashboard',
                 'page_id'    => 'dashboard',
-                'content'    => '[dokan-dashboard]'
+                'content'    => '[dokan-dashboard]',
             ),
             array(
                 'post_title' => __( 'Store List', 'dokan' ),
                 'slug'       => 'store-listing',
                 'page_id'    => 'store_listing',
-                'content'    => '[dokan-stores]'
+                'content'    => '[dokan-stores]',
             ),
             array(
-                'post_title' => __( 'My Orders', 'dokan-lite' ),
+                'post_title' => __( 'My Orders', 'dokan' ),
                 'slug'       => 'my-orders',
                 'page_id'    => 'my_orders',
                 'content'    => '[dokan-my-orders]',
@@ -511,24 +566,23 @@ class Admin {
                     'post_content'   => $page['content'],
                     'post_status'    => 'publish',
                     'post_type'      => 'page',
-                    'comment_status' => 'closed'
+                    'comment_status' => 'closed',
                         ) );
-                $dokan_pages[ $page['page_id'] ] = $page_id ;
+                $dokan_pages[ $page['page_id'] ] = $page_id;
             }
 
             update_option( 'dokan_pages', $dokan_pages );
             flush_rewrite_rules();
         } else {
             foreach ( $pages as $page ) {
-
-                if ( !$this->dokan_page_exist( $page['slug'] ) ) {
+                if ( ! $this->dokan_page_exist( $page['slug'] ) ) {
                     $page_id = wp_insert_post( array(
                         'post_title'     => $page['post_title'],
                         'post_name'      => $page['slug'],
                         'post_content'   => $page['content'],
                         'post_status'    => 'publish',
                         'post_type'      => 'page',
-                        'comment_status' => 'closed'
+                        'comment_status' => 'closed',
                             ) );
                     $dokan_pages[ $page['page_id'] ] = $page_id ;
                     update_option( 'dokan_pages', $dokan_pages );
@@ -584,21 +638,21 @@ class Admin {
             'id'     => 'dokan-sellers',
             'parent' => 'dokan',
             'title'  => __( 'Vendors', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan#/vendors' )
+            'href'   => admin_url( 'admin.php?page=dokan#/vendors' ),
         ) );
 
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-reports',
             'parent' => 'dokan',
             'title'  => __( 'Reports', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan#/reports' )
+            'href'   => admin_url( 'admin.php?page=dokan#/reports' ),
         ) );
 
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-settings',
             'parent' => 'dokan',
             'title'  => __( 'Settings', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan#/settings' )
+            'href'   => admin_url( 'admin.php?page=dokan#/settings' ),
         ) );
     }
 
@@ -634,7 +688,7 @@ class Admin {
                 'order_total'  => __( 'Order Total', 'dokan' ),
                 'net_amount'   => __( 'Vendor Earning', 'dokan' ),
                 'order_status' => __( 'Status', 'dokan' ),
-                'commission'   => __( 'Commission', 'dokan' )
+                'commission'   => __( 'Commission', 'dokan' ),
             );
 
             $filename = "Report-" . date( 'Y-m-d', time() );
@@ -731,7 +785,7 @@ class Admin {
         $hide_notice = get_option( $offer_key, 'show' );
         $offer_link  = 'https://wedevs.com/dokan/pricing/#dokan-compare-table-section';
         $offer_last_date = strtotime( '2018-12-31 12:00:00' );
-        $content = __( '<p>Christmas Offer! <strong>Save 30%%</strong> Upgrading Your Dokan Package. <strong>Coupon: “XMAS30”</strong>. Offer Ends in 31st Dec, 12.00 PM! <a target="_blank" href="%s">Grab The Deal</a></p>', 'dokan-lite' );
+        $content = __( '<p>Christmas Offer! <strong>Save 30%%</strong> Upgrading Your Dokan Package. <strong>Coupon: “XMAS30”</strong>. Offer Ends in 31st Dec, 12.00 PM! <a target="_blank" href="%s">Grab The Deal</a></p>', 'dokan' );
 
         if ( 'hide' == $hide_notice ) {
             return;
@@ -774,13 +828,13 @@ class Admin {
      */
     public function dismiss_christmas_offer() {
         if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json_error( __( 'You have no permission to do that', 'dokan-lite' ) );
+            wp_send_json_error( __( 'You have no permission to do that', 'dokan' ) );
         }
 
         $nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 
         if ( ! wp_verify_nonce( $nonce, 'dokan_admin' ) ) {
-            wp_send_json_error( __( 'Invalid nonce', 'dokan-lite' ) );
+            wp_send_json_error( __( 'Invalid nonce', 'dokan' ) );
         }
 
         if ( ! empty( $_POST['dokan_christmas_dismissed'] ) ) {
