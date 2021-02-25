@@ -9,10 +9,6 @@
             </router-link>
         </h2>
 
-        <div class="export-area" v-if="showLogsAarea">
-            <button @click="exportLogs()" id="export-logs" class="button">{{ __('Export Logs', 'dokan') }}</button>
-        </div>
-
         <div class="report-area" v-if="showReportArea">
             <ul class="subsubsub dokan-report-sub" style="float: none;">
                 <li>
@@ -154,6 +150,11 @@
         </div>
 
         <div class="logs-area" v-if="showLogsAarea">
+
+            <div class="export-csv-area" style="text-align: right; margin-top: 10px;">
+                <button @click="exportLogs()" id="export-logs" class="button">{{ __('Export Logs', 'dokan') }}</button>
+            </div>
+
             <list-table
                 :columns="columns"
                 :loading="loading"
@@ -192,7 +193,7 @@
                 </template>
 
                 <template slot="vendor_id" slot-scope="data">
-                    <a target="_blank" :href="editUserUrl(data.row.vendor_id)">{{ data.row.vendor_name ? data.row.vendor_name : __( '(no name)', 'dokan' ) }}</a>
+                    <a :href="editUserUrl(data.row.vendor_id)">{{ data.row.vendor_name ? data.row.vendor_name : __( '(no name)', 'dokan' ) }}</a>
                 </template>
 
                 <template slot="order_total" slot-scope="data">
@@ -649,7 +650,7 @@ export default {
         },
 
         editUserUrl(id) {
-            return `${dokan.urls.adminRoot}user-edit.php?user_id=${id}`;
+            return `${dokan.urls.adminRoot}admin.php?page=dokan#/vendors/${id}`;
         },
 
         exportLogs() {
