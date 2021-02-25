@@ -201,7 +201,7 @@ class Dokan_Wholesale_Admin {
 
         $wholesale_data                     = [];
         $wholesale_data['enable_wholesale'] = ! empty( $_POST['enable_wholesale'] ) ? wc_clean( $_POST['enable_wholesale'] ) : 'no';
-        $wholesale_data['price']            = ! empty( $_POST['wholesale_price'] ) ? floatval( $_POST['wholesale_price'] ) : '';
+        $wholesale_data['price']            = ! empty( $_POST['wholesale_price'] ) ? wc_format_decimal( $_POST['wholesale_price'] ) : '';
         $wholesale_data['quantity']         = ! empty( $_POST['wholesale_quantity'] ) ? absint( $_POST['wholesale_quantity'] ) : '';
 
         $product->update_meta_data( '_dokan_wholesale_meta', $wholesale_data );
