@@ -14,3 +14,8 @@
 .dokan-elementor-flex-right .elementor-widget-wrap {
     justify-content: flex-end;
 }
+
+.dokan-follow-store-buttons-wrapper {
+	display: flex;
+	justify-content: center;
+}

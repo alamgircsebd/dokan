@@ -72,7 +72,7 @@ class StoreFollowButton extends DokanButton {
                 ],
                 'selectors' => [
                     '{{WRAPPER}} > .elementor-widget-container > .elementor-button-wrapper > .dokan-store-follow-store-btn' => 'width: auto; margin: 0;',
-                ]
+                ],
             ]
         );
 
@@ -102,7 +102,7 @@ class StoreFollowButton extends DokanButton {
      * @return string
      */
     protected function get_button_class() {
-        $classes = 'dokan-store-follow-store-btn dokan-follow-store-button';
+        $classes = 'dokan-store-follow-store-btn dokan-follow-store-button dokan-follow-store-buttons-wrapper';
 
         return $classes;
     }
@@ -152,26 +152,33 @@ class StoreFollowButton extends DokanButton {
 
         $settings = $this->get_settings_for_display();
 
-        $this->add_render_attribute( [
-            'content-wrapper' => [
-                'class' => 'elementor-button-content-wrapper',
-            ],
-            'icon-align' => [
-                'class' => [
-                    'elementor-button-icon',
-                    'elementor-align-icon-' . $settings['icon_align'],
+        $this->add_render_attribute(
+            [
+                'content-wrapper' => [
+                    'class' => 'elementor-button-content-wrapper',
                 ],
-            ],
-            'text' => [
-                'class' => 'elementor-button-text',
-            ],
-        ] );
+                'icon-align' => [
+                    'class' => [
+                        'elementor-button-icon',
+                        'elementor-align-icon-' . $settings['icon_align'],
+                    ],
+                ],
+                'text' => [
+                    'class' => 'elementor-button-text',
+                ],
+            ]
+        );
 
         $this->add_inline_editing_attributes( 'text', 'none' );
         ?>
-        <span class="dokan-follow-store-button-label-current"><?php echo $this->button_args['label_current']; ?></span>
-        <span class="dokan-follow-store-button-label-unfollow"><?php echo $this->button_args['label_unfollow']; ?></span>
+        <?php if ( ! empty( $settings['selected_icon']['value'] ) ) : ?>
+            <span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?>>
+                <i class="<?php echo esc_attr( $settings['selected_icon']['value'] ); ?>" aria-hidden="true"></i>
+            </span>
+        <?php endif; ?>
 
+        <span class="dokan-follow-store-button-label-current elementor-button-text"><?php echo $this->button_args['label_current']; ?></span>
+        <span class="dokan-follow-store-button-label-unfollow elementor-button-text"><?php echo $this->button_args['label_unfollow']; ?></span>
         <?php
     }
 }
