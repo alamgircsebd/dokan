@@ -1,8 +1,8 @@
 <?php
 
 /**
-* Dokan_Vendor_Analytics_Reports class
-*/
+ * Dokan_Vendor_Analytics_Reports class
+ */
 class Dokan_Vendor_Analytics_Reports {
 
     /**
@@ -11,7 +11,6 @@ class Dokan_Vendor_Analytics_Reports {
      * @since 1.0.0
      */
     public function __construct() {
-
     }
 
     /**
@@ -22,22 +21,21 @@ class Dokan_Vendor_Analytics_Reports {
       * @return void
       */
     public function filter_page_path( $filter ) {
-
         if ( ! is_user_logged_in() ) {
             return;
         }
 
-        if ( ! current_user_can( 'seller' ) ) {
+        if ( ! current_user_can( 'dokandar' ) ) {
             return;
         }
 
         $vendor_id  = get_current_user_id();
         $userdata = get_userdata( $vendor_id );
-        $user_nicename = ( !false == $userdata ) ? $userdata->user_nicename : '';
+        $user_nicename = ( ! false == $userdata ) ? $userdata->user_nicename : '';
         $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
         $store_url_query = 'ga:pagePath==/' . $custom_store_url . '/' . $user_nicename . '/';
 
-        $product_ids = $this->get_vendor_product_ids($vendor_id);
+        $product_ids = $this->get_vendor_product_ids( $vendor_id );
         $product_url_query = '';
 
         if ( count( $product_ids ) ) {
@@ -49,7 +47,6 @@ class Dokan_Vendor_Analytics_Reports {
         $filter = $filter ? $filter . ',' : '';
 
         return $filter .= $product_url_query . $store_url_query;
-
     }
 
     /**
@@ -60,7 +57,7 @@ class Dokan_Vendor_Analytics_Reports {
       * @return void
       */
     public function load_dokan_vendor_analytics() {
-        include_once( DOKAN_VENDOR_ANALYTICS_TOOLS_DIR . '/src/Dokan/autoload.php' );
+        include_once DOKAN_VENDOR_ANALYTICS_TOOLS_DIR . '/src/Dokan/autoload.php';
 
         $client = dokan_vendor_analytics_client();
         $token  = dokan_vendor_analytics_token();
@@ -74,11 +71,13 @@ class Dokan_Vendor_Analytics_Reports {
         if ( $client->isAccessTokenExpired() ) {
             $refresh_token = $client->getRefreshToken();
 
-            $response = wp_remote_post( dokan_vendor_analytics_get_refresh_token_url(), array(
-                'body' => array(
-                    'refresh_token' => $refresh_token,
+            $response = wp_remote_post(
+                dokan_vendor_analytics_get_refresh_token_url(), array(
+					'body' => array(
+						'refresh_token' => $refresh_token,
+					),
                 )
-            ) );
+            );
 
             if ( is_wp_error( $response ) ) {
                 dokan_log( $response->get_error_message() );
@@ -97,7 +96,10 @@ class Dokan_Vendor_Analytics_Reports {
 
         $profile_id = dokan_get_option( 'profile', 'dokan_vendor_analytics', null );
 
-        return array( 'client' => $client, 'profile_id' => $profile_id );
+        return array(
+			'client' => $client,
+			'profile_id' => $profile_id,
+		);
     }
 
     /**
@@ -152,10 +154,9 @@ class Dokan_Vendor_Analytics_Reports {
      * analytics content
      *
      * @since 1.0.0
-     *
      */
     public function get_analytics_content( $metrics, $dimensions, $sort, $headers ) {
-        $start_date = date( 'Y-m-01', current_time('timestamp') );
+        $start_date = date( 'Y-m-01', current_time( 'timestamp' ) );
         $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
         if ( isset( $_POST['dokan_analytics_filter'] ) ) {
             $start_date = $_POST['start_date'];
@@ -175,7 +176,7 @@ class Dokan_Vendor_Analytics_Reports {
                 <thead>
                     <tr>
                         <?php
-                        foreach ($headers as $header) {
+                        foreach ( $headers as $header ) {
                             echo '<th>' . $header . '</th>';
                         }
                         ?>
@@ -187,11 +188,11 @@ class Dokan_Vendor_Analytics_Reports {
                         ?>
                         <tr>
                             <?php
-                            foreach ( $row as $key => $column) {
+                            foreach ( $row as $key => $column ) {
                                 // if ( in_array( $result['columnHeaders'][$key]->getName(), array( 'ga:avgTimeOnPage', 'ga:entranceRate', 'ga:exitRate' ) ) ) {
                                 //     $column = round( $column, 2 );
                                 // }
-                                switch ( $result['columnHeaders'][$key]->getName() ) {
+                                switch ( $result['columnHeaders'][ $key ]->getName() ) {
                                     case 'ga:avgTimeOnPage':
                                         $column = round( $column, 2 );
                                         break;
@@ -203,7 +204,8 @@ class Dokan_Vendor_Analytics_Reports {
                                         break;
                                 }
                                 echo '<td>' . $column . '</td>';
-                            } ?>
+                            }
+                            ?>
                         </tr>
                         <?php
                     }
@@ -224,13 +226,15 @@ class Dokan_Vendor_Analytics_Reports {
      * @return array
      */
     public function get_vendor_product_ids( $vendor_id ) {
-        $products = new WP_Query( array(
-            'post_type' => 'product',
-            'post_status' => 'publish',
-            'fields' => 'ids',
-            'author' => $vendor_id,
-            'nopaging' => true,
-        ) );
+        $products = new WP_Query(
+            array(
+                'post_type' => 'product',
+                'post_status' => 'publish',
+                'fields' => 'ids',
+                'author' => $vendor_id,
+                'nopaging' => true,
+            )
+        );
 
         return $products->posts;
     }

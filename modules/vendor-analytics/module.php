@@ -36,8 +36,8 @@ class Module {
      */
     public function define_constant() {
         define( 'DOKAN_VENDOR_ANALYTICS_DIR', dirname( __FILE__ ) );
-        define( 'DOKAN_VENDOR_ANALYTICS_URL' , plugins_url( '', __FILE__ ) );
-        define( 'DOKAN_VENDOR_ANALYTICS_ASSETS' , DOKAN_VENDOR_ANALYTICS_URL . '/assets' );
+        define( 'DOKAN_VENDOR_ANALYTICS_URL', plugins_url( '', __FILE__ ) );
+        define( 'DOKAN_VENDOR_ANALYTICS_ASSETS', DOKAN_VENDOR_ANALYTICS_URL . '/assets' );
         define( 'DOKAN_VENDOR_ANALYTICS_VIEWS', DOKAN_VENDOR_ANALYTICS_DIR . '/views' );
         define( 'DOKAN_VENDOR_ANALYTICS_INC_DIR', DOKAN_VENDOR_ANALYTICS_DIR . '/includes' );
         define( 'DOKAN_VENDOR_ANALYTICS_TOOLS_DIR', DOKAN_VENDOR_ANALYTICS_DIR . '/tools' );
@@ -127,12 +127,14 @@ class Module {
         $link    = dokan_get_navigation_url( 'analytics' );
         $current = isset( $_GET['tab'] ) ? $_GET['tab'] : 'general';
 
-        dokan_get_template_part( 'vendor-analytics/content', '', array(
-            'is_vendor_analytics' => true,
-            'tabs' => $tabs,
-            'link' => $link,
-            'current' => $current,
-        ) );
+        dokan_get_template_part(
+            'vendor-analytics/content', '', array(
+                'is_vendor_analytics' => true,
+                'tabs' => $tabs,
+                'link' => $link,
+                'current' => $current,
+            )
+        );
     }
 
     /**
@@ -161,8 +163,13 @@ class Module {
      */
     public function load_analytics_template( $query_vars ) {
         if ( isset( $query_vars['analytics'] ) ) {
-            if ( ! current_user_can( 'seller' ) ) {
-                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+            if ( ! current_user_can( 'dokandar' ) ) {
+                dokan_get_template_part(
+                    'global/dokan-error', '', array(
+                        'deleted' => false,
+                        'message' => __( 'You have no permission to view this page', 'dokan' ),
+                    )
+                );
             } else {
                 dokan_get_template_part( 'vendor-analytics/analytics', '', array( 'is_vendor_analytics' => true ) );
             }
@@ -179,12 +186,12 @@ class Module {
      * @return array $urls
      */
     public function add_analytics_page( $urls ) {
-        if ( dokan_is_seller_enabled( get_current_user_id() ) && current_user_can( 'seller' ) ) {
+        if ( dokan_is_seller_enabled( get_current_user_id() ) && current_user_can( 'dokandar' ) ) {
             $urls['analytics'] = array(
                 'title' => __( 'Analytics', 'dokan' ),
                 'icon'  => '<i class="fa fa-area-chart"></i>',
                 'url'   => dokan_get_navigation_url( 'analytics' ),
-                'pos'   => 181
+                'pos'   => 181,
             );
         }
 
