@@ -47,8 +47,38 @@ class Announcement {
         $sender_type = get_post_meta( $post_id, '_announcement_type', true );
         $vendor_ids  = [];
 
-        if ( 'all_seller' === $sender_type ) {
-            $users   = new \WP_User_Query( array( 'role' => 'seller' ) );
+        $announcement_types = apply_filters( 'dokan_announcement_seller_types', [ 'all_seller', 'enabled_seller', 'disabled_seller', 'featured_seller' ] );
+
+        if ( in_array( $sender_type, $announcement_types, true ) ) {
+            $args = [
+                'role__in'   => [ 'seller', 'administrator' ],
+            ];
+
+            if ( 'enabled_seller' === $sender_type ) {
+                $args['meta_query'][] = [
+                    'key'     => 'dokan_enable_selling',
+                    'value'   => 'yes',
+                    'compare' => '=',
+                ];
+            }
+
+            if ( 'disabled_seller' === $sender_type ) {
+                $args['meta_query'][] = [
+                    'key'     => 'dokan_enable_selling',
+                    'value'   => 'no',
+                    'compare' => '=',
+                ];
+            }
+
+            if ( 'featured_seller' === $sender_type ) {
+                $args['meta_query'][] = [
+                    'key'     => 'dokan_feature_seller',
+                    'value'   => 'yes',
+                    'compare' => '=',
+                ];
+            }
+
+            $users   = new \WP_User_Query( $args );
             $vendors = $users->get_results();
 
             if ( $vendors ) {
@@ -139,7 +169,7 @@ class Announcement {
         $existing_seller = $new_seller = $del_seller = array(); // phpcs:ignore
 
         foreach ( $sellers as $seller ) {
-            if ( in_array( $seller, $db ) ) {
+            if ( in_array( $seller, $db, true ) ) {
                 $existing_seller[] = $seller;
             } else {
                 $new_seller[] = $seller;
@@ -232,13 +262,12 @@ class Announcement {
         $i          = 0;
 
         foreach ( $seller_array as $key => $seller_id ) {
-            $sep    = ( $i == 0 ) ? '' : ',';
+            $sep    = ( $i === 0 ) ? '' : ',';
             $values .= sprintf( '%s( %d, %d )', $sep, $seller_id, $post_id );
 
             $i++;
         }
 
-        // $sellers = implode( ',', $seller_array );
         $sql = "DELETE FROM {$table_name} WHERE (`user_id`, `post_id` ) IN ($values)";
 
         if ( $values ) {

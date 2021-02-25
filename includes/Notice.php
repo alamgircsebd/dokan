@@ -25,11 +25,12 @@ class Notice {
      * @uses action hook
      * @uses filter hook
      */
-    function __construct() {
+    public function __construct() {
         add_action( 'dokan_load_custom_template', array( $this, 'load_announcement_template' ), 10 );
         add_action( 'dokan_announcement_content_area_header', array( $this, 'load_header_template' ) );
         add_action( 'dokan_announcement_content', array( $this, 'load_announcement_content' ), 10 );
         add_action( 'dokan_single_announcement_content', array( $this, 'load_single_announcement_content' ), 10 );
+        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_announcement_page' ), 15 );
     }
 
     /**
@@ -43,7 +44,12 @@ class Notice {
      */
     public function load_announcement_template( $query_vars ) {
         if ( isset( $query_vars['announcement'] ) ) {
-            dokan_get_template_part( 'announcement/announcement', '', array( 'pro' => true, 'announcement' => $this ) );
+            dokan_get_template_part(
+                'announcement/announcement', '', array(
+                    'pro' => true,
+                    'announcement' => $this,
+                )
+            );
             return;
         }
         if ( isset( $query_vars['single-announcement'] ) ) {
@@ -82,7 +88,7 @@ class Notice {
      * @return void
      */
     public function load_single_announcement_content() {
-        $this->notice_id =  get_query_var( 'single-announcement' );
+        $this->notice_id = get_query_var( 'single-announcement' );
 
         if ( is_numeric( $this->notice_id ) ) {
             $notice = $this->get_single_announcement( $this->notice_id );
@@ -90,11 +96,15 @@ class Notice {
 
         if ( $notice ) {
             $notice_data = reset( $notice );
-            if( $notice_data->status == 'unread' ) {
+            if ( 'unread' === $notice_data->status ) {
                 $this->update_notice_status( $this->notice_id, 'read' );
             }
-            dokan_get_template_part( 'announcement/single-notice', '', array( 'pro' => true, 'notice_data' => $notice_data ) );
-
+            dokan_get_template_part(
+                'announcement/single-notice', '', array(
+                    'pro' => true,
+                    'notice_data' => $notice_data,
+                )
+            );
         } else {
             dokan_get_template_part( 'announcement/no-announcement', '', array( 'pro' => true ) );
         }
@@ -109,19 +119,18 @@ class Notice {
      *
      * @return object
      */
-    function get_announcement_by_users( $per_page = NULL ) {
-
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+    public function get_announcement_by_users( $per_page = null ) {
+        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1; //phpcs:ignore
 
         $args = array(
             'post_type'      => 'dokan_announcement',
             'post_status'    => 'publish',
-            'posts_per_page' => ($per_page) ? $per_page : $this->perpage,
+            'posts_per_page' => ( $per_page ) ? $per_page : $this->perpage,
             'orderby'        => 'post_date',
             'order'          => 'DESC',
             'meta_key'       => '_announcement_type',
             'meta_value'     => 'selected_seller',
-            'paged'          => $pagenum
+            'paged'          => $pagenum,
         );
 
         $this->add_query_filter();
@@ -140,27 +149,30 @@ class Notice {
      *
      * @return void
      */
-    function show_announcement_template() {
+    public function show_announcement_template() {
         $query = $this->get_announcement_by_users();
 
         $args = array(
-            'post_type'      => 'dokan_announcement',
-            'post_status'    => 'publish',
-            'orderby'        => 'post_date',
-            'order'          => 'DESC',
-            'meta_key'       => '_announcement_type',
-            'meta_value'     => 'all_seller',
+            'post_type'   => 'dokan_announcement',
+            'post_status' => 'publish',
+            'orderby'     => 'post_date',
+            'order'       => 'DESC',
         );
 
         $this->add_query_filter();
 
-        $all_seller_posts = new WP_Query( $args );
+        $seller_posts = new WP_Query( $args );
 
         $this->remove_query_filter();
 
-        $notices = array_merge( $all_seller_posts->posts, $query->posts );
+        $notices = array_merge( $seller_posts->posts, $query->posts );
 
-        dokan_get_template_part( 'announcement/listing-announcement', '', array( 'pro' => true, 'notices' => $notices ) );
+        dokan_get_template_part(
+            'announcement/listing-announcement', '', array(
+                'pro' => true,
+                'notices' => $notices,
+            )
+        );
 
         wp_reset_postdata();
         $this->get_pagination( $query );
@@ -172,7 +184,7 @@ class Notice {
      *
      *  @since  2.1
      */
-    function add_query_filter() {
+    public function add_query_filter() {
         add_filter( 'posts_fields', array( $this, 'select_dokan_announcement_table' ), 10, 2 );
         add_filter( 'posts_join', array( $this, 'join_dokan_announcement_table' ) );
         add_filter( 'posts_where', array( $this, 'where_dokan_announcement_table' ), 10, 2 );
@@ -185,7 +197,7 @@ class Notice {
      *
      * @return void
      */
-    function remove_query_filter() {
+    public function remove_query_filter() {
         remove_filter( 'posts_fields', array( $this, 'select_dokan_announcement_table' ), 10, 2 );
         remove_filter( 'posts_join', array( $this, 'join_dokan_announcement_table' ) );
         remove_filter( 'posts_where', array( $this, 'where_dokan_announcement_table' ), 10, 2 );
@@ -200,25 +212,27 @@ class Notice {
      *
      * @return void
      */
-    function get_pagination( $query ) {
-        $pagenum  = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
-        $base_url = dokan_get_navigation_url('notice');
+    public function get_pagination( $query ) {
+        $pagenum  = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1; //phpcs:ignore
+        $base_url = dokan_get_navigation_url( 'notice' );
 
         if ( $query->max_num_pages > 1 ) {
             echo '<div class="pagination-wrap">';
-            $page_links = paginate_links( array(
-                'current'   => $pagenum,
-                'total'     => $query->max_num_pages,
-                'base'      => $base_url. '%_%',
-                'format'    => '?pagenum=%#%',
-                'add_args'  => false,
-                'type'      => 'array',
-                'prev_text' => __( '&laquo; Previous', 'dokan' ),
-                'next_text' => __( 'Next &raquo;', 'dokan' )
-            ) );
+            $page_links = paginate_links(
+                array(
+                    'current'   => $pagenum,
+                    'total'     => $query->max_num_pages,
+                    'base'      => $base_url . '%_%',
+                    'format'    => '?pagenum=%#%',
+                    'add_args'  => false,
+                    'type'      => 'array',
+                    'prev_text' => __( '&laquo; Previous', 'dokan' ),
+                    'next_text' => __( 'Next &raquo;', 'dokan' ),
+                )
+            );
 
             echo '<ul class="pagination"><li>';
-            echo join("</li>\n\t<li>", $page_links);
+            echo join( "</li>\n\t<li>", $page_links );
             echo "</li>\n</ul>\n";
             echo '</div>';
         }
@@ -233,16 +247,16 @@ class Notice {
      *
      * @return object
      */
-    function get_single_announcement( $notice_id ) {
+    public function get_single_announcement( $notice_id ) {
         $args = array(
             'p'         => $notice_id,
-            'post_type' => 'dokan_announcement'
+            'post_type' => 'dokan_announcement',
         );
 
         $this->add_query_filter();
 
         $query = new WP_Query( $args );
-        $notice = (array)$query->posts;
+        $notice = (array) $query->posts;
 
         $this->remove_query_filter();
         return $notice;
@@ -258,16 +272,19 @@ class Notice {
      *
      * @return void
      */
-    function update_notice_status( $notice_id, $status ) {
+    public function update_notice_status( $notice_id, $status ) {
         global $wpdb;
-        $table_name = $wpdb->prefix.'dokan_announcement';
+        $table_name = $wpdb->prefix . 'dokan_announcement';
 
         $wpdb->update(
             $table_name,
             array(
                 'status' => $status,
             ),
-            array( 'post_id' => $notice_id, 'user_id' => dokan_get_current_user_id() )
+            array(
+                'post_id' => $notice_id,
+                'user_id' => dokan_get_current_user_id(),
+            )
         );
     }
 
@@ -281,11 +298,11 @@ class Notice {
      *
      * @return string
      */
-    function select_dokan_announcement_table( $fields, $query ) {
+    public function select_dokan_announcement_table( $fields, $query ) {
         global $wpdb;
 
-        $table_name = $wpdb->prefix.'dokan_announcement';
-        $fields .= " ,da.id, da.status";
+        $table_name = $wpdb->prefix . 'dokan_announcement';
+        $fields .= ' ,da.id, da.status';
 
         return $fields;
     }
@@ -299,10 +316,10 @@ class Notice {
      *
      * @return string
      */
-    function join_dokan_announcement_table( $join ) {
+    public function join_dokan_announcement_table( $join ) {
         global $wpdb;
 
-        $table_name = $wpdb->prefix .'dokan_announcement';
+        $table_name = $wpdb->prefix . 'dokan_announcement';
         $join .= " LEFT JOIN $table_name AS da ON $wpdb->posts.ID = da.post_id";
 
         return $join;
@@ -318,14 +335,34 @@ class Notice {
      *
      * @return string
      */
-    function where_dokan_announcement_table( $where, $query ) {
+    public function where_dokan_announcement_table( $where, $query ) {
         global $wpdb;
 
-        $table_name = $wpdb->prefix .'dokan_announcement';
+        $table_name = $wpdb->prefix . 'dokan_announcement';
         $current_user_id = dokan_get_current_user_id();
 
         $where .= " AND da.user_id = $current_user_id AND ( da.status = 'read' OR da.status = 'unread' )";
 
         return $where;
+    }
+
+    /**
+     * Add announcement page in seller dashboard
+     *
+     * @param array $urls
+     *
+     * @return array $urls
+     */
+    public function add_announcement_page( $urls ) {
+        if ( current_user_can( 'dokandar' ) ) {
+            $urls['announcement'] = array(
+                'title' => __( 'Announcements', 'dokan' ),
+                'icon'  => '<i class="fa fa-bell"></i>',
+                'url'   => dokan_get_navigation_url( 'announcement' ),
+                'pos'   => 181,
+            );
+        }
+
+        return $urls;
     }
 }

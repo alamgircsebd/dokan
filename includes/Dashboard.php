@@ -22,7 +22,6 @@ class Dashboard extends DokanDashboard {
      * within our plugin.
      *
      * @uses add_action()
-     *
      */
     public function __construct() {
         $this->user_id        = dokan_get_current_user_id();
@@ -50,19 +49,20 @@ class Dashboard extends DokanDashboard {
      * @return void
      */
     public function get_review_widget() {
-        if ( !current_user_can( 'dokan_view_overview_menu' ) ) {
+        if ( ! current_user_can( 'dokan_view_overview_menu' ) ) {
             return;
         }
 
-        if ( !current_user_can( 'dokan_view_review_reports' ) ) {
+        if ( ! current_user_can( 'dokan_view_review_reports' ) ) {
             return;
         }
 
-        dokan_get_template_part( 'dashboard/review-widget', '', array(
-            'pro'            => true,
-            'comment_counts' => $this->comment_counts,
-            'reviews_url'    => dokan_get_navigation_url( 'reviews' ),
-        )
+        dokan_get_template_part(
+            'dashboard/review-widget', '', array(
+				'pro'            => true,
+				'comment_counts' => $this->comment_counts,
+				'reviews_url'    => dokan_get_navigation_url( 'reviews' ),
+			)
         );
     }
 
@@ -72,11 +72,11 @@ class Dashboard extends DokanDashboard {
      * @return void
      */
     public function get_announcement_widget() {
-        if ( !current_user_can( 'dokan_view_overview_menu' ) ) {
+        if ( ! current_user_can( 'dokan_view_overview_menu' ) ) {
             return;
         }
 
-        if ( !current_user_can( 'dokan_view_announcement' ) ) {
+        if ( ! current_user_can( 'dokan_view_announcement' ) ) {
             return;
         }
 
@@ -88,23 +88,22 @@ class Dashboard extends DokanDashboard {
             'post_status' => 'publish',
             'orderby'     => 'post_date',
             'order'       => 'DESC',
-            'meta_key'    => '_announcement_type',
-            'meta_value'  => 'all_seller',
         );
 
         $template_notice->add_query_filter();
 
-        $all_seller_posts = new \WP_Query( $args );
+        $seller_posts = new \WP_Query( $args );
 
         $template_notice->remove_query_filter();
 
-        $notices = array_merge( $all_seller_posts->posts, $query->posts );
+        $notices = array_merge( $seller_posts->posts, $query->posts );
 
-        dokan_get_template_part( 'dashboard/announcement-widget', '', array(
-            'pro'              => true,
-            'notices'          => $notices,
-            'announcement_url' => dokan_get_navigation_url( 'announcement' ),
-        )
+        dokan_get_template_part(
+            'dashboard/announcement-widget', '', array(
+				'pro'              => true,
+				'notices'          => $notices,
+				'announcement_url' => dokan_get_navigation_url( 'announcement' ),
+			)
         );
     }
 

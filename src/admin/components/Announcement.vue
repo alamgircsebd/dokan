@@ -59,6 +59,9 @@
             <template slot="send_to" slot-scope="data">
                 <span v-if="'all_seller' === data.row.sender_type">{{ __( 'All Vendor', 'dokan' ) }}</span>
                 <span v-if="'selected_seller' === data.row.sender_type">{{ __( 'Selected Vendor', 'dokan' ) }}</span>
+                <span v-if="'enabled_seller' === data.row.sender_type">{{ __( 'Enabled Vendors', 'dokan' ) }}</span>
+                <span v-if="'disabled_seller' === data.row.sender_type">{{ __( 'Disabled Vendors', 'dokan' ) }}</span>
+                <span v-if="'featured_seller' === data.row.sender_type">{{ __( 'Featured Vendors', 'dokan' ) }}</span>
             </template>
 
             <template slot="row-actions" slot-scope="data">

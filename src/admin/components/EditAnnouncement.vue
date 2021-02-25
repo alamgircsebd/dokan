@@ -97,6 +97,9 @@
                                             <select name="announcement_sender_type" id="announcement_sender_type" v-model="announcement.sender_type">
                                                 <option value="all_seller">{{ __( 'All Vendor', 'dokan' )}}</option>
                                                 <option value="selected_seller">{{ __( 'Selected Vendor', 'dokan' )}}</option>
+                                                <option value="enabled_seller">{{ __( 'Enabled Vendors', 'dokan' )}}</option>
+                                                <option value="disabled_seller">{{ __( 'Disabled Vendors', 'dokan' )}}</option>
+                                                <option value="featured_seller">{{ __( 'Featured Vendors', 'dokan' )}}</option>
                                             </select>
                                         </td>
                                     </tr>
