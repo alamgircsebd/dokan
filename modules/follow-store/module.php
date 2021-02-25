@@ -2,6 +2,8 @@
 
 namespace WeDevs\DokanPro\Modules\FollowStore;
 
+use DokanFollowStoreRestController;
+
 final class Module {
 
     /**
@@ -23,6 +25,7 @@ final class Module {
     public function __construct() {
         $this->define_constants();
         $this->includes();
+        $this->load_hooks();
         $this->instances();
     }
 
@@ -78,5 +81,22 @@ final class Module {
         new \Dokan_Follow_Store_Vendor_Dashboard();
         new \Dokan_Follow_Store_Cron();
         new \Dokan_Follow_Store_Email_Loader();
+    }
+
+    /**
+     * Load hooks for this modules
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function load_hooks() {
+        add_filter( 'dokan_rest_api_class_map', [ $this, 'rest_api_class_map' ] );
+    }
+
+    public function rest_api_class_map($class_map) {
+        $class_map[ DOKAN_FOLLOW_STORE_PATH . '/includes/class-dokan-follow-store-rest-controller.php' ] = DokanFollowStoreRestController::class;
+
+        return $class_map;
     }
 }
