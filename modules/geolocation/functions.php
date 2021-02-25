@@ -83,6 +83,7 @@ function dokan_geo_enqueue_locations_map() {
         'info_window_template' => $info_window_template,
         'default_geolocation'  => dokan_geo_get_default_location(),
         'map_zoom'             => dokan_get_option( 'map_zoom', 'dokan_geolocation', 11 ),
+        'is_auto_zoom'         => is_singular( 'product' ) ? 0 : 1, // Autozoom only work when pass 1
     );
 
     $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
