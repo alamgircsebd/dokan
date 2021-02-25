@@ -159,7 +159,6 @@ final class Module {
     public function get_social_networks_map() {
         $map = [
             'fb'        => 'fa fa-facebook',
-            'gplus'     => 'fa fa-google',
             'twitter'   => 'fa fa-twitter',
             'pinterest' => 'fa fa-pinterest',
             'linkedin'  => 'fa fa-linkedin',

@@ -130,7 +130,7 @@ class StoreShare {
                         $(".dokan-share").jsSocials({
                         showCount: false,
                         showLabel: false,
-                           shares: ["facebook", "twitter", "googleplus", "linkedin", "pinterest", "email"]
+                           shares: ["facebook", "twitter", "linkedin", "pinterest", "email"]
                         });
                     },
 

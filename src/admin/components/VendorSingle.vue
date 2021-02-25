@@ -245,7 +245,6 @@
                                 <a :class="{ active: isSocialActive('fb') }" :href="store.social.fb" target="_blank"><span class="flaticon-facebook-logo"></span></a>
                                 <a :class="{ active: isSocialActive('flickr') }" :href="store.social.flickr" target="_blank"><span class="flaticon-flickr-website-logo-silhouette"></span></a>
                                 <a :class="{ active: isSocialActive('twitter') }" :href="store.social.twitter" target="_blank"><span class="flaticon-twitter-logo-silhouette"></span></a>
-                                <a :class="{ active: isSocialActive('gplus') }" :href="store.social.gplus" target="_blank"><span class="flaticon-google-plus"></span></a>
                                 <a :class="{ active: isSocialActive('instagram') }" :href="store.social.instagram" target="_blank"><span class="flaticon-instagram"></span></a>
                                 <a :class="{ active: isSocialActive('youtube') }" :href="store.social.youtube" target="_blank"><span class="flaticon-youtube"></span></a>
                                 <a :class="{ active: isSocialActive('linkedin') }" :href="store.social.linkedin" target="_blank"><span class="flaticon-linkedin-logo"></span></a>
@@ -348,7 +347,6 @@ export default {
                 gravatar_id: '',
                 social: {
                     fb: '',
-                    gplus: '',
                     youtube: '',
                     twitter: '',
                     linkedin: '',
