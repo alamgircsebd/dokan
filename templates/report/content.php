@@ -40,7 +40,7 @@
         <?php endif ?>
 
     <?php } ?>
-</div> 
+</div>
 
 <?php
     $datepicker_format = 'yy-mm-dd';
@@ -53,7 +53,13 @@
     (function($){
         $(document).ready(function(){
             $('.datepicker').datepicker({
-                dateFormat: '<?php echo $datepicker_format; ?>'
+                dateFormat: '<?php echo $datepicker_format; ?>',
+                onSelect: function(changedDate, instance){
+                    let targetElement = $( '#'+ instance.id + '_alt' );
+                    if (targetElement.length) {
+                        targetElement.val( instance.selectedYear + '-' + (instance.selectedMonth +1) + '-' + instance.selectedDay );
+                    }
+                }
             });
         });
     })(jQuery);

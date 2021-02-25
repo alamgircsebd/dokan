@@ -459,14 +459,17 @@ function dokan_daily_sales() {
     $end_date   = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 
     if ( isset( $_POST['dokan_report_filter'] ) ) {
-        $start_date = date( 'Y-m-d', strtotime( $_POST['start_date'] ) );
-        $end_date   = date( 'Y-m-d', strtotime( $_POST['end_date'] ) );
+        $start_date = date( 'Y-m-d', strtotime( $_POST['start_date_alt'] ) );
+        $end_date   = date( 'Y-m-d', strtotime( $_POST['end_date_alt'] ) );
     } ?>
 
     <form method="post" class="dokan-form-inline report-filter dokan-clearfix" action="">
         <div class="dokan-form-group">
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
         </div>
+
+        <input type="hidden" name="start_date_alt" id="from_alt" value="<?php echo esc_attr( $start_date ); ?>">
+        <input type="hidden" name="end_date_alt" id="to_alt" value="<?php echo esc_attr( $end_date ); ?>">
 
         <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
