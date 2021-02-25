@@ -60,7 +60,7 @@ class PaymentTokens {
      *
      * @return array
      */
-    public function get_customer_payment_tokens( $tokens = [], $customer_id, $gateway_id ) {
+    public function get_customer_payment_tokens( $tokens, $customer_id, $gateway_id ) {
         if ( is_user_logged_in() && class_exists( 'WC_Payment_Token_CC' ) ) {
             $stored_tokens = [];
             $stripe_stored_tokens = [];

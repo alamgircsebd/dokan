@@ -189,7 +189,7 @@ function dokan_seller_sales_statement() {
  *
  * @return obj
  */
-function dokan_get_order_report_data( $args = [], $start_date, $end_date, $current_user = false ) {
+function dokan_get_order_report_data( $args, $start_date, $end_date, $current_user = false ) {
     global $wpdb;
 
     if ( ! $current_user ) {

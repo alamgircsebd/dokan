@@ -98,6 +98,9 @@ class Module {
 
         $settings = get_option( 'woocommerce_dokan-moip-connect_settings' );
 
+        if ( empty( $settings ) ) {
+            return;
+        }
         $key        = $settings['testmode'] === 'no' ? $settings['production_key'] : $settings['test_key'];
         $token      = $settings['testmode'] === 'no' ? $settings['production_token'] : $settings['test_token'];
         $public_key = $settings['testmode'] === 'no' ? $settings['production_public_key'] : $settings['test_public_key'];

@@ -42,6 +42,10 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
      */
     public function __construct() {
         $this->settings = get_option('woocommerce_dokan-moip-connect_settings');
+
+        if ( empty( $this->settings ) ) {
+            return;
+        }
         $this->key      = $this->settings['testmode'] == 'no' ? $this->settings['production_key'] : $this->settings['test_key'];
         $this->token    = $this->settings['testmode'] == 'no' ? $this->settings['production_token'] : $this->settings['test_token'];
         $this->base_url = $this->settings['testmode'] == 'no' ? 'https://api.moip.com.br/assinaturas/v1' : 'https://sandbox.moip.com.br/assinaturas/v1';
