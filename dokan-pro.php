@@ -39,7 +39,7 @@ class Dokan_Pro {
     public $version = '3.2.0';
 
     /**
-     * Databse version key
+     * Database version key
      *
      * @since 3.0.0
      *
@@ -111,6 +111,13 @@ class Dokan_Pro {
         trigger_error( sprintf( 'Undefined property: %s', self::class . '::$' . $prop ) );
     }
 
+    /**
+     * Magic isset to check if it's exist
+     *
+     * @param $prop
+     *
+     * @return bool
+     */
     public function __isset( $prop ) {
         if ( array_key_exists( $prop, $this->container ) ) {
             return true;
@@ -142,7 +149,7 @@ class Dokan_Pro {
     /**
      * Get Dokan db version key
      *
-     * @since DOKAN_LITE_SINCE
+     * @since 2.8.0
      *
      * @return string
      */

@@ -67,9 +67,9 @@ class Shortcode {
                             if ( $subscription->is_trial() ) {
                                 $trial_title = $subscription->get_trial_range() . ' ' . $subscription->get_trial_period_types();
 
-                                printf( __( 'Your are using <span>%s (%s trial)</span> package.', 'dokan' ), $subscription->get_package_title(), $trial_title  );
+                                printf( __( 'You are using <span>%s (%s trial)</span> package.', 'dokan' ), $subscription->get_package_title(), $trial_title  );
                             } else {
-                                printf( __( 'Your are using <span>%s</span> package.', 'dokan' ), $subscription->get_package_title() );
+                                printf( __( 'You are using <span>%s</span> package.', 'dokan' ), $subscription->get_package_title() );
                             }
                         ?>
                     </p>
