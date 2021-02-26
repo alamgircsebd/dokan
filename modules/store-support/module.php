@@ -1480,6 +1480,7 @@ class Module {
         $support_text           = isset( $profile_info['support_btn_name'] ) ? $profile_info['support_btn_name'] : '';
         $enable_support         = isset( $profile_info['show_support_btn'] ) ? $profile_info['show_support_btn'] : 'yes';
         $enable_support_product = isset( $profile_info['show_support_btn_product'] ) ? $profile_info['show_support_btn_product'] : 'yes';
+        $store_support_product_page = dokan_get_option( 'store_support_product_page', 'dokan_store_support_setting', 'dont_show' );
         ?>
             <div class="dokan-form-group">
                 <label class="dokan-w3 dokan-control-label"><?php esc_html_e( 'Enable Support', 'dokan' ); ?></label>
@@ -1491,7 +1492,7 @@ class Module {
                         </label>
                         <label>
                             <input type="hidden" name="support_checkbox_product" value="no">
-                            <input type="checkbox" id="support_checkbox_product" name="support_checkbox_product" value="yes" <?php checked( $enable_support_product, 'yes' ); ?>> <?php esc_html_e( 'Show support button in single product', 'dokan' ); ?>
+                            <input type="checkbox" id="support_checkbox_product" name="support_checkbox_product" value="yes" <?php checked( $enable_support_product, 'yes' ); ?> <?php echo $store_support_product_page === 'dont_show' ? 'disabled="disabled"' : ''; ?>  > <?php esc_html_e( 'Show support button in single product', 'dokan' ); ?>
                         </label>
                     </div>
                 </div>
