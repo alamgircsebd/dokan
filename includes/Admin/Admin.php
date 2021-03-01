@@ -199,7 +199,7 @@ class Admin {
             'options' => array(
                 'publish' => __( 'Published', 'dokan' ),
                 'pending' => __( 'Pending Review', 'dokan' ),
-            )
+            ),
         );
 
         $settings_fields['vendor_duplicate_product'] = array(
@@ -235,7 +235,7 @@ class Admin {
             'options' => array(
                 'single'   => __( 'Single', 'dokan' ),
                 'multiple' => __( 'Multiple', 'dokan' ),
-            )
+            ),
         );
 
         $settings_fields['product_vendors_can_create_tags'] = array(
@@ -251,8 +251,14 @@ class Admin {
             'label'   => __( 'Discount Editing', 'dokan' ),
             'desc'    => __( 'Vendor can add order and product discount', 'dokan' ),
             'type'    => 'multicheck',
-            'default' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) ),
-            'options' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) ),
+            'default' => array(
+                'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ),
+                'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ),
+            ),
+            'options' => array(
+                'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ),
+                'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ),
+            ),
         );
 
         $settings_fields['hide_customer_info'] = array(
@@ -284,11 +290,13 @@ class Admin {
      * @return array
      */
     public function admin_settings_rearrange_map( $map ) {
-        return array_merge( $map, array(
-            'seller_review_manage_dokan_general' => array( 'seller_review_manage', 'dokan_selling' ),
-            'store_banner_width_dokan_general'   => array( 'store_banner_width', 'dokan_appearance' ),
-            'store_banner_height_dokan_general'  => array( 'store_banner_height', 'dokan_appearance' ),
-        ) );
+        return array_merge(
+            $map, array(
+                'seller_review_manage_dokan_general' => array( 'seller_review_manage', 'dokan_selling' ),
+                'store_banner_width_dokan_general'   => array( 'store_banner_width', 'dokan_appearance' ),
+                'store_banner_height_dokan_general'  => array( 'store_banner_height', 'dokan_appearance' ),
+            )
+        );
     }
 
     /**
@@ -300,7 +308,7 @@ class Admin {
      *
      * @return array
      */
-    public function load_settings_sections_fields( $settings_fields , $dokan_settings ) {
+    public function load_settings_sections_fields( $settings_fields, $dokan_settings ) {
         $appearence_settings = array(
             'store_banner_width' => array(
                 'name'    => 'store_banner_width',
@@ -329,8 +337,16 @@ class Admin {
                 'label'   => __( 'Order Status for Withdraw', 'dokan' ),
                 'desc'    => __( 'Order status for which vendor can make a withdraw request.', 'dokan' ),
                 'type'    => 'multicheck',
-                'default' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) ),
-                'options' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) ),
+                'default' => array(
+                    'wc-completed' => __( 'Completed', 'dokan' ),
+                    'wc-processing' => __( 'Processing', 'dokan' ),
+                    'wc-on-hold' => __( 'On-hold', 'dokan' ),
+                ),
+                'options' => array(
+                    'wc-completed' => __( 'Completed', 'dokan' ),
+                    'wc-processing' => __( 'Processing', 'dokan' ),
+                    'wc-on-hold' => __( 'On-hold', 'dokan' ),
+                ),
             ),
             'withdraw_date_limit'   => array(
                 'name'    => 'withdraw_date_limit',
@@ -415,7 +431,7 @@ class Admin {
      *
      * @return void
      */
-    function common_scripts() {
+    public function common_scripts() {
         wp_enqueue_style( 'jquery-ui' );
         wp_enqueue_style( 'dokan-select2-css' );
 
@@ -479,7 +495,7 @@ class Admin {
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         if ( dokan_is_store_categories_feature_on() ) {
@@ -515,7 +531,7 @@ class Admin {
      *
      * @return void
      */
-    function whats_new_page() {
+    public function whats_new_page() {
         include dirname( __FILE__ ) . '/Views/whats-new.php';
     }
 
@@ -526,8 +542,7 @@ class Admin {
      *
      * @return void
      */
-    function create_default_pages() {
-
+    public function create_default_pages() {
         if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'create_pages' ) {
             return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
         }
@@ -558,19 +573,20 @@ class Admin {
             ),
         );
 
-        $dokan_pages = array() ;
+        $dokan_pages = array();
 
         if ( ! $page_created ) {
-
             foreach ( $pages as $page ) {
-                $page_id = wp_insert_post( array(
-                    'post_title'     => $page['post_title'],
-                    'post_name'      => $page['slug'],
-                    'post_content'   => $page['content'],
-                    'post_status'    => 'publish',
-                    'post_type'      => 'page',
-                    'comment_status' => 'closed',
-                        ) );
+                $page_id = wp_insert_post(
+                    array(
+                        'post_title'     => $page['post_title'],
+                        'post_name'      => $page['slug'],
+                        'post_content'   => $page['content'],
+                        'post_status'    => 'publish',
+                        'post_type'      => 'page',
+                        'comment_status' => 'closed',
+                    )
+                );
                 $dokan_pages[ $page['page_id'] ] = $page_id;
             }
 
@@ -578,16 +594,18 @@ class Admin {
             flush_rewrite_rules();
         } else {
             foreach ( $pages as $page ) {
-                if ( ! $this->dokan_page_exist( $page['slug'] ) ) {
-                    $page_id = wp_insert_post( array(
-                        'post_title'     => $page['post_title'],
-                        'post_name'      => $page['slug'],
-                        'post_content'   => $page['content'],
-                        'post_status'    => 'publish',
-                        'post_type'      => 'page',
-                        'comment_status' => 'closed',
-                            ) );
-                    $dokan_pages[ $page['page_id'] ] = $page_id ;
+                if ( ! $this->dokan_page_exist( $page['slug'] ) && ! $this->dokan_is_post_slug_exists( $page['slug'] ) ) {
+                    $page_id = wp_insert_post(
+                        array(
+                            'post_title'     => $page['post_title'],
+                            'post_name'      => $page['slug'],
+                            'post_content'   => $page['content'],
+                            'post_status'    => 'publish',
+                            'post_type'      => 'page',
+                            'comment_status' => 'closed',
+                        )
+                    );
+                    $dokan_pages[ $page['page_id'] ] = $page_id;
                     update_option( 'dokan_pages', $dokan_pages );
                 }
             }
@@ -596,9 +614,11 @@ class Admin {
         }
 
         update_option( 'dokan_pages_created', 1 );
-        wp_send_json_success( array(
-            'message' => __( 'All the default pages has been created!', 'dokan' )
-        ), 201 );
+        wp_send_json_success(
+            array(
+                'message' => __( 'All the default pages has been created!', 'dokan' ),
+            ), 201
+        );
         exit;
     }
 
@@ -611,7 +631,7 @@ class Admin {
      *
      * @return boolean
      */
-    function dokan_page_exist( $slug ) {
+    public function dokan_page_exist( $slug ) {
         if ( ! $slug ) {
             return false;
         }
@@ -624,7 +644,7 @@ class Admin {
 
         $page_list = get_option( 'dokan_pages', '' );
         $slug      = str_replace( '-', '_', $slug );
-        $page      = isset( $page_list[$slug] ) ? get_post( $page_list[$slug] ) : null;
+        $page      = isset( $page_list[ $slug ] ) ? get_post( $page_list[ $slug ] ) : null;
 
         if ( $page === null ) {
             return false;
@@ -633,30 +653,44 @@ class Admin {
         }
     }
 
-    function render_pro_admin_toolbar( $wp_admin_bar ) {
-
+    /**
+     * Render pro admin toolbar
+     *
+     * @since 1.0
+     *
+     * @param obj $wp_admin_bar
+     *
+     * @return void
+     */
+    public function render_pro_admin_toolbar( $wp_admin_bar ) {
         $wp_admin_bar->remove_menu( 'dokan-pro-features' );
 
-        $wp_admin_bar->add_menu( array(
-            'id'     => 'dokan-sellers',
-            'parent' => 'dokan',
-            'title'  => __( 'Vendors', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan#/vendors' ),
-        ) );
+        $wp_admin_bar->add_menu(
+            array(
+                'id'     => 'dokan-sellers',
+                'parent' => 'dokan',
+                'title'  => __( 'Vendors', 'dokan' ),
+                'href'   => admin_url( 'admin.php?page=dokan#/vendors' ),
+            )
+        );
 
-        $wp_admin_bar->add_menu( array(
-            'id'     => 'dokan-reports',
-            'parent' => 'dokan',
-            'title'  => __( 'Reports', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan#/reports' ),
-        ) );
+        $wp_admin_bar->add_menu(
+            array(
+                'id'     => 'dokan-reports',
+                'parent' => 'dokan',
+                'title'  => __( 'Reports', 'dokan' ),
+                'href'   => admin_url( 'admin.php?page=dokan#/reports' ),
+            )
+        );
 
-        $wp_admin_bar->add_menu( array(
-            'id'     => 'dokan-settings',
-            'parent' => 'dokan',
-            'title'  => __( 'Settings', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan#/settings' ),
-        ) );
+        $wp_admin_bar->add_menu(
+            array(
+                'id'     => 'dokan-settings',
+                'parent' => 'dokan',
+                'title'  => __( 'Settings', 'dokan' ),
+                'href'   => admin_url( 'admin.php?page=dokan#/settings' ),
+            )
+        );
     }
 
     /**
@@ -666,8 +700,7 @@ class Admin {
      *
      * @global type $wpdb
      */
-    function dokan_export_all_logs() {
-
+    public function dokan_export_all_logs() {
         if ( isset( $_GET['action'] ) && $_GET['action'] == 'dokan-export' ) {
             global $wpdb;
             $seller_where = '';
@@ -683,7 +716,7 @@ class Admin {
             $all_logs = $wpdb->get_results( $sql );
 
             $all_logs = json_decode( json_encode( $all_logs ), true );
-            $ob = fopen( "php://output", 'w' );
+            $ob = fopen( 'php://output', 'w' );
 
             $headers = array(
                 'order_id'     => __( 'Order', 'dokan' ),
@@ -694,8 +727,8 @@ class Admin {
                 'commission'   => __( 'Commission', 'dokan' ),
             );
 
-            $filename = "Report-" . date( 'Y-m-d', time() );
-            header( "Content-Type: application/csv; charset=" . get_option( 'blog_charset' ) );
+            $filename = 'Report-' . date( 'Y-m-d', time() );
+            header( 'Content-Type: application/csv; charset=' . get_option( 'blog_charset' ) );
             header( "Content-Disposition: attachment; filename=$filename.csv" );
 
             fputcsv( $ob, array_values( $headers ) );
@@ -704,7 +737,7 @@ class Admin {
                 unset( $a['id'] );
                 unset( $a['post_date'] );
 
-                $a['seller_id'] = dokan()->vendor->get($a['seller_id'])->get_name();
+                $a['seller_id'] = dokan()->vendor->get( $a['seller_id'] )->get_name();
                 $a['order_status'] = ucwords( substr( $a['order_status'], 3 ) );
                 $a['commission'] = $a['order_total'] - $a['net_amount'];
 
@@ -724,7 +757,6 @@ class Admin {
      */
 
     public function show_whats_new_notice() {
-
         if ( ! current_user_can( 'manage_options' ) ) {
             return;
         }
@@ -751,15 +783,22 @@ class Admin {
                     });
                 });
             </script>
-       <?php
+        <?php
     }
 
+    /**
+     * Dismiss new notice
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
     public function dismiss_new_notice() {
         if ( ! current_user_can( 'manage_options' ) ) {
             return;
         }
 
-        if ( !empty( $_POST['dokan_promotion_dismissed'] ) ) {
+        if ( ! empty( $_POST['dokan_promotion_dismissed'] ) ) {
             $versions = get_option( 'dokan_whats_new_versions', array() );
 
             if ( ! in_array( DOKAN_PRO_PLUGIN_VERSION, $versions ) ) {
@@ -778,7 +817,6 @@ class Admin {
      * @return void
      */
     public function show_chirstmas_notice() {
-
         if ( ! current_user_can( 'manage_options' ) ) {
             return;
         }
@@ -859,7 +897,6 @@ class Admin {
         }
 
         if ( isset( $_REQUEST['action2'] ) && $_REQUEST['action2'] == 'delete' ) {
-
             $users = $_REQUEST['users'];
 
             if ( $users ) {
@@ -869,7 +906,7 @@ class Admin {
             }
         }
 
-        $redirect_url = add_query_arg( array( 'page' => 'dokan-sellers'), admin_url( 'admin.php' ) );
+        $redirect_url = add_query_arg( array( 'page' => 'dokan-sellers' ), admin_url( 'admin.php' ) );
         wp_redirect( $redirect_url );
         exit();
     }
@@ -918,7 +955,7 @@ class Admin {
         $admin_additional_fee = get_user_meta( $user->ID, 'dokan_admin_additional_fee', true );
         ?>
         <span class="additional-fee dokan-hide">
-            <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
+            <?php echo esc_html( '% &nbsp;&nbsp; +' ); ?>
             <input type="text" class="wc_input_price small-text" name="dokan_admin_additional_fee" value="<?php echo esc_attr( wc_format_localized_price( $admin_additional_fee ) ); ?>">
         </span>
 
@@ -1016,11 +1053,39 @@ class Admin {
             return;
         }
         $get_post = wp_unslash( $_POST ); // phpcs:ignore
-        
-        $days_limit = isset( $get_post['withdraw_date_limit'] ) && trim($get_post['withdraw_date_limit']) !== '' ? absint( $get_post['withdraw_date_limit'] ) : '';
+
+        $days_limit = isset( $get_post['withdraw_date_limit'] ) && trim( $get_post['withdraw_date_limit'] ) !== '' ? absint( $get_post['withdraw_date_limit'] ) : '';
 
         update_user_meta( $user_id, 'withdraw_date_limit', $days_limit );
     }
-}
 
+    /**
+     * Check post slug exits for dokan pages
+     *
+     * @since 1.0
+     *
+     * @param string $post_slug
+     *
+     * @return boolean
+     */
+    public function dokan_is_post_slug_exists( $post_slug ) {
+        if ( ! $post_slug ) {
+            return false;
+        }
+
+        global $wpdb;
+
+        $results = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT `post_name` FROM {$wpdb->prefix}posts WHERE `post_name` = %s", $post_slug
+            ), ARRAY_A
+        );
+
+        if ( $results ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 // End of WeDevs\DokanPro\Admin\Admin class;
