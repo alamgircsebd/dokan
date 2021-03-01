@@ -46,6 +46,9 @@ class Admin {
 
         add_action( 'dokan_admin_setup_wizard_after_admin_commission', [ $this, 'add_additional_fee_admin_setup_wizard' ] );
         add_action( 'dokan_admin_setup_wizard_save_step_setup_selling', [ $this, 'setup_wizard_save_step_setup_selling' ], 35, 2 );
+
+        add_action( 'dokan_seller_meta_fields', array( $this, 'add_admin_user_withdraw_threshold_options' ), 9 );
+        add_action( 'dokan_process_seller_meta_fields', array( $this, 'save_admin_user_withdraw_threshold_option' ) );
     }
 
     /**
@@ -966,6 +969,57 @@ class Admin {
             update_user_meta( $user->ID, 'dokan_admin_additional_fee', '' );
             $errors->add( 'required', sprintf( '<strong>%1$s:</strong> %2$s', __( 'Error', 'dokan' ), __( 'Admin flat commission is required.', 'dokan' ) ) );
         }
+    }
+
+    /**
+     * Show withdraw threshold action in user profile
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param object $user
+     */
+    public function add_admin_user_withdraw_threshold_options( $user ) {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return;
+        }
+
+        if ( ! user_can( $user, 'dokandar' ) ) {
+            return;
+        }
+
+        $withdraw_date_limit = get_user_meta( $user->ID, 'withdraw_date_limit', true );
+        ?>
+        <tr>
+            <th><?php esc_html_e( 'Withdraw Threshold', 'dokan' ); ?></th>
+            <td>
+                <label for="withdraw_date_limit">
+                    <input type="number" name="withdraw_date_limit" min="0" id="withdraw_date_limit" value="<?php echo esc_attr( $withdraw_date_limit ); ?>" />
+                </label>
+
+                <p class="description"><?php esc_html_e( 'If set, it will override global withdraw threshold days for this vendor', 'dokan' ); ?></p>
+            </td>
+        </tr>
+        <?php
+    }
+
+    /**
+     * Save admin user profile withdraw threshold options
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @param  integer $user_id
+     *
+     * @return void
+     */
+    public function save_admin_user_withdraw_threshold_option( $user_id ) {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return;
+        }
+        $get_post = wp_unslash( $_POST ); // phpcs:ignore
+        
+        $days_limit = isset( $get_post['withdraw_date_limit'] ) && trim($get_post['withdraw_date_limit']) !== '' ? absint( $get_post['withdraw_date_limit'] ) : '';
+
+        update_user_meta( $user_id, 'withdraw_date_limit', $days_limit );
     }
 }
 
