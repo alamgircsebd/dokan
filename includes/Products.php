@@ -839,7 +839,7 @@ class Products {
         $options = $this->get_inline_edit_options();
 
         $wp_cats = get_the_terms( $post, 'product_cat' );
-        $cats    = wp_list_pluck( $wp_cats, 'term_id' );
+        $cats    = ! empty( $wp_cats ) && ! is_wp_error( $wp_cats ) ? wp_list_pluck( $wp_cats, 'term_id' ) : '';
 
         if ( $options['using_single_category_style'] && ! empty( $cats ) ) {
             $cats = array_pop( $cats );
