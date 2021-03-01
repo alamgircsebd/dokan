@@ -120,7 +120,7 @@ class Module {
                 'default' => 'above_tab',
                 'options' => array(
                     'above_tab'  => __( 'Above Product Tab', 'dokan' ),
-                    'inside_tab' => __( 'Inside Product Tab', 'dokan' ),
+                    'inside_tab' => __( 'Inside Vendor Info Product Tab', 'dokan' ),
                     'dont_show'  => __( 'Don\'t Show', 'dokan' ),
                 ),
             ),
@@ -299,7 +299,7 @@ class Module {
 
         $get_support_default_text = dokan_get_option( 'support_button_label', 'dokan_store_support_setting', __( 'Get Support', 'dokan' ) );
 
-        $button['text']  = ! empty( $store_info['support_btn_name'] ) ? $store_info['support_btn_name'] : $get_support_default_text; 
+        $button['text'] = ! empty( $store_info['support_btn_name'] ) ? $store_info['support_btn_name'] : $get_support_default_text;
 
         return $button;
     }
@@ -950,10 +950,9 @@ class Module {
                 <div class="dokan-support-single-title">
                     <h1><?php the_title(); ?></h1>
                     <?php
-                        $Order_id = get_post_meta( get_the_ID(), 'order_id', true );
+                    $Order_id = get_post_meta( get_the_ID(), 'order_id', true );
 
-                    if ( $Order_id ) {
-                        $order          = wc_get_order( $Order_id );
+                    if ( $Order_id && ( $order = wc_get_order( $Order_id ) ) ) {
                         $ticket_ref_url = $order->get_view_order_url();
 
                         if ( $is_seller_dashboard ) {
