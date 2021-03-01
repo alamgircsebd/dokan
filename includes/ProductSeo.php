@@ -2,6 +2,9 @@
 
 namespace WeDevs\DokanPro;
 
+use WPSEO_Options;
+use WPSEO_Option_Titles;
+
 /**
  * Dokan Pro Product SEO class
  *
@@ -20,7 +23,6 @@ class ProductSeo {
      * @uses filters
      */
     public function __construct() {
-        
         $this->init_hooks();
     }
 
@@ -30,7 +32,6 @@ class ProductSeo {
      * @return void
      */
     public function init_hooks() {
-
         if ( ! class_exists( 'WPSEO_Frontend' ) ) {
             return;
         }
@@ -103,13 +104,46 @@ class ProductSeo {
         $seo_title    = get_post_meta( $post_id, '_yoast_wpseo_title', true );
         $seo_metadesc = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
 
-        dokan_get_template_part( 'products/product-seo-content', '', array(
-            'pro'       => true,
-            'post'      => $post,
-            'post_id'   => $post_id,
-            'seo_title' => $this->convert_yoast_to_dokan_format( $seo_title ),
-            'seo_metadesc' => $this->convert_yoast_to_dokan_format( $seo_metadesc ),
-        ) );
+        dokan_get_template_part(
+            'products/product-seo-content', '', array(
+                'pro'          => true,
+                'post'         => $post,
+                'post_id'      => $post_id,
+                'title_sep'    => $this->get_title_separator(),
+                'seo_title'    => $this->convert_yoast_to_dokan_format( $seo_title ),
+                'seo_metadesc' => $this->convert_yoast_to_dokan_format( $seo_metadesc ),
+            )
+        );
+    }
+
+    /**
+     * Get title separator
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return string
+     */
+    public function get_title_separator() {
+        if ( ! class_exists( 'WPSEO_Options' ) || ! class_exists( 'WPSEO_Option_Titles' ) ) {
+            return '-';
+        }
+
+        // Get the titles option and the separator options.
+        $separator         = WPSEO_Options::get( 'separator' );
+        $seperator_options = WPSEO_Option_Titles::get_instance()->get_separator_options();
+
+        // This should always be set, but just to be sure.
+        if ( isset( $seperator_options[ $separator ] ) ) {
+            // Set the new replacement.
+            $replacement = $seperator_options[ $separator ];
+        }
+
+        /**
+         * Filter: 'wpseo_replacements_filter_sep' - Allow customization of the separator character(s).
+         *
+         * @api string $replacement The current separator.
+         */
+        return apply_filters( 'wpseo_replacements_filter_sep', $replacement );
     }
 
     /**
@@ -124,18 +158,20 @@ class ProductSeo {
             return;
         }
 
-        if ( isset( $_POST['_yoast_wpseo_focuskw'] ) ) {
-            update_post_meta( $post_id, '_yoast_wpseo_focuskw', $_POST['_yoast_wpseo_focuskw'] );
-            update_post_meta( $post_id, '_yoast_wpseo_focuskw_text_input', $_POST['_yoast_wpseo_focuskw'] );
+        $get_postdata = wp_unslash( $_POST ); // phpcs:ignore
+
+        if ( isset( $get_postdata['_yoast_wpseo_focuskw'] ) ) {
+            update_post_meta( $post_id, '_yoast_wpseo_focuskw', $get_postdata['_yoast_wpseo_focuskw'] );
+            update_post_meta( $post_id, '_yoast_wpseo_focuskw_text_input', $get_postdata['_yoast_wpseo_focuskw'] );
         }
 
-        if ( isset( $_POST['_yoast_wpseo_title'] ) ) {
-            $seo_title = $this->convert_dokan_to_yoast_format( $_POST['_yoast_wpseo_title'] );
+        if ( isset( $get_postdata['_yoast_wpseo_title'] ) ) {
+            $seo_title = $this->convert_dokan_to_yoast_format( sanitize_text_field( $get_postdata['_yoast_wpseo_title'] ) );
             update_post_meta( $post_id, '_yoast_wpseo_title', $seo_title );
         }
 
-        if ( isset( $_POST['_yoast_wpseo_metadesc'] ) ) {
-            $seo_metadesc = $this->convert_dokan_to_yoast_format( $_POST['_yoast_wpseo_metadesc'] );
+        if ( isset( $get_postdata['_yoast_wpseo_metadesc'] ) ) {
+            $seo_metadesc = $this->convert_dokan_to_yoast_format( sanitize_text_field( $get_postdata['_yoast_wpseo_metadesc'] ) );
             update_post_meta( $post_id, '_yoast_wpseo_metadesc', $seo_metadesc );
         }
     }
