@@ -197,6 +197,9 @@ class Dokan_Geolocation_Vendor_View {
      * @return void
      */
     public static function load_store_lists_filter() {
+        if ( 'top' !== self::$map_location ) {
+            return;
+        }
         $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
 
         remove_action( 'dokan_before_seller_listing_loop', array( self::class, 'before_seller_listing_loop' ) );
