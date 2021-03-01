@@ -6,7 +6,7 @@ function dokan_save_variations( $post_id ) {
     $attributes = (array) maybe_unserialize( get_post_meta( $post_id, '_product_attributes', true ) );
     update_post_meta( $post_id, '_create_variation', 'yes' );
 
-    $_post_data = $_POST;//phpcs:ignore WordPress.Security.NonceVerification.Missing
+    $_post_data = wp_unslash( $_POST ); //phpcs:ignore WordPress.Security.NonceVerification.Missing
 
     if ( isset( $_post_data['variable_sku'] ) ) {
         $variable_post_id               = $_post_data['variable_post_id'];
@@ -141,8 +141,12 @@ function dokan_save_variations( $post_id ) {
                 update_post_meta( $variation_id, '_backorders', wc_clean( $variable_backorders[ $i ] ) );
                 wc_update_product_stock( $variation_id, wc_stock_amount( $variable_stock[ $i ] ) );
             } else {
+                $parent_manage_stock = ! empty( $_post_data['_manage_stock'] ) ? 'yes' : 'no';
+                $parent_stock_amount = isset( $_post_data['_stock'] ) ? wc_clean( $_post_data['_stock'] ) : '';
+                $parent_stock_amount = 'yes' === $parent_manage_stock ? wc_stock_amount( wp_unslash( $parent_stock_amount ) ) : '';
+
                 delete_post_meta( $variation_id, '_backorders' );
-                wc_update_product_stock( $variation_id, '' );
+                wc_update_product_stock( $variation_id, $parent_stock_amount );
             }
 
             // Only update stock status to user setting if changed by the user, but do so before looking at stock levels at variation level
