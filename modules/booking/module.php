@@ -538,11 +538,17 @@ class Module {
 
         $product->set_props( $posted_props );
 
-        $product->save();
-
         $_virtual   = isset( $post_data['_virtual'] ) ? wc_clean( $post_data['_virtual'] ) : '';
-        $is_virtual = 'on' === $_virtual ? 'yes' : 'no';
-        update_post_meta( $post_id, '_virtual', $is_virtual );
+
+        // Saving meta data
+        $metadata = array(
+            '_virtual' => 'on' === $_virtual ? 'yes' : 'no',
+            '_sku'     => isset( $post_data['_sku'] ) ? wc_clean( $post_data['_sku'] ) : '',
+        );
+
+        $product->set_meta_data( $metadata );
+
+        $product->save();
 
         do_action( 'dokan_booking_after_product_data_saved' );
     }
