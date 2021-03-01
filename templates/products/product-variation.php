@@ -8,7 +8,7 @@
  */
 ?>
 
-<div class="dokan-attribute-variation-options dokan-edit-row dokan-clearfix">
+<div class="dokan-attribute-variation-options dokan-edit-row dokan-clearfix hide_if_external">
     <div class="dokan-section-heading" data-togglehandler="dokan_attribute_variation_options">
         <h2><i class="fa fa-list-alt" aria-hidden="true"></i> <?php _e( 'Attribute', 'dokan' ); ?><span class="show_if_variable show_if_variable-subscription"><?php _e( ' and Variation', 'dokan' ) ?></span></h2>
         <p class="show_if_variable show_if_variable-subscription"><?php _e( 'Manage attributes and variations for this variable product.', 'dokan' ); ?></p>

@@ -1,4 +1,4 @@
-<div class="dokan-rma-options dokan-edit-row dokan-clearfix">
+<div class="dokan-rma-options dokan-edit-row dokan-clearfix hide_if_external">
     <div class="dokan-section-heading" data-togglehandler="dokan_rma_options">
         <h2><i class="fa fa-undo" aria-hidden="true"></i> <?php _e( 'RMA Options', 'dokan' ); ?></h2>
         <p><?php _e( 'Set your return and warranty settings for override global settings', 'dokan' ) ?></p>

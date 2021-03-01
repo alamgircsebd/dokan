@@ -66,7 +66,7 @@
                         </div>
                     <?php } ?>
 
-                    <?php if ( 'simple' === $product_type ) { ?>
+                    <?php if ( 'simple' === $product_type || 'external' === $product_type ) { ?>
                         <div class="dokan-inline-edit-field-row dokan-clearfix">
                             <label class="dokan-w3">
                                 <?php esc_html_e( 'Price', 'dokan' ); ?>

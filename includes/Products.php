@@ -51,6 +51,7 @@ class Products {
         add_filter( 'dokan_product_types', array( $this, 'set_default_product_types' ), 10 );
 
         add_action( 'dokan_after_linked_product_fields', array( $this, 'group_product_content' ), 10, 2 );
+        add_action( 'dokan_product_edit_after_title', array( $this, 'external_product_content' ), 10, 2 );
         add_filter( 'woocommerce_duplicate_product_exclude_meta', array( $this, 'remove_unwanted_meta' ) );
 
         add_filter( 'dokan_localized_args', array( $this, 'dokan_pro_localized_args' ) );
@@ -102,12 +103,12 @@ class Products {
     }
 
     /**
-    * Render product lot dicount options
-    *
-    * @since 2.6
-    *
-    * @return void
-    **/
+     * Render product lot dicount options
+     *
+     * @since 2.6
+     *
+     * @return void
+     */
     public function load_lot_discount_content( $post, $post_id ) {
         $_is_lot_discount       = get_post_meta( $post_id, '_is_lot_discount', true );
         $_lot_discount_quantity = get_post_meta( $post_id, '_lot_discount_quantity', true );
@@ -199,12 +200,12 @@ class Products {
     }
 
     /**
-    * Render linked product content
-    *
-    * @since 2.6.6
-    *
-    * @return void
-    **/
+     * Render linked product content
+     *
+     * @since 2.6.6
+     *
+     * @return void
+     */
     public function load_linked_product_content( $post, $post_id ) {
         $upsells_ids = get_post_meta( $post_id, '_upsell_ids', true );
         $crosssells_ids = get_post_meta( $post_id, '_crosssell_ids', true );
@@ -470,6 +471,12 @@ class Products {
             dokan_save_variations( $post_id );
         }
 
+        // Save external
+        if ( 'external' === $product_type ) {
+            update_post_meta( $post_id, '_product_url', isset( $post_data['_product_url'] ) ? $post_data['_product_url'] : '' );
+            update_post_meta( $post_id, '_button_text', isset( $post_data['_button_text'] ) ? $post_data['_button_text'] : '' );
+        }
+
         if ( 'grouped' === $product_type && version_compare( WC_VERSION, '2.7', '>' ) ) {
             $product = wc_get_product( $post_id );
             $group_product_ids = isset( $post_data['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $post_data['grouped_products'] ) ) : array();
@@ -526,12 +533,12 @@ class Products {
     }
 
     /**
-    * Added duplicate row action
-    *
-    * @since 2.6.3
-    *
-    * @return void
-    **/
+     * Added duplicate row action
+     *
+     * @since 2.6.3
+     *
+     * @return void
+     */
     public function product_row_action( $row_action, $post ) {
         if ( empty( $post->ID ) ) {
             return $row_action;
@@ -561,12 +568,12 @@ class Products {
     }
 
     /**
-    * Handle duplicate product action
-    *
-    * @since 2.6.3
-    *
-    * @return void
-    **/
+     * Handle duplicate product action
+     *
+     * @since 2.6.3
+     *
+     * @return void
+     */
     public function handle_duplicate_product() {
         if ( ! is_user_logged_in() ) {
             return;
@@ -642,12 +649,12 @@ class Products {
     }
 
     /**
-    * Show duplicate success message
-    *
-    * @since 2.6.3
-    *
-    * @return void
-    **/
+     * Show duplicate success message
+     *
+     * @since 2.6.3
+     *
+     * @return void
+     */
     public function display_duplicate_message( $type ) {
         if ( 'product_duplicated' === $type ) {
             dokan_get_template_part(
@@ -709,8 +716,9 @@ class Products {
      */
     public function set_default_product_types( $product_types ) {
         $product_types = array(
-            'simple' => __( 'Simple', 'dokan' ),
+            'simple'   => __( 'Simple', 'dokan' ),
             'variable' => __( 'Variable', 'dokan' ),
+            'external' => __( 'External/Affiliate product', 'dokan' ),
         );
 
         if ( version_compare( WC_VERSION, '2.7', '>' ) ) {
@@ -743,21 +751,41 @@ class Products {
     }
 
     /**
-    * Group product content
-    *
-    * @since 2.6.6
-    *
-    * @return void
-    **/
+     * Group product content
+     *
+     * @since 2.6.6
+     *
+     * @return void
+     */
     public function group_product_content( $post, $post_id ) {
         dokan_get_template_part(
             'products/group-product',
             '',
             array(
-                'pro'            => true,
-                'post'           => $post,
-                'post_id'        => $post_id,
-                'product'        => wc_get_product( $post_id ),
+                'pro'     => true,
+                'post'    => $post,
+                'post_id' => $post_id,
+                'product' => wc_get_product( $post_id ),
+            )
+        );
+    }
+
+    /**
+     * External product content
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function external_product_content( $post, $post_id ) {
+        dokan_get_template_part(
+            'products/external-product',
+            '',
+            array(
+                'pro'     => true,
+                'post'    => $post,
+                'post_id' => $post_id,
+                'product' => wc_get_product( $post_id ),
             )
         );
     }

@@ -1,4 +1,4 @@
-<div class="dokan-wholesale-options dokan-edit-row dokan-clearfix show_if_simple">
+<div class="dokan-wholesale-options dokan-edit-row dokan-clearfix show_if_simple show_if_external">
     <div class="dokan-section-heading" data-togglehandler="dokan_wholesale_options">
         <h2><i class="fa fa-cart-plus" aria-hidden="true"></i> <?php _e( 'Wholesale Options', 'dokan' ); ?></h2>
         <p><?php _e( 'If you want to sell this product as wholesale then set your setting to the right way', 'dokan' ) ?></p>
