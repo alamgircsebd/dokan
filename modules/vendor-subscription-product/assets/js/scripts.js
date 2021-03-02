@@ -6,6 +6,17 @@
             $('#product_type').trigger('change');
         } )
 
+        var regularPrice = $('#_regular_price');
+        var subscriptionPrice = $('#_subscription_price');
+
+        if ( regularPrice.length && subscriptionPrice.length ) {
+            subscriptionPrice.change(function (){
+                var changedPrice = subscriptionPrice.val();
+                regularPrice.val( changedPrice );
+            });
+        }
+
+
         $('body').on('dokan-product-type-change', function(e, select_val, el){
             if ( 'variable-subscription' === select_val ) {
                 $( 'input#_manage_stock' ).change();
