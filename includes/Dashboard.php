@@ -81,13 +81,15 @@ class Dashboard extends DokanDashboard {
         }
 
         $template_notice = dokan_pro()->notice;
-        $query           = $template_notice->get_announcement_by_users( apply_filters( 'dokan_announcement_list_number', 3 ) );
 
         $args = array(
-            'post_type'   => 'dokan_announcement',
-            'post_status' => 'publish',
-            'orderby'     => 'post_date',
-            'order'       => 'DESC',
+            'post_type'      => 'dokan_announcement',
+            'post_status'    => 'publish',
+            'orderby'        => 'post_date',
+            'order'          => 'DESC',
+            'posts_per_page' => apply_filters( 'dokan_dashboard_widget_announcement_list_number', 3 ),
+            'orderby'        => 'post_date',
+            'order'          => 'DESC',
         );
 
         $template_notice->add_query_filter();
@@ -96,12 +98,10 @@ class Dashboard extends DokanDashboard {
 
         $template_notice->remove_query_filter();
 
-        $notices = array_merge( $seller_posts->posts, $query->posts );
-
         dokan_get_template_part(
             'dashboard/announcement-widget', '', array(
 				'pro'              => true,
-				'notices'          => $notices,
+				'notices'          => $seller_posts->posts,
 				'announcement_url' => dokan_get_navigation_url( 'announcement' ),
 			)
         );

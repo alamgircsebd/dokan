@@ -111,38 +111,6 @@ class Notice {
     }
 
     /**
-     * Get Announcement via teble and announcement post type
-     *
-     * @since  2.1
-     *
-     * @param  integer $per_page
-     *
-     * @return object
-     */
-    public function get_announcement_by_users( $per_page = null ) {
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1; //phpcs:ignore
-
-        $args = array(
-            'post_type'      => 'dokan_announcement',
-            'post_status'    => 'publish',
-            'posts_per_page' => ( $per_page ) ? $per_page : $this->perpage,
-            'orderby'        => 'post_date',
-            'order'          => 'DESC',
-            'meta_key'       => '_announcement_type',
-            'meta_value'     => 'selected_seller',
-            'paged'          => $pagenum,
-        );
-
-        $this->add_query_filter();
-
-        $query = new WP_Query( $args );
-
-        $this->remove_query_filter();
-
-        return $query;
-    }
-
-    /**
      * Show announcement template
      *
      * @since  2.1
@@ -150,13 +118,15 @@ class Notice {
      * @return void
      */
     public function show_announcement_template() {
-        $query = $this->get_announcement_by_users();
+        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1; //phpcs:ignore
 
         $args = array(
-            'post_type'   => 'dokan_announcement',
-            'post_status' => 'publish',
-            'orderby'     => 'post_date',
-            'order'       => 'DESC',
+            'post_type'      => 'dokan_announcement',
+            'post_status'    => 'publish',
+            'posts_per_page' => apply_filters( 'dokan_announcement_list_number', $this->perpage ),
+            'orderby'        => 'post_date',
+            'order'          => 'DESC',
+            'paged'          => $pagenum,
         );
 
         $this->add_query_filter();
@@ -165,17 +135,15 @@ class Notice {
 
         $this->remove_query_filter();
 
-        $notices = array_merge( $seller_posts->posts, $query->posts );
-
         dokan_get_template_part(
             'announcement/listing-announcement', '', array(
                 'pro' => true,
-                'notices' => $notices,
+                'notices' => $seller_posts->posts,
             )
         );
 
         wp_reset_postdata();
-        $this->get_pagination( $query );
+        $this->get_pagination( $seller_posts );
     }
 
     /**
@@ -214,7 +182,7 @@ class Notice {
      */
     public function get_pagination( $query ) {
         $pagenum  = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1; //phpcs:ignore
-        $base_url = dokan_get_navigation_url( 'notice' );
+        $base_url = dokan_get_navigation_url( 'announcement' );
 
         if ( $query->max_num_pages > 1 ) {
             echo '<div class="pagination-wrap">';
