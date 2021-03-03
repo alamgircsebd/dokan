@@ -356,6 +356,11 @@ function dokan_geographic_analytics() {
 
     $results = $reports->dokan_get_vendor_analytics( $start_date, $end_date, $metrics, $dimensions, $sort, false, 20 );
 
+    if ( is_wp_error( $results ) ) {
+        echo esc_html( $results->get_error_message() );
+        return;
+    }
+
     if ( empty( $results->totalsForAllResults ) ) {
         echo __( 'There is no analytics found for your store.', 'dokan' );
         return;
@@ -381,7 +386,7 @@ function dokan_geographic_analytics() {
     $args = array(
         'results' => $results,
         'headers' => $headers,
-        'rows'    => $results->rows,
+        'rows'    => ( isset( $results->rows ) && ! empty( $results->rows ) ) ? $results->rows : array(),
     );
 
     wp_enqueue_script( 'echarts-js', DOKAN_VENDOR_ANALYTICS_ASSETS . '/js/echarts.min.js', array(), false, true );
