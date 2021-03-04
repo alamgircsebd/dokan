@@ -55,6 +55,9 @@ class Products {
         add_filter( 'woocommerce_duplicate_product_exclude_meta', array( $this, 'remove_unwanted_meta' ) );
 
         add_filter( 'dokan_localized_args', array( $this, 'dokan_pro_localized_args' ) );
+
+        //Prevent Duplicate SKU for multiple save from various vendor
+        add_action( 'woocommerce_product_duplicate_before_save', [ $this, 'prevent_duplicate_sku' ], 10, 2 );
     }
 
     /**
@@ -1056,5 +1059,50 @@ class Products {
         );
 
         wp_send_json_success( $message );
+    }
+
+    /**
+     * Prevent duplicate sku when multiple vendor add same product
+     *
+     * @param $duplicate
+     *
+     * @return void
+     */
+    public function prevent_duplicate_sku( $duplicate, $product ) {
+        $sku        = $duplicate->get_sku( 'edit' );
+        $unique_sku = $this->get_unique_sku( $sku );
+        $duplicate->set_sku( $unique_sku );
+    }
+
+    /**
+     * Check recursively if sku exist
+     *
+     * @param $sku
+     *
+     * @return mixed
+     */
+    public function get_unique_sku( $sku ) {
+        $unique_sku = $sku;
+
+        // If SKU is already empty, we don't need to create a new SKU
+        if ( empty( $unique_sku ) ) {
+            return  $unique_sku;
+        }
+
+        global $wpdb;
+        $result = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}postmeta WHERE meta_key='_sku' AND meta_value =%s ", $sku ) );
+        if ( $result >= 1 ) {
+            if ( strpos( $sku, '-' ) !== false ) {
+                $arr                      = explode( '-', $sku );
+                $arr[ count( $arr ) - 1 ] = $arr[ count( $arr ) - 1 ] + 1;
+                $unique_sku               = implode( '-', $arr );
+            } else {
+                $unique_sku = $sku . '-1';
+            }
+
+            return $this->get_unique_sku( $unique_sku );
+        } else {
+            return $unique_sku;
+        }
     }
 }

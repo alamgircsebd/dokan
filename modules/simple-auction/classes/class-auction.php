@@ -433,11 +433,19 @@ class Dokan_Template_Auction {
             wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );
 
             // Update SKU
-            $sku = trim( $_POST['_sku'] ) !== '' ? sanitize_text_field( wp_unslash( $_POST['_sku'] ) ) : '';
-            if ( ! empty( $sku ) && ! wc_product_has_unique_sku( $post_id, $sku ) ) {
-                $sku = '';
+            $old_sku = get_post_meta( $post_id, '_sku', true );
+            delete_post_meta( $post_id, '_sku' );
+
+            $product = wc_get_product( $post_id );
+
+            $sku = trim( wp_unslash( $_POST['_sku'] ) ) !== '' ? sanitize_text_field( wp_unslash( $_POST['_sku'] ) ) : '';
+            try {
+                $product->set_sku( $sku );
+            } catch ( \WC_Data_Exception $e ) {
+                $product->set_sku( $old_sku );
             }
-            update_post_meta( $post_id, '_sku', $sku );
+
+            $product->save();
 
             do_action( 'dokan_update_auction_product', $post_id, wp_unslash( $_POST ) );
 
