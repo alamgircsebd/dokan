@@ -420,7 +420,7 @@ class Dokan_Template_Auction {
             // Update auction date
             $auction_dates_to   = isset( $_POST['_auction_dates_to'] ) ? sanitize_text_field( wp_unslash( $_POST['_auction_dates_to'] ) ) : '';
             $auction_dates_from = isset( $_POST['_auction_dates_from'] ) ? sanitize_text_field( wp_unslash( $_POST['_auction_dates_from'] ) ) : '';
-            
+
             update_post_meta( $post_id, '_auction_dates_to', $auction_dates_to );
             update_post_meta( $post_id, '_auction_dates_from', $auction_dates_from );
 
@@ -433,9 +433,11 @@ class Dokan_Template_Auction {
             wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );
 
             // Update SKU
-            if ( isset( $_POST['_sku'] ) ) {
-                update_post_meta( $post_id, '_sku', ( '' === $_POST['_sku'] ) ? '' : sanitize_text_field( wp_unslash( $_POST['_sku'] ) )  );
+            $sku = trim( $_POST['_sku'] ) !== '' ? sanitize_text_field( wp_unslash( $_POST['_sku'] ) ) : '';
+            if ( ! empty( $sku ) && ! wc_product_has_unique_sku( $post_id, $sku ) ) {
+                $sku = '';
             }
+            update_post_meta( $post_id, '_sku', $sku );
 
             do_action( 'dokan_update_auction_product', $post_id, wp_unslash( $_POST ) );
 

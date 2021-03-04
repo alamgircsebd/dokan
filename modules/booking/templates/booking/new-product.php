@@ -36,6 +36,12 @@ $template_args = array(
     'is_booking' => true,
     'post_id'    => $post_id
 );
+
+// Setting errors for template
+if ( ! empty( $_GET['errors'] ) ) {
+    dokan()->dashboard->templates->products->set_errors( array_map( 'sanitize_text_field', wp_unslash( $_GET['errors'] ) ) );
+}
+
 ?>
 
 <header class="dokan-dashboard-header dokan-clearfix">
