@@ -98,15 +98,15 @@
                                         <?php echo sprintf( '<a href="%s">%s</a>', esc_url( $edit_url ), $staff->display_name ); ?>
                                         <div class="row-actions">
 
-                                            <?php if ( current_user_can( 'seller' ) ): ?>
+                                            <?php if ( current_user_can( 'dokandar' ) ): ?>
                                                 <span class="edit"><a href="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a> | </span>
                                             <?php endif; ?>
 
-                                            <?php if ( current_user_can( 'seller' ) ): ?>
+                                            <?php if ( current_user_can( 'dokandar' ) ): ?>
                                                 <span class="delete"><a  href="<?php echo $delete_url; ?>"  onclick="return confirm('<?php esc_attr_e( 'Are you sure want to delete', 'dokan' ); ?>');"><?php _e( 'Delete', 'dokan' ); ?></a> | </span>
                                             <?php endif ?>
 
-                                            <?php if ( current_user_can( 'seller' ) ): ?>
+                                            <?php if ( current_user_can( 'dokandar' ) ): ?>
                                                 <span class="permission"><a  href="<?php echo $manage_permission_url; ?>" ><?php _e( 'Manage Permissions', 'dokan' ); ?></a></span>
                                             <?php endif ?>
                                         </div>

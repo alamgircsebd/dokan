@@ -273,7 +273,7 @@ class Module {
      */
     public function load_staff_template( $query_vars ) {
         if ( isset( $query_vars['staffs'] ) ) {
-            if ( ! current_user_can( 'seller' ) ) {
+            if ( ! current_user_can( 'dokandar' ) || current_user_can( 'vendor_staff' ) ) {
                 dokan_get_template_part(
                     'global/dokan-error', '', array(
                         'deleted' => false,
@@ -301,7 +301,7 @@ class Module {
      * @return array $urls
      */
     public function add_staffs_page( $urls ) {
-        if ( dokan_is_seller_enabled( get_current_user_id() ) && current_user_can( 'seller' ) ) {
+        if ( dokan_is_seller_enabled( get_current_user_id() ) && current_user_can( 'dokandar' ) && ! current_user_can( 'vendor_staff' ) ) {
             $urls['staffs'] = array(
                 'title' => __( 'Staff', 'dokan' ),
                 'icon'  => '<i class="fa fa-users"></i>',
