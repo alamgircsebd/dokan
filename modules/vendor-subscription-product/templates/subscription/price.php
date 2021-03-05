@@ -62,7 +62,7 @@ if ( ! $chosen_period = get_post_meta( $post_id, '_subscription_period', true ) 
     </div>
 
     <div class="content-full-part sale-price dokan-clearfix dokan-form-group">
-        <label for="_sale_price" class="form-label">
+        <label for="_subscription_sale_price" class="form-label">
             <?php esc_html_e( 'Sale Price', 'dokan' ); ?>
             <a href="#" class="sale_schedule <?php echo ($show_schedule ) ? 'dokan-hide' : ''; ?>"><?php esc_html_e( 'Schedule', 'dokan' ); ?></a>
             <a href="#" class="cancel_sale_schedule <?php echo ( ! $show_schedule ) ? 'dokan-hide' : ''; ?>"><?php esc_html_e( 'Cancel', 'dokan' ); ?></a>
@@ -70,7 +70,7 @@ if ( ! $chosen_period = get_post_meta( $post_id, '_subscription_period', true ) 
 
         <div class="dokan-input-group">
             <span class="dokan-input-group-addon"><?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>
-            <?php dokan_post_input_box( $post_id, '_sale_price', array( 'class' => 'dokan-form-control dokan-product-sales-price','placeholder' => __( '0.00', 'dokan' ) ), 'price' ); ?>
+            <?php dokan_post_input_box( $post_id, '_sale_price', array( 'class' => 'dokan-form-control dokan-product-sales-price','placeholder' => __( '0.00', 'dokan' ), 'name' => '_subscription_sale_price' ), 'price' ); ?>
         </div>
     </div>
 
@@ -78,14 +78,14 @@ if ( ! $chosen_period = get_post_meta( $post_id, '_subscription_period', true ) 
         <div class="content-half-part from">
             <div class="dokan-input-group">
                 <span class="dokan-input-group-addon"><?php esc_html_e( 'From', 'dokan' ); ?></span>
-                <input type="text" name="_sale_price_dates_from" class="dokan-form-control dokan-start-date" value="<?php echo esc_attr( $_sale_price_dates_from ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="<?php esc_html_e( 'YYYY-MM-DD', 'dokan' ); ?>">
+                <input type="text" name="_subscription_sale_price_dates_from" class="dokan-form-control dokan-start-date" value="<?php echo esc_attr( $_sale_price_dates_from ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="<?php esc_html_e( 'YYYY-MM-DD', 'dokan' ); ?>">
             </div>
         </div>
 
         <div class="content-half-part to">
             <div class="dokan-input-group">
                 <span class="dokan-input-group-addon"><?php esc_html_e( 'To', 'dokan' ); ?></span>
-                <input type="text" name="_sale_price_dates_to" class="dokan-form-control dokan-end-date" value="<?php echo esc_attr( $_sale_price_dates_to ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="<?php esc_html_e( 'YYYY-MM-DD', 'dokan' ); ?>">
+                <input type="text" name="_subscription_sale_price_dates_to" class="dokan-form-control dokan-end-date" value="<?php echo esc_attr( $_sale_price_dates_to ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="<?php esc_html_e( 'YYYY-MM-DD', 'dokan' ); ?>">
             </div>
         </div>
     </div>

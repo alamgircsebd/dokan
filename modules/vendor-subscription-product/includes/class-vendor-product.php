@@ -110,7 +110,7 @@ class Dokan_VSP_Product {
         if ( 'subscription' === $product_type ) {
 
             $subscription_price = isset( $_POST['_subscription_price'] ) ? wc_format_decimal( $_POST['_subscription_price'] ) : '';
-            $sale_price         = wc_format_decimal( $_POST['_sale_price'] );
+            $sale_price         = wc_format_decimal( $_POST['_subscription_sale_price'] );
 
             update_post_meta( $post_id, '_subscription_price', $subscription_price );
 
@@ -121,8 +121,8 @@ class Dokan_VSP_Product {
             $site_offset = get_option( 'gmt_offset' ) * 3600;
 
             // Save the timestamps in UTC time, the way WC does it.
-            $date_from = ( ! empty( $_POST['_sale_price_dates_from'] ) ) ? wcs_date_to_time( $_POST['_sale_price_dates_from'] ) - $site_offset : '';
-            $date_to   = ( ! empty( $_POST['_sale_price_dates_to'] ) ) ? wcs_date_to_time( $_POST['_sale_price_dates_to'] ) - $site_offset : '';
+            $date_from = ( ! empty( $_POST['_subscription_sale_price_dates_from'] ) ) ? wcs_date_to_time( $_POST['_subscription_sale_price_dates_from'] ) - $site_offset : '';
+            $date_to   = ( ! empty( $_POST['_subscription_sale_price_dates_to'] ) ) ? wcs_date_to_time( $_POST['_subscription_sale_price_dates_to'] ) - $site_offset : '';
 
             $now = gmdate( 'U' );
 
