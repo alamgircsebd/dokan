@@ -30,9 +30,9 @@ class StoreCategory {
             add_action( 'dokan_vendor_to_array', array( $this, 'add_store_categories_vendor_to_array' ), 10, 2 );
             add_action( 'dokan_rest_prepare_store_item_for_response', array( $this, 'rest_prepare_store_item_for_response' ), 10, 2 );
             add_action( 'dokan_rest_stores_update_store', array( $this, 'rest_stores_update_store_category' ), 10, 2 );
-            add_action( 'dokan_seller_listing_search_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
-            add_action( 'dokan_seller_listing_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
-            add_action( 'dokan_rest_get_stores_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
+            add_filter( 'dokan_seller_listing_search_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
+            add_filter( 'dokan_seller_listing_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
+            add_filter( 'dokan_rest_get_stores_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
             add_action( 'pre_user_query', array( $this, 'add_store_category_query' ) );
         }
     }
