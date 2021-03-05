@@ -1,6 +1,147 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.2.1',
+        'released' => '2021-05-03',
+        'changes'  => array(
+            array(
+                'title'       => 'External/Affiliate Product for Vendor [External/Affiliate Product]',
+                'type'        => 'Improvement',
+                'description' => 'External/Affiliate product support added for vendor',
+            ),
+            array(
+                'title'       => 'Added Rest API Support for Follow Store [Follow Store]',
+                'type'        => 'Improvement',
+                'description' => 'Added rest api support for follow store module.',
+            ),
+            array(
+                'title'       => 'Announcements 3 New Options Added for Vendors [Announcements]',
+                'type'        => 'Improvement',
+                'description' => 'Announcements 3 new options added enabled, disabled, featured sellers.',
+            ),
+            array(
+                'title'       => 'Vendor Withdraw Individual Threshold Days Option Added [Store Withdraw]',
+                'type'        => 'Improvement',
+                'description' => 'Admin can set vendor individual threshold days from user edit page in admin area.',
+            ),
+            array(
+                'title'       => 'Disable "Support Button" for Single Product Page [Store Support]',
+                'type'        => 'Improvement',
+                'description' => 'Disable "Support Button" for single product page in vendor settings page when Admin disable support from admin settings.',
+            ),
+            array(
+                'title'       => 'Fixed PHP 8 Warnings',
+                'type'        => 'Fix',
+                'description' => 'Fixed some PHP 8 warnings.',
+            ),
+            array(
+                'title'       => 'Vendor Report Date Filter Conflicts Issue Fixed',
+                'type'        => 'Fix',
+                'description' => 'Vendor report date filter conflicts with non english / local languages set as site language.',
+            ),
+            array(
+                'title'       => 'Apply Product Lot Discount on Order',
+                'type'        => 'Fix',
+                'description' => 'Apply product lot discount on order issue fixed now.',
+            ),
+            array(
+                'title'       => 'Typos in Edit Product Page and Subscription Page',
+                'type'        => 'Fix',
+                'description' => 'Typos in edit product page and subscription page fixed now.',
+            ),
+            array(
+                'title'       => 'Whole Price is Not Stored as Decimal Issue Fixed',
+                'type'        => 'Fix',
+                'description' => 'Whole price is not stored as decimal when decimal separator is comma issue fixed now.',
+            ),
+            array(
+                'title'       => 'Combine Commission Field is Missing on Setup Wizard',
+                'type'        => 'Fix',
+                'description' => 'Combine commission field is missing on setup wizard issue fixed now.',
+            ),
+            array(
+                'title'       => 'Vendor Analytics Menu not Showing for Administrator',
+                'type'        => 'Fix',
+                'description' => 'Vendor analytics menu not showing for administrator dokandar issue fixed now.',
+            ),
+            array(
+                'title'       => 'Turn Off Geolocation Autozoom for Product',
+                'type'        => 'Fix',
+                'description' => 'Turn off geolocation autozoom for single product page.',
+            ),
+            array(
+                'title'       => 'Mapbox Zoom Icons Missing',
+                'type'        => 'Fix',
+                'description' => 'Mapbox zoom icons missing issue fixed now.',
+            ),
+            array(
+                'title'       => 'Elementor Buttons Icon Missing',
+                'type'        => 'Fix',
+                'description' => 'Elementor buttons icon missing issue resolved.',
+            ),
+            array(
+                'title'       => 'Error Showing in Store Support Ticket',
+                'type'        => 'Fix',
+                'description' => 'Error showing in store support ticket details if order remove somehow.',
+            ),
+            array(
+                'title'       => 'Dokan Pages Duplicate Issue Fixed',
+                'type'        => 'Fix',
+                'description' => 'Dokan pages duplicate issue fixed when try to use tools from Dokan admin area.',
+            ),
+            array(
+                'title'       => 'Parent SKU Not Saving on Variation Product',
+                'type'        => 'Fix',
+                'description' => 'Parent SKU not saving on variation product issue fixed now.',
+            ),
+            array(
+                'title'       => 'Warning Showing Product Listing Page',
+                'type'        => 'Fix',
+                'description' => 'Warning showing product listing page when imported product on vendor dashboard area.',
+            ),
+            array(
+                'title'       => 'Design Related Problem Fixed All Logs Report',
+                'type'        => 'Fix',
+                'description' => 'Design related problem in all logs issue report in Dokan admin area.',
+            ),
+            array(
+                'title'       => 'Deprecated Gplus Cleanup',
+                'type'        => 'Fix',
+                'description' => 'Deprecated Gplus cleanup. Now Google Plus option totally removed from dokan.',
+            ),
+            array(
+                'title'       => 'Booking Details Page Showing Index Error Warning',
+                'type'        => 'Fix',
+                'description' => 'Fixed an issue where booking details page showing index error warning.',
+            ),
+            array(
+                'title'       => 'Booking SKU Not Saving',
+                'type'        => 'Fix',
+                'description' => 'Booking SKU not saving, hidden input problem fixed now.',
+            ),
+            array(
+                'title'       => 'Some Filter Was Being Used as Action',
+                'type'        => 'Fix',
+                'description' => 'Some filter was being used as action, now resolved that issues.',
+            ),
+            array(
+                'title'       => 'Product Discount Price is Not Updating Issue Fixed',
+                'type'        => 'Fix',
+                'description' => 'Product Discount price is not updating if vendor subscription module is active.',
+            ),
+            array(
+                'title'       => 'Admin Dokandar Staff Module Access Issue',
+                'type'        => 'Fix',
+                'description' => 'Admin dokandar staff module access issue fixed now.',
+            ),
+            array(
+                'title'       => 'Announcement Page Added and Pagination Issue Fixed',
+                'type'        => 'Fix',
+                'description' => 'Announcement page added for vendor and pagination issue fixed.',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.2.0',
         'released' => '2021-01-29',
         'changes'  => array(
