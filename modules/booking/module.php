@@ -543,17 +543,6 @@ class Module {
         $is_virtual = 'on' === $_virtual ? 'yes' : 'no';
         update_post_meta( $post_id, '_virtual', $is_virtual );
 
-        // Update SKU
-        $old_sku = get_post_meta( $post_id, '_sku', true );
-        delete_post_meta( $post_id, '_sku' );
-
-        $sku = trim( $post_data['_sku'] ) !== '' ? sanitize_text_field( $post_data['_sku'] ) : '';
-        try {
-            $product->set_sku( $sku );
-        } catch ( \WC_Data_Exception $e ) {
-            $product->set_sku( $old_sku );
-        }
-
         $product->save();
 
         do_action( 'dokan_booking_after_product_data_saved' );
