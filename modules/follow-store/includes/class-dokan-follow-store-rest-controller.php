@@ -3,7 +3,7 @@
 /**
  * Class DokanFollowStoreRestController
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.1
  *
  * @author weDevs
  */
@@ -25,7 +25,7 @@ class DokanFollowStoreRestController extends WP_REST_Controller {
     /**
      * Register follow-store routes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.1
      *
      * @return void
      */
@@ -66,7 +66,7 @@ class DokanFollowStoreRestController extends WP_REST_Controller {
      *
      * @param $request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.1
      *
      * @return WP_Error|WP_REST_Response
      */
@@ -104,7 +104,7 @@ class DokanFollowStoreRestController extends WP_REST_Controller {
      *
      * @param $request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.1
      *
      * @return WP_Error|WP_REST_Response
      */
