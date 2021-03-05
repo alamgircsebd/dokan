@@ -54,7 +54,7 @@ class Admin {
     /**
      * Add additional fee setup wizard
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.1
      *
      * @return void
      */
@@ -1011,7 +1011,7 @@ class Admin {
     /**
      * Show withdraw threshold action in user profile
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.1
      *
      * @param object $user
      */
@@ -1042,7 +1042,7 @@ class Admin {
     /**
      * Save admin user profile withdraw threshold options
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.2.1
      *
      * @param  integer $user_id
      *

@@ -86,7 +86,7 @@ final class Module {
     /**
      * Load hooks for this modules
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.1
      *
      * @return void
      */

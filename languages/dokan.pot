@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan Pro 3.2.0\n"
+"Project-Id-Version: Dokan Pro 3.2.1\n"
 "Report-Msgid-Bugs-To: https://wedevs.com/account/tickets/\n"
-"POT-Creation-Date: 2021-01-29 12:13:09+00:00\n"
+"POT-Creation-Date: 2021-03-05 09:20:32+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,100 +31,104 @@ msgstr ""
 msgid "3"
 msgstr ""
 
-#: dokan-pro.php:223
+#: dokan-pro.php:230
 msgid "Error: Nonce verification failed"
 msgstr ""
 
-#: dokan-pro.php:490
+#: dokan-pro.php:497
 msgid "Activating"
 msgstr ""
 
-#: dokan-pro.php:491
+#: dokan-pro.php:498
 msgid "Deactivating"
 msgstr ""
 
-#: dokan-pro.php:492 includes/Admin/Admin.php:340
+#: dokan-pro.php:499 includes/Admin/Admin.php:75 includes/Admin/Admin.php:414
 msgid "Amount you will get from sales in both percentage and fixed fee"
 msgstr ""
 
-#: dokan-pro.php:493
+#: dokan-pro.php:500
 msgid "It will override the default commission admin gets from each sales"
 msgstr ""
 
-#: dokan-pro.php:680
+#: dokan-pro.php:687
 msgid "Starter"
 msgstr ""
 
-#: dokan-pro.php:685
+#: dokan-pro.php:692
 msgid "Professional"
 msgstr ""
 
-#: dokan-pro.php:690
+#: dokan-pro.php:697
 msgid "Business"
 msgstr ""
 
-#: dokan-pro.php:695
+#: dokan-pro.php:702
 msgid "Enterprise"
 msgstr ""
 
-#: includes/Admin/Admin.php:62
+#: includes/Admin/Admin.php:80
+msgid "How much amount (%) you will get from each order"
+msgstr ""
+
+#: includes/Admin/Admin.php:120
 msgid "Refunds"
 msgstr ""
 
-#: includes/Admin/Admin.php:68
+#: includes/Admin/Admin.php:126
 msgid "Refunds %s"
 msgstr ""
 
-#: includes/Admin/Admin.php:72
+#: includes/Admin/Admin.php:130 includes/Notice.php:327
 msgid "Announcements"
 msgstr ""
 
-#: includes/Admin/Admin.php:74 includes/Admin/Admin.php:593
+#: includes/Admin/Admin.php:132 includes/Admin/Admin.php:681
 #: includes/Reports.php:156 src/admin/components/Reports.vue:5
 #: templates/report/header.php:11
 msgid "Reports"
 msgstr ""
 
-#: includes/Admin/Admin.php:77
+#: includes/Admin/Admin.php:135
 msgid "Whats New"
 msgstr ""
 
-#: includes/Admin/Admin.php:81 src/admin/components/Modules.vue:3
+#: includes/Admin/Admin.php:139 src/admin/components/Modules.vue:3
 msgid "Modules"
 msgstr ""
 
-#: includes/Admin/Admin.php:82 modules/export-import/module.php:222
+#: includes/Admin/Admin.php:140 modules/export-import/module.php:222
 #: modules/export-import/module.php:229
 #: modules/export-import/templates/export-import/template_importer.php:16
 #: modules/export-import/templates/export-import/template_importer_new.php:38
 msgid "Tools"
 msgstr ""
 
-#: includes/Admin/Admin.php:109
+#: includes/Admin/Admin.php:167
 msgid "Enable Terms and Condition"
 msgstr ""
 
-#: includes/Admin/Admin.php:110
+#: includes/Admin/Admin.php:168
 msgid "Enable Terms and Condition check on registration form"
 msgstr ""
 
-#: includes/Admin/Admin.php:116
+#: includes/Admin/Admin.php:174
 msgid "Enable Single Seller Mode"
 msgstr ""
 
-#: includes/Admin/Admin.php:117
+#: includes/Admin/Admin.php:175
 msgid "Enable single seller mode"
 msgstr ""
 
-#: includes/Admin/Admin.php:137
+#: includes/Admin/Admin.php:195
 msgid "New Product Status"
 msgstr ""
 
-#: includes/Admin/Admin.php:138
+#: includes/Admin/Admin.php:196
 msgid "Product status when a vendor creates a product"
 msgstr ""
 
-#: includes/Admin/Admin.php:142
+#: includes/Admin/Admin.php:200
 #: modules/booking/templates/booking/product-list.php:253
 #: modules/export-import/includes/export/class-wc-product-csv-exporter.php:85
 #: modules/export-import/includes/importers/class-wc-product-csv-importer-controller.php:377
@@ -132,210 +136,210 @@ msgstr ""
 #: modules/simple-auction/templates/auction/auction-products-listing.php:212
 #: modules/subscription/includes/admin/admin.php:546
 #: src/admin/components/Announcement.vue:16
-#: src/admin/components/Announcement.vue:118
+#: src/admin/components/Announcement.vue:121
 msgid "Published"
 msgstr ""
 
-#: includes/Admin/Admin.php:143
+#: includes/Admin/Admin.php:201
 #: modules/subscription/includes/admin/admin.php:547
 #: templates/products/edit/product-list-table-inline-edit-form.php:40
 msgid "Pending Review"
 msgstr ""
 
-#: includes/Admin/Admin.php:149
+#: includes/Admin/Admin.php:207
 msgid "Duplicate product"
 msgstr ""
 
-#: includes/Admin/Admin.php:150
+#: includes/Admin/Admin.php:208
 msgid "Allow vendor to duplicate their product"
 msgstr ""
 
-#: includes/Admin/Admin.php:157
+#: includes/Admin/Admin.php:215
 msgid "Edited Product Status"
 msgstr ""
 
-#: includes/Admin/Admin.php:158
+#: includes/Admin/Admin.php:216
 msgid ""
 "Set Product status as pending review when a vendor edits or updates a "
 "product"
 msgstr ""
 
-#: includes/Admin/Admin.php:165
+#: includes/Admin/Admin.php:223
 msgid "Product Mail Notification"
 msgstr ""
 
-#: includes/Admin/Admin.php:166
+#: includes/Admin/Admin.php:224
 msgid "Email notification on new product submission"
 msgstr ""
 
-#: includes/Admin/Admin.php:173
+#: includes/Admin/Admin.php:231
 msgid "Product Category Selection"
 msgstr ""
 
-#: includes/Admin/Admin.php:174
+#: includes/Admin/Admin.php:232
 msgid "Select a category type for Products"
 msgstr ""
 
-#: includes/Admin/Admin.php:178 includes/Brands/AdminSettings.php:26
+#: includes/Admin/Admin.php:236 includes/Brands/AdminSettings.php:26
 #: includes/StoreCategory.php:88
 msgid "Single"
 msgstr ""
 
-#: includes/Admin/Admin.php:179 includes/Brands/AdminSettings.php:27
+#: includes/Admin/Admin.php:237 includes/Brands/AdminSettings.php:27
 #: includes/StoreCategory.php:89
 msgid "Multiple"
 msgstr ""
 
-#: includes/Admin/Admin.php:185
+#: includes/Admin/Admin.php:243
 msgid "Vendors Can Create Tags"
 msgstr ""
 
-#: includes/Admin/Admin.php:186
+#: includes/Admin/Admin.php:244
 msgid "Allow vendors to create new product tags from vendor dashboard."
 msgstr ""
 
-#: includes/Admin/Admin.php:193
+#: includes/Admin/Admin.php:251
 msgid "Discount Editing"
 msgstr ""
 
-#: includes/Admin/Admin.php:194
+#: includes/Admin/Admin.php:252
 msgid "Vendor can add order and product discount"
 msgstr ""
 
-#: includes/Admin/Admin.php:196 includes/Admin/Admin.php:197
+#: includes/Admin/Admin.php:255 includes/Admin/Admin.php:259
 msgid "Allow vendor to add discount on product"
 msgstr ""
 
-#: includes/Admin/Admin.php:196 includes/Admin/Admin.php:197
+#: includes/Admin/Admin.php:256 includes/Admin/Admin.php:260
 msgid "Allow vendor to add discount on order"
 msgstr ""
 
-#: includes/Admin/Admin.php:202
+#: includes/Admin/Admin.php:266
 msgid "Hide Customer info"
 msgstr ""
 
-#: includes/Admin/Admin.php:203
+#: includes/Admin/Admin.php:267
 msgid "Hide customer information from order details of vendors"
 msgstr ""
 
-#: includes/Admin/Admin.php:210
+#: includes/Admin/Admin.php:274
 msgid "Vendor Product Review"
 msgstr ""
 
-#: includes/Admin/Admin.php:211
+#: includes/Admin/Admin.php:275
 msgid "Vendor can change product review status from vendor dashboard"
 msgstr ""
 
-#: includes/Admin/Admin.php:249
+#: includes/Admin/Admin.php:315
 msgid "Store Banner width"
 msgstr ""
 
-#: includes/Admin/Admin.php:255
+#: includes/Admin/Admin.php:321
 msgid "Store Banner height"
 msgstr ""
 
-#: includes/Admin/Admin.php:271
+#: includes/Admin/Admin.php:337
 msgid "Order Status for Withdraw"
 msgstr ""
 
-#: includes/Admin/Admin.php:272
+#: includes/Admin/Admin.php:338
 msgid "Order status for which vendor can make a withdraw request."
 msgstr ""
 
-#: includes/Admin/Admin.php:274 includes/Admin/Admin.php:275
+#: includes/Admin/Admin.php:341 includes/Admin/Admin.php:346
 #: modules/rma/includes/functions.php:293
 #: modules/vendor-subscription-product/includes/functions.php:148
 msgid "Completed"
 msgstr ""
 
-#: includes/Admin/Admin.php:274 includes/Admin/Admin.php:275
+#: includes/Admin/Admin.php:342 includes/Admin/Admin.php:347
 #: modules/rma/includes/functions.php:292
 #: modules/vendor-subscription-product/includes/functions.php:168
 msgid "Processing"
 msgstr ""
 
-#: includes/Admin/Admin.php:274 includes/Admin/Admin.php:275
+#: includes/Admin/Admin.php:343 includes/Admin/Admin.php:348
 #: modules/vendor-subscription-product/includes/functions.php:164
 msgid "On-hold"
 msgstr ""
 
-#: includes/Admin/Admin.php:279
+#: includes/Admin/Admin.php:353 includes/Admin/Admin.php:1030
 msgid "Withdraw Threshold"
 msgstr ""
 
-#: includes/Admin/Admin.php:280
+#: includes/Admin/Admin.php:354
 msgid ""
 "Days, ( Make order matured to make a withdraw request) <br> Value \"0\" "
 "will inactive this option"
 msgstr ""
 
-#: includes/Admin/Admin.php:286
+#: includes/Admin/Admin.php:360
 msgid "Hide Withdraw Option"
 msgstr ""
 
-#: includes/Admin/Admin.php:287
+#: includes/Admin/Admin.php:361
 msgid "Hide withdraw option (when vendor is getting commission automatically) "
 msgstr ""
 
-#: includes/Admin/Admin.php:314 includes/Products.php:284
+#: includes/Admin/Admin.php:388 includes/Products.php:288
 #: modules/subscription/includes/admin/admin.php:135
 msgid "Admin Commission"
 msgstr ""
 
-#: includes/Admin/Admin.php:319
+#: includes/Admin/Admin.php:393
 msgid "Percent Fee"
 msgstr ""
 
-#: includes/Admin/Admin.php:322
+#: includes/Admin/Admin.php:396
 msgid "Amount you will get from sales in percentage (10%)"
 msgstr ""
 
-#: includes/Admin/Admin.php:329
+#: includes/Admin/Admin.php:403
 msgid "Fixed Fee"
 msgstr ""
 
-#: includes/Admin/Admin.php:332
+#: includes/Admin/Admin.php:406
 msgid "Amount you will get from sales in flat rate(+5)"
 msgstr ""
 
-#: includes/Admin/Admin.php:474 includes/Admin/Admin.php:478
+#: includes/Admin/Admin.php:547 includes/Admin/Admin.php:551
 #: includes/Admin/Ajax.php:30 includes/Admin/Ajax.php:94
 #: includes/Admin/Ajax.php:98
 msgid "You don't have enough permission"
 msgstr ""
 
-#: includes/Admin/Admin.php:484
+#: includes/Admin/Admin.php:557
 msgid "Dashboard"
 msgstr ""
 
-#: includes/Admin/Admin.php:490
+#: includes/Admin/Admin.php:563
 msgid "Store List"
 msgstr ""
 
-#: includes/Admin/Admin.php:496
+#: includes/Admin/Admin.php:569
 msgid "My Orders"
 msgstr ""
 
-#: includes/Admin/Admin.php:543
+#: includes/Admin/Admin.php:619
 msgid "All the default pages has been created!"
 msgstr ""
 
-#: includes/Admin/Admin.php:586
+#: includes/Admin/Admin.php:672
 #: modules/follow-store/includes/class-dokan-follow-store-my-account.php:42
 msgid "Vendors"
 msgstr ""
 
-#: includes/Admin/Admin.php:600
+#: includes/Admin/Admin.php:690
 msgid "Settings"
 msgstr ""
 
-#: includes/Admin/Admin.php:632 includes/Reports.php:103
+#: includes/Admin/Admin.php:722 includes/Reports.php:103
 #: includes/functions-reports.php:127
 #: modules/booking/templates/booking/my-bookings/all-bookings.php:77
 msgid "Order"
 msgstr ""
 
-#: includes/Admin/Admin.php:633 modules/geolocation/views/filters.php:26
+#: includes/Admin/Admin.php:723 modules/geolocation/views/filters.php:26
 #: modules/geolocation/views/widget-form.php:11
 #: modules/moip/includes/admin/class-moip-gateway.php:100
 #: modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:176
@@ -348,15 +352,15 @@ msgstr ""
 msgid "Vendor"
 msgstr ""
 
-#: includes/Admin/Admin.php:634 templates/orders/views/html-order-items.php:204
+#: includes/Admin/Admin.php:724 templates/orders/views/html-order-items.php:204
 msgid "Order Total"
 msgstr ""
 
-#: includes/Admin/Admin.php:635
+#: includes/Admin/Admin.php:725
 msgid "Vendor Earning"
 msgstr ""
 
-#: includes/Admin/Admin.php:636
+#: includes/Admin/Admin.php:726
 #: modules/booking/templates/booking/product-list.php:40
 #: modules/booking/templates/booking/product-list.php:171
 #: modules/rma/templates/rma/customer-rma-requests.php:25
@@ -366,55 +370,59 @@ msgstr ""
 #: modules/simple-auction/templates/auction/auction-products-listing.php:42
 #: modules/simple-auction/templates/auction/auction-products-listing.php:115
 #: modules/store-support/module.php:795 modules/store-support/module.php:848
-#: modules/store-support/module.php:1141
+#: modules/store-support/module.php:1140
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:215
 #: modules/vendor-subscription-product/templates/subscription/subscrptions.php:96
-#: src/admin/components/Announcement.vue:144
+#: src/admin/components/Announcement.vue:147
 #: src/admin/components/VendorPro.vue:51 src/frontend/components/Zone.vue:98
 #: templates/products/edit/product-list-table-inline-edit-form.php:36
 msgid "Status"
 msgstr ""
 
-#: includes/Admin/Admin.php:637
+#: includes/Admin/Admin.php:727
 msgid "Commission"
 msgstr ""
 
-#: includes/Admin/Admin.php:734
+#: includes/Admin/Admin.php:829
 msgid ""
 "<p>Christmas Offer! <strong>Save 30%%</strong> Upgrading Your Dokan "
 "Package. <strong>Coupon: “XMAS30”</strong>. Offer Ends in 31st Dec, 12.00 "
 "PM! <a target=\"_blank\" href=\"%s\">Grab The Deal</a></p>"
 msgstr ""
 
-#: includes/Admin/Admin.php:777
+#: includes/Admin/Admin.php:872
 msgid "You have no permission to do that"
 msgstr ""
 
-#: includes/Admin/Admin.php:783 includes/Admin/Ajax.php:181
+#: includes/Admin/Admin.php:878 includes/Admin/Ajax.php:181
 #: includes/Ajax.php:86 includes/Ajax.php:107 includes/Ajax.php:128
 #: includes/Ajax.php:164 includes/Ajax.php:204 includes/Ajax.php:241
 #: includes/Ajax.php:277 includes/Ajax.php:309 includes/Ajax.php:336
-#: includes/Products.php:927 modules/rma/includes/class-ajax.php:32
+#: includes/Products.php:958 modules/rma/includes/class-ajax.php:32
 #: modules/rma/includes/class-ajax.php:54
 #: modules/rma/includes/class-ajax.php:148
 #: modules/rma/includes/class-ajax.php:235
 msgid "Invalid nonce"
 msgstr ""
 
-#: includes/Admin/Admin.php:830
+#: includes/Admin/Admin.php:924
 msgid "Combine"
 msgstr ""
 
-#: includes/Admin/Admin.php:907 includes/Admin/Admin.php:913
+#: includes/Admin/Admin.php:1001 includes/Admin/Admin.php:1007
 msgid "Error"
 msgstr ""
 
-#: includes/Admin/Admin.php:907
+#: includes/Admin/Admin.php:1001
 msgid "Admin percentage commission is required."
 msgstr ""
 
-#: includes/Admin/Admin.php:913
+#: includes/Admin/Admin.php:1007
 msgid "Admin flat commission is required."
+msgstr ""
+
+#: includes/Admin/Admin.php:1036
+msgid "If set, it will override global withdraw threshold days for this vendor"
 msgstr ""
 
 #: includes/Admin/Ajax.php:72
@@ -457,34 +465,34 @@ msgstr ""
 msgid "Deactivated"
 msgstr ""
 
-#: includes/Admin/Announcement.php:87 includes/Admin/Announcement.php:98
-#: includes/Admin/Announcement.php:99 src/admin/components/Announcement.vue:4
+#: includes/Admin/Announcement.php:117 includes/Admin/Announcement.php:128
+#: includes/Admin/Announcement.php:129 src/admin/components/Announcement.vue:4
 #: templates/announcement/header.php:12
 msgid "Announcement"
 msgstr ""
 
-#: includes/Admin/Announcement.php:100 includes/Emails/Announcement.php:14
+#: includes/Admin/Announcement.php:130 includes/Emails/Announcement.php:14
 msgid "Dokan Announcement"
 msgstr ""
 
-#: includes/Admin/Announcement.php:101 src/admin/components/Announcement.vue:5
+#: includes/Admin/Announcement.php:131 src/admin/components/Announcement.vue:5
 #: src/admin/components/EditAnnouncement.vue:4
 msgid "Add Announcement"
 msgstr ""
 
-#: includes/Admin/Announcement.php:102
+#: includes/Admin/Announcement.php:132
 #: src/admin/components/NewAnnouncement.vue:3
 msgid "Add New Announcement"
 msgstr ""
 
-#: includes/Admin/Announcement.php:103 modules/booking/module.php:611
+#: includes/Admin/Announcement.php:133 modules/booking/module.php:612
 #: modules/booking/templates/booking/product-list.php:122
 #: modules/booking/templates/booking/resources/resources.php:111
 #: modules/product-addon/templates/product-addon/html-global-admin.php:34
 #: modules/simple-auction/templates/auction/auction-products-listing.php:102
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:166
 #: modules/vendor-staff/templates/vendor-staff/staffs.php:102
-#: src/admin/components/Announcement.vue:152
+#: src/admin/components/Announcement.vue:155
 #: src/admin/components/StoreCategoriesIndex.vue:172
 #: src/frontend/components/Main.vue:18 templates/coupon/listing.php:39
 #: templates/products/edit/sidebar.php:26
@@ -493,32 +501,32 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: includes/Admin/Announcement.php:104
+#: includes/Admin/Announcement.php:134
 #: src/admin/components/EditAnnouncement.vue:3
 msgid "Edit Announcement"
 msgstr ""
 
-#: includes/Admin/Announcement.php:105
+#: includes/Admin/Announcement.php:135
 msgid "New Announcement"
 msgstr ""
 
-#: includes/Admin/Announcement.php:106 includes/Admin/Announcement.php:107
+#: includes/Admin/Announcement.php:136 includes/Admin/Announcement.php:137
 msgid "View Announcement"
 msgstr ""
 
-#: includes/Admin/Announcement.php:108
+#: includes/Admin/Announcement.php:138
 msgid "Search Announcement"
 msgstr ""
 
-#: includes/Admin/Announcement.php:109
+#: includes/Admin/Announcement.php:139
 msgid "No Announcement Found"
 msgstr ""
 
-#: includes/Admin/Announcement.php:110
+#: includes/Admin/Announcement.php:140
 msgid "No Announcement found in trash"
 msgstr ""
 
-#: includes/Admin/Announcement.php:111
+#: includes/Admin/Announcement.php:141
 msgid "Parent Announcement"
 msgstr ""
 
@@ -565,8 +573,8 @@ msgid ""
 "here."
 msgstr ""
 
-#: includes/Admin/Pointers.php:153 modules/geolocation/functions.php:154
-#: modules/geolocation/functions.php:271
+#: includes/Admin/Pointers.php:153 modules/geolocation/functions.php:155
+#: modules/geolocation/functions.php:272
 msgid "Search Vendors"
 msgstr ""
 
@@ -690,15 +698,15 @@ msgstr ""
 msgid "Zone settings save successfully"
 msgstr ""
 
-#: includes/Ajax.php:442 includes/Ajax.php:1671 includes/Products.php:240
-#: includes/functions-wc.php:285
+#: includes/Ajax.php:442 includes/Ajax.php:1671 includes/Products.php:244
+#: includes/functions-wc.php:289
 #: modules/simple-auction/templates/auction/auction-shipping.php:39
 #: templates/orders/views/html-order-items.php:21
 #: templates/products/edit/inventory.php:11
 msgid "Standard"
 msgstr ""
 
-#: includes/Ajax.php:452 includes/Ajax.php:1681 includes/Products.php:907
+#: includes/Ajax.php:452 includes/Ajax.php:1681 includes/Products.php:938
 #: includes/woo-views/variation-admin-html.php:68
 #: templates/products/edit/inventory.php:57
 msgid "Do not allow"
@@ -708,7 +716,7 @@ msgstr ""
 msgid "Allow, but notify customer"
 msgstr ""
 
-#: includes/Ajax.php:454 includes/Ajax.php:1683 includes/Products.php:909
+#: includes/Ajax.php:454 includes/Ajax.php:1683 includes/Products.php:940
 #: includes/woo-views/variation-admin-html.php:70
 #: templates/products/edit/inventory.php:59
 msgid "Allow"
@@ -777,7 +785,7 @@ msgid "Clear"
 msgstr ""
 
 #: includes/Ajax.php:1869 includes/woo-views/variation-admin-html.php:6
-#: modules/booking/module.php:612
+#: modules/booking/module.php:613
 #: modules/booking/templates/booking/persons/html-booking-person.php:9
 #: modules/booking/templates/booking/resources/html-booking-resource.php:9
 #: modules/booking/templates/booking/resources/resources.php:112
@@ -1433,7 +1441,7 @@ msgstr ""
 
 #: includes/Module.php:358 modules/stripe/includes/Helper.php:280
 #: modules/stripe/templates/admin-options.php:1
-#: src/admin/components/VendorSingle.vue:260
+#: src/admin/components/VendorSingle.vue:259
 msgid "Stripe Connect"
 msgstr ""
 
@@ -1497,7 +1505,7 @@ msgstr ""
 msgid "Offer any customer to buy product as a wholesale price from any vendors."
 msgstr ""
 
-#: includes/Notice.php:216
+#: includes/Notice.php:197
 #: modules/booking/templates/booking/product-list.php:295
 #: modules/booking/templates/booking/resources/resources.php:143
 #: modules/rma/includes/class-order.php:152
@@ -1506,7 +1514,7 @@ msgstr ""
 msgid "&laquo; Previous"
 msgstr ""
 
-#: includes/Notice.php:217
+#: includes/Notice.php:198
 #: modules/booking/templates/booking/product-list.php:296
 #: modules/booking/templates/booking/resources/resources.php:144
 #: modules/rma/includes/class-order.php:153
@@ -1515,105 +1523,109 @@ msgstr ""
 msgid "Next &raquo;"
 msgstr ""
 
-#: includes/Products.php:266 includes/functions-wc.php:1345
+#: includes/Products.php:270 includes/functions-wc.php:1349
 #: modules/subscription/includes/admin/admin.php:119
 msgid "Admin Commission type"
 msgstr ""
 
-#: includes/Products.php:269
+#: includes/Products.php:273
 msgid "Set the commission type admin will get from this product"
 msgstr ""
 
-#: includes/Products.php:542
+#: includes/Products.php:552
 #: templates/products/edit/product-list-table-inline-edit-form.php:6
 msgid "Quick Edit"
 msgstr ""
 
-#: includes/Products.php:554
+#: includes/Products.php:564
 #: modules/booking/templates/booking/product-list.php:160
 msgid "Duplicate"
 msgstr ""
 
-#: includes/Products.php:658
+#: includes/Products.php:668
 msgid "Product succesfully duplicated"
 msgstr ""
 
-#: includes/Products.php:712
+#: includes/Products.php:722
 #: modules/booking/templates/booking/product-list.php:216
 msgid "Simple"
 msgstr ""
 
-#: includes/Products.php:713
+#: includes/Products.php:723
 #: modules/booking/templates/booking/product-list.php:219
 msgid "Variable"
 msgstr ""
 
-#: includes/Products.php:717
+#: includes/Products.php:724
+msgid "External/Affiliate product"
+msgstr ""
+
+#: includes/Products.php:728
 msgid "Group Product"
 msgstr ""
 
-#: includes/Products.php:794
+#: includes/Products.php:825
 msgid "Error! Your account is not enabled for selling, please contact the admin"
 msgstr ""
 
-#: includes/Products.php:893
+#: includes/Products.php:924
 #: modules/booking/templates/booking/html-other-options.php:17
-#: modules/booking/templates/booking/new-product.php:689
+#: modules/booking/templates/booking/new-product.php:695
 #: modules/simple-auction/templates/auction/auction-product-edit.php:456
 #: templates/products/edit/sidebar.php:31
 msgid "Online"
 msgstr ""
 
-#: includes/Products.php:894
+#: includes/Products.php:925
 #: modules/booking/templates/booking/html-other-options.php:18
-#: modules/booking/templates/booking/new-product.php:690
+#: modules/booking/templates/booking/new-product.php:696
 #: modules/simple-auction/templates/auction/auction-product-edit.php:457
 #: modules/subscription/includes/admin/admin.php:548
 #: src/admin/components/Announcement.vue:19
-#: src/admin/components/Announcement.vue:120
+#: src/admin/components/Announcement.vue:123
 #: templates/products/edit/sidebar.php:32
 msgid "Draft"
 msgstr ""
 
-#: includes/Products.php:903 templates/products/edit/inventory.php:46
+#: includes/Products.php:934 templates/products/edit/inventory.php:46
 msgid "In Stock"
 msgstr ""
 
-#: includes/Products.php:904 templates/products/edit/inventory.php:47
+#: includes/Products.php:935 templates/products/edit/inventory.php:47
 msgid "Out of Stock"
 msgstr ""
 
-#: includes/Products.php:908 includes/woo-views/variation-admin-html.php:69
+#: includes/Products.php:939 includes/woo-views/variation-admin-html.php:69
 #: templates/products/edit/inventory.php:58
 msgid "Allow but notify customer"
 msgstr ""
 
-#: includes/Products.php:931
+#: includes/Products.php:962
 msgid "data is empty"
 msgstr ""
 
-#: includes/Products.php:937
+#: includes/Products.php:968
 msgid "Product ID field is required"
 msgstr ""
 
-#: includes/Products.php:969 includes/Products.php:1007
+#: includes/Products.php:1000 includes/Products.php:1038
 msgid "Error updating product data"
 msgstr ""
 
-#: includes/Products.php:973
+#: includes/Products.php:1004
 msgid "Invalid or duplicated SKU."
 msgstr ""
 
-#: includes/Products.php:1026
+#: includes/Products.php:1057
 msgid "Product updated successfully"
 msgstr ""
 
-#: includes/REST/AnnouncementController.php:57
+#: includes/REST/AnnouncementController.php:59
 msgid "Announcement status"
 msgstr ""
 
-#: includes/REST/AnnouncementController.php:74
-#: includes/REST/AnnouncementController.php:102
+#: includes/REST/AnnouncementController.php:79
+#: includes/REST/AnnouncementController.php:109
 #: includes/REST/CouponController.php:467 includes/REST/RefundController.php:64
 #: includes/REST/RefundController.php:79 includes/REST/RefundController.php:94
 #: includes/REST/RefundController.php:413
@@ -1626,37 +1638,37 @@ msgstr ""
 msgid "Unique identifier for the object."
 msgstr ""
 
-#: includes/REST/AnnouncementController.php:189
+#: includes/REST/AnnouncementController.php:199
 #: templates/announcement/listing-announcement.php:47
 #: templates/dashboard/announcement-widget.php:47
 msgid "No announcement found"
 msgstr ""
 
-#: includes/REST/AnnouncementController.php:208
-#: includes/REST/AnnouncementController.php:271
+#: includes/REST/AnnouncementController.php:217
+#: includes/REST/AnnouncementController.php:310
 msgid "Announcement title must be required"
 msgstr ""
 
-#: includes/REST/AnnouncementController.php:267
+#: includes/REST/AnnouncementController.php:306
 msgid "No announcement id found"
 msgstr ""
 
-#: includes/REST/AnnouncementController.php:360
+#: includes/REST/AnnouncementController.php:432
 #: modules/store-reviews/classes/api/class-store-reviews-controller.php:275
 #. translators: %s: force=true
 msgid "The post does not support trashing. Set '%s' to delete."
 msgstr ""
 
-#: includes/REST/AnnouncementController.php:365
+#: includes/REST/AnnouncementController.php:437
 #: modules/store-reviews/classes/api/class-store-reviews-controller.php:280
 msgid "The post has already been deleted."
 msgstr ""
 
-#: includes/REST/AnnouncementController.php:376
+#: includes/REST/AnnouncementController.php:448
 msgid "The announcement cannot be deleted."
 msgstr ""
 
-#: includes/REST/AnnouncementController.php:427
+#: includes/REST/AnnouncementController.php:499
 #: includes/REST/StoreController.php:134
 #: modules/store-reviews/classes/api/class-store-reviews-controller.php:342
 msgid "No items found for bulk updating"
@@ -2094,6 +2106,8 @@ msgid "Refund status"
 msgstr ""
 
 #: includes/REST/RefundController.php:197
+#: modules/follow-store/includes/class-dokan-follow-store-rest-controller.php:80
+#: modules/follow-store/includes/class-dokan-follow-store-rest-controller.php:118
 #: modules/rma/includes/class-ajax.php:162
 #: modules/rma/includes/class-ajax.php:249
 #: modules/rma/includes/functions.php:366 templates/widgets/best-seller.php:36
@@ -2113,6 +2127,8 @@ msgid "Order ID"
 msgstr ""
 
 #: includes/REST/RefundController.php:425
+#: modules/follow-store/includes/class-dokan-follow-store-rest-controller.php:40
+#: modules/follow-store/includes/class-dokan-follow-store-rest-controller.php:55
 #: modules/store-reviews/classes/api/class-store-reviews-controller.php:46
 msgid "Vendor ID"
 msgstr ""
@@ -2243,9 +2259,9 @@ msgid "Refund request submitted."
 msgstr ""
 
 #: includes/Refund/Ajax.php:127 modules/live-chat/includes/Talkjs.php:181
-#: modules/moip/includes/admin/class-moip-subscription.php:108
-#: modules/moip/includes/admin/class-moip-subscription.php:193
-#: modules/moip/includes/admin/class-moip-subscription.php:540
+#: modules/moip/includes/admin/class-moip-subscription.php:112
+#: modules/moip/includes/admin/class-moip-subscription.php:197
+#: modules/moip/includes/admin/class-moip-subscription.php:544
 msgid "Something went wrong"
 msgstr ""
 
@@ -2396,12 +2412,12 @@ msgid "You have no permission to manage this review"
 msgstr ""
 
 #: includes/Review.php:320 includes/Review.php:370
-#: modules/store-support/module.php:1297 templates/coupon/listing.php:120
+#: modules/store-support/module.php:1296 templates/coupon/listing.php:120
 msgid "&laquo;"
 msgstr ""
 
 #: includes/Review.php:321 includes/Review.php:371
-#: modules/store-support/module.php:1298 templates/coupon/listing.php:121
+#: modules/store-support/module.php:1297 templates/coupon/listing.php:121
 msgid "&raquo;"
 msgstr ""
 
@@ -2504,7 +2520,7 @@ msgstr ""
 #: modules/rma/includes/class-vendor.php:250
 #: modules/simple-auction/module.php:404
 #: modules/simple-auction/templates/auction/template-auction.php:6
-#: modules/store-support/module.php:716 modules/vendor-analytics/module.php:165
+#: modules/store-support/module.php:716 modules/vendor-analytics/module.php:170
 #: modules/vendor-staff/module.php:280
 msgid "You have no permission to view this page"
 msgstr ""
@@ -2517,7 +2533,7 @@ msgstr ""
 msgid "Shipping options saved successfully"
 msgstr ""
 
-#: includes/Settings.php:626
+#: includes/Settings.php:625
 msgid "Biography"
 msgstr ""
 
@@ -2889,7 +2905,7 @@ msgstr ""
 msgid "No of Vendor:"
 msgstr ""
 
-#: includes/Withdraws.php:37 src/admin/components/VendorSingle.vue:262
+#: includes/Withdraws.php:37 src/admin/components/VendorSingle.vue:261
 msgid "Skrill"
 msgstr ""
 
@@ -2897,12 +2913,12 @@ msgstr ""
 msgid "E-mail"
 msgstr ""
 
-#: includes/functions-reports.php:12 includes/functions-reports.php:846
-#: includes/functions-reports.php:949
+#: includes/functions-reports.php:12 includes/functions-reports.php:849
+#: includes/functions-reports.php:952
 msgid "Sales"
 msgstr ""
 
-#: includes/functions-reports.php:15 src/admin/components/Reports.vue:146
+#: includes/functions-reports.php:15 src/admin/components/Reports.vue:142
 msgid "Overview"
 msgstr ""
 
@@ -2923,23 +2939,23 @@ msgid "Statement"
 msgstr ""
 
 #: includes/functions-reports.php:69 includes/functions-reports.php:468
-#: includes/functions-reports.php:829 includes/functions-reports.php:933
+#: includes/functions-reports.php:832 includes/functions-reports.php:936
 #: modules/vendor-analytics/includes/functions.php:70
 msgid "From:"
 msgstr ""
 
-#: includes/functions-reports.php:73 includes/functions-reports.php:472
-#: includes/functions-reports.php:834 includes/functions-reports.php:938
+#: includes/functions-reports.php:73 includes/functions-reports.php:475
+#: includes/functions-reports.php:837 includes/functions-reports.php:941
 #: modules/vendor-analytics/includes/functions.php:74
 msgid "To:"
 msgstr ""
 
-#: includes/functions-reports.php:77 includes/functions-reports.php:475
-#: includes/functions-reports.php:838 includes/functions-reports.php:942
+#: includes/functions-reports.php:77 includes/functions-reports.php:478
+#: includes/functions-reports.php:841 includes/functions-reports.php:945
 #: modules/elementor/includes/Widgets/StoreVacationMessage.php:112
 #: modules/elementor/views/editor-templates/sortable-list-row.php:26
 #: modules/vendor-analytics/includes/functions.php:77
-#: src/admin/components/Reports.vue:52 src/admin/components/Reports.vue:65
+#: src/admin/components/Reports.vue:48 src/admin/components/Reports.vue:61
 msgid "Show"
 msgstr ""
 
@@ -2963,47 +2979,47 @@ msgstr ""
 msgid "This month's sales"
 msgstr ""
 
-#: includes/functions-reports.php:480
+#: includes/functions-reports.php:483
 msgid "Sales in this period"
 msgstr ""
 
-#: includes/functions-reports.php:566
+#: includes/functions-reports.php:569
 msgid "%s sales in this period"
 msgstr ""
 
-#: includes/functions-reports.php:569
+#: includes/functions-reports.php:572
 msgid "%s average daily sales"
 msgstr ""
 
-#: includes/functions-reports.php:572
+#: includes/functions-reports.php:575
 msgid "%s orders placed"
 msgstr ""
 
-#: includes/functions-reports.php:575
+#: includes/functions-reports.php:578
 msgid "%s items purchased"
 msgstr ""
 
-#: includes/functions-reports.php:578
+#: includes/functions-reports.php:581
 msgid "%s charged for shipping"
 msgstr ""
 
-#: includes/functions-reports.php:581
+#: includes/functions-reports.php:584
 msgid "%s worth of coupons used"
 msgstr ""
 
-#: includes/functions-reports.php:689
+#: includes/functions-reports.php:692
 msgid "Sales total"
 msgstr ""
 
-#: includes/functions-reports.php:699
+#: includes/functions-reports.php:702
 msgid "Number of orders"
 msgstr ""
 
-#: includes/functions-reports.php:706
+#: includes/functions-reports.php:709
 msgid "sales"
 msgstr ""
 
-#: includes/functions-reports.php:845 includes/functions-reports.php:948
+#: includes/functions-reports.php:848 includes/functions-reports.php:951
 #: modules/export-import/includes/importers/views/html-csv-import-done.php:54
 #: modules/export-import/templates/export-import/template_importer.php:60
 #: modules/export-import/templates/export-import/template_importer_new.php:106
@@ -3017,15 +3033,15 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: includes/functions-reports.php:861
+#: includes/functions-reports.php:864
 msgid "Product does not exist"
 msgstr ""
 
-#: includes/functions-reports.php:950
+#: includes/functions-reports.php:953
 msgid "Earning"
 msgstr ""
 
-#: includes/functions-reports.php:966
+#: includes/functions-reports.php:969
 msgid "Product no longer exists"
 msgstr ""
 
@@ -3034,117 +3050,117 @@ msgstr ""
 msgid "#%s &ndash; Variation SKU must be unique."
 msgstr ""
 
-#: includes/functions-wc.php:300
+#: includes/functions-wc.php:304
 msgid ""
 "Before adding variations, add and save some attributes on the "
 "<strong>Attributes</strong> tab."
 msgstr ""
 
-#: includes/functions-wc.php:304
+#: includes/functions-wc.php:308
 msgid "Learn more"
 msgstr ""
 
-#: includes/functions-wc.php:422
+#: includes/functions-wc.php:426
 msgid "Add Variation"
 msgstr ""
 
-#: includes/functions-wc.php:425
+#: includes/functions-wc.php:429
 msgid "Link all variations"
 msgstr ""
 
-#: includes/functions-wc.php:427
+#: includes/functions-wc.php:431
 msgid "Default selections:"
 msgstr ""
 
-#: includes/functions-wc.php:441
+#: includes/functions-wc.php:445
 msgid "No default"
 msgstr ""
 
-#: includes/functions-wc.php:525
+#: includes/functions-wc.php:529
 msgid ""
 "Are you sure you want to link all variations? This will create a new "
 "variation for each and every possible combination of variation attributes "
 "(max 50 per run)."
 msgstr ""
 
-#: includes/functions-wc.php:542
+#: includes/functions-wc.php:546
 msgid "variation added"
 msgstr ""
 
-#: includes/functions-wc.php:544
+#: includes/functions-wc.php:548
 msgid "variations added"
 msgstr ""
 
-#: includes/functions-wc.php:546
+#: includes/functions-wc.php:550
 msgid "No variations added"
 msgstr ""
 
-#: includes/functions-wc.php:569
+#: includes/functions-wc.php:573
 msgid "Are you sure you want to remove this variation?"
 msgstr ""
 
-#: includes/functions-wc.php:733
+#: includes/functions-wc.php:737
 msgid "Enter your first name"
 msgstr ""
 
-#: includes/functions-wc.php:734
+#: includes/functions-wc.php:738
 msgid "Enter your shop name"
 msgstr ""
 
-#: includes/functions-wc.php:735
+#: includes/functions-wc.php:739
 msgid "Enter your shop address"
 msgstr ""
 
-#: includes/functions-wc.php:736
+#: includes/functions-wc.php:740
 msgid "Enter your phone number"
 msgstr ""
 
-#: includes/functions-wc.php:861 includes/functions-wc.php:862
+#: includes/functions-wc.php:865 includes/functions-wc.php:866
 msgid "Quantity Discount"
 msgstr ""
 
-#: includes/functions-wc.php:868 includes/functions-wc.php:869
+#: includes/functions-wc.php:872 includes/functions-wc.php:873
 msgid "Order Discount"
 msgstr ""
 
-#: includes/functions-wc.php:898 includes/functions-wc.php:952
+#: includes/functions-wc.php:902 includes/functions-wc.php:956
 msgid "Quantity Discount:"
 msgstr ""
 
-#: includes/functions-wc.php:907 includes/functions-wc.php:915
-#: includes/functions-wc.php:944
+#: includes/functions-wc.php:911 includes/functions-wc.php:919
+#: includes/functions-wc.php:948
 msgid "Order Discount:"
 msgstr ""
 
-#: includes/functions-wc.php:1269
+#: includes/functions-wc.php:1273
 msgid "Commission type"
 msgstr ""
 
-#: includes/functions-wc.php:1275 includes/functions-wc.php:1354
+#: includes/functions-wc.php:1279 includes/functions-wc.php:1358
 msgid "This is the commission type for admin fee"
 msgstr ""
 
-#: includes/functions-wc.php:1279
+#: includes/functions-wc.php:1283
 msgid "Admin Commission from this category"
 msgstr ""
 
-#: includes/functions-wc.php:1285 includes/functions-wc.php:1366
+#: includes/functions-wc.php:1289 includes/functions-wc.php:1370
 msgid "If set, it will override global admin commission rate for this category"
 msgstr ""
 
-#: includes/functions-wc.php:1358
+#: includes/functions-wc.php:1362
 msgid "Admin commission"
 msgstr ""
 
-#: includes/functions-wc.php:1521
+#: includes/functions-wc.php:1525
 msgid "Shipping: "
 msgstr ""
 
-#: includes/functions-wc.php:1685
+#: includes/functions-wc.php:1689
 msgid "Sorry, you can't add more than one vendor's product in the cart."
 msgstr ""
 
-#: includes/functions-wc.php:1718
+#: includes/functions-wc.php:1722
 msgid "Sorry, you can't purchase from multiple vendors at once."
 msgstr ""
 
@@ -3185,47 +3201,43 @@ msgid "Add facebook to gain %s%% progress"
 msgstr ""
 
 #: includes/functions.php:94
-msgid "Add Google to gain %s%% progress"
-msgstr ""
-
-#: includes/functions.php:97
 msgid "Add Twitter to gain %s%% progress"
 msgstr ""
 
-#: includes/functions.php:100
+#: includes/functions.php:97
 msgid "Add Youtube to gain %s%% progress"
 msgstr ""
 
-#: includes/functions.php:103
+#: includes/functions.php:100
 msgid "Add LinkedIn to gain %s%% progress"
 msgstr ""
 
-#: includes/functions.php:106
+#: includes/functions.php:103
 msgid "Start with adding a Banner to gain profile progress"
 msgstr ""
 
-#: includes/functions.php:163
+#: includes/functions.php:160
 msgid ""
 "Are you sure you want to remove the selected items? If you have previously "
 "reduced this item's stock, or this order was submitted by a customer, you "
 "will need to manually restore the item's stock."
 msgstr ""
 
-#: includes/functions.php:164
+#: includes/functions.php:161
 msgid "Please select some items."
 msgstr ""
 
-#: includes/functions.php:165
+#: includes/functions.php:162
 msgid ""
 "Are you sure you wish to process this refund request? This action cannot be "
 "undone."
 msgstr ""
 
-#: includes/functions.php:166
+#: includes/functions.php:163
 msgid "Are you sure you wish to delete this refund? This action cannot be undone."
 msgstr ""
 
-#: includes/functions.php:167
+#: includes/functions.php:164
 msgid "Remove this item meta?"
 msgstr ""
 
@@ -3362,9 +3374,9 @@ msgstr ""
 #: includes/woo-views/variation-admin-html.php:91
 #: modules/vendor-subscription-product/templates/subscription/price.php:67
 #: modules/vendor-subscription-product/templates/subscription/variation-price.php:66
-#: src/admin/components/EditAnnouncement.vue:205
-#: src/admin/components/EditAnnouncement.vue:271
-#: src/admin/components/NewAnnouncement.vue:237
+#: src/admin/components/EditAnnouncement.vue:208
+#: src/admin/components/EditAnnouncement.vue:274
+#: src/admin/components/NewAnnouncement.vue:240
 #: templates/orders/views/html-variation-admin.php:95
 #: templates/products/edit/html-product-variation.php:121
 #: templates/products/product-edit.php:268
@@ -3541,7 +3553,7 @@ msgid ""
 msgstr ""
 
 #: includes/woo-views/variation-admin-html.php:238
-#: modules/booking/templates/booking/new-product.php:122
+#: modules/booking/templates/booking/new-product.php:128
 #: modules/booking/templates/booking/product-list.php:212
 #: templates/orders/views/html-variation-admin.php:78
 #: templates/products/edit/html-product-variation.php:79
@@ -3603,9 +3615,9 @@ msgstr ""
 
 #: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:121
 #: modules/booking/includes/emails/class-dokan-booking-email-new.php:131
-#: modules/booking/module.php:609
+#: modules/booking/module.php:610
 #: modules/booking/templates/booking/my-bookings/all-bookings.php:130
-#: modules/booking/templates/booking/my-bookings/booking-details.php:236
+#: modules/booking/templates/booking/my-bookings/booking-details.php:248
 #: modules/booking/templates/booking/resources/resources.php:107
 #: modules/stripe/includes/StripeConnect.php:555
 #: modules/stripe/includes/StripeConnect.php:570
@@ -3744,7 +3756,7 @@ msgid ""
 "created."
 msgstr ""
 
-#: modules/booking/module.php:405 modules/booking/module.php:1175
+#: modules/booking/module.php:405 modules/booking/module.php:1176
 msgid "Booking"
 msgstr ""
 
@@ -3752,85 +3764,85 @@ msgstr ""
 msgid "You have no permission to view this booking page"
 msgstr ""
 
-#: modules/booking/module.php:781 modules/booking/module.php:798
+#: modules/booking/module.php:782 modules/booking/module.php:799
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: modules/booking/module.php:785
+#: modules/booking/module.php:786
 msgid "You have taken too long. Please go back and retry."
 msgstr ""
 
-#: modules/booking/module.php:869
+#: modules/booking/module.php:870
 msgid "Error Occured"
 msgstr ""
 
-#: modules/booking/module.php:884
+#: modules/booking/module.php:885
 msgid "All Booking Product"
 msgstr ""
 
-#: modules/booking/module.php:888
+#: modules/booking/module.php:889
 msgid "Add Booking Product"
 msgstr ""
 
-#: modules/booking/module.php:892
+#: modules/booking/module.php:893
 #: modules/booking/templates/booking/my-bookings/all-bookings.php:41
 msgid "Manage Bookings"
 msgstr ""
 
-#: modules/booking/module.php:896
+#: modules/booking/module.php:897
 msgid "Calendar"
 msgstr ""
 
-#: modules/booking/module.php:900
+#: modules/booking/module.php:901
 #: modules/booking/templates/booking/resources/html-booking-resources.php:90
 msgid "Manage Resources"
 msgstr ""
 
-#: modules/booking/module.php:904
+#: modules/booking/module.php:905
 msgid "Edit Booking Product"
 msgstr ""
 
-#: modules/booking/module.php:908
+#: modules/booking/module.php:909
 msgid "Edit Resource"
 msgstr ""
 
-#: modules/booking/module.php:912
+#: modules/booking/module.php:913
 msgid "Edit Booking"
 msgstr ""
 
-#: modules/booking/module.php:1150
+#: modules/booking/module.php:1151
 msgid "View booking menu"
 msgstr ""
 
-#: modules/booking/module.php:1153
+#: modules/booking/module.php:1154
 msgid "Manage booking products"
 msgstr ""
 
-#: modules/booking/module.php:1154
+#: modules/booking/module.php:1155
 msgid "Manage booking calendar"
 msgstr ""
 
-#: modules/booking/module.php:1155
+#: modules/booking/module.php:1156
 msgid "Manage bookings"
 msgstr ""
 
-#: modules/booking/module.php:1156
+#: modules/booking/module.php:1157
 msgid "Manage booking resource"
 msgstr ""
 
-#: modules/booking/module.php:1157
+#: modules/booking/module.php:1158
 msgid "Add booking product"
 msgstr ""
 
-#: modules/booking/module.php:1158
+#: modules/booking/module.php:1159
 msgid "Edit booking product"
 msgstr ""
 
-#: modules/booking/module.php:1159
+#: modules/booking/module.php:1160
 msgid "Delete booking product"
 msgstr ""
 
-#: modules/booking/module.php:1190
+#: modules/booking/module.php:1191
 msgid "Booking Person Discount (Amount Off Per Person)"
 msgstr ""
 
@@ -3956,43 +3968,43 @@ msgstr ""
 
 #: modules/booking/templates/booking/html-booking-availability-fields.php:20
 #: modules/booking/templates/booking/html-booking-pricing-fields.php:20
-#: modules/booking/templates/booking/new-product.php:525
+#: modules/booking/templates/booking/new-product.php:531
 msgid "Monday"
 msgstr ""
 
 #: modules/booking/templates/booking/html-booking-availability-fields.php:21
 #: modules/booking/templates/booking/html-booking-pricing-fields.php:21
-#: modules/booking/templates/booking/new-product.php:526
+#: modules/booking/templates/booking/new-product.php:532
 msgid "Tuesday"
 msgstr ""
 
 #: modules/booking/templates/booking/html-booking-availability-fields.php:22
 #: modules/booking/templates/booking/html-booking-pricing-fields.php:22
-#: modules/booking/templates/booking/new-product.php:527
+#: modules/booking/templates/booking/new-product.php:533
 msgid "Wednesday"
 msgstr ""
 
 #: modules/booking/templates/booking/html-booking-availability-fields.php:23
 #: modules/booking/templates/booking/html-booking-pricing-fields.php:23
-#: modules/booking/templates/booking/new-product.php:528
+#: modules/booking/templates/booking/new-product.php:534
 msgid "Thursday"
 msgstr ""
 
 #: modules/booking/templates/booking/html-booking-availability-fields.php:24
 #: modules/booking/templates/booking/html-booking-pricing-fields.php:24
-#: modules/booking/templates/booking/new-product.php:529
+#: modules/booking/templates/booking/new-product.php:535
 msgid "Friday"
 msgstr ""
 
 #: modules/booking/templates/booking/html-booking-availability-fields.php:25
 #: modules/booking/templates/booking/html-booking-pricing-fields.php:25
-#: modules/booking/templates/booking/new-product.php:530
+#: modules/booking/templates/booking/new-product.php:536
 msgid "Saturday"
 msgstr ""
 
 #: modules/booking/templates/booking/html-booking-availability-fields.php:26
 #: modules/booking/templates/booking/html-booking-pricing-fields.php:26
-#: modules/booking/templates/booking/new-product.php:524
+#: modules/booking/templates/booking/new-product.php:530
 msgid "Sunday"
 msgstr ""
 
@@ -4112,13 +4124,13 @@ msgid ""
 msgstr ""
 
 #: modules/booking/templates/booking/html-dokan-booking-pricing.php:52
-#: modules/booking/templates/booking/new-product.php:557
+#: modules/booking/templates/booking/new-product.php:563
 #: modules/booking/templates/booking/resources/edit-resource.php:78
 msgid "Range type"
 msgstr ""
 
 #: modules/booking/templates/booking/html-dokan-booking-pricing.php:53
-#: modules/booking/templates/booking/new-product.php:558
+#: modules/booking/templates/booking/new-product.php:564
 #: modules/booking/templates/booking/resources/edit-resource.php:79
 msgid "Range"
 msgstr ""
@@ -4132,7 +4144,7 @@ msgid "Enter a cost for this rule. Applied to each booking block."
 msgstr ""
 
 #: modules/booking/templates/booking/html-dokan-booking-pricing.php:76
-#: modules/booking/templates/booking/new-product.php:585
+#: modules/booking/templates/booking/new-product.php:591
 #: modules/booking/templates/booking/resources/edit-resource.php:106
 msgid "Add Range"
 msgstr ""
@@ -4142,26 +4154,26 @@ msgid "All matching rules will be applied to the booking."
 msgstr ""
 
 #: modules/booking/templates/booking/html-other-options.php:3
-#: modules/booking/templates/booking/new-product.php:675
+#: modules/booking/templates/booking/new-product.php:681
 #: modules/simple-auction/templates/auction/auction-product-edit.php:446
 msgid "Other Options"
 msgstr ""
 
 #: modules/booking/templates/booking/html-other-options.php:4
-#: modules/booking/templates/booking/new-product.php:676
+#: modules/booking/templates/booking/new-product.php:682
 #: modules/simple-auction/templates/auction/auction-product-edit.php:447
 msgid "Set your extra product options"
 msgstr ""
 
 #: modules/booking/templates/booking/html-other-options.php:13
-#: modules/booking/templates/booking/new-product.php:685
+#: modules/booking/templates/booking/new-product.php:691
 #: modules/simple-auction/templates/auction/auction-product-edit.php:453
 #: modules/subscription/includes/admin/admin.php:541
 msgid "Product Status"
 msgstr ""
 
 #: modules/booking/templates/booking/html-other-options.php:34
-#: modules/booking/templates/booking/new-product.php:706
+#: modules/booking/templates/booking/new-product.php:712
 #: modules/simple-auction/templates/auction/auction-product-edit.php:472
 #: templates/products/edit/options.php:19
 #: templates/products/edit/product-list-table-inline-edit-form.php:140
@@ -4169,18 +4181,18 @@ msgid "Visibility"
 msgstr ""
 
 #: modules/booking/templates/booking/html-other-options.php:45
-#: modules/booking/templates/booking/new-product.php:717
+#: modules/booking/templates/booking/new-product.php:723
 #: templates/products/edit/options.php:4
 msgid "Purchase Note"
 msgstr ""
 
 #: modules/booking/templates/booking/html-other-options.php:46
-#: modules/booking/templates/booking/new-product.php:718
+#: modules/booking/templates/booking/new-product.php:724
 msgid "Customer will get this info in their order email"
 msgstr ""
 
 #: modules/booking/templates/booking/html-other-options.php:51
-#: modules/booking/templates/booking/new-product.php:723
+#: modules/booking/templates/booking/new-product.php:729
 msgid "Enable product reviews"
 msgstr ""
 
@@ -4362,34 +4374,34 @@ msgstr ""
 msgid "No Bookings found"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:30
+#: modules/booking/templates/booking/my-bookings/booking-details.php:32
 msgid "This is not yours, I swear!"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:42
+#: modules/booking/templates/booking/my-bookings/booking-details.php:44
 msgid "Booking Details"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:45
-msgid "Booking Number: #%d. Order Number:<a href=\"%s\"> #%d </a>"
+#: modules/booking/templates/booking/my-bookings/booking-details.php:49
+msgid "Booking Number: #%1$d. Order Number:<a href=\"%2$s\"> #%3$d </a>"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:57
+#: modules/booking/templates/booking/my-bookings/booking-details.php:62
 #: modules/rma/templates/rma/vendor-rma-requests.php:50
 #: modules/rma/templates/rma/vendor-rma-single-request.php:67
 msgid "Details"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:63
+#: modules/booking/templates/booking/my-bookings/booking-details.php:68
 msgid "Booking Status:"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:65
+#: modules/booking/templates/booking/my-bookings/booking-details.php:70
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:242
 msgid "&nbsp; Edit"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:82
+#: modules/booking/templates/booking/my-bookings/booking-details.php:88
 #: modules/product-addon/templates/product-addon/html-global-admin-add.php:11
 #: modules/rma/templates/rma/vendor-rma-single-request.php:159
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:263
@@ -4399,7 +4411,7 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:84
+#: modules/booking/templates/booking/my-bookings/booking-details.php:90
 #: modules/seller-vacation/views/store-settings.php:55
 #: modules/subscription/assets/src/js/admin/components/Subscriptions.vue:238
 #: modules/vendor-subscription-product/templates/subscription/price.php:68
@@ -4414,7 +4426,7 @@ msgstr ""
 #: src/admin/components/Refund.vue:122 src/admin/components/Refund.vue:152
 #: src/admin/components/VendorSingle.vue:108
 #: src/admin/components/VendorSingle.vue:153
-#: src/admin/components/VendorSingle.vue:287
+#: src/admin/components/VendorSingle.vue:286
 #: templates/orders/views/html-order-items.php:286
 #: templates/products/edit/product-list-table-inline-edit-form.php:245
 #: templates/products/edit/sidebar.php:42
@@ -4422,113 +4434,113 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:89
+#: modules/booking/templates/booking/my-bookings/booking-details.php:95
 msgid "Order Date :"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:97
+#: modules/booking/templates/booking/my-bookings/booking-details.php:103
 msgid "Booked Product : "
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:108
+#: modules/booking/templates/booking/my-bookings/booking-details.php:116
 msgid "Resource(s) :"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:122
-#: modules/booking/templates/booking/my-bookings/booking-details.php:129
+#: modules/booking/templates/booking/my-bookings/booking-details.php:131
+#: modules/booking/templates/booking/my-bookings/booking-details.php:138
 msgid "Person(s) :"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:139
+#: modules/booking/templates/booking/my-bookings/booking-details.php:148
 msgid "Booking Start Date :"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:144
+#: modules/booking/templates/booking/my-bookings/booking-details.php:153
 msgid "Booking End Date :"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:149
+#: modules/booking/templates/booking/my-bookings/booking-details.php:158
 msgid "Duration :"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:173
+#: modules/booking/templates/booking/my-bookings/booking-details.php:182
 msgid "Customer Details"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:183
+#: modules/booking/templates/booking/my-bookings/booking-details.php:193
 msgid "Name:"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:193
+#: modules/booking/templates/booking/my-bookings/booking-details.php:203
 msgid "User Email:"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:203
+#: modules/booking/templates/booking/my-bookings/booking-details.php:215
 msgid "Address:"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:208
+#: modules/booking/templates/booking/my-bookings/booking-details.php:220
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:170
 msgid "No billing address set."
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:213
+#: modules/booking/templates/booking/my-bookings/booking-details.php:225
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:291
 msgid "Email:"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:219
+#: modules/booking/templates/booking/my-bookings/booking-details.php:231
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:295
 msgid "Phone:"
 msgstr ""
 
-#: modules/booking/templates/booking/my-bookings/booking-details.php:227
+#: modules/booking/templates/booking/my-bookings/booking-details.php:239
 msgid "View Order"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:44
+#: modules/booking/templates/booking/new-product.php:50
 msgid "Add Bookable product"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:53
+#: modules/booking/templates/booking/new-product.php:59
 #: modules/simple-auction/templates/auction/auction-product-edit.php:74
 #: modules/single-product-multiple-vendor/includes/products.php:495
 #: templates/products/product-edit.php:114
 msgid "View Product"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:58
+#: modules/booking/templates/booking/new-product.php:64
 #: modules/simple-auction/templates/auction/auction-product-edit.php:69
 #: templates/products/product-edit.php:109
 msgid "Hidden"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:72
+#: modules/booking/templates/booking/new-product.php:78
 #: modules/simple-auction/templates/auction/new-auction-product.php:33
 #: templates/products/product-edit.php:145
 msgid "Error!"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:81
+#: modules/booking/templates/booking/new-product.php:87
 #: modules/booking/templates/booking/resources/edit-resource.php:33
 #: modules/simple-auction/templates/auction/auction-product-edit.php:84
 #: src/admin/components/Tools.vue:87 src/admin/components/Tools.vue:127
-#: src/admin/components/Tools.vue:168 src/admin/components/VendorSingle.vue:565
+#: src/admin/components/Tools.vue:168 src/admin/components/VendorSingle.vue:563
 #: templates/products/product-edit.php:132
 msgid "Success!"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:81
+#: modules/booking/templates/booking/new-product.php:87
 msgid "The product has been saved successfully."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:84
+#: modules/booking/templates/booking/new-product.php:90
 #: modules/simple-auction/templates/auction/auction-product-edit.php:87
 #: templates/products/product-edit.php:135
 msgid "View Product &rarr;"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:114
+#: modules/booking/templates/booking/new-product.php:120
 #: modules/elementor/includes/Widgets/StoreCoupons.php:83
 #: modules/elementor/includes/Widgets/StoreInfo.php:93
 #: modules/elementor/includes/Widgets/StoreInfo.php:95
@@ -4540,30 +4552,30 @@ msgstr ""
 #: modules/product-addon/templates/product-addon/html-addon.php:115
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:103
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:155
-#: modules/store-support/module.php:793 modules/store-support/module.php:1140
+#: modules/store-support/module.php:793 modules/store-support/module.php:1139
 #: modules/stripe/includes/Settings/StripeConnect.php:14
-#: src/admin/components/Announcement.vue:141
+#: src/admin/components/Announcement.vue:144
 #: src/frontend/components/Zone.vue:170 templates/coupon/form.php:19
 #: templates/products/edit/product-list-table-inline-edit-form.php:10
-#: templates/products/product-seo-content.php:58
-#: templates/products/product-seo-content.php:75
+#: templates/products/product-seo-content.php:49
+#: templates/products/product-seo-content.php:66
 msgid "Title"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:116
+#: modules/booking/templates/booking/new-product.php:122
 msgid "Please choose a Name !!!"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:118
+#: modules/booking/templates/booking/new-product.php:124
 #: modules/simple-auction/templates/auction/new-auction-product.php:81
 msgid "Product name.."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:122
+#: modules/booking/templates/booking/new-product.php:128
 msgid "Virtual products are intangible and aren't shipped."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:127
+#: modules/booking/templates/booking/new-product.php:133
 #: modules/simple-auction/templates/auction/auction-product-edit.php:178
 #: modules/simple-auction/templates/auction/auction-product-edit.php:209
 #: src/admin/components/VendorPro.vue:41
@@ -4571,14 +4583,14 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:152
+#: modules/booking/templates/booking/new-product.php:158
 #: modules/simple-auction/templates/auction/auction-product-edit.php:229
 #: modules/simple-auction/templates/auction/new-auction-product.php:128
 #: templates/products/product-edit.php:338
 msgid "Select product category"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:159
+#: modules/booking/templates/booking/new-product.php:165
 #: modules/export-import/includes/export/class-wc-product-csv-exporter.php:107
 #: modules/export-import/includes/importers/class-wc-product-csv-importer-controller.php:399
 #: modules/export-import/includes/importers/class-wc-product-csv-importer-controller.php:531
@@ -4586,242 +4598,242 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:179
+#: modules/booking/templates/booking/new-product.php:185
 #: modules/simple-auction/templates/auction/auction-product-edit.php:255
 #: modules/simple-auction/templates/auction/new-auction-product.php:151
 #: templates/products/product-edit.php:363
 msgid "Select product tags"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:204
+#: modules/booking/templates/booking/new-product.php:210
 #: modules/simple-auction/templates/auction/auction-product-edit.php:119
 #: templates/products/product-edit.php:229
 msgid "Upload a product cover image"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:235
+#: modules/booking/templates/booking/new-product.php:241
 #: modules/simple-auction/templates/auction/auction-product-edit.php:149
 #: templates/products/edit/sidebar.php:213
 msgid "Delete image"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:241
+#: modules/booking/templates/booking/new-product.php:247
 #: modules/simple-auction/templates/auction/auction-product-edit.php:155
 #: modules/simple-auction/templates/auction/new-auction-product.php:69
 #: templates/products/edit/sidebar.php:219
 msgid "Add gallery image"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:299
+#: modules/booking/templates/booking/new-product.php:305
 msgid "Booking duration"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:302
+#: modules/booking/templates/booking/new-product.php:308
 msgid "Fixed blocks of"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:303
+#: modules/booking/templates/booking/new-product.php:309
 msgid "Customer defined blocks of"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:307
-#: modules/booking/templates/booking/new-product.php:373
-#: modules/booking/templates/booking/new-product.php:448
-#: modules/booking/templates/booking/new-product.php:460
-#: modules/subscription/includes/classes/Helper.php:201
+#: modules/booking/templates/booking/new-product.php:313
+#: modules/booking/templates/booking/new-product.php:379
+#: modules/booking/templates/booking/new-product.php:454
+#: modules/booking/templates/booking/new-product.php:466
+#: modules/subscription/includes/classes/Helper.php:199
 msgid "Month(s)"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:308
-#: modules/booking/templates/booking/new-product.php:375
-#: modules/booking/templates/booking/new-product.php:450
-#: modules/booking/templates/booking/new-product.php:462
-#: modules/subscription/includes/classes/Helper.php:199
+#: modules/booking/templates/booking/new-product.php:314
+#: modules/booking/templates/booking/new-product.php:381
+#: modules/booking/templates/booking/new-product.php:456
+#: modules/booking/templates/booking/new-product.php:468
+#: modules/subscription/includes/classes/Helper.php:197
 msgid "Day(s)"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:309
-#: modules/booking/templates/booking/new-product.php:376
-#: modules/booking/templates/booking/new-product.php:451
-#: modules/booking/templates/booking/new-product.php:463
+#: modules/booking/templates/booking/new-product.php:315
+#: modules/booking/templates/booking/new-product.php:382
+#: modules/booking/templates/booking/new-product.php:457
+#: modules/booking/templates/booking/new-product.php:469
 msgid "Hour(s)"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:310
+#: modules/booking/templates/booking/new-product.php:316
 msgid "Minutes(s)"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:318
+#: modules/booking/templates/booking/new-product.php:324
 msgid "Minimum duration"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:324
+#: modules/booking/templates/booking/new-product.php:330
 msgid "Maximum duration"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:330
+#: modules/booking/templates/booking/new-product.php:336
 msgid "Calendar display mode"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:332
+#: modules/booking/templates/booking/new-product.php:338
 msgid "Display calendar on click"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:333
+#: modules/booking/templates/booking/new-product.php:339
 msgid "Calendar always visible"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:340
+#: modules/booking/templates/booking/new-product.php:346
 msgid "Enable Calendar Range Picker?"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:341
+#: modules/booking/templates/booking/new-product.php:347
 msgid ""
 "Lets the user select a start and end date on the calendar - duration will "
 "be calculated automatically."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:350
+#: modules/booking/templates/booking/new-product.php:356
 msgid "Requires Confirmation"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:351
+#: modules/booking/templates/booking/new-product.php:357
 msgid ""
 "Check this box if the booking requires YOUR approval/confirmation. Payment "
 "will not be taken during CHECKOUT."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:362
+#: modules/booking/templates/booking/new-product.php:368
 msgid "Can Be Cancelled ?"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:363
+#: modules/booking/templates/booking/new-product.php:369
 msgid ""
 "Check this box if the booking can be cancelled by the customer after it has "
 "been purchased. A refund will not be sent automatically."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:370
+#: modules/booking/templates/booking/new-product.php:376
 msgid "Booking can be cancelled "
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:374
-#: modules/booking/templates/booking/new-product.php:449
-#: modules/booking/templates/booking/new-product.php:461
-#: modules/subscription/includes/classes/Helper.php:200
+#: modules/booking/templates/booking/new-product.php:380
+#: modules/booking/templates/booking/new-product.php:455
+#: modules/booking/templates/booking/new-product.php:467
+#: modules/subscription/includes/classes/Helper.php:198
 msgid "Week(s)"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:378
+#: modules/booking/templates/booking/new-product.php:384
 msgid "before start date"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:431
+#: modules/booking/templates/booking/new-product.php:437
 msgid "Availability"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:432
+#: modules/booking/templates/booking/new-product.php:438
 msgid "Set Availability options"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:441
+#: modules/booking/templates/booking/new-product.php:447
 msgid "Max bookings per block"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:445
+#: modules/booking/templates/booking/new-product.php:451
 msgid "Minimum booking window ( into the future )"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:457
+#: modules/booking/templates/booking/new-product.php:463
 msgid "Maximum booking window ( into the future )"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:468
+#: modules/booking/templates/booking/new-product.php:474
 msgid "Require a buffer period of ( "
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:468
+#: modules/booking/templates/booking/new-product.php:474
 msgid " ) between bookings"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:475
+#: modules/booking/templates/booking/new-product.php:481
 msgid "Adjacent Buffering ?"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:476
+#: modules/booking/templates/booking/new-product.php:482
 msgid ""
 "By default buffer period applies forward into the future of a booking. "
 "Enabling this option will apply adjacently (before and after Bookings)"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:483
+#: modules/booking/templates/booking/new-product.php:489
 msgid "All dates are..."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:485
+#: modules/booking/templates/booking/new-product.php:491
 msgid "available by default"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:486
+#: modules/booking/templates/booking/new-product.php:492
 msgid "not-available by default"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:488
+#: modules/booking/templates/booking/new-product.php:494
 msgid "This option affects how you use the rules below."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:492
+#: modules/booking/templates/booking/new-product.php:498
 msgid "Check rules against..."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:494
+#: modules/booking/templates/booking/new-product.php:500
 msgid "All blocks being booked"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:495
+#: modules/booking/templates/booking/new-product.php:501
 msgid "The starting block only"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:497
+#: modules/booking/templates/booking/new-product.php:503
 msgid "This option affects how bookings are checked for availability."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:501
+#: modules/booking/templates/booking/new-product.php:507
 msgid "First block starts at..."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:508
+#: modules/booking/templates/booking/new-product.php:514
 msgid "Restrict start and end days?"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:510
+#: modules/booking/templates/booking/new-product.php:516
 msgid ""
 "Restrict bookings so that they can only start on certain days of the week. "
 "Does not affect availability."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:549
+#: modules/booking/templates/booking/new-product.php:555
 msgid "Set Availability Range :"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:562
+#: modules/booking/templates/booking/new-product.php:568
 #: modules/booking/templates/booking/resources/edit-resource.php:83
 msgid "Bookable"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:563
+#: modules/booking/templates/booking/new-product.php:569
 #: modules/booking/templates/booking/resources/edit-resource.php:84
 msgid "If not bookable, users won't be able to choose this block for their booking."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:569
+#: modules/booking/templates/booking/new-product.php:575
 #: modules/booking/templates/booking/resources/edit-resource.php:90
 #: modules/product-addon/templates/product-addon/html-global-admin-add.php:32
 #: modules/product-addon/templates/product-addon/html-global-admin.php:15
 msgid "Priority"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:570
+#: modules/booking/templates/booking/new-product.php:576
 #: modules/booking/templates/booking/resources/edit-resource.php:91
 msgid ""
 "The lower the priority number, the earlier this rule gets applied. By "
@@ -4830,38 +4842,38 @@ msgid ""
 "different orders."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:586
+#: modules/booking/templates/booking/new-product.php:592
 #: modules/booking/templates/booking/resources/edit-resource.php:107
 msgid ""
 "Rules with lower numbers will execute first. Rules further down this table "
 "with the same priority will also execute first."
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:608
+#: modules/booking/templates/booking/new-product.php:614
 msgid "Extra Options"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:609
+#: modules/booking/templates/booking/new-product.php:615
 msgid "Set more options"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:618
+#: modules/booking/templates/booking/new-product.php:624
 msgid "Please Save the Product to add extra options ( Persons or Resources )"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:624
+#: modules/booking/templates/booking/new-product.php:630
 msgid "Has persons"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:630
+#: modules/booking/templates/booking/new-product.php:636
 msgid "Has resources"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:658
+#: modules/booking/templates/booking/new-product.php:664
 msgid "Short Description"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:663
+#: modules/booking/templates/booking/new-product.php:669
 #: modules/booking/templates/booking/persons/html-booking-person.php:37
 #: modules/elementor/includes/Widgets/StoreCoupons.php:87
 #: modules/export-import/includes/export/class-wc-product-csv-exporter.php:89
@@ -4882,10 +4894,10 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: modules/booking/templates/booking/new-product.php:737
-#: modules/booking/templates/booking/new-product.php:738
 #: modules/booking/templates/booking/new-product.php:743
 #: modules/booking/templates/booking/new-product.php:744
+#: modules/booking/templates/booking/new-product.php:749
+#: modules/booking/templates/booking/new-product.php:750
 msgid "Save Product"
 msgstr ""
 
@@ -5017,9 +5029,9 @@ msgstr ""
 #: modules/simple-auction/templates/auction/auction-products-listing.php:189
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:160
 #: modules/store-support/module.php:796 modules/store-support/module.php:849
-#: modules/store-support/module.php:1142
+#: modules/store-support/module.php:1141
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:214
-#: src/admin/components/Announcement.vue:145
+#: src/admin/components/Announcement.vue:148
 #: src/admin/components/Refund.vue:111
 msgid "Date"
 msgstr ""
@@ -5069,7 +5081,7 @@ msgstr ""
 #: modules/booking/templates/booking/product-list.php:258
 #: modules/simple-auction/templates/auction/auction-products-listing.php:217
 #: src/admin/components/Announcement.vue:18
-#: src/admin/components/Announcement.vue:122
+#: src/admin/components/Announcement.vue:125
 msgid "Scheduled"
 msgstr ""
 
@@ -5490,10 +5502,10 @@ msgstr ""
 
 #: modules/elementor/includes/Tags/StoreName.php:39
 #: modules/elementor/includes/Widgets/StoreName.php:31
-#: modules/store-support/module.php:1139
+#: modules/store-support/module.php:1138
 #: modules/vendor-verification/templates/admin-verifications.php:113
 #: modules/vendor-verification/templates/admin-verifications.php:124
-#: src/admin/components/Reports.vue:37
+#: src/admin/components/Reports.vue:33
 msgid "Store Name"
 msgstr ""
 
@@ -5898,6 +5910,7 @@ msgstr ""
 #: modules/export-import/includes/export/class-wc-product-csv-exporter.php:117
 #: modules/export-import/includes/importers/class-wc-product-csv-importer-controller.php:409
 #: modules/export-import/includes/importers/class-wc-product-csv-importer-controller.php:542
+#: templates/products/external-product.php:23
 msgid "Button text"
 msgstr ""
 
@@ -6633,7 +6646,7 @@ msgid "ago"
 msgstr ""
 
 #: modules/geolocation/class-dokan-geolocation-product-single.php:39
-#: modules/geolocation/functions.php:156 modules/geolocation/functions.php:270
+#: modules/geolocation/functions.php:157 modules/geolocation/functions.php:271
 #: modules/vendor-analytics/includes/functions.php:39
 msgid "Location"
 msgstr ""
@@ -6745,11 +6758,11 @@ msgstr ""
 msgid "Dhaka"
 msgstr ""
 
-#: modules/geolocation/functions.php:153
+#: modules/geolocation/functions.php:154
 msgid "Search Vendors or Products"
 msgstr ""
 
-#: modules/geolocation/functions.php:155
+#: modules/geolocation/functions.php:156
 msgid "Search Products"
 msgstr ""
 
@@ -6846,7 +6859,7 @@ msgid "Opening Pattern"
 msgstr ""
 
 #: modules/live-chat/includes/AdminSettings.php:121
-#: modules/vendor-analytics/includes/functions.php:408
+#: modules/vendor-analytics/includes/functions.php:413
 msgid "Browser"
 msgstr ""
 
@@ -6890,7 +6903,6 @@ msgid "Above Product Tab"
 msgstr ""
 
 #: modules/live-chat/includes/AdminSettings.php:155
-#: modules/store-support/module.php:123
 msgid "Inside Product Tab"
 msgstr ""
 
@@ -7249,16 +7261,16 @@ msgstr ""
 msgid "CPF number must be 11 character long"
 msgstr ""
 
-#: modules/moip/includes/admin/class-moip-subscription.php:278
+#: modules/moip/includes/admin/class-moip-subscription.php:282
 msgid "Subscripton can't be created: "
 msgstr ""
 
-#: modules/moip/includes/admin/class-moip-subscription.php:288
+#: modules/moip/includes/admin/class-moip-subscription.php:292
 msgid "Subscription not created"
 msgstr ""
 
-#: modules/moip/includes/admin/class-moip-subscription.php:483
 #: modules/moip/includes/admin/class-moip-subscription.php:487
+#: modules/moip/includes/admin/class-moip-subscription.php:491
 msgid "Invoice not found"
 msgstr ""
 
@@ -7286,7 +7298,7 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
-#: modules/moip/module.php:350
+#: modules/moip/module.php:353
 #. translators: %s: moip payment method not configured error message
 msgid ""
 "<strong>Error!</strong> You cannot complete your purchase until "
@@ -7294,23 +7306,23 @@ msgid ""
 "remove %2$s to continue."
 msgstr ""
 
-#: modules/moip/module.php:424
+#: modules/moip/module.php:427
 msgid "Your Wirecard account isn't active yet. Please connect to Wirecard first!"
 msgstr ""
 
-#: modules/moip/module.php:424
+#: modules/moip/module.php:427
 msgid "Connect to Moip"
 msgstr ""
 
-#: modules/moip/module.php:471
+#: modules/moip/module.php:474
 msgid "Dokan Wirecard Settings"
 msgstr ""
 
-#: modules/moip/module.php:475
+#: modules/moip/module.php:478
 msgid "Disconnect User Wirecard Account"
 msgstr ""
 
-#: modules/moip/module.php:477
+#: modules/moip/module.php:480
 msgid "User account not connected to Wirecard"
 msgstr ""
 
@@ -8002,7 +8014,7 @@ msgstr ""
 
 #: modules/report-abuse/assets/src/js/admin/pages/AbuseReports.vue:76
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:82
-#: src/admin/components/Reports.vue:176
+#: src/admin/components/Reports.vue:177
 msgid "Filter by vendor"
 msgstr ""
 
@@ -8732,7 +8744,7 @@ msgid "RMA Options"
 msgstr ""
 
 #: modules/rma/templates/rma/product.php:4
-msgid "Set your return and warranty settigs for overwride global settings"
+msgid "Set your return and warranty settings for override global settings"
 msgstr ""
 
 #: modules/rma/templates/rma/product.php:16
@@ -8858,7 +8870,7 @@ msgstr ""
 
 #: modules/rma/templates/rma/settings.php:192
 #: modules/shipstation/views/settings.php:52
-#: src/admin/components/VendorSingle.vue:444
+#: src/admin/components/VendorSingle.vue:442
 #: src/frontend/components/Zone.vue:138 templates/settings/seo-form.php:115
 msgid "Save Changes"
 msgstr ""
@@ -9043,7 +9055,7 @@ msgstr ""
 #: modules/store-support/templates/email/new-ticket.php:8
 #: modules/vendor-subscription-product/templates/subscription/price.php:80
 #: modules/vendor-subscription-product/templates/subscription/variation-price.php:81
-#: src/admin/components/Reports.vue:44 templates/products/product-edit.php:274
+#: src/admin/components/Reports.vue:40 templates/products/product-edit.php:274
 msgid "From"
 msgstr ""
 
@@ -9051,7 +9063,7 @@ msgstr ""
 #: modules/seller-vacation/views/store-settings.php:67
 #: modules/vendor-subscription-product/templates/subscription/price.php:87
 #: modules/vendor-subscription-product/templates/subscription/variation-price.php:88
-#: src/admin/components/Reports.vue:49 src/admin/components/VendorSingle.vue:18
+#: src/admin/components/Reports.vue:45 src/admin/components/VendorSingle.vue:18
 #: templates/products/product-edit.php:281
 msgid "To"
 msgstr ""
@@ -9798,7 +9810,7 @@ msgstr ""
 
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:108
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:156
-#: src/admin/components/Announcement.vue:142
+#: src/admin/components/Announcement.vue:145
 msgid "Content"
 msgstr ""
 
@@ -9809,8 +9821,8 @@ msgstr ""
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:143
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:170
 #: src/admin/components/Announcement.vue:20
-#: src/admin/components/Announcement.vue:121
-#: src/admin/components/Announcement.vue:156
+#: src/admin/components/Announcement.vue:124
+#: src/admin/components/Announcement.vue:159
 #: templates/dashboard/review-widget.php:34
 #: templates/review/listing-table-tr.php:44
 #: templates/review/listing-table-tr.php:66
@@ -9823,26 +9835,26 @@ msgstr ""
 
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:174
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:220
-#: src/admin/components/Announcement.vue:160
-#: src/admin/components/Announcement.vue:198
+#: src/admin/components/Announcement.vue:163
+#: src/admin/components/Announcement.vue:201
 msgid "Permanent Delete"
 msgstr ""
 
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:178
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:224
-#: src/admin/components/Announcement.vue:164
-#: src/admin/components/Announcement.vue:202
+#: src/admin/components/Announcement.vue:167
+#: src/admin/components/Announcement.vue:205
 #: templates/review/listing-table-tr.php:54 templates/review/listing.php:55
 msgid "Restore"
 msgstr ""
 
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:231
-#: src/admin/components/Announcement.vue:209
+#: src/admin/components/Announcement.vue:212
 msgid "Move in Trash"
 msgstr ""
 
 #: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:287
-#: src/admin/components/Announcement.vue:274
+#: src/admin/components/Announcement.vue:277
 msgid "No data found"
 msgstr ""
 
@@ -10003,6 +10015,10 @@ msgstr ""
 msgid "Show store support button on product page"
 msgstr ""
 
+#: modules/store-support/module.php:123
+msgid "Inside Vendor Info Product Tab"
+msgstr ""
+
 #: modules/store-support/module.php:129
 msgid "Support Buttton Label"
 msgstr ""
@@ -10098,25 +10114,25 @@ msgstr ""
 msgid "Sorry, something went wrong! Couldn't create the ticket."
 msgstr ""
 
-#: modules/store-support/module.php:792 modules/store-support/module.php:1138
+#: modules/store-support/module.php:792 modules/store-support/module.php:1137
 msgid "Topic"
 msgstr ""
 
 #: modules/store-support/module.php:828 modules/store-support/module.php:842
-#: modules/store-support/module.php:1176 modules/store-support/module.php:1190
+#: modules/store-support/module.php:1175 modules/store-support/module.php:1189
 msgid "closed"
 msgstr ""
 
 #: modules/store-support/module.php:831 modules/store-support/module.php:845
-#: modules/store-support/module.php:1179 modules/store-support/module.php:1193
+#: modules/store-support/module.php:1178 modules/store-support/module.php:1192
 msgid "close topic"
 msgstr ""
 
-#: modules/store-support/module.php:835 modules/store-support/module.php:1183
+#: modules/store-support/module.php:835 modules/store-support/module.php:1182
 msgid "open"
 msgstr ""
 
-#: modules/store-support/module.php:838 modules/store-support/module.php:1186
+#: modules/store-support/module.php:838 modules/store-support/module.php:1185
 msgid "re-open topic"
 msgstr ""
 
@@ -10124,7 +10140,7 @@ msgstr ""
 msgid "Are you sure?"
 msgstr ""
 
-#: modules/store-support/module.php:858 modules/store-support/module.php:1206
+#: modules/store-support/module.php:858 modules/store-support/module.php:1205
 msgid "No tickets found!"
 msgstr ""
 
@@ -10132,66 +10148,66 @@ msgstr ""
 msgid "Back to Tickets"
 msgstr ""
 
-#: modules/store-support/module.php:966
+#: modules/store-support/module.php:965
 msgid "Referenced Order #%s"
 msgstr ""
 
-#: modules/store-support/module.php:1019
+#: modules/store-support/module.php:1018
 msgid "Add Reply"
 msgstr ""
 
-#: modules/store-support/module.php:1019
+#: modules/store-support/module.php:1018
 msgid "Ticket Closed"
 msgstr ""
 
-#: modules/store-support/module.php:1025
+#: modules/store-support/module.php:1024
 msgid "(Adding reply will re-open the ticket)"
 msgstr ""
 
-#: modules/store-support/module.php:1037
+#: modules/store-support/module.php:1036
 msgid "-- Change Status --"
 msgstr ""
 
-#: modules/store-support/module.php:1038
+#: modules/store-support/module.php:1037
 msgid "Close Ticket"
 msgstr ""
 
-#: modules/store-support/module.php:1052
+#: modules/store-support/module.php:1051
 msgid "Leave a Reply"
 msgstr ""
 
-#: modules/store-support/module.php:1054
+#: modules/store-support/module.php:1053
 msgid "Cancel Reply"
 msgstr ""
 
-#: modules/store-support/module.php:1055
+#: modules/store-support/module.php:1054
 msgid "Submit Reply"
 msgstr ""
 
-#: modules/store-support/module.php:1059
+#: modules/store-support/module.php:1058
 msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
 msgstr ""
 
-#: modules/store-support/module.php:1068
+#: modules/store-support/module.php:1067
 msgid ""
 "This ticket has been closed. Open a new support ticket if you have any "
 "further query."
 msgstr ""
 
-#: modules/store-support/module.php:1081
+#: modules/store-support/module.php:1080
 msgid "Topic not found"
 msgstr ""
 
-#: modules/store-support/module.php:1114
+#: modules/store-support/module.php:1113
 #: modules/store-support/templates/store-support/support.php:35
 msgid "Support Tickets"
 msgstr ""
 
-#: modules/store-support/module.php:1116
+#: modules/store-support/module.php:1115
 msgid "View Support Tickets"
 msgstr ""
 
-#: modules/store-support/module.php:1452
+#: modules/store-support/module.php:1451
 msgid "[%1$s][%2$d] A New Reply on Your Ticket"
 msgstr ""
 
@@ -11340,33 +11356,33 @@ msgstr ""
 msgid "year"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:202
+#: modules/subscription/includes/classes/Helper.php:200
 msgid "Year(s)"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:313
-#: modules/subscription/includes/classes/Helper.php:330
+#: modules/subscription/includes/classes/Helper.php:311
+#: modules/subscription/includes/classes/Helper.php:328
 #. translators: placeholder is a number, this is for the teens
 #. translators: placeholder is a number, numbers ending in 4-9, 0
 msgid "%sth"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:318
+#: modules/subscription/includes/classes/Helper.php:316
 #. translators: placeholder is a number, numbers ending in 1
 msgid "%sst"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:322
+#: modules/subscription/includes/classes/Helper.php:320
 #. translators: placeholder is a number, numbers ending in 2
 msgid "%snd"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:326
+#: modules/subscription/includes/classes/Helper.php:324
 #. translators: placeholder is a number, numbers ending in 3
 msgid "%srd"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:552
+#: modules/subscription/includes/classes/Helper.php:550
 msgid "Dokan Vendor Subscription: "
 msgstr ""
 
@@ -11408,11 +11424,11 @@ msgid ""
 msgstr ""
 
 #: modules/subscription/includes/classes/Shortcode.php:70
-msgid "Your are using <span>%s (%s trial)</span> package."
+msgid "You are using <span>%s (%s trial)</span> package."
 msgstr ""
 
 #: modules/subscription/includes/classes/Shortcode.php:72
-msgid "Your are using <span>%s</span> package."
+msgid "You are using <span>%s</span> package."
 msgstr ""
 
 #: modules/subscription/includes/classes/Shortcode.php:78
@@ -11664,9 +11680,9 @@ msgstr ""
 msgid "Subscription Details:"
 msgstr ""
 
-#: modules/vendor-analytics/includes/class-analytics-reports.php:167
+#: modules/vendor-analytics/includes/class-analytics-reports.php:168
 #: modules/vendor-analytics/includes/functions.php:104
-#: modules/vendor-analytics/includes/functions.php:360
+#: modules/vendor-analytics/includes/functions.php:365
 msgid "There is no analytics found for your store."
 msgstr ""
 
@@ -11711,7 +11727,7 @@ msgstr ""
 
 #: modules/vendor-analytics/includes/functions.php:24
 #: modules/vendor-analytics/includes/functions.php:134
-#: modules/vendor-analytics/module.php:184
+#: modules/vendor-analytics/module.php:191
 #: modules/vendor-analytics/templates/vendor-analytics/header.php:11
 msgid "Analytics"
 msgstr ""
@@ -11737,7 +11753,7 @@ msgid "Promotions"
 msgstr ""
 
 #: modules/vendor-analytics/includes/functions.php:51
-#: modules/vendor-analytics/includes/functions.php:448
+#: modules/vendor-analytics/includes/functions.php:453
 msgid "Keyword"
 msgstr ""
 
@@ -11751,9 +11767,9 @@ msgid "users"
 msgstr ""
 
 #: modules/vendor-analytics/includes/functions.php:211
-#: modules/vendor-analytics/includes/functions.php:411
-#: modules/vendor-analytics/includes/functions.php:431
-#: modules/vendor-analytics/includes/functions.php:449
+#: modules/vendor-analytics/includes/functions.php:416
+#: modules/vendor-analytics/includes/functions.php:436
+#: modules/vendor-analytics/includes/functions.php:454
 msgid "Sessions"
 msgstr ""
 
@@ -11810,27 +11826,27 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: modules/vendor-analytics/includes/functions.php:409
+#: modules/vendor-analytics/includes/functions.php:414
 msgid "Operating System"
 msgstr ""
 
-#: modules/vendor-analytics/includes/functions.php:410
+#: modules/vendor-analytics/includes/functions.php:415
 msgid "OS Version"
 msgstr ""
 
-#: modules/vendor-analytics/includes/functions.php:428
+#: modules/vendor-analytics/includes/functions.php:433
 msgid "Source"
 msgstr ""
 
-#: modules/vendor-analytics/includes/functions.php:429
+#: modules/vendor-analytics/includes/functions.php:434
 msgid "Medium"
 msgstr ""
 
-#: modules/vendor-analytics/includes/functions.php:430
+#: modules/vendor-analytics/includes/functions.php:435
 msgid "Social Media"
 msgstr ""
 
-#: modules/vendor-analytics/includes/functions.php:582
+#: modules/vendor-analytics/includes/functions.php:587
 msgid "Token is empty"
 msgstr ""
 
@@ -12037,38 +12053,38 @@ msgstr ""
 msgid "Variable subscription"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:401
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:400
 msgid "Sign Up Fee Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:402
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:401
 msgid "Sign Up Fee % Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:403
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:402
 msgid "Recurring Product Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:404
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:403
 msgid "Recurring Product % Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:424
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:423
 msgid "Active for x payments"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:426
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:425
 msgid "Unlimited payments"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:464
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:463
 #. translators: %d refers to the number of payments the coupon can be used for.
 msgid "Active for %d payment"
 msgid_plural "Active for %d payments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:469
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:468
 msgid "Active for unlimited payments"
 msgstr ""
 
@@ -12539,7 +12555,7 @@ msgstr ""
 #: modules/vendor-verification/templates/admin-verifications.php:189
 #: modules/vendor-verification/templates/admin-verifications.php:251
 #: src/admin/components/Announcement.vue:17
-#: src/admin/components/Announcement.vue:119 src/admin/components/Refund.vue:13
+#: src/admin/components/Announcement.vue:122 src/admin/components/Refund.vue:13
 #: templates/dashboard/review-widget.php:24
 msgid "Pending"
 msgstr ""
@@ -12968,11 +12984,29 @@ msgstr ""
 msgid "Selected Vendor"
 msgstr ""
 
-#: src/admin/components/Announcement.vue:133
+#: src/admin/components/Announcement.vue:62
+#: src/admin/components/EditAnnouncement.vue:100
+#: src/admin/components/NewAnnouncement.vue:91
+msgid "Enabled Vendors"
+msgstr ""
+
+#: src/admin/components/Announcement.vue:63
+#: src/admin/components/EditAnnouncement.vue:101
+#: src/admin/components/NewAnnouncement.vue:92
+msgid "Disabled Vendors"
+msgstr ""
+
+#: src/admin/components/Announcement.vue:64
+#: src/admin/components/EditAnnouncement.vue:102
+#: src/admin/components/NewAnnouncement.vue:93
+msgid "Featured Vendors"
+msgstr ""
+
+#: src/admin/components/Announcement.vue:136
 msgid "No announcement found."
 msgstr ""
 
-#: src/admin/components/Announcement.vue:143
+#: src/admin/components/Announcement.vue:146
 msgid "Sent To"
 msgstr ""
 
@@ -12995,24 +13029,24 @@ msgstr ""
 msgid "Send Announcement To"
 msgstr ""
 
-#: src/admin/components/EditAnnouncement.vue:105
-#: src/admin/components/NewAnnouncement.vue:96
+#: src/admin/components/EditAnnouncement.vue:108
+#: src/admin/components/NewAnnouncement.vue:99
 msgid "Select Vendors"
 msgstr ""
 
-#: src/admin/components/EditAnnouncement.vue:147
-#: src/admin/components/NewAnnouncement.vue:144
+#: src/admin/components/EditAnnouncement.vue:150
+#: src/admin/components/NewAnnouncement.vue:147
 msgid "Save as Draft"
 msgstr ""
 
-#: src/admin/components/EditAnnouncement.vue:148
-#: src/admin/components/EditAnnouncement.vue:282
-#: src/admin/components/NewAnnouncement.vue:145
-#: src/admin/components/NewAnnouncement.vue:248
+#: src/admin/components/EditAnnouncement.vue:151
+#: src/admin/components/EditAnnouncement.vue:285
+#: src/admin/components/NewAnnouncement.vue:148
+#: src/admin/components/NewAnnouncement.vue:251
 msgid "Send"
 msgstr ""
 
-#: src/admin/components/EditAnnouncement.vue:248
+#: src/admin/components/EditAnnouncement.vue:251
 msgid "Announcement draft successfully"
 msgstr ""
 
@@ -13080,59 +13114,59 @@ msgstr ""
 msgid "All Logs"
 msgstr ""
 
-#: src/admin/components/Reports.vue:13
-msgid "Export Logs"
-msgstr ""
-
-#: src/admin/components/Reports.vue:20
+#: src/admin/components/Reports.vue:16
 msgid "By Day"
 msgstr ""
 
-#: src/admin/components/Reports.vue:24
+#: src/admin/components/Reports.vue:20
 msgid "By Year"
 msgstr ""
 
-#: src/admin/components/Reports.vue:29
+#: src/admin/components/Reports.vue:25
 msgid "By Vendor"
 msgstr ""
 
-#: src/admin/components/Reports.vue:40
+#: src/admin/components/Reports.vue:36
 msgid "Search Store..."
 msgstr ""
 
-#: src/admin/components/Reports.vue:58
+#: src/admin/components/Reports.vue:54
 msgid "Year"
 msgstr ""
 
-#: src/admin/components/Reports.vue:71
+#: src/admin/components/Reports.vue:67
 msgid "At a Glance"
 msgstr ""
 
-#: src/admin/components/Reports.vue:99 src/admin/components/Reports.vue:117
+#: src/admin/components/Reports.vue:95 src/admin/components/Reports.vue:113
 msgid "%s Vendor"
 msgstr ""
 
-#: src/admin/components/Reports.vue:108
+#: src/admin/components/Reports.vue:104
 msgid "%s Orders"
 msgstr ""
 
-#: src/admin/components/Reports.vue:110
+#: src/admin/components/Reports.vue:106
 msgid "Orders placed in this period"
 msgstr ""
 
-#: src/admin/components/Reports.vue:118 src/admin/components/Reports.vue:134
+#: src/admin/components/Reports.vue:114 src/admin/components/Reports.vue:130
 msgid "awaiting approval"
 msgstr ""
 
-#: src/admin/components/Reports.vue:124
+#: src/admin/components/Reports.vue:120
 msgid "%s Products"
 msgstr ""
 
-#: src/admin/components/Reports.vue:133
+#: src/admin/components/Reports.vue:129
 msgid "%s Withdrawals"
 msgstr ""
 
-#: src/admin/components/Reports.vue:185
+#: src/admin/components/Reports.vue:155
+msgid "Export Logs"
+msgstr ""
+
+#: src/admin/components/Reports.vue:186
 msgid "Search by order"
 msgstr ""
 
@@ -13152,7 +13186,7 @@ msgstr ""
 #: src/admin/components/StoreCategoriesIndex.vue:29
 #: src/admin/components/StoreCategoriesIndex.vue:159
 #: src/admin/components/StoreCategoriesShow.vue:27
-#: templates/products/product-seo-content.php:67
+#: templates/products/product-seo-content.php:58
 msgid "Slug"
 msgstr ""
 
@@ -13349,47 +13383,47 @@ msgstr ""
 msgid "Registered Since"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:256
+#: src/admin/components/VendorSingle.vue:255
 msgid "Payment Methods"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:259
+#: src/admin/components/VendorSingle.vue:258
 msgid "PayPal Payment"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:261
+#: src/admin/components/VendorSingle.vue:260
 msgid "Bank Payment"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:266
+#: src/admin/components/VendorSingle.vue:265
 msgid "Product Publishing"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:268
+#: src/admin/components/VendorSingle.vue:267
 msgid "Direct"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:269
+#: src/admin/components/VendorSingle.vue:268
 msgid "Requires Review"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:431
+#: src/admin/components/VendorSingle.vue:429
 msgid "Not Set"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:444
+#: src/admin/components/VendorSingle.vue:442
 msgid "Saving..."
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:567
+#: src/admin/components/VendorSingle.vue:565
 msgid "Email has been sent successfully."
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:608
+#: src/admin/components/VendorSingle.vue:606
 msgid "Vendor Updated"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:609
+#: src/admin/components/VendorSingle.vue:607
 msgid "Vendor Updated Successfully!"
 msgstr ""
 
@@ -14198,6 +14232,22 @@ msgstr ""
 msgid "+ Add product images"
 msgstr ""
 
+#: templates/products/external-product.php:17
+msgid "Product URL"
+msgstr ""
+
+#: templates/products/external-product.php:19
+msgid "Enter the external URL to the product."
+msgstr ""
+
+#: templates/products/external-product.php:24
+msgid "Buy product"
+msgstr ""
+
+#: templates/products/external-product.php:24
+msgid "This text will be shown on the button linking to the external product."
+msgstr ""
+
 #: templates/products/group-product.php:13
 msgid "This lets you choose which products are part of this group."
 msgstr ""
@@ -14268,33 +14318,33 @@ msgstr ""
 msgid "Edit Snippet"
 msgstr ""
 
-#: templates/products/product-seo-content.php:54
-#: templates/products/product-seo-content.php:64
+#: templates/products/product-seo-content.php:45
+#: templates/products/product-seo-content.php:55
 msgid "SEO Title"
 msgstr ""
 
-#: templates/products/product-seo-content.php:57
-#: templates/products/product-seo-content.php:74
+#: templates/products/product-seo-content.php:48
+#: templates/products/product-seo-content.php:65
 msgid "Insert snippet variable"
 msgstr ""
 
-#: templates/products/product-seo-content.php:59
-#: templates/products/product-seo-content.php:76
+#: templates/products/product-seo-content.php:50
+#: templates/products/product-seo-content.php:67
 msgid "Seperator"
 msgstr ""
 
-#: templates/products/product-seo-content.php:60
-#: templates/products/product-seo-content.php:77
+#: templates/products/product-seo-content.php:51
+#: templates/products/product-seo-content.php:68
 msgid "Site Title"
 msgstr ""
 
+#: templates/products/product-seo-content.php:62
 #: templates/products/product-seo-content.php:71
-#: templates/products/product-seo-content.php:80
 msgid "Meta description"
 msgstr ""
 
-#: templates/products/product-seo-content.php:87
-#: templates/products/product-seo-content.php:94
+#: templates/products/product-seo-content.php:78
+#: templates/products/product-seo-content.php:85
 msgid "Focus keyword"
 msgstr ""
 
@@ -14643,44 +14693,44 @@ msgctxt "Post Type Singular Name"
 msgid "Topic"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:287
+#: modules/subscription/includes/classes/Helper.php:285
 msgctxt "period interval (eg \"$10 _every_ 2 weeks\")"
 msgid "every"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:291
+#: modules/subscription/includes/classes/Helper.php:289
 #. translators: period interval, placeholder is ordinal (eg "$10 every
 #. _2nd/3rd/4th_", etc)
 msgctxt "period interval with ordinal number (e.g. \"every 2nd\""
 msgid "every %s"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:355
+#: modules/subscription/includes/classes/Helper.php:353
 msgctxt "Subscription length"
 msgid "Never expire"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:360
+#: modules/subscription/includes/classes/Helper.php:358
 msgctxt "Subscription lengths. e.g. \"For 1 day...\""
 msgid "1 day"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:364
+#: modules/subscription/includes/classes/Helper.php:362
 msgctxt "Subscription lengths. e.g. \"For 1 week...\""
 msgid "1 week"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:368
+#: modules/subscription/includes/classes/Helper.php:366
 msgctxt "Subscription lengths. e.g. \"For 1 month...\""
 msgid "1 month"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:372
+#: modules/subscription/includes/classes/Helper.php:370
 msgctxt "Subscription lengths. e.g. \"For 1 year...\""
 msgid "1 year"
 msgstr ""
 
-#: modules/subscription/includes/classes/Helper.php:404
+#: modules/subscription/includes/classes/Helper.php:402
 #. translators: placeholder is number of days. (e.g. "Bill this every day / 4
 #. days")
 msgctxt "Subscription billing period."
@@ -14689,7 +14739,7 @@ msgid_plural "%s days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: modules/subscription/includes/classes/Helper.php:406
+#: modules/subscription/includes/classes/Helper.php:404
 #. translators: placeholder is number of weeks. (e.g. "Bill this every week / 4
 #. weeks")
 msgctxt "Subscription billing period."
@@ -14698,7 +14748,7 @@ msgid_plural "%s weeks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: modules/subscription/includes/classes/Helper.php:408
+#: modules/subscription/includes/classes/Helper.php:406
 #. translators: placeholder is number of months. (e.g. "Bill this every month /
 #. 4 months")
 msgctxt "Subscription billing period."
@@ -14707,7 +14757,7 @@ msgid_plural "%s months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: modules/subscription/includes/classes/Helper.php:410
+#: modules/subscription/includes/classes/Helper.php:408
 #. translators: placeholder is number of years. (e.g. "Bill this every year / 4
 #. years")
 msgctxt "Subscription billing period."

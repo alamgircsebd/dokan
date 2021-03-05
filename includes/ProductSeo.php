@@ -119,7 +119,7 @@ class ProductSeo {
     /**
      * Get title separator
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.1
      *
      * @return string
      */

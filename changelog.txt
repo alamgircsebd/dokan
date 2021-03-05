@@ -1,3 +1,34 @@
+v3.2.1 Mar 05, 2021
+----------------------------------
+
+- **feat:** External product support added for vendor
+- **feat:** Added rest api support for follow store
+- **new:** Announcements 3 new options added enabled sellers, disabled sellers, featured sellers
+- **new:** Added Announcement menu for vendor dashboard
+- **new:** Vendor withdraw area added threshold days if that vendor have individual
+- **new:** Disable "Support Button" for single product page in vendor settings page when Admin disable support from admin settings.
+- **fix:** Fixed some PHP 8 warnings
+- **fix:** Vendor report date filter conflicts with non english / local languages set as site language
+- **fix:** Apply product lot discount on order
+- **fix:** Typos in edit product page and subscription page
+- **fix:** Whole price is not stored as decimal when decimal separator is comma
+- **fix:** Combine commission field is missing on setup wizard issue fixed
+- **fix:** Vendor analytics menu not showing for administrator users issue
+- **fix:** Turn off geolocation autozoom for single product page
+- **fix:** Mapbox zoom icons missing issue fixed
+- **fix:** Elementor buttons icon missing issue resolved
+- **fix:** Error showing in store support ticket details if order remove somehow
+- **fix:** Dokan pages duplicate issue fixed when try to use tools from Dokan admin area
+- **fix:** Parent SKU not saving on variation product issue fixed
+- **fix:** Warning showing product listing page when imported product
+- **fix:** Design related problem in all logs issue report in Dokan admin area
+- **fix:** Deprecated Gplus cleanup
+- **fix:** Fixed an issue where booking details page showing index error warning
+- **fix:** Booking SKU not saving, hidden input problem
+- **fix:** Some filter was being used as action
+- **fix:** Product Discount price is not updating if vendor subscription module is active
+- **fix:** Admin dokandar staff module access issue fixed
+
 v3.2.0 Jan 29, 2021
 ----------------------------------
 
