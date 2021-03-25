@@ -114,7 +114,7 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
     $get_data = wp_unslash( $_GET ); // phpcs:ignore
 
     $s             = get_query_var( 's', '' );
-    $seller_s      = isset( $get_data['do_seller_search'] ) ? sanitize_text_field( $get_data['do_seller_search'] ) : '';
+    $seller_s      = isset( $get_data['dokan_seller_search'] ) ? sanitize_text_field( $get_data['dokan_seller_search'] ) : '';
     $search_query  = $seller_s;
     $latitude      = isset( $get_data['latitude'] ) ? sanitize_text_field( $get_data['latitude'] ) : null;
     $longitude     = isset( $get_data['longitude'] ) ? sanitize_text_field( $get_data['longitude'] ) : null;
