@@ -9,7 +9,12 @@
                 <progressbar :value="progressValue"></progressbar>
             </div>
 
-            <a class="button button-primary" v-text="type.button" @click="doAction(key)"></a>
+            <div v-if="key === 0 && allPageStatus.exists" >
+                <a class="button button-disabled">All Pages Created</a>
+            </div>
+            <div v-else>
+                <a class="button button-primary" v-text="type.button" @click="doAction(key)"></a>
+            </div>
         </postbox>
     </div>
 </template>
@@ -30,6 +35,12 @@ export default {
         return {
             progressValue: 0,
             showBar: '',
+            allPageStatus: {
+                data: {
+                    action: 'check_all_dokan_pages_exists'
+                },
+                exists: false,
+            },
             types: [
                 {
                     name: this.__( 'Page Installation', 'dokan' ),
@@ -58,6 +69,10 @@ export default {
             ],
 
         }
+    },
+
+    created() {
+        this.checkAllPages();
     },
 
     methods: {
@@ -95,6 +110,16 @@ export default {
                         type: 'warn'
                     })
                 }
+            } );
+        },
+
+        checkAllPages() {
+            let self = this;
+            let data = this.allPageStatus.data;
+
+            jQuery.post( dokan.ajaxurl, data, function(res) {
+                self.allPageStatus.exists = res.data.all_pages_exists === '1' ;
+                console.log("Response: ", self.allPageStatus.exists );
             } );
         },
 

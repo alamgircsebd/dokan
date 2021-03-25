@@ -44,6 +44,7 @@ class Admin {
         add_action( 'dokan_process_seller_meta_fields', [ $this, 'save_meta_fields' ] );
         add_action( 'user_profile_update_errors', [ $this, 'make_combine_commission_fields_mandatory' ], 10, 3 );
 
+        add_action( 'wp_ajax_check_all_dokan_pages_exists', [ $this, 'check_all_dokan_pages_exists' ], 10, 2 );
         add_action( 'dokan_admin_setup_wizard_after_admin_commission', [ $this, 'add_additional_fee_admin_setup_wizard' ] );
         add_action( 'dokan_admin_setup_wizard_save_step_setup_selling', [ $this, 'setup_wizard_save_step_setup_selling' ], 35, 2 );
 
@@ -1006,6 +1007,30 @@ class Admin {
             update_user_meta( $user->ID, 'dokan_admin_additional_fee', '' );
             $errors->add( 'required', sprintf( '<strong>%1$s:</strong> %2$s', __( 'Error', 'dokan' ), __( 'Admin flat commission is required.', 'dokan' ) ) );
         }
+    }
+
+    /**
+     * Checks if all dokan pages are created
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @return void
+     *
+     * TODO: We need to check if all pages are consist of the required shortcode
+     */
+    public function check_all_dokan_pages_exists() {
+        if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'check_all_dokan_pages_exists' ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
+        }
+
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
+        }
+
+        $all_pages_created = get_option( 'dokan_pages_created', false );
+        wp_send_json_success( [
+            'all_pages_exists' => $all_pages_created
+        ], 201 );
     }
 
     /**
