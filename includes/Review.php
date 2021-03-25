@@ -578,7 +578,7 @@ class Review {
 
         $action = $_POST['comment_status'];
 
-        if ( !count( $_POST['commentid'] ) ) {
+        if ( empty( $_POST['commentid'] ) ) {
             return;
         }
 
