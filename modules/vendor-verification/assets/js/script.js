@@ -1,13 +1,13 @@
 ;
 ( function ( $ ) {
-        
+
     var feedback = $('#feedback');
     var phoneFeedback = $('#d_v_phone_feedback');
     // country to state select generate
     var dokan_address_wrapper = $( '.dokan-address-fields' );
                     var dokan_address_select = {
                         init: function () {
-                            
+
                             dokan_address_wrapper.on( 'change', 'select.country_to_state', this.state_select );
                         },
                         state_select: function () {
@@ -23,19 +23,19 @@
                                 country = $( this ).val();
 
                             if ( states[ country ] ) {
-                                
+
                                 if ( $.isEmptyObject( states[ country ] ) ) {
 
                                     $( 'div#dokan-states-box' ).slideUp( 2 );
                                     if ( $statebox.is( 'select' ) ) {
                                         $( 'select#dokan_address_state' ).replaceWith( '<input type="text" class="' + input_class + '" name="' + input_name + '" id="' + input_id + '" required />' );
                                     }
-                                    
+
                                     $( '#dokan_address_state' ).val( 'N/A' );
-                                    
+
                                 } else {
                                     input_selected_state = '';
-                                    
+
                                     var options = '',
                                         state = states[ country ];
 
@@ -61,17 +61,17 @@
                                     }
                                     $( '#dokan_address_state' ).removeClass( 'dokan-hide' );
                                     $( 'div#dokan-states-box' ).slideDown();
-                                    
+
                                 }
                             } else {
-                                
-                                
+
+
                                 if ( $statebox.is( 'select' ) ) {
                                     input_selected_state = '';
                                     $( 'select#dokan_address_state' ).replaceWith( '<input type="text" class="' + input_class + '" name="' + input_name + '" id="' + input_id + '" required="required"/>' );
                                 }
                                 $( '#dokan_address_state' ).val(input_selected_state);
-                                
+
                                 if ( $( '#dokan_address_state' ).val() == 'N/A' ){
                                     $( '#dokan_address_state' ).val('');
                                 }
@@ -82,9 +82,9 @@
                     }
 
     $( document ).ready( function () {
-        
+
         dokan_address_select.init();
-    
+
     //ID verification
         // show verification panel on start click
         $( 'button#dokan_v_id_click' ).click( function () {
@@ -92,20 +92,20 @@
                 $( '.dokan_v_id_info_box' ).slideDown('fast');
             });
         } );
-        
+
         // close verification panel on cancel click
         $( 'input#dokan_v_id_cancel_form' ).click( function () {
             $( '.dokan_v_id_info_box' ).slideUp( 'fast',function(){
                 $( 'button#dokan_v_id_click' ).slideDown('fast');
             });
         } );
-        
+
         // submit ID verification request
         $( '.dokan-verification-content' ).on( 'click', 'input#dokan_v_id_submit', function ( e ) {
             e.preventDefault();
 
             if ( $( "input[name='dokan_gravatar']" ).val() == 0 ) {
-                alert( 'Upload a Photo' );
+                alert( __( 'Upload a Photo', 'dokan' ) );
                 return;
             }
 
@@ -124,7 +124,7 @@
                     feedback.html( resp.data );
                     feedback.fadeIn();
                     $( 'div.dokan_v_id_info_box' ).hide();
-                    $( 'button#dokan_v_id_cancel' ).show();                    
+                    $( 'button#dokan_v_id_cancel' ).show();
                 } else {
                     feedback.addClass( 'dokan-alert dokan-alert-danger' );
                     feedback.html( 'failed' );
@@ -132,7 +132,7 @@
                 }
             } )
         } );
-        
+
         // cancel Verification ID request
         $( 'button#dokan_v_id_cancel' ).click( function () {
             data = {
@@ -150,7 +150,7 @@
                     $( 'button#dokan_v_id_cancel' ).hide();
                     $( 'button#dokan_v_id_click' ).removeClass('dokan-hide');
                     $( 'button#dokan_v_id_click' ).show();
-                                        
+
                 } else {
                     feedback.addClass( 'dokan-alert dokan-alert-danger' );
                     feedback.html( 'failed' );
@@ -158,8 +158,8 @@
                 }
             } )
         } );
-        
-    //Phone verification    
+
+    //Phone verification
         // send sms on submit
         $('.dokan_v_phone_box').on('submit', 'form#dokan-verify-phone-form', function(e) {
             e.preventDefault();
@@ -198,7 +198,7 @@
 
             })
         });
-        
+
         // Allow Numeric values only on phone verification field
         $( '#phone' ).keydown( function ( e ) {
             // Allow: backspace, delete, tab, escape, enter and .
@@ -216,7 +216,7 @@
                     e.preventDefault();
                 }
         } );
-        
+
         // submit verification code
         $('.dokan_v_phone_code_box').on('submit', 'form#dokan-v-phone-code-form', function(e) {
             e.preventDefault();
@@ -256,14 +256,14 @@
             });
         });
 
-    //Address verification    
+    //Address verification
         // show address verification panel on start click
         $( 'button#dokan_v_address_click' ).click( function () {
             $( 'button#dokan_v_address_click' ).slideUp('fast',function(){
                 $( '.dokan_v_address_box' ).slideDown('fast');
             });
         } );
-        
+
         // close address verification panel on cancel click
         $( 'input#dokan_v_address_cancel' ).click( function () {
             $( '.dokan_v_address_box' ).slideUp('fast',function(){
@@ -273,23 +273,23 @@
                 address_feedback.html('');
             });
         } );
-        
+
         // submit Address verification request
         $( '.dokan-verification-content' ).on( 'submit', 'form#dokan-verify-address-form', function ( e ) {
             e.preventDefault();
 
             var self = $( this );
-           
+
             var address_feedback = $('div#d_v_address_feedback');
             feedback.fadeOut();
             address_feedback.addClass( 'dokan-hide' );
-            
-            
+
+
 
             $.post( dokan.ajaxurl, self.serialize(), function ( resp ) {
 
                 if ( resp.success == true ) {
-                    
+
                     feedback.addClass( 'dokan-alert dokan-alert-success' );
                     $( 'html,body' ).animate( { scrollTop: 100 } );
                     feedback.html( resp.data );
@@ -297,7 +297,7 @@
                     $( 'div.dokan_v_address_box' ).slideUp( 'fast' );
                     $( 'button#dokan_v_address_cancel' ).removeClass( 'dokan-hide' );
                     $( '#dokan_v_address_cancel' ).show();
-                   
+
 
                 } else {
                     address_feedback.addClass( 'dokan-alert dokan-alert-danger' );
@@ -307,7 +307,7 @@
                 }
             } );
         } );
-        
+
         //cancel Address verification request
         $( 'button#dokan_v_address_cancel' ).click( function () {
             var data = {
@@ -322,19 +322,19 @@
                     $( '#dokan_v_address_feedback' ).addClass( 'dokan-hide' );
                     feedback.addClass( 'dokan-alert dokan-alert-success' );
                     feedback.html( resp.data );
-                    feedback.fadeIn(); 
+                    feedback.fadeIn();
                     $( 'button#dokan_v_address_cancel' ).addClass('dokan-hide');
                     $( 'button#dokan_v_address_click' ).removeClass('dokan-hide');
                     $( 'button#dokan_v_address_click' ).show();
                     $('div#d_v_address_feedback').addClass('dokan-hide');
-                    
+
                 } else {
                     feedback.addClass( 'dokan-alert dokan-alert-danger' );
                     feedback.html( 'failed' );
                     feedback.fadeIn();
                 }
             } )
-        } );//        
+        } );//
     } );
 
 } )( jQuery );

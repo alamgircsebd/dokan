@@ -5,7 +5,7 @@
             <a class="dokan-close" data-dismiss="alert">&times;</a>
         </div>
 
-        <div class="back-link"><router-link :to="{ name: 'Main' }">{{ __( '&larr; Back to Zone List', 'dokan' ) }}</router-link></div>
+        <div class="back-link"><router-link :to="{ name: 'Main' }">&larr; {{ __( 'Back to Zone List', 'dokan' ) }}</router-link></div>
 
         <form method="post" id="shipping-settings" @submit.prevent="saveSettings">
             <div class="dokan-shipping-wrapper">

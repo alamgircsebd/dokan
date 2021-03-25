@@ -123,7 +123,7 @@ class Shortcode {
                                     <label>
                                         <?php
                                             /* translators: 1: Required PHP Version 2: Running php version */
-                                            echo sprintf( __( 'To %1$s your subscription %2$s click here &rarr;', 'dokan' ), $notice, $again );
+                                            echo sprintf( __( 'To %1$s your subscription %2$s click here &rarr;', 'dokan' ), $maybe_reactivate ? __( 'activate', 'dokan' ) : __( 'cancel', 'dokan' ), $again );
                                         ?>
                                     </label>
 
