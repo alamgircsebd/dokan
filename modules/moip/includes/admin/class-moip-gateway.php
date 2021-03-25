@@ -595,7 +595,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             $fee               = floatval( $do_order->order_total ) - floatval( $do_order->net_amount );
             $order_total       = wc_format_decimal( $do_order->order_total, 2 );
             $application_fee   = wc_format_decimal( $fee, 2 );
-            $vendor_commission = ( $order_total - $application_fee ) * 100;
+            $vendor_commission = wc_format_decimal( $order_total - $application_fee, 2 ) * 100;
 
             // get all the order items and add to moip_order item
             $moip_order = $moip->orders()->setOwnId( uniqid() );
@@ -619,7 +619,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             // Creating an order and splitting payment using 'addReceiver' method
             // Here we're setting a secondary account to receive vendor commission
             $moip_order->setCustomer( $moip_data['customer'] )
-                ->addReceiver( $moip_vendor_account, 'SECONDARY', $vendor_commission, null, $moip_fee_bearer )
+                ->addReceiver( $moip_vendor_account, 'SECONDARY', (int) $vendor_commission, null, $moip_fee_bearer )
                 ->create();
 
             if ( ! isset( $_POST['moip_hash'] ) || empty( $_POST['moip_hash'] ) ) {
