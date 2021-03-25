@@ -3,6 +3,8 @@
 namespace WeDevs\DokanPro\Modules\Stripe;
 
 use Exception;
+use Stripe\Charge;
+use Stripe\SetupIntent;
 use WeDevs\DokanPro\Modules\Stripe\Helper;
 use WeDevs\Dokan\Exceptions\DokanException;
 use WeDevs\DokanPro\Modules\Stripe\DokanStripe;
@@ -31,16 +33,17 @@ class IntentController extends StripePaymentGateway {
      */
     public function hooks() {
         add_action( 'wc_ajax_dokan_stripe_verify_intent', [ $this, 'verify_intent' ] );
+        add_action( 'wc_ajax_dokan_stripe_create_setup_intent', [ $this, 'create_setup_intent' ] );
         add_action( 'dokan_stripe_payment_completed', [ $this, 'process_vendor_payment' ], 10, 2 );
     }
 
     /**
      * Loads the order from the current request.
      *
-     * @since 3.0.3
-     * @throws WC_Stripe_Exception An exception if there is no order ID or the order does not exist.
+     * @return \WC_Order
+     * @throws DokanException An exception if there is no order key or the order does not exist.
      *
-     * @return WC_Order
+     * @since 3.0.3
      */
     protected function get_order_from_request() {
         /*
@@ -51,8 +54,8 @@ class IntentController extends StripePaymentGateway {
 
         $order_id = null;
 
-        if ( isset( $_GET['order'] ) && absint( $_GET['order'] ) ) {
-            $order_id = absint( $_GET['order'] );
+        if ( isset( $_GET['order'] ) ) {
+            $order_id = absint( wp_unslash( $_GET['order'] ) );
         }
 
         $order = wc_get_order( $order_id );
@@ -62,7 +65,7 @@ class IntentController extends StripePaymentGateway {
         }
 
         if ( ! isset( $_GET['key'] ) || $order->get_order_key() !== sanitize_text_field( wp_unslash( $_GET['key'] ) ) ) {
-            throw new DokanException( 'missing-order-key', __( 'Invalid order id. Plase try again.', 'dokan' ) );
+            throw new DokanException( 'missing-order-key', __( 'Invalid order id. Please try again.', 'dokan' ) );
         }
 
         return $order;
@@ -125,7 +128,7 @@ class IntentController extends StripePaymentGateway {
             ];
         } else {
             $errors = [
-                'message' => $e->get_message(),
+                'message' => $e->getMessage(),
             ];
         }
 
@@ -146,7 +149,7 @@ class IntentController extends StripePaymentGateway {
      *
      * @since 3.0.3
      *
-     * @param WC_Order $order The order which is in a transitional state
+     * @param \WC_Order $order The order which is in a transitional state
      *
      * @return void
      */
@@ -173,12 +176,12 @@ class IntentController extends StripePaymentGateway {
 
         if ( 'succeeded' === $intent->status ) {
             WC()->cart->empty_cart();
-            $order->payment_complete();
+            $this->handle_intent_verification_success( $order, $intent );
             do_action( 'dokan_stripe_payment_completed', $order, $intent );
-        } else if ( 'requires_capture' === $intent->status ) {
+        } elseif ( 'requires_capture' === $intent->status ) {
             // Proceed with the payment completion.
             $this->handle_intent_verification_success( $order, $intent );
-        } else if ( 'requires_payment_method' === $intent->status ) {
+        } elseif ( 'requires_payment_method' === $intent->status ) {
             // `requires_payment_method` means that SCA got denied for the current payment method.
             $this->handle_intent_verification_failure( $order, $intent );
         }
@@ -190,13 +193,18 @@ class IntentController extends StripePaymentGateway {
      * Called after an intent verification succeeds, this allows
      * specific APNs or children of this class to modify its behavior.
      *
-     * @since 3.0.3
-     *
      * @param WC_Order $order The order whose verification succeeded.
      * @param stdClass $intent The Payment Intent object.
+     * @throws DokanException
+     * @since 3.0.3
      */
     protected function handle_intent_verification_success( $order, $intent ) {
         $this->process_response( end( $intent->charges->data ), $order );
+
+        if ( isset( $_GET['early_renewal'] ) && function_exists( 'wcs_update_dates_after_early_renewal' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+            wcs_update_dates_after_early_renewal( wcs_get_subscription( $order->get_meta( '_subscription_renewal' ) ), $order );
+            wc_add_notice( __( 'Your early renewal order was successful.', 'dokan' ), 'success' );
+        }
     }
 
     /**
@@ -236,11 +244,11 @@ class IntentController extends StripePaymentGateway {
     /**
      * Process vendor payment
      *
-     * @since 3.0.3
-     *
      * @param \WC_Order $order
      *
      * @return void
+     * @throws DokanException
+     * @since 3.0.3
      */
     public function process_vendor_payment( $order, $intent ) {
         if ( Helper::is_subscription_order( $order ) ) {
@@ -257,7 +265,7 @@ class IntentController extends StripePaymentGateway {
         $stripe_fee    = Helper::format_gateway_balance_fee( $intent->charges->first()->balance_transaction );
 
         // This will make sure the parent order has processing_fee that requires in
-        // Commission::calculate_gateway_fee() method at begining.
+        // Commission::calculate_gateway_fee() method at beginning.
         $order->update_meta_data( 'dokan_gateway_stripe_fee', $stripe_fee );
 
         // In case of we have sub orders, lets add the gateway fee in the parent order.
@@ -276,7 +284,7 @@ class IntentController extends StripePaymentGateway {
 
         foreach ( $all_orders as $tmp_order ) {
             //return if $tmp_order not instance of WC_Order
-            if ( ! $tmp_order instanceof \WC_Order) {
+            if ( ! $tmp_order instanceof \WC_Order ) {
                 continue;
             }
 
@@ -309,13 +317,37 @@ class IntentController extends StripePaymentGateway {
             }
 
             if ( $vendor_earning < 1 ) {
-                $tmp_order->add_order_note( sprintf( __( 'Transfer to the vendor stripe account skipped due to a negative balance: %s %s', 'dokan' ), $vendor_raw_earning, $currency ) );
+                $tmp_order->add_order_note( sprintf( __( 'Transfer to the vendor stripe account skipped due to a negative balance: %1$s %2$s', 'dokan' ), $vendor_raw_earning, $currency ) );
                 $tmp_order->save_meta_data();
                 continue;
             }
 
+            // get currency and symbol
+            $currency        = $order->get_currency();
+            $currency_symbol = html_entity_decode( get_woocommerce_currency_symbol( $order->get_currency() ) );
+
+            // prepare extra metadata
+            $application_fee = dokan()->commission->get_earning_by_order( $tmp_order, 'admin' );
+            $metadata = [
+                'stripe_processing_fee' => $currency_symbol . wc_format_decimal( $stripe_fee_for_vendor, 2 ),
+                'application_fee'       => $currency_symbol . wc_format_decimal( $application_fee, 2 ),
+            ];
+
+            // get payment info
+            $payment_info = Helper::generate_payment_info( $order, $tmp_order, $metadata );
+
             try {
-                DokanStripe::transfer()->amount( $vendor_earning, $currency )->from( $charge_id )->to( $connected_vendor_id );
+                $transfer = DokanStripe::transfer()
+                    ->description( $payment_info['description'] )
+                    ->transaction( $charge_id )
+                    ->group( $payment_info['transfer_group'] )
+                    ->meta( $payment_info['metadata'] )
+                    ->amount( $vendor_earning, $currency )
+                    ->from( $charge_id )
+                    ->to( $connected_vendor_id )
+                    ->send();
+
+                $tmp_order->update_meta_data( '_dokan_stripe_transfer_id', $transfer->id );
             } catch ( Exception $e ) {
                 dokan_log( 'Could not transfer amount to connected vendor account via 3ds. Order ID: ' . $tmp_order->get_id() . ', Amount tried to transfer: ' . $vendor_raw_earning . " $currency" );
                 $tmp_order->add_order_note( sprintf( __( 'Transfer failed to vendor account (%s)', 'dokan' ), $e->getMessage() ) );
@@ -324,11 +356,28 @@ class IntentController extends StripePaymentGateway {
                 continue;
             }
 
+            // update vendor payment meta
+            try {
+                $vendor_charge = Charge::update(
+                    $transfer->destination_payment,
+                    [
+                        'description'    => $payment_info['description'],
+                        'transfer_group' => $payment_info['transfer_group'],
+                        'metadata'       => $payment_info['metadata'],
+                    ],
+                    [
+                        'stripe_account' => $transfer->destination,
+                    ]
+                );
+            } catch ( Exception $e ) {
+                dokan_log( 'Could not update charge information: ' . $e->getMessage() );
+            }
+
             if ( $order->get_id() !== $tmp_order_id ) {
                 $tmp_order->update_meta_data( 'paid_with_dokan_3ds', true );
                 $tmp_order->add_order_note(
                     sprintf(
-                        __( 'Order %s payment is completed via %s with 3d secure on (Charge ID: %s)', 'dokan' ),
+                        __( 'Order %1$s payment is completed via %2$s with 3d secure on (Charge ID: %3$s)', 'dokan' ),
                         $tmp_order->get_order_number(),
                         $this->get_title(),
                         $charge_id
@@ -357,7 +406,7 @@ class IntentController extends StripePaymentGateway {
         $this->process_seller_withdraws( $all_withdraws );
         $order->add_order_note(
             sprintf(
-                __( 'Order %s payment is completed via %s 3d secure. (Charge ID: %s)', 'dokan' ),
+                __( 'Order %1$s payment is completed via %2$s 3d secure. (Charge ID: %3$s)', 'dokan' ),
                 $order->get_order_number(),
                 $this->get_title(),
                 $charge_id
@@ -366,5 +415,93 @@ class IntentController extends StripePaymentGateway {
 
         $order->save_meta_data();
         dokan()->commission->calculate_gateway_fee( $order->get_id() );
+    }
+
+    /**
+     * Creates a Setup Intent through AJAX while adding cards.
+     * @since DOKAN_PRO_SINCE
+     */
+    public function create_setup_intent() {
+        if (
+            ! is_user_logged_in()
+            || ! isset( $_POST['stripe_source_id'] )
+            || ! isset( $_POST['nonce'] )
+        ) {
+            return;
+        }
+
+        try {
+            $source_id = wc_clean( wp_unslash( $_POST['stripe_source_id'] ) );
+
+            // 1. Verify.
+            if (
+                ! wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'dokan_stripe_create_si' )
+                || ! preg_match( '/^src_.*$/', $source_id )
+            ) {
+                throw new Exception( __( 'Unable to verify your request. Please reload the page and try again.', 'dokan' ) );
+            }
+
+            // 2. Load the customer ID (and create a customer eventually).
+            $customer = new Customer( get_current_user_id() );
+
+            // 3. Attach the source to the customer (Setup Intents require that).
+            $source_object = $customer->add_source( $source_id );
+            if ( is_wp_error( $source_object ) ) {
+                throw new Exception( $source_object->get_error_message() );
+            }
+
+            // 4. Generate the setup intent
+            try {
+                $setup_intent = SetupIntent::create(
+                    [
+                        'customer'       => $customer->get_id(),
+                        'confirm'        => 'true',
+                        'payment_method' => $source_id,
+                        'usage'          => 'off_session',
+                    ]
+                );
+            } catch ( Exception $e ) {
+                $error_response_message = $e->getMessage();
+                dokan_log( 'Failed create Setup Intent while saving a card.' );
+                dokan_log( "Response: $error_response_message" );
+                throw new Exception( __( 'Your card could not be set up for future usage.', 'dokan' ) );
+            }
+
+            // 5. Respond.
+            if ( 'requires_action' === $setup_intent->status ) {
+                $response = [
+                    'status'        => 'requires_action',
+                    'client_secret' => $setup_intent->client_secret,
+                ];
+            } elseif ( 'requires_payment_method' === $setup_intent->status
+                || 'requires_confirmation' === $setup_intent->status
+                || 'canceled' === $setup_intent->status ) {
+                // These statuses should not be possible, as such we return an error.
+                $response = [
+                    'status' => 'error',
+                    'error'  => [
+                        'type'    => 'setup_intent_error',
+                        'message' => __( 'Failed to save payment method.', 'dokan' ),
+                    ],
+                ];
+            } else {
+                // This should only be reached when status is `processing` or `succeeded`, which are
+                // the only statuses that we haven't explicitly handled.
+                $response = [
+                    'status' => 'success',
+                ];
+            }
+        } catch ( Exception $e ) {
+            $response = [
+                'status' => 'error',
+                'error'  => array(
+                    'type'    => 'setup_intent_error',
+                    'message' => $e->getMessage(),
+                ),
+            ];
+        }
+
+        echo wp_json_encode( $response );
+        exit;
     }
 }

@@ -79,7 +79,7 @@ class PaymentTokens {
 
             // delete from local token reference if source doesn't exists on stripe end.
             foreach ( $tokens as $token ) {
-                if ( ! in_array( $token->get_token(), $stripe_stored_tokens ) ) {
+                if ( ! in_array( $token->get_token(), $stripe_stored_tokens, true ) ) {
                     $token->delete( true );
                     continue;
                 }
@@ -89,7 +89,7 @@ class PaymentTokens {
 
             foreach ( $stripe_sources as $source ) {
                 if ( isset( $source->type ) && 'card' === $source->type ) {
-                    if ( ! in_array( $source->id, $stored_tokens ) ) {
+                    if ( ! in_array( $source->id, $stored_tokens, true ) ) {
                         $token = new WC_Payment_Token_CC();
                         $token->set_token( $source->id );
                         $token->set_gateway_id( $this->gateway_id );
@@ -106,7 +106,7 @@ class PaymentTokens {
                         $tokens[ $token->get_id() ] = $token;
                     }
                 } else {
-                    if ( ! in_array( $source->id, $stored_tokens ) && 'card' === $source->object ) {
+                    if ( ! in_array( $source->id, $stored_tokens, true ) && 'card' === $source->object ) {
                         $token = new WC_Payment_Token_CC();
                         $token->set_token( $source->id );
                         $token->set_gateway_id( $this->gateway_id );

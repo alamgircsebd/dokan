@@ -30,22 +30,21 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * If user is logged in and/or has WC account, create an account on Stripe.
      * This way we can attribute the payment to the user to better fight fraud.
      *
-     * @since 3.0.3
-     *
-     * @param string $user_id
+     * @param int $user_id
      * @param bool $force_save_source Should we force save payment source.
-     *
+     * @param int|null $existing_customer_id
      * @return object
+     * @throws DokanException
+     * @since 3.0.3
      */
     public function prepare_source( $user_id, $force_save_source = false, $existing_customer_id = null ) {
-
         $customer = new Customer( $user_id );
 
         if ( ! empty( $existing_customer_id ) ) {
             $customer->set_id( $existing_customer_id );
         }
 
-        $posted             = wp_unslash( $_POST );
+        $posted             = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification
         $source_object      = '';
         $source_id          = '';
         $wc_token_id        = '';
@@ -57,20 +56,19 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
         if ( ! empty( $posted['stripe_source'] ) ) {
             $source_object    = $this->get_source_object( wc_clean( $posted['stripe_source'] ) );
             $source_id        = $source_object->id;
-            $maybe_saved_card = isset( $_POST[ 'wc-' . $payment_method . '-new-payment-method' ] ) && ! empty( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] );
+            $maybe_saved_card = isset( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] ) && ! empty( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] );
             /**
              * This is true if the user wants to store the card to their account.
              * Criteria to save to file is they are logged in, they opted to save or product requirements and the source is
              * actually reusable. Either that or force_save_source is true.
              */
             if ( ( $user_id && Helper::save_cards() && $maybe_saved_card && 'reusable' === $source_object->usage ) || $force_save_source ) {
-                $response           = $customer->add_source( $source_object->id );
+                $response = $customer->add_source( $source_object->id );
                 if ( ! empty( $response->error ) ) {
                     throw new DokanException( print_r( $response, true ), Helper::get_localized_error_message_from_response( $response ) );
                 }
                 $setup_future_usage = true;
             }
-
         } elseif ( $this->is_using_saved_payment_method() ) {
             $wc_token_id = wc_clean( $posted[ 'wc-' . $payment_method . '-payment-token' ] );
             $wc_token    = WC_Payment_Tokens::get( $wc_token_id );
@@ -85,10 +83,10 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             if ( $this->is_type_legacy_card( $source_id ) ) {
                 $is_token = true;
             }
-        } elseif ( ! empty( $posted['stripe_token' ] ) && 'new' !== $posted['stripe_token'] ) {
+        } elseif ( ! empty( $posted['stripe_token'] ) && 'new' !== $posted['stripe_token'] ) {
             $stripe_token     = wc_clean( $posted['stripe_token'] );
             $is_token         = true;
-            $maybe_saved_card = isset( $_POST[ 'wc-' . $payment_method . '-new-payment-method' ] ) && ! empty( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] );
+            $maybe_saved_card = isset( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] ) && ! empty( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] );
 
             /**
              * This is true if the user wants to store the card to their account.
@@ -110,24 +108,11 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
 
         $customer_id = $customer->get_id();
 
-        /**
-         * note: we need to add source while adding/updating a customer, because admin make change
-         * non3ds to 3ds and vice-versa, it that case, if we don't attach source to a customer, then
-         * payment wont work.
-         */
         if ( ! $customer_id ) {
-            if ( $source_id ) {
-                $customer->set_id( $customer->create_customer( [ 'source' => $source_id ] ) );
-            } else {
-                $customer->set_id( $customer->create_customer() );
-            }
+            $customer->set_id( $customer->create_customer() );
             $customer_id = $customer->get_id();
         } else {
-            if ( $source_id ) {
-                $customer->update_customer( [ 'source' => $source_id ] );
-            } else {
-                $customer->update_customer();
-            }
+            $customer->update_customer();
         }
 
         if ( empty( $source_object ) && ! $is_token ) {
@@ -139,16 +124,17 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             'token_id'           => $wc_token_id,
             'source'             => $source_id,
             'source_object'      => $source_object,
-            'setup_future_usage' => $setup_future_usage ? 'off_session' : null
+            'setup_future_usage' => $setup_future_usage ? 'off_session' : null,
         ];
     }
 
     /**
      * Get source object by source id.
      *
-     * @since 3.0.3
-     *
      * @param string $source_id The source ID to get source object for.
+     * @return string|Source
+     * @throws DokanException
+     * @since 3.0.3
      */
     public function get_source_object( $source_id = '' ) {
         if ( empty( $source_id ) ) {
@@ -157,7 +143,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
 
         try {
             $source_object = Source::retrieve( $source_id );
-        } catch( Exception $e ) {
+        } catch ( Exception $e ) {
             throw new DokanException( 'get_source_object', $e->getMessage() );
         }
 
@@ -172,31 +158,29 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * @return bool
      */
     public function is_using_saved_payment_method() {
-        $payment_method = isset( $_POST['payment_method'] ) ? wc_clean( $_POST['payment_method'] ) : 'dokan-stripe-connect';
+        $payment_method = isset( $_POST['payment_method'] ) ? wc_clean( wp_unslash( $_POST['payment_method'] ) ) : 'dokan-stripe-connect'; // phpcs:ignore WordPress.Security.NonceVerification
 
-        return ( isset( $_POST[ 'wc-' . $payment_method . '-payment-token' ] ) && 'new' !== $_POST[ 'wc-' . $payment_method . '-payment-token' ] );
+        return ( isset( $_POST[ 'wc-' . $payment_method . '-payment-token' ] ) && 'new' !== $_POST[ 'wc-' . $payment_method . '-payment-token' ] ); // phpcs:ignore WordPress.Security.NonceVerification
     }
 
     /**
      * Checks whether a source exists.
      *
-     * @since 3.0.3
-     *
      * @param object $prepared_source The source that should be verified.
-     *
-     * @throws \DokanException
+     * @throws DokanException
+     * @since 3.0.3
      */
     public function validate_source( $prepared_source ) {
         if ( empty( $prepared_source->source ) ) {
             throw new DokanException(
-                'wrong',
+                'invalid-source',
                 __( 'Payment processing failed. Please retry.', 'dokan' )
             );
         }
 
         if ( ! empty( $prepared_source->source_object->status ) && 'consumed' === $prepared_source->source_object->status ) {
             throw new DokanException(
-                'wrong',
+                'invalid-source',
                 sprintf(
                     __( 'Payment processing failed. Please try again with a different card. If it\'s a saved card, <a href="%s" target="_blank">remove it first</a> and try again.', 'dokan' ),
                     wc_get_account_endpoint_url( 'payment-methods' )
@@ -235,15 +219,15 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Validates that the order meets the minimum order amount
      * set by Stripe.
      *
-     * @since 3.0.3
-     *
-     * @param object $order
+     * @param \WC_Order $order
      *
      * @return void
+     * @throws DokanException
+     * @since 3.0.3
      */
     public function validate_minimum_order_amount( $order ) {
         if ( $order->get_total() * 100 < $this->get_minimum_amount() ) {
-            throw new Exception( 'Did not meet minimum amount', sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'dokan' ), wc_price( $this->get_minimum_amount() / 100 ) ) );
+            throw new DokanException( 'Did not meet minimum amount', sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'dokan' ), wc_price( $this->get_minimum_amount() / 100 ) ) );
         }
     }
 
@@ -308,7 +292,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
         $processing     = get_transient( $transient_name );
 
         // Block the process if the same intent is already being handled.
-        if ( "-1" === $processing || ( isset( $intent->id ) && $processing === $intent->id ) ) {
+        if ( '-1' === $processing || ( isset( $intent->id ) && $processing === $intent->id ) ) {
             return true;
         }
 
@@ -338,7 +322,6 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * @since 3.0.3
      */
     public function process_response( $response, $order ) {
-
         $order_id = $order->get_id();
         $captured = ( isset( $response->captured ) && $response->captured ) ? 'yes' : 'no';
 
@@ -370,7 +353,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             if ( 'failed' === $response->status ) {
                 $localized_message = __( 'Payment processing failed. Please retry.', 'dokan' );
                 $order->add_order_note( $localized_message );
-                throw new \WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+                throw new DokanException( print_r( $response, true ), $localized_message );
             }
         } else {
             $order->set_transaction_id( $response->id );
@@ -379,7 +362,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
                 wc_reduce_stock_levels( $order_id );
             }
 
-            $order->update_status( 'on-hold', sprintf( __( 'Stripe charge authorized (Charge ID: %s). Process order to take payment, or cancel to remove the pre-authorization.', 'woocommerce-gateway-stripe' ), $response->id ) );
+            $order->update_status( 'on-hold', sprintf( __( 'Stripe charge authorized (Charge ID: %s). Process order to take payment, or cancel to remove the pre-authorization.', 'dokan' ), $response->id ) );
         }
 
         if ( is_callable( [ $order, 'save' ] ) ) {
@@ -415,7 +398,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
                     ],
                 ]
             );
-        } catch( Exception $e ) {
+        } catch ( Exception $e ) {
             dokan_log( 'get_intent_from_order error: ' . $e->getMessage() );
             return false;
         }
@@ -454,9 +437,9 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if request is invalid and that
      * they are worth retrying.
      *
-     * @since 3.0.3
-     *
      * @param object $error
+     * @return bool
+     * @since 3.0.3
      */
     public function is_retryable_error( $error ) {
         return (
@@ -472,9 +455,9 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of same idempotency key
      * error due to retries with different parameters.
      *
-     * @since 3.0.3
-     *
      * @param array $error
+     * @return bool
+     * @since 3.0.3
      */
     public function is_same_idempotency_error( $error ) {
         return (
@@ -488,9 +471,9 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of invalid request
      * error and it is no such customer.
      *
-     * @since 3.0.3
-     *
      * @param array $error
+     * @return bool
+     * @since 3.0.3
      */
     public function is_no_such_customer_error( $error ) {
         return (
@@ -504,9 +487,9 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of invalid request
      * error and it is no such token.
      *
-     * @since 3.0.3
-     *
      * @param array $error
+     * @return bool
+     * @since 3.0.3
      */
     public function is_no_such_token_error( $error ) {
         return (
@@ -520,9 +503,9 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of invalid request
      * error and it is no such source.
      *
-     * @since 3.0.3
-     *
      * @param array $error
+     * @return bool
+     * @since 3.0.3
      */
     public function is_no_such_source_error( $error ) {
         return (
@@ -536,9 +519,9 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of invalid request
      * error and it is no such source linked to customer.
      *
-     * @since 3.0.3
-     *
      * @param array $error
+     * @return bool
+     * @since 3.0.3
      */
     public function is_no_linked_source_error( $error ) {
         return (
@@ -602,13 +585,11 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     }
 
     /**
-     * Insert withdraw data into vendor balnace table
+     * Insert withdraw data into vendor balance table
      *
-     * @since 3.0.3
-     *
-     * @param  array $all_withdraw
-     *
+     * @param $all_withdraws
      * @return void
+     * @since 3.0.3
      */
     public function insert_into_vendor_balance( $all_withdraws ) {
         if ( ! $all_withdraws ) {
@@ -625,7 +606,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
                 continue;
             }
 
-            $wpdb->insert( $wpdb->prefix . 'dokan_vendor_balance',
+            $wpdb->insert(
+                $wpdb->prefix . 'dokan_vendor_balance',
                 [
                     'vendor_id'     => $withdraw['user_id'],
                     'trn_id'        => $withdraw['order_id'],
@@ -653,7 +635,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     }
 
     /**
-     * Automatically process withdrwal for sellers per order
+     * Automatically process withdrawal for sellers per order
      *
      * @since 3.0.3
      *
@@ -661,12 +643,12 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      *
      * @return void
      */
-    public function process_seller_withdraws( $all_withdraws ){
+    public function process_seller_withdraws( $all_withdraws ) {
         if ( ! $all_withdraws ) {
             return;
         }
 
-        $IP = dokan_get_client_ip();
+        $ip = dokan_get_client_ip();
 
         foreach ( $all_withdraws as $withdraw_data ) {
             $stripe_key          = get_user_meta( $withdraw_data['user_id'], '_stripe_connect_access_key', true );
@@ -680,8 +662,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
                 'date'   => current_time( 'mysql' ),
                 'status' => 1,
                 'method' => 'dokan-stripe-connect',
-                'notes'  => sprintf( __( 'Order %d payment Auto paid via %s', 'dokan' ), $withdraw_data['order_id'], Helper::get_gateway_title() ),
-                'ip'     => $IP
+                'notes'  => sprintf( __( 'Order %1$d payment Auto paid via %2$s', 'dokan' ), $withdraw_data['order_id'], Helper::get_gateway_title() ),
+                'ip'     => $ip,
             ];
 
             $data = array_merge( $data, $withdraw_data );
@@ -702,13 +684,13 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     public function get_dokan_order( $order_id, $seller_id ) {
         global $wpdb;
 
-        $sql = "SELECT *
-        FROM {$wpdb->prefix}dokan_orders AS do
-        WHERE
-        do.seller_id = %d AND
-        do.order_id = %d";
-
-        return $wpdb->get_row( $wpdb->prepare( $sql, $seller_id, $order_id ) );
+        return $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM {$wpdb->prefix}dokan_orders AS do
+                WHERE do.seller_id = %d AND do.order_id = %d",
+                $seller_id, $order_id
+            )
+        );
     }
 
     public function get_all_orders_to_be_processed( $order ) {
@@ -716,7 +698,13 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
         $all_orders   = [];
 
         if ( $has_suborder ) {
-            $sub_order_ids = get_children( [ 'post_parent' => $order->get_id(), 'post_type' => 'shop_order', 'fields' => 'ids' ] );
+            $sub_order_ids = get_children(
+                [
+                    'post_parent' => $order->get_id(),
+                    'post_type' => 'shop_order',
+                    'fields' => 'ids',
+                ]
+            );
 
             foreach ( $sub_order_ids as $sub_order_id ) {
                 $sub_order    = wc_get_order( $sub_order_id );
@@ -761,16 +749,16 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Add payment method via account screen.
      *
-     * @since 3.0.3
-     *
      * @return array
+     * @throws DokanException
+     * @since 3.0.3
      */
     public function add_payment_method() {
         $error     = false;
         $error_msg = __( 'There was a problem adding the payment method.', 'dokan' );
         $source_id = '';
 
-        $posted = wp_unslash( $_POST );
+        $posted = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification
 
         if ( empty( $posted['stripe_source'] ) && empty( $posted['stripe_token'] ) || ! is_user_logged_in() ) {
             $error = true;
@@ -780,13 +768,13 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
         $source          = ! empty( $posted['stripe_source'] ) ? wc_clean( $posted['stripe_source'] ) : '';
         $source_object   = $this->get_source_object( $source );
 
-        if ( ! is_object( $source_object ) ) {
-            $error = true;
-        }
+        if ( isset( $source_object ) ) {
+            if ( ! empty( $source_object->error ) ) {
+                $error = true;
+            }
 
-        if ( ! empty( $source_object->id ) ) {
             $source_id = $source_object->id;
-        } elseif ( ! empty( $posted['stripe_token'] ) ) {
+        } elseif ( isset( $posted['stripe_token'] ) ) {
             $source_id = wc_clean( $posted['stripe_token'] );
         } else {
             $error = true;
@@ -796,7 +784,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             $response = $stripe_customer->add_source( $source_id );
         } catch ( DokanException $e ) {
             $error = true;
-            $error_msg .= $e->getMessage();
+            $response = false;
+            $error_msg .= ' ' . $e->getMessage();
         }
 
         if ( ! $response || is_wp_error( $response ) ) {
@@ -825,7 +814,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      */
     public function ensure_subscription_has_customer_id( $order_id ) {
         $subscriptions_ids = wcs_get_subscriptions_for_order( $order_id, array( 'order_type' => 'any' ) );
-        foreach( $subscriptions_ids as $subscription_id => $subscription ) {
+        foreach ( $subscriptions_ids as $subscription_id => $subscription ) {
             if ( ! metadata_exists( 'post', $subscription_id, '_stripe_customer_id' ) ) {
                 $stripe_customer = new Customer( $subscription->get_user_id() );
                 update_post_meta( $subscription_id, '_stripe_customer_id', $stripe_customer->get_id() );

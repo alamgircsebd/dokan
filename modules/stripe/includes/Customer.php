@@ -102,7 +102,7 @@ class Customer {
      * @return array
      */
     protected function generate_customer_request() {
-        $billing_email = isset( $_POST['billing_email'] ) ? filter_var( $_POST['billing_email'], FILTER_SANITIZE_EMAIL ) : '';
+        $billing_email = isset( $_POST['billing_email'] ) ? filter_var( wp_unslash( $_POST['billing_email'] ), FILTER_SANITIZE_EMAIL ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
         $user          = $this->get_user();
 
         if ( $user ) {
@@ -120,7 +120,7 @@ class Customer {
             }
 
             // translators: %1$s First name, %2$s Second name, %3$s Username.
-            $description = sprintf( __( 'Name: %1$s %2$s, Username: %s', 'dokan' ), $billing_first_name, $billing_last_name, $user->user_login );
+            $description = sprintf( __( 'Name: %1$s %2$s, Username: %3$s', 'dokan' ), $billing_first_name, $billing_last_name, $user->user_login );
 
             $defaults = [
                 'email'       => $user->user_email,
@@ -149,6 +149,7 @@ class Customer {
      * Create a customer via API.
      * @param array $args
      * @return WP_Error|int
+     * @throws DokanException
      */
     public function create_customer( $args = [] ) {
         $args = wp_parse_args( $args, $this->generate_customer_request() );
@@ -176,11 +177,15 @@ class Customer {
      * Updates the Stripe customer through the API.
      *
      * @param array $args Additional arguments for the request (optional).
+     * @throws DokanException
      */
     public function update_customer( $args = [] ) {
         if ( empty( $this->get_id() ) ) {
             throw new DokanException( 'id_required_to_update_user', __( 'Attempting to update a Stripe customer without a customer ID.', 'dokan' ) );
         }
+
+        // get customer args
+        $args = wp_parse_args( $args, $this->generate_customer_request() );
 
         try {
             $response = StripeCustomer::update( $this->get_id(), $args );
@@ -192,17 +197,6 @@ class Customer {
         $this->set_customer_data( $response );
 
         do_action( 'dokan_stripe_connnect_update_customer', $args, $response );
-    }
-
-    /**
-     * Checks to see if error is of invalid request
-     * error and it is no such customer.
-     *
-     * @since 4.1.2
-     * @param array $error
-     */
-    public function is_no_such_customer_error( $error ) {
-        return preg_match( '/No such customer/i', $error );
     }
 
     /**
@@ -242,9 +236,34 @@ class Customer {
     }
 
     /**
+     * Checks to see if error is of invalid request
+     * error and it is no such customer.
+     *
+     * @param array $error
+     * @return false|int
+     * @since DOKAN_PRO_SINCE
+     */
+    public function is_no_such_customer_error( $error ) {
+        return preg_match( '/No such customer/i', $error );
+    }
+
+    /**
+     * Checks to see if error is of invalid request
+     * error and it is no such customer.
+     *
+     * @since DOKAN_PRO_SINCE
+     * @param array $error
+     * @return bool
+     */
+    public function is_source_already_attached_error( $error ) {
+        return preg_match( '/already been attached to a customer/i', $error );
+    }
+
+    /**
      * Add a source for this stripe customer.
      * @param string $source_id
      * @return WP_Error|int
+     * @throws DokanException
      */
     public function add_source( $source_id ) {
         if ( ! $this->get_id() ) {
@@ -262,6 +281,15 @@ class Customer {
                 $this->delete_id_from_meta();
                 $this->create_customer();
                 return $this->add_source( $source_id );
+            } elseif ( $this->is_source_already_attached_error( $e->getMessage() ) ) {
+                try {
+                    $response = StripeCustomer::retrieveSource( $this->get_id(), $source_id );
+                    if ( $response->id ) {
+                        return $response->id;
+                    }
+                } catch ( Exception $e ) {
+                    throw new DokanException( 'dokan_unable_to_get_source', $e->getMessage() );
+                }
             } else {
                 throw new DokanException( 'dokan_unable_to_add_source', $e->getMessage() );
             }
@@ -305,6 +333,7 @@ class Customer {
     /**
      * Delete a source from stripe.
      * @param string $source_id
+     * @return bool|void
      */
     public function delete_source( $source_id ) {
         if ( ! $this->get_id() ) {
@@ -325,6 +354,7 @@ class Customer {
     /**
      * Delete a source from stripe.
      * @param string $source_id
+     * @return bool|void
      */
     public function set_default_source( $source_id ) {
         if ( ! $this->get_id() ) {
@@ -335,7 +365,7 @@ class Customer {
             $response = StripeCustomer::update( $this->get_id(), [ 'default_source' => wc_clean( $source_id ) ] );
         } catch ( Exception $e ) {
             $this->clear_cache();
-            return;
+            return false;
         }
 
         $this->clear_cache();

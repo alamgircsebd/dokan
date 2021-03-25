@@ -13,6 +13,11 @@ jQuery( function( $ ) {
 
     var dokan_stripe_form = {
         init: function() {
+            // Initialize tokenization script if on change payment method page and pay for order page.
+            if ( 'yes' === dokan_stripe_connect_params.is_change_payment_page || 'yes' === dokan_stripe_connect_params.is_pay_for_order_page ) {
+                $( document.body ).trigger( 'wc-credit-card-form-init' );
+            }
+
             // checkout page
             if ( $( 'form.woocommerce-checkout' ).length ) {
                 this.form = $( 'form.woocommerce-checkout' );
@@ -35,10 +40,14 @@ jQuery( function( $ ) {
             $( 'form.woocommerce-checkout' ).on( 'change', this.reset );
             $( 'form.woocommerce-checkout' ).on( 'checkout_place_order_dokan-stripe-connect', this.onSubmit );
 
+            // Subscription early renewals modal.
+            $( '#early_renewal_modal_submit' ).on( 'click', dokan_stripe_form.onEarlyRenewalSubmit );
+
             dokan_stripe_form.createElements();
 
             // Listen for hash changes in order to handle payment intents
             window.addEventListener( 'hashchange', dokan_stripe_form.onHashChange );
+            dokan_stripe_form.maybeConfirmIntent();
         },
 
         createElements: function() {
@@ -61,6 +70,10 @@ jQuery( function( $ ) {
         },
 
         mountElements: function() {
+            if ( ! $( '#dokan-stripe-card-element' ).length ) {
+                return;
+            }
+
             card.mount( '#dokan-stripe-card-element' );
         },
 
@@ -222,11 +235,12 @@ jQuery( function( $ ) {
                     .val( response.source.id )
             );
 
-            if ( $( 'form#add_payment_method' ).length ) {
-                $( dokan_stripe_form.form ).off( 'submit', dokan_stripe_form.form.onSubmit );
+            if ( $( 'form#add_payment_method' ).length || $( '#wc-stripe-change-payment-method' ).length ) {
+                dokan_stripe_form.sourceSetup( response );
+                return;
             }
 
-            dokan_stripe_form.form.submit();
+            dokan_stripe_form.form.trigger( 'submit' );
         },
 
         handleSource( source, subscriptionProductId ) {
@@ -297,23 +311,7 @@ jQuery( function( $ ) {
         },
 
         confirmCardPayment: function( clientSecret, source ) {
-            stripe.confirmCardPayment( clientSecret, {
-                payment_method: {
-                    card: card,
-                    billing_details: {
-                        name: $( '#dokan-payment-customer-name' ).val(),
-                        email: $( '#dokan-payment-customer-email' ).val(),
-                        address: {
-                            city: $( '#dokan-payment-customer-city' ).val(),
-                            state: $( '#dokan-payment-customer-state' ).val(),
-                            country: $( '#dokan-payment-customer-country' ).val(),
-                            line1: $( '#dokan-payment-customer-address_1' ).val(),
-                            line2: $( '#dokan-payment-customer-address_2' ).val(),
-                            postal_code: $( '#dokan-payment-customer-postal_code' ).val(),
-                        }
-                    }
-                }
-            } )
+            stripe.confirmCardPayment( clientSecret )
             .then( function( response ) {
                 if ( response.paymentIntent && 'succeeded' === response.paymentIntent.status ) {
                     dokan_stripe_form.resetAndSubmit( source );
@@ -404,6 +402,17 @@ jQuery( function( $ ) {
             dokan_stripe_form.openIntentModal( intentClientSecret, redirectURL, false );
         },
 
+        maybeConfirmIntent: function() {
+            if ( ! $( '#dokan-stripe-intent-id' ).length || ! $( '#dokan-stripe-intent-return' ).length ) {
+                return;
+            }
+
+            var intentSecret = $( '#dokan-stripe-intent-id' ).val();
+            var returnURL    = $( '#dokan-stripe-intent-return' ).val();
+
+            dokan_stripe_form.openIntentModal( intentSecret, returnURL, true );
+        },
+
         /**
          * Opens the modal for PaymentIntent authorizations.
          *
@@ -437,6 +446,94 @@ jQuery( function( $ ) {
                     // Report back to the server.
                     $.get( redirectURL + '&is_ajax' );
                 } );
+        },
+
+        /**
+         * Prevents the standard behavior of the "Renew Now" button in the
+         * early renewals modal by using AJAX instead of a simple redirect.
+         *
+         * @param {Event} e The event that occured.
+         */
+        onEarlyRenewalSubmit: function( e ) {
+            e.preventDefault();
+
+            $.ajax( {
+                url: $( '#early_renewal_modal_submit' ).attr( 'href' ),
+                method: 'get',
+                success: function( html ) {
+                    var response = JSON.parse( html );
+                    console.log( response );
+
+                    if ( response.stripe_sca_required ) {
+                        dokan_stripe_form.openIntentModal( response.intent_secret, response.redirect_url, true );
+                    } else {
+                        window.location = response.redirect_url;
+                    }
+                },
+            } );
+
+            return false;
+        },
+
+        /**
+         * Authenticate Source if necessary by creating and confirming a SetupIntent.
+         *
+         * @param {Object} response The `stripe.createSource` response.
+         */
+        sourceSetup: function( response ) {
+            var apiError = {
+                error: {
+                    type: 'api_connection_error'
+                }
+            };
+
+            $.ajax( {
+                url: dokan_stripe_form.getAjaxURL( 'create_setup_intent'),
+                dataType: 'json',
+                method: 'POST',
+                data: {
+                    stripe_source_id: response.source.id,
+                    nonce: dokan_stripe_connect_params.add_card_nonce,
+                },
+                error: function() {
+                    console.log( 'here111' );
+                    $( document.body ).trigger( 'stripeError', apiError );
+                }
+            } ).done( function( serverResponse ) {
+                if ( 'success' === serverResponse.status ) {
+                    if ( $( 'form#add_payment_method' ).length ) {
+                        $( dokan_stripe_form.form ).off( 'submit', dokan_stripe_form.form.onSubmit );
+                    }
+                    dokan_stripe_form.form.trigger( 'submit' );
+                    return;
+                } else if ( 'requires_action' !== serverResponse.status ) {
+                    $( document.body ).trigger( 'stripeError', serverResponse );
+                    return;
+                }
+
+                stripe.confirmCardSetup( serverResponse.client_secret, { payment_method: response.source.id } )
+                    .then( function( result ) {
+                        if ( result.error ) {
+                            $( document.body ).trigger( 'stripeError', result );
+                            return;
+                        }
+
+                        if ( $( 'form#add_payment_method' ).length ) {
+                            $( dokan_stripe_form.form ).off( 'submit', dokan_stripe_form.form.onSubmit );
+                        }
+                        dokan_stripe_form.form.trigger( 'submit' );
+                    } )
+                    .catch( function( err ) {
+                        console.log( err );
+                        $( document.body ).trigger( 'stripeError', { error: err } );
+                    } );
+            } );
+        },
+
+        getAjaxURL: function( endpoint ) {
+            return dokan_stripe_connect_params.ajaxurl
+                .toString()
+                .replace( '%%endpoint%%', 'dokan_stripe_' + endpoint );
         },
 
     };

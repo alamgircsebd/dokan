@@ -2,24 +2,24 @@ jQuery( function($) {
     Stripe.setPublishableKey( dokan_stripe_connect_params.key );
 
     /* Checkout Form */
-    $('form.checkout').on('checkout_place_order_dokan-stripe-connect', function( event ) {
+    $('form.woocommerce-checkout').on('checkout_place_order_dokan-stripe-connect', function( event ) {
         return stripeFormHandler();
     });
 
     /* Pay Page Form */
-    $('form#order_review').submit(function(){
+    $('form#order_review').on( 'submit', function() {
         return stripeFormHandler();
     });
 
     /* Both Forms */
-    $("form.checkout, form#order_review").on('change', '.card-number, .card-cvc, .card-expiry-month, .card-expiry-year, input[name=dokan_stripe_customer_id], #dokan-stripe-connect-card-number, #dokan-stripe-connect-card-cvc, #dokan-stripe-connect-card-expiry', function( event ) {
-        $('.woocommerce_error, .woocommerce-error, .woocommerce-message, .woocommerce_message, .stripe_token').remove();
-        $('.stripe_token').remove();
+    $("form.woocommerce-checkout, form#order_review").on('change', '.card-number, .card-cvc, .card-expiry-month, .card-expiry-year, input[name=dokan_stripe_customer_id], #dokan-stripe-connect-card-number, #dokan-stripe-connect-card-cvc, #dokan-stripe-connect-card-expiry', function( event ) {
+        $( '.woocommerce_error, .woocommerce-error, .woocommerce-message, .woocommerce_message, .stripe_token' ).remove();
+        $('.stripe_token' ).remove();
 
         dokan_stripe_connect_params.token_done = false;
     });
 
-    $("form.checkout, form#order_review").on('change', 'input[name=dokan_stripe_customer_id]', function() {
+    $("form.woocommerce-checkout, form#order_review").on('change', 'input[name=dokan_stripe_customer_id]', function() {
         if ( $('input[name=dokan_stripe_customer_id]:checked').val() == 'new' ) {
             $('div.stripe_new_card').slideDown( 200 );
         } else {
@@ -29,13 +29,13 @@ jQuery( function($) {
 
     function stripeFormHandler() {
         if ( $('#payment_method_dokan-stripe-connect').is(':checked') ) {
-            if ( isStripeSaveCardChosen() ) {
+            if ( isStripeSaveCardChosen() || $( 'input.stripe_token' ).length ) {
                 return true;
             }
 
             var card = $('#dokan-stripe-connect-card-number').val();
             var cvc = $('#dokan-stripe-connect-card-cvc').val();
-            var $form = $("form.checkout, form#order_review");
+            var $form = $("form.woocommerce-checkout, form#order_review");
             var expires = $('#dokan-stripe-connect-card-expiry').payment( 'cardExpiryVal' );
             var month = parseInt( expires['month'] ) || 0;
             var year = parseInt( expires['year'] ) || 0;
@@ -91,7 +91,7 @@ jQuery( function($) {
     }
 
     function stripeResponseHandler( status, response ) {
-        var $form = $("form.checkout, form#order_review");
+        var $form = $("form.woocommerce-checkout, form#order_review");
 
         if ( response.error ) {
             $('.woocommerce_error, .woocommerce-error, .woocommerce-message, .woocommerce_message, .stripe_token').remove();
@@ -102,7 +102,7 @@ jQuery( function($) {
             var token = response['id'];
 
             dokan_stripe_connect_params.token_done = true;
-            $( '.stripe_token').remove();
+            $( '.stripe_token' ).remove();
 
             $form.off( 'checkout_place_order_dokan-stripe-connect' );
             $form.append("<input type='hidden' class='stripe_token' name='stripe_token' value='" + token + "'/>");

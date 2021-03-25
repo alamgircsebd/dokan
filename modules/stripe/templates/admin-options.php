@@ -22,7 +22,7 @@
     <?php
     echo wp_kses(
         sprintf(
-            __( 'Recurring subscription requires webhooks to be configured. Go to <a href="%1$s" target="_blank">webhook</a> and set your webhook url <code>%2$s</code>. Otherwise recurring payment will not work automatically.', 'dokan' ),
+            __( 'Recurring subscription requires webhooks to be configured. Go to <a href="%1$s" target="_blank">webhook</a> and set your webhook url <code>%2$s</code> (if not automatically set). Otherwise recurring payment will not work automatically.', 'dokan' ),
             'https://dashboard.stripe.com/account/webhooks',
             home_url( 'wc-api/dokan_stripe' )
         ),

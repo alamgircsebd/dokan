@@ -4,6 +4,7 @@ namespace WeDevs\DokanPro\Modules\Stripe;
 
 use Stripe\BalanceTransaction;
 use Stripe\Stripe;
+use WeDevs\Dokan\Exceptions\DokanException;
 use WeDevs\DokanPro\Modules\Stripe\Settings\RetrieveSettings;
 
 defined( 'ABSPATH' ) || exit;
@@ -62,6 +63,192 @@ class Helper {
         }
 
         return 'yes' === $settings['testmode'];
+    }
+
+    /**
+     * Check if this gateway is enabled and ready to use
+     *
+     * @since 3.0.3
+     *
+     * @return bool
+     */
+    public static function is_ready() {
+        if ( ! self::is_enabled() || ! self::get_secret_key() || ! self::get_client_id() ) {
+            return false;
+        }
+
+        if ( ! self::are_keys_set() ) {
+            return false;
+        }
+
+        if ( ! is_ssl() && ! self::is_test_mode() ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if secret key and publishable keys are valid
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return bool
+     */
+    public static function are_keys_set() {
+        if ( self::is_test_mode() ) {
+            return preg_match( '/^pk_test_/', self::get_publishable_key() )
+                && preg_match( '/^[rs]k_test_/', self::get_secret_key() );
+        } else {
+            return preg_match( '/^pk_live_/', self::get_publishable_key() )
+                && preg_match( '/^[rs]k_live_/', self::get_secret_key() );
+        }
+    }
+
+    /**
+     * Check wheter it's enabled or not
+     *
+     * @since 3.0.3
+     *
+     * @return bool
+     */
+    public static function is_enabled() {
+        $settings = self::get_settings();
+
+        return ! empty( $settings['enabled'] ) && 'yes' === $settings['enabled'];
+    }
+
+    /**
+     * Get secret key
+     *
+     * @since 3.0.3
+     *
+     * @return string
+     */
+    public static function get_secret_key() {
+        $key      = self::is_test_mode() ? 'test_secret_key' : 'secret_key';
+        $settings = self::get_settings();
+
+        if ( ! empty( $settings[ $key ] ) ) {
+            return $settings[ $key ];
+        }
+    }
+
+    /**
+     * Get secret key
+     *
+     * @since 3.0.3
+     *
+     * @return string
+     */
+    public static function get_publishable_key() {
+        $key      = self::is_test_mode() ? 'test_publishable_key' : 'publishable_key';
+        $settings = self::get_settings();
+
+        if ( ! empty( $settings[ $key ] ) ) {
+            return $settings[ $key ];
+        }
+    }
+
+    /**
+     * Get client id
+     *
+     * @since 3.0.3
+     *
+     * @return string
+     */
+    public static function get_client_id() {
+        $key      = self::is_test_mode() ? 'test_client_id' : 'client_id';
+        $settings = self::get_settings();
+
+        if ( ! empty( $settings[ $key ] ) ) {
+            return $settings[ $key ];
+        }
+    }
+
+    /**
+     * Check whether non-connected sellers can sell product or not
+     *
+     * @since 3.0.3
+     *
+     * @return bool
+     */
+    public static function allow_non_connected_sellers() {
+        $settings = self::get_settings();
+
+        return ! empty( $settings['allow_non_connected_sellers'] ) && 'yes' === $settings['allow_non_connected_sellers'];
+    }
+
+    /**
+     * Check if non-connected sellers gets notice to connect their stripe account
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return bool
+     */
+    public static function display_notice_to_non_connected_sellers() {
+        $settings = self::get_settings();
+
+        return ! empty( $settings['display_notice_to_non_connected_sellers'] ) && 'yes' === $settings['display_notice_to_non_connected_sellers'];
+    }
+
+    /**
+     * Check if non-connected sellers gets notice to connect their stripe account
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return int
+     */
+    public static function non_connected_sellers_display_notice_intervals() {
+        $settings = self::get_settings();
+
+        return ! empty( $settings['display_notice_interval'] ) ? absint( $settings['display_notice_interval'] ) : 7;
+    }
+
+    /**
+     * Show checkout modal
+     *
+     * @since  3.0.3
+     *
+     * @return bool
+     */
+    public static function show_checkout_modal() {
+        $settings = self::get_settings();
+
+        return ! empty( $settings['stripe_checkout'] ) && 'yes' === $settings['stripe_checkout'];
+    }
+
+    /**
+     * Get gateway title
+     *
+     * @since 3.0.3
+     *
+     * @return string
+     */
+    public static function get_gateway_title() {
+        $settings = self::get_settings();
+
+        return ! empty( $settings['title'] ) ? $settings['title'] : __( 'Stripe Connect', 'dokan' );
+    }
+
+
+    public static function save_cards() {
+        $settings = self::get_settings();
+
+        return ! empty( $settings['saved_cards'] ) && 'yes' === $settings['saved_cards'];
+    }
+
+    /**
+     * Does seller pay the Stripe processing fee
+     *
+     * @since 3.1.0
+     *
+     * @return bool
+     */
+    public static function seller_pays_the_processing_fee() {
+        $settings = self::get_settings();
+
+        return isset( $settings['seller_pays_the_processing_fee'] ) && dokan_validate_boolean( $settings['seller_pays_the_processing_fee'] );
     }
 
     /**
@@ -129,6 +316,16 @@ class Helper {
     }
 
     /**
+     * Checks if page is pay for order and change subs payment page.
+     *
+     * @since DOKAN_PRO_SINCE
+     * @return bool
+     */
+    public static function is_subs_change_payment() {
+        return ( isset( $_GET['pay_for_order'] ) && isset( $_GET['change_payment_method'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+    }
+
+    /**
      * Get subscription product from an order
      *
      * @param \WC_Order $order
@@ -145,38 +342,6 @@ class Helper {
         }
 
         return null;
-    }
-
-    /**
-     * Check if this gateway is enabled and ready to use
-     *
-     * @since 3.0.3
-     *
-     * @return bool
-     */
-    public static function is_ready() {
-        if ( ! self::is_enabled() || ! self::get_secret_key() || ! self::get_client_id() ) {
-            return false;
-        }
-
-        if ( ! is_ssl() && ! self::is_test_mode() ) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Check wheter it's enabled or not
-     *
-     * @since 3.0.3
-     *
-     * @return bool
-     */
-    public static function is_enabled() {
-        $settings = self::get_settings();
-
-        return ! empty( $settings['enabled'] ) && 'yes' === $settings['enabled'];
     }
 
     /**
@@ -199,64 +364,6 @@ class Helper {
     }
 
     /**
-     * Get secret key
-     *
-     * @since 3.0.3
-     *
-     * @return string
-     */
-    public static function get_secret_key() {
-        $key      = self::is_test_mode() ? 'test_secret_key' : 'secret_key';
-        $settings = self::get_settings();
-
-        if ( ! empty( $settings[ $key ] ) ) {
-            return $settings[ $key ];
-        }
-    }
-
-    /**
-     * Get client id
-     *
-     * @since 3.0.3
-     *
-     * @return string
-     */
-    public static function get_client_id() {
-        $key      = self::is_test_mode() ? 'test_client_id' : 'client_id';
-        $settings = self::get_settings();
-
-        if ( ! empty( $settings[ $key ] ) ) {
-            return $settings[ $key ];
-        }
-    }
-
-    /**
-     * Check wheter non-connected sellers can sale product or not
-     *
-     * @since 3.0.3
-     *
-     * @return bool
-     */
-    public static function allow_non_connected_sellers() {
-        $settings = self::get_settings();
-
-        return ! empty( $settings['allow_non_connected_sellers'] ) && 'yes' === $settings['allow_non_connected_sellers'];
-    }
-
-    /**
-     * Show checkout modal
-     *
-     * @since  3.0.3
-     *
-     * @return bool
-     */
-    public static function show_checkout_modal() {
-        $settings = self::get_settings();
-
-        return ! empty( $settings['stripe_checkout'] ) && 'yes' === $settings['stripe_checkout'];
-    }
-
-    /**
      * Get gateway id
      *
      * @since 3.0.3
@@ -265,39 +372,6 @@ class Helper {
      */
     public static function get_gateway_id() {
         return 'dokan-stripe-connect';
-    }
-
-    /**
-     * Get gateway title
-     *
-     * @since 3.0.3
-     *
-     * @return string
-     */
-    public static function get_gateway_title() {
-        $settings = self::get_settings();
-
-        return ! empty( $settings['title'] ) ? $settings['title'] : __( 'Stripe Connect', 'dokan' );
-    }
-
-
-    public static function save_cards() {
-        $settings = self::get_settings();
-
-        return ! empty( $settings['saved_cards'] ) && 'yes' === $settings['saved_cards'];
-    }
-
-    /**
-     * Does seller pay the Stripe processing fee
-     *
-     * @since 3.1.0
-     *
-     * @return bool
-     */
-    public static function seller_pays_the_processing_fee() {
-        $settings = self::get_settings();
-
-        return isset( $settings['seller_pays_the_processing_fee'] ) && dokan_validate_boolean( $settings['seller_pays_the_processing_fee'] );
     }
 
     /**
@@ -347,16 +421,19 @@ class Helper {
      * @return array
      */
     public static function get_supported_webhook_events() {
-        return apply_filters( 'dokan_stripe_get_supported_webhook_events', [
-            'charge.dispute.closed'                => 'ChargeDisputeClosed',
-            'charge.dispute.created'               => 'ChargeDisputeCreated',
-            'invoice.payment_failed'               => 'InvoicePaymentFailed',
-            'invoice.payment_succeeded'            => 'InvoicePaymentSucceeded',
-            'invoice.payment_action_required'      => 'InvoicePaymentActionRequired',
-            'customer.subscription.updated'        => 'SubscriptionUpdated',
-            'customer.subscription.deleted'        => 'SubscriptionDeleted',
-            'customer.subscription.trial_will_end' => 'SubscriptionTrialWillEnd',
-        ] );
+        return apply_filters(
+            'dokan_stripe_get_supported_webhook_events',
+            [
+                'charge.dispute.closed'                => 'ChargeDisputeClosed',
+                'charge.dispute.created'               => 'ChargeDisputeCreated',
+                'invoice.payment_failed'               => 'InvoicePaymentFailed',
+                'invoice.payment_succeeded'            => 'InvoicePaymentSucceeded',
+                'invoice.payment_action_required'      => 'InvoicePaymentActionRequired',
+                'customer.subscription.updated'        => 'SubscriptionUpdated',
+                'customer.subscription.deleted'        => 'SubscriptionDeleted',
+                'customer.subscription.trial_will_end' => 'SubscriptionTrialWillEnd',
+            ]
+        );
     }
 
     /**
@@ -369,26 +446,26 @@ class Helper {
     public static function get_stripe_amount( $total ) {
         switch ( get_woocommerce_currency() ) {
             /* Zero decimal currencies*/
-            case 'BIF' :
-            case 'CLP' :
-            case 'DJF' :
-            case 'GNF' :
-            case 'JPY' :
-            case 'KMF' :
-            case 'KRW' :
-            case 'MGA' :
-            case 'PYG' :
-            case 'RWF' :
-            case 'VND' :
-            case 'VUV' :
-            case 'XAF' :
-            case 'XOF' :
-            case 'XPF' :
-            $total = absint( $total );
-            break;
-            default :
-            $total = round( $total, 2 ) * 100; /* In cents*/
-            break;
+            case 'BIF':
+            case 'CLP':
+            case 'DJF':
+            case 'GNF':
+            case 'JPY':
+            case 'KMF':
+            case 'KRW':
+            case 'MGA':
+            case 'PYG':
+            case 'RWF':
+            case 'VND':
+            case 'VUV':
+            case 'XAF':
+            case 'XOF':
+            case 'XPF':
+                $total = absint( $total );
+                break;
+            default:
+                $total = wc_format_decimal( $total, 2 ) * 100; /* In cents*/
+                break;
         }
 
         return $total;
@@ -422,7 +499,7 @@ class Helper {
             }
         }
 
-        if ( ! in_array( strtolower( $balance_transaction->currency ), self::no_decimal_currencies() ) ) {
+        if ( ! in_array( strtolower( $balance_transaction->currency ), self::no_decimal_currencies(), true ) ) {
             $fee = number_format( $fee / 100, 2, '.', '' );
         }
 
@@ -431,7 +508,6 @@ class Helper {
         }
 
         return $fee;
-
     }
 
     /**
@@ -463,12 +539,35 @@ class Helper {
     /**
      * Checks to see if error is no such subscription error.
      *
-     * @since 3.0.3
-     *
      * @param string $error_message
+     * @return false|int
+     * @since 3.0.3
      */
     public static function is_no_such_subscription_error( $error_message ) {
         return preg_match( '/No such subscription/i', $error_message );
+    }
+
+    /**
+     * Checks to see if error is no such subscription error.
+     *
+     * @param string $error_message
+     * @return false|int
+     * @since DOKAN_PRO_SINCE
+     */
+    public static function is_customer_without_source_error( $error_message ) {
+        return preg_match( '/You provided a customer without specifying a source./i', $error_message );
+    }
+
+    /**
+     * Checks to see if error is of invalid request
+     * error and it is no such token.
+     *
+     * @param array $error_message
+     * @return false|int
+     * @since DOKAN_PRO_SINCE
+     */
+    public static function is_no_such_token_error( $error_message ) {
+        return preg_match( '/No such token./i', $error_message );
     }
 
     /**
@@ -536,5 +635,73 @@ class Helper {
         }
 
         return $localized_message;
+    }
+
+    /**
+     * Generate extra information for orders to send with stripe.
+     *
+     * @since DOKAN_PRO_SINCE
+     * @param  WC_Order $order
+     * @param  WC_Order $sub_order
+     * @param  array $extra_metadata
+     * @return array
+     */
+    public static function generate_payment_info( $order, $sub_order = null, $extra_metadata = [] ) {
+        $post_data = [];
+
+        // add transfer group
+        $transfer_group = __( 'Dokan Order# ', 'dokan' ) . $order->get_order_number();
+        $post_data['transfer_group'] = apply_filters( 'dokan_stripe_transfer_group', $transfer_group, $order, $sub_order );
+
+        $billing_email            = $order->get_billing_email();
+        $billing_first_name       = $order->get_billing_first_name();
+        $billing_last_name        = $order->get_billing_last_name();
+
+        $metadata = [
+            'customer_name'     => sanitize_text_field( $billing_first_name ) . ' ' . sanitize_text_field( $billing_last_name ),
+            'customer_email'    => sanitize_email( $billing_email ),
+            'order_id'          => $order->get_id(),
+            'site_url'          => esc_url( get_site_url() ),
+        ];
+
+        if ( self::has_subscription( $order->get_id() ) ) {
+            $metadata += array(
+                'payment_type' => 'recurring',
+            );
+        }
+
+        if ( is_array( $extra_metadata ) && ! empty( $extra_metadata ) ) {
+            $metadata += $extra_metadata;
+        }
+
+        if ( ! is_null( $sub_order ) && $sub_order->get_id() !== $order->get_id() ) {
+            /* translators: 1) blog name 2) order number 3) sub order number */
+            $post_data['description'] = sprintf( __( '%1$1s - Order %2$2s, suborder of %3$3s', 'dokan' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $sub_order->get_order_number(), $order->get_order_number() );
+
+            //fix sub order metadata
+            $metadata['order_id'] = $sub_order->get_id();
+            $metadata['parent_order_id'] = $order->get_id();
+        } else {
+            /* translators: 1) blog name 2) order number */
+            $post_data['description'] = sprintf( __( '%1$s - Order %2$s', 'dokan' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $order->get_order_number() );
+        }
+
+        $post_data['metadata'] = apply_filters( 'dokan_stripe_payment_metadata', $metadata, $order, $sub_order );
+
+        return apply_filters( 'dokan_stripe_generate_payment_info', $post_data, $order, $sub_order );
+    }
+
+    /**
+     * Checks whether a source exists.
+     *
+     * @since DOKAN_PRO_SINCE
+     * @param  object $prepared_source The source that should be verified.
+     * @throws DokanException     An exception if the source ID is missing.
+     */
+    public function check_source( $prepared_source ) {
+        if ( empty( $prepared_source->source ) ) {
+            $localized_message = __( 'Payment processing failed. Please retry.', 'dokan' );
+            throw new DokanException( print_r( $prepared_source, true ), $localized_message );
+        }
     }
 }

@@ -83,7 +83,7 @@ class StripeConnect extends StripePaymentGateway {
      * @return void
      */
     public function init_form_fields() {
-        $this->form_fields = require( dirname( __FILE__ ) . '/Settings/StripeConnect.php' );
+        $this->form_fields = require dirname( __FILE__ ) . '/Settings/StripeConnect.php';
     }
 
     /**
@@ -125,8 +125,40 @@ class StripeConnect extends StripePaymentGateway {
              * See: https://github.com/woocommerce/woocommerce-subscriptions/blob/99a75687e109b64cbc07af6e5518458a6305f366/includes/class-wcs-cart-renewal.php#L165
              * If we are in the "You just need to authorize SCA" flow, we don't want that redirection to happen.
              */
-            // add_action( 'template_redirect', array( $this, 'remove_order_pay_var' ), 99 );
-            // add_action( 'template_redirect', array( $this, 'restore_order_pay_var' ), 101 );
+            add_action( 'template_redirect', array( $this, 'remove_order_pay_var' ), 99 );
+            add_action( 'template_redirect', array( $this, 'restore_order_pay_var' ), 101 );
+        }
+
+        // hooks related to order pay page.
+        add_filter( 'woocommerce_get_checkout_payment_url', [ $this, 'get_checkout_payment_url' ], 10, 2 );
+        add_filter( 'woocommerce_available_payment_gateways', [ $this, 'prepare_order_pay_page' ] );
+    }
+
+    /**
+     * Process the payment method change for subscriptions.
+     *
+     * @param int $order_id
+     * @return array
+     * @since 4.0.4
+     * @since 4.1.11 Remove 3DS check as it is not needed.
+     */
+    public function change_subs_payment_method( $order_id ) {
+        try {
+            $subscription    = wc_get_order( $order_id );
+            $prepared_source = $this->prepare_source( get_current_user_id(), true );
+
+            Helper::check_source( $prepared_source );
+            $this->save_source_to_order( $subscription, $prepared_source );
+
+            do_action( 'dokan_stripe_change_subs_payment_method_success', $prepared_source->source, $prepared_source );
+
+            return [
+                'result'   => 'success',
+                'redirect' => $this->get_return_url( $subscription ),
+            ];
+        } catch ( DokanException $e ) {
+            wc_add_notice( $e->getMessage(), 'error' );
+            dokan_log( 'Error: ' . $e->getMessage() );
         }
     }
 
@@ -147,11 +179,19 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Scheduled_subscription_payment function.
      *
-     * @param $amount_to_charge float The amount to charge.
-     * @param $renewal_order WC_Order A WC_Order object created to record the renewal payment.
+     * @param float $amount
+     * @param $renewal_order \WC_Order A WC_Order object created to record the renewal payment.
+     * @param bool $retry
+     * @param bool $previous_error
+     * @return void
      */
-    public function process_subscription_payment( $amount = 0.0, $renewal_order, $retry = true, $previous_error ) {
+    public function process_subscription_payment( $amount = 0.0, $renewal_order = null, $retry = true, $previous_error = false ) {
         try {
+            // check if $renewal_order is a instance of WC_Order
+            if ( ! $renewal_order instanceof \WC_Order ) {
+                throw new DokanException( 'invalid_order_object', __( 'Invalid renewal order object.', 'dokan' ) );
+            }
+
             if ( $amount * 100 < $this->get_minimum_amount() ) {
                 /* translators: minimum amount */
                 $message = sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'dokan' ), wc_price( $this->get_minimum_amount() / 100 ) );
@@ -166,25 +206,30 @@ class StripeConnect extends StripePaymentGateway {
             $this->ensure_subscription_has_customer_id( $order_id );
 
             // Unlike regular off-session subscription payments, early renewals are treated as on-session payments, involving the customer.
-            if ( isset( $_REQUEST['process_early_renewal'] ) ) { // wpcs: csrf ok.
-                $response = parent::process_payment( $order_id, true, false, $previous_error, true );
+            if ( isset( $_REQUEST['process_early_renewal'] ) && Helper::payment_method() === '3ds' ) { // phpcs:ignore WordPress.Security.NonceVerification
+                // early renewal only works with stripe3ds payment method.
+                $payment_method = '\\WeDevs\\DokanPro\\Modules\\Stripe\\PaymentMethods\\Stripe3DSPayment';
+                $response = ( new $payment_method( $renewal_order, false, true ) )->pay();
 
-                if( 'success' === $response['result'] && isset( $response['payment_intent_secret'] ) ) {
+                if ( 'success' === $response['result'] && isset( $response['payment_intent_secret'] ) ) {
                     $verification_url = add_query_arg(
-                        array(
+                        [
                             'order'         => $order_id,
+                            'key'           => $renewal_order->get_order_key(),
                             'nonce'         => wp_create_nonce( 'dokan_stripe_confirm_pi' ),
-                            'redirect_to'   => remove_query_arg( array( 'process_early_renewal', 'subscription_id', 'wcs_nonce' ) ),
+                            'redirect_to'   => remove_query_arg( [ 'process_early_renewal', 'subscription_id', 'wcs_nonce' ] ),
                             'early_renewal' => true,
-                        ),
+                        ],
                         WC_AJAX::get_endpoint( 'dokan_stripe_verify_intent' )
                     );
 
-                    echo wp_json_encode( array(
-                        'stripe_sca_required' => true,
-                        'intent_secret'       => $response['payment_intent_secret'],
-                        'redirect_url'        => $verification_url,
-                    ) );
+                    echo wp_json_encode(
+                        [
+                            'stripe_sca_required' => true,
+                            'intent_secret'       => $response['payment_intent_secret'],
+                            'redirect_url'        => $verification_url,
+                        ]
+                    );
 
                     exit;
                 }
@@ -363,25 +408,23 @@ class StripeConnect extends StripePaymentGateway {
             update_post_meta( $subscription->get_id(), '_stripe_source_id', $intent->source );
             update_post_meta( $subscription->get_id(), '_stripe_intent_id', $intent->id );
         }
-     }
+	}
 
     /**
      * Validate the payment meta data required to process automatic recurring payments so that store managers can
      * manually set up automatic recurring payments for a customer via the Edit Subscriptions screen in 2.0+.
      *
-     * @since 2.5
-     * @since 4.0.4 Stripe sourd id field no longer needs to be required.
      * @param string $payment_method_id The ID of the payment method to validate
      * @param array $payment_meta associative array of meta data required for automatic payments
-     * @return array
+     * @return void
+     * @throws Exception
      */
     public function validate_subscription_payment_meta( $payment_method_id, $payment_meta ) {
         if ( $this->id === $payment_method_id ) {
-
             if ( ! isset( $payment_meta['post_meta']['_stripe_customer_id']['value'] ) || empty( $payment_meta['post_meta']['_stripe_customer_id']['value'] ) ) {
 
                 // Allow empty stripe customer id during subscription renewal. It will be added when processing payment if required.
-                if ( ! isset( $_POST['wc_order_action'] ) || 'wcs_process_renewal' !== $_POST['wc_order_action'] ) {
+                if ( ! isset( $_POST['wc_order_action'] ) || 'wcs_process_renewal' !== sanitize_text_field( wp_unslash( $_POST['wc_order_action'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
                     throw new Exception( __( 'A "Stripe Customer ID" value is required.', 'dokan' ) );
                 }
             } elseif ( 0 !== strpos( $payment_meta['post_meta']['_stripe_customer_id']['value'], 'cus_' ) ) {
@@ -393,7 +436,6 @@ class StripeConnect extends StripePaymentGateway {
                 && 0 !== strpos( $payment_meta['post_meta']['_stripe_source_id']['value'], 'card_' ) )
                 && ( ! empty( $payment_meta['post_meta']['_stripe_source_id']['value'] )
                 && 0 !== strpos( $payment_meta['post_meta']['_stripe_source_id']['value'], 'src_' ) ) ) {
-
                 throw new Exception( __( 'Invalid source ID. A valid source "Stripe Source ID" must begin with "src_" or "card_".', 'dokan' ) );
             }
         }
@@ -446,6 +488,7 @@ class StripeConnect extends StripePaymentGateway {
         $subs_statuses = apply_filters( 'dokan_stripe_update_subs_payment_method_card_statuses', array( 'active' ) );
         if (
             apply_filters( 'dokan_stripe_display_update_subs_payment_method_card_checkbox', true ) &&
+            function_exists( 'wcs_user_has_subscription' ) &&
             wcs_user_has_subscription( get_current_user_id(), '', $subs_statuses ) &&
             is_add_payment_method_page()
         ) {
@@ -473,7 +516,7 @@ class StripeConnect extends StripePaymentGateway {
      * @return Void
      */
     public function handle_add_payment_method_success( $source_id, $source_object ) {
-        if ( isset( $_POST[ 'wc-' . $this->id . '-update-subs-payment-method-card' ] ) ) {
+        if ( isset( $_POST[ 'dokan-' . $this->id . '-update-subs-payment-method-card' ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
             $all_subs        = wcs_get_users_subscriptions();
             $subs_statuses   = apply_filters( 'dokan_stripe_update_subs_payment_method_card_statuses', array( 'active' ) );
             $stripe_customer = new Customer( get_current_user_id() );
@@ -581,14 +624,14 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Create a new PaymentIntent
      *
-     * @since 3.0.3
-     *
      * @param \WC_Order $order
      * @param object $prepared_source The source that is used for the payment
      *
      * @return object
+     * @throws DokanException
+     * @since 3.0.3
      */
-    public function create_intent_for_renewal_order( $order, $prepared_source, $amount = NULL ) {
+    public function create_intent_for_renewal_order( $order, $prepared_source, $amount = null ) {
         $description = sprintf(
             __( '%1$s - Order %2$s', 'dokan' ),
             wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ),
@@ -647,7 +690,8 @@ class StripeConnect extends StripePaymentGateway {
 
     /**
      * Don't transfer Stripe fee/ID meta to renewal orders.
-     * @param int $resubscribe_order The order created for the customer to resubscribe to the old expired/cancelled subscription
+     * @param \WC_Order $renewal_order
+     * @return \WC_Order
      */
     public function delete_renewal_meta( $renewal_order ) {
         // delete payment intent ID
@@ -658,6 +702,23 @@ class StripeConnect extends StripePaymentGateway {
     }
 
     /**
+     * Hijacks `wp_redirect` in order to generate a JS-friendly object with the URL.
+     *
+     * @param string $url The URL that Subscriptions attempts a redirect to.
+     * @return void
+     */
+    public function redirect_after_early_renewal( $url ) {
+        echo wp_json_encode(
+            [
+                'stripe_sca_required' => false,
+                'redirect_url'        => $url,
+            ]
+        );
+
+        exit;
+    }
+
+    /**
      * Handle transfer payment
      *
      * @since 1.0.0
@@ -665,7 +726,6 @@ class StripeConnect extends StripePaymentGateway {
      * @return void
      */
     public function handle_transfer_payment( $response, $order ) {
-
     }
 
     /**
@@ -676,10 +736,10 @@ class StripeConnect extends StripePaymentGateway {
      * Not using 2.6 tokens for this part since we need a customer AND a card
      * token, and not just one.
      *
-     * @since 3.1.0
-     * @version 4.0.0
      * @param object $order
      * @return object
+     * @throws DokanException
+     * @since DOKAN_PRO_SINCE
      */
     public function prepare_order_source( $order = null ) {
         $stripe_customer = new Customer();
@@ -770,13 +830,13 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Retrieves intent from Stripe API by intent id.
      *
-     * @param string $intent_type 	Either 'payment_intents' or 'setup_intents'.
-     * @param string $intent_id		Intent id.
-     * @return object|bool 			Either the intent object or `false`.
-     * @throws Exception 			Throws exception for unknown $intent_type.
+     * @param string $intent_type   Either 'payment_intents' or 'setup_intents'.
+     * @param string $intent_id     Intent id.
+     * @return object|bool          Either the intent object or `false`.
+     * @throws Exception            Throws exception for unknown $intent_type.
      */
     public function get_intent( $intent_type, $intent_id ) {
-        if ( ! in_array( $intent_type, [ 'payment_intents', 'setup_intents' ] ) ) {
+        if ( ! in_array( $intent_type, [ 'payment_intents', 'setup_intents' ], true ) ) {
             throw new Exception( "Failed to get intent of type $intent_type. Type is not allowed" );
         }
 
@@ -791,7 +851,7 @@ class StripeConnect extends StripePaymentGateway {
                             ],
                         ]
                     );
-                } catch( Exception $e ) {
+                } catch ( Exception $e ) {
                     return false;
                 }
                 break;
@@ -806,7 +866,7 @@ class StripeConnect extends StripePaymentGateway {
                             ],
                         ]
                     );
-                } catch( Exception $e ) {
+                } catch ( Exception $e ) {
                     return false;
                 }
                 break;
@@ -924,7 +984,14 @@ class StripeConnect extends StripePaymentGateway {
      * @return void
      */
     public function payment_scripts() {
-        if ( ! is_checkout() && ! is_add_payment_method_page() && ! isset( $_GET['pay_for_order'] ) ) {
+        if (
+            ! is_checkout()
+            && ! isset( $_GET['pay_for_order'] ) // wpcs: csrf ok.
+            && ! is_add_payment_method_page()
+            && ! isset( $_GET['change_payment_method'] ) // wpcs: csrf ok.
+            && ! ( ! empty( get_query_var( 'view-subscription' ) ) && is_callable( '\WCS_Early_Renewal_Manager::is_early_renewal_via_modal_enabled' ) && \WCS_Early_Renewal_Manager::is_early_renewal_via_modal_enabled() )
+            || ( is_order_received_page() )
+        ) {
             return;
         }
 
@@ -932,15 +999,23 @@ class StripeConnect extends StripePaymentGateway {
 
         if ( ! Helper::is_3d_secure_enabled() && $this->checkout_modal && ! is_add_payment_method_page() ) {
             wp_enqueue_script( 'stripe', 'https://checkout.stripe.com/v2/checkout.js', [], '2.0', true );
-            wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe-checkout.js', dirname( __FILE__ ) ), [ 'stripe' ], false, true );
-        } else if ( ! Helper::is_3d_secure_enabled() && ! is_add_payment_method_page() ) {
+
+            $dokan_stripe_version = filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/stripe-checkout.js' );
+            wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe-checkout.js', dirname( __FILE__ ) ), [ 'stripe' ], $dokan_stripe_version, true );
+        } elseif ( ! Helper::is_3d_secure_enabled() && ! is_add_payment_method_page() ) {
+            $this->tokenization_script();
             wp_enqueue_script( 'stripe', 'https://js.stripe.com/v1/', [], '1.0', true );
-            wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe.js', dirname( __FILE__ ) ), [ 'jquery','stripe' ], false, false );
+
+            $dokan_stripe_version = filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/stripe.js' );
+            wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe.js', dirname( __FILE__ ) ), [ 'jquery', 'stripe' ], $dokan_stripe_version, false );
         }
 
         if ( Helper::is_3d_secure_enabled() || is_add_payment_method_page() ) {
+            $this->tokenization_script();
             wp_enqueue_script( 'stripe', 'https://js.stripe.com/v3/', [], [], true );
-            wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe-3ds.js', dirname( __FILE__ ) ), [ 'jquery', 'stripe' ], false, true );
+
+            $dokan_stripe_version = filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/stripe-3ds.js' );
+            wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe-3ds.js', dirname( __FILE__ ) ), [ 'jquery', 'stripe' ], $dokan_stripe_version, true );
         }
 
         $stripe_params = [
@@ -948,27 +1023,31 @@ class StripeConnect extends StripePaymentGateway {
             'key'                   => $this->publishable_key,
             'is_checkout'           => is_checkout() & empty( $_GET['pay_for_order'] ) ? 'yes' : 'no',
             'is_pay_for_order_page' => is_wc_endpoint_url( 'order-pay' ) ? 'yes' : 'no',
+            'is_change_payment_page' => isset( $_GET['change_payment_method'] ) ? 'yes' : 'no', // wpcs: csrf ok.
+            'is_add_payment_page'   => is_wc_endpoint_url( 'add-payment-method' ) ? 'yes' : 'no',
             'name'                  => get_bloginfo( 'name' ),
-            'description'           => get_bloginfo ( 'description' ),
-            'label'                 => sprintf( __( '%s', 'dokan') , $this->checkout_label ),
+            'description'           => get_bloginfo( 'description' ),
+            'label'                 => $this->checkout_label,
             'locale'                => $this->checkout_locale,
             'image'                 => $this->checkout_image,
             'i18n_terms'            => __( 'Please accept the terms and conditions first', 'dokan' ),
             'i18n_required_fields'  => __( 'Please fill in required checkout fields first', 'dokan' ),
             'invalid_request_error' => __( 'Unable to process this payment, please try again or use alternative method.', 'dokan' ),
             'email_invalid'         => __( 'Invalid email address, please correct and try again.', 'dokan' ),
+            'add_card_nonce'        => wp_create_nonce( 'dokan_stripe_create_si' ),
+            'ajaxurl'               => WC_AJAX::get_endpoint( '%%endpoint%%' ),
         ];
 
-        if ( is_checkout_pay_page() || isset( $_GET['pay_for_order'] ) && 'true' === $_GET['pay_for_order'] ) {
-            if ( is_checkout_pay_page() && isset( $_GET['order'] ) && isset( $_GET['order_id'] ) ) {
-                $order_key = urldecode( $_GET['order'] );
-                $order_id  = absint( $_GET['order_id'] );
+        if ( is_checkout_pay_page() || isset( $_GET['pay_for_order'] ) && 'true' === $_GET['pay_for_order'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+            if ( is_checkout_pay_page() && isset( $_GET['order'] ) && isset( $_GET['order_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+                $order_key = urldecode( wp_unslash( $_GET['order'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+                $order_id  = absint( wp_unslash( $_GET['order_id'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
                 $order     = wc_get_order( $order_id );
             }
 
             // If we're on the pay page we need to pass stripe.js the address of the order.
-            if ( isset( $_GET['pay_for_order'] ) && 'true' === $_GET['pay_for_order'] ) {
-                $order_key = urldecode( $_GET['key'] );
+            if ( isset( $_GET['pay_for_order'] ) && 'true' === sanitize_text_field( wp_unslash( $_GET['pay_for_order'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+                $order_key = urldecode( wp_unslash( $_GET['key'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
                 $order_id  = wc_get_order_id_by_order_key( $order_key );
                 $order     = wc_get_order( $order_id );
             }
@@ -977,19 +1056,19 @@ class StripeConnect extends StripePaymentGateway {
                 return;
             }
 
-            if ( dokan_get_prop( $order, 'id') == $order_id && dokan_get_prop( $order, 'order_key') == $order_key ) {
-                $stripe_params['billing_first_name'] = dokan_get_prop( $order , 'billing_first_name');
-                $stripe_params['billing_last_name']  = dokan_get_prop( $order , 'billing_last_name');
-                $stripe_params['billing_address_1']  = dokan_get_prop( $order , 'billing_address_1');
-                $stripe_params['billing_address_2']  = dokan_get_prop( $order , 'billing_address_2');
-                $stripe_params['billing_state']      = dokan_get_prop( $order , 'billing_state');
-                $stripe_params['billing_city']       = dokan_get_prop( $order , 'billing_city');
-                $stripe_params['billing_postcode']   = dokan_get_prop( $order , 'billing_postcode');
-                $stripe_params['billing_country']    = dokan_get_prop( $order , 'billing_country');
+            if ( dokan_get_prop( $order, 'id' ) == $order_id && dokan_get_prop( $order, 'order_key' ) == $order_key ) {
+                $stripe_params['billing_first_name'] = dokan_get_prop( $order, 'billing_first_name' );
+                $stripe_params['billing_last_name']  = dokan_get_prop( $order, 'billing_last_name' );
+                $stripe_params['billing_address_1']  = dokan_get_prop( $order, 'billing_address_1' );
+                $stripe_params['billing_address_2']  = dokan_get_prop( $order, 'billing_address_2' );
+                $stripe_params['billing_state']      = dokan_get_prop( $order, 'billing_state' );
+                $stripe_params['billing_city']       = dokan_get_prop( $order, 'billing_city' );
+                $stripe_params['billing_postcode']   = dokan_get_prop( $order, 'billing_postcode' );
+                $stripe_params['billing_country']    = dokan_get_prop( $order, 'billing_country' );
             }
         }
 
-        wp_localize_script( 'dokan_stripe', 'dokan_stripe_connect_params', apply_filters( 'dokan_stripe_js_params', $stripe_params) );
+        wp_localize_script( 'dokan_stripe', 'dokan_stripe_connect_params', apply_filters( 'dokan_stripe_js_params', $stripe_params ) );
     }
 
     /**
@@ -1021,8 +1100,8 @@ class StripeConnect extends StripePaymentGateway {
         $lastname             = '';
 
         // If paying from order, we need to get total from order not cart.
-        if ( isset( $_GET['pay_for_order'] ) && ! empty( $_GET['key'] ) ) { // wpcs: csrf ok.
-            $order      = wc_get_order( wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) ) ); // wpcs: csrf ok, sanitization ok.
+        if ( isset( $_GET['pay_for_order'] ) && ! empty( $_GET['key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+            $order      = wc_get_order( wc_get_order_id_by_order_key( wc_clean( wp_unslash( $_GET['key'] ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
             $total      = $order->get_total();
             $user_email = $order->get_billing_email();
         } else {
@@ -1046,7 +1125,7 @@ class StripeConnect extends StripePaymentGateway {
         >';
 
         if ( $this->testmode ) {
-            $description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 and 4000002500003155 for testing 3D Secure with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'dokan' ), 'https://stripe.com/docs/testing' );
+            $description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 and 4000002500003155 for testing 3D Secure with any CVC and a valid expiration date or check the %1$s Testing Stripe documentation %2$s for more card numbers.', 'dokan' ), '<a href="https://stripe.com/docs/testing" target="_blank">', '</a>' );
         }
 
         $description                   = trim( $description );
@@ -1104,9 +1183,9 @@ class StripeConnect extends StripePaymentGateway {
                     data-currency="<?php echo esc_attr( strtolower( get_woocommerce_currency() ) ); ?>"
                 >
                     <?php
-                        if ( ! $this->checkout_modal ) {
-                            $this->form();
-                        }
+                    if ( ! $this->checkout_modal ) {
+                        $this->form();
+                    }
                     ?>
                 </div>
             <?php endif; ?>
@@ -1123,7 +1202,7 @@ class StripeConnect extends StripePaymentGateway {
      * @since 3.0.3
      *
      * @param int $oder_id
-     *
+     * @throws DokanException
      * @return array
      */
     public function process_payment( $order_id ) {
@@ -1178,7 +1257,175 @@ class StripeConnect extends StripePaymentGateway {
 
         return [
             'result'   => 'success',
-            'redirect' => sprintf( '#confirm-pi-%s:%s', $result['payment_intent_secret'], rawurlencode( $verification_url ) )
+            'redirect' => sprintf( '#confirm-pi-%s:%s', $result['payment_intent_secret'], rawurlencode( $verification_url ) ),
         ];
+    }
+
+    /**
+     * Preserves the "dokan-stripe-confirmation" URL parameter so the user can complete the SCA authentication after logging in.
+     *
+     * @since DOKAN_PRO_SINCE
+     * @param string $pay_url Current computed checkout URL for the given order.
+     * @param WC_Order $order Order object.
+     *
+     * @return string Checkout URL for the given order.
+     */
+    public function get_checkout_payment_url( $pay_url, $order ) {
+        global $wp;
+        if ( isset( $_GET['dokan-stripe-confirmation'] ) && isset( $wp->query_vars['order-pay'] ) && (int) $wp->query_vars['order-pay'] === (int) $order->get_id() ) { // phpcs:ignore WordPress.Security.NonceVerification
+            $pay_url = add_query_arg( 'dokan-stripe-confirmation', 1, $pay_url );
+        }
+        return $pay_url;
+    }
+
+    /**
+     * Adds the necessary hooks to modify the "Pay for order" page in order to clean
+     * it up and prepare it for the Stripe PaymentIntents modal to confirm a payment.
+     *
+     * @param WC_Payment_Gateway[] $gateways A list of all available gateways.
+     * @return WC_Payment_Gateway[]          Either the same list or an empty one in the right conditions.
+     * @since DOKAN_PRO_SINCE
+     */
+    public function prepare_order_pay_page( $gateways ) {
+        if ( ! is_wc_endpoint_url( 'order-pay' ) || ! isset( $_GET['dokan-stripe-confirmation'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+            return $gateways;
+        }
+
+        try {
+            $this->prepare_intent_for_order_pay_page();
+        } catch ( DokanException $e ) {
+            dokan_log( 'Stripe prepare order pay page exception: ' . $e->getMessage() );
+            // Just show the full order pay page if there was a problem preparing the Payment Intent
+            return $gateways;
+        }
+
+        add_filter( 'woocommerce_checkout_show_terms', '__return_false' );
+        add_filter( 'woocommerce_pay_order_button_html', '__return_false' );
+        add_filter( 'woocommerce_available_payment_gateways', '__return_empty_array' );
+        add_filter( 'woocommerce_no_available_payment_methods_message', [ $this, 'change_no_available_methods_message' ] );
+        add_action( 'woocommerce_pay_order_after_submit', [ $this, 'render_payment_intent_inputs' ] );
+
+        return [];
+    }
+
+    /**
+     * Changes the text of the "No available methods" message to one that indicates
+     * the need for a PaymentIntent to be confirmed.
+     *
+     * @since DOKAN_PRO_SINCE
+     * @return string the new message.
+     */
+    public function change_no_available_methods_message() {
+        return wpautop( __( "Almost there!\n\nYour order has already been created, the only thing that still needs to be done is for you to authorize the payment with your bank.", 'dokan' ) );
+    }
+
+    /**
+     * Renders hidden inputs on the "Pay for Order" page in order to let Stripe handle PaymentIntents.
+     *
+     * @param WC_Order|null $order Order object, or null to get the order from the "order-pay" URL parameter
+     *
+     * @throws DokanException
+     * @since DOKAN_PRO_SINCE
+     */
+    public function render_payment_intent_inputs( $order = null ) {
+        if ( ! isset( $order ) || empty( $order ) ) {
+            $order = wc_get_order( absint( get_query_var( 'order-pay' ) ) );
+        }
+        if ( ! isset( $this->order_pay_intent ) ) {
+            $this->prepare_intent_for_order_pay_page( $order );
+        }
+
+        $verification_url = add_query_arg(
+            array(
+                'order'            => $order->get_id(),
+                'key'              => $order->get_order_key(),
+                'nonce'            => wp_create_nonce( 'dokan_stripe_confirm_pi' ),
+                'redirect_to'      => rawurlencode( $this->get_return_url( $order ) ),
+                'is_pay_for_order' => true,
+            ),
+            WC_AJAX::get_endpoint( 'dokan_stripe_verify_intent' )
+        );
+
+        echo '<input type="hidden" id="dokan-stripe-intent-id" value="' . esc_attr( $this->order_pay_intent->client_secret ) . '" />';
+        echo '<input type="hidden" id="dokan-stripe-intent-return" value="' . esc_attr( $verification_url ) . '" />';
+    }
+
+    /**
+     * Prepares the Payment Intent for it to be completed in the "Pay for Order" page.
+     *
+     * @param WC_Order|null $order Order object, or null to get the order from the "order-pay" URL parameter
+     *
+     * @throws DokanException
+     * @since DOKAN_PRO_SINCE
+     */
+    public function prepare_intent_for_order_pay_page( $order = null ) {
+        if ( ! isset( $order ) || empty( $order ) ) {
+            $order = wc_get_order( absint( get_query_var( 'order-pay' ) ) );
+        }
+
+        $intent = $this->get_intent_from_order( $order );
+
+        if ( ! $intent ) {
+            throw new DokanException( 'Payment Intent not found', sprintf( __( 'Payment Intent not found for order #%s', 'dokan' ), $order->get_id() ) );
+        }
+
+        if ( 'requires_payment_method' === $intent->status && isset( $intent->last_payment_error )
+            && 'authentication_required' === $intent->last_payment_error->code ) {
+            try {
+                $intent = PaymentIntent::confirm(
+                    [
+                        'payment_method' => $intent->last_payment_error->source->id,
+                    ]
+                );
+
+                if ( isset( $intent->error ) ) {
+                    throw new DokanException( print_r( $intent, true ), $intent->error->message );
+                }
+            } catch ( Exception $e ) {
+                throw new DokanException( print_r( $intent, true ), $e->getMessage() );
+            }
+        }
+
+        $this->order_pay_intent = $intent;
+    }
+
+    /**
+     * If this is the "Pass the SCA challenge" flow, remove a variable that is checked by WC Subscriptions
+     * so WC Subscriptions doesn't redirect to the checkout
+     */
+    public function remove_order_pay_var() {
+        global $wp;
+        if ( isset( $_GET['dokan-stripe-confirmation'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+            $this->order_pay_var = $wp->query_vars['order-pay'];
+            $wp->query_vars['order-pay'] = null;
+        }
+    }
+
+    /**
+     * Restore the variable that was removed in remove_order_pay_var()
+     */
+    public function restore_order_pay_var() {
+        global $wp;
+        if ( isset( $this->order_pay_var ) ) {
+            $wp->query_vars['order-pay'] = $this->order_pay_var;
+        }
+    }
+
+    /**
+     * Create webhook url on stripe end via api.
+     *
+     * @since DOKAN_PRO_SINCE
+     * @return void
+     */
+    public function process_admin_options() {
+        parent::process_admin_options();
+
+        $instance = dokan_pro()->module->stripe->webhook;
+        if ( ! $instance instanceof WebhookHandler ) {
+            return;
+        }
+
+        // todo: will store webhook id in option table
+        $instance->register_webhook();
     }
 }

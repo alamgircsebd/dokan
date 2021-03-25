@@ -79,6 +79,9 @@ class VendorProfile {
         if ( isset( $_POST['disconnect_user_stripe'] ) ) {
             delete_user_meta( $vendor_id, 'dokan_connected_vendor_id' );
             delete_user_meta( $vendor_id, '_stripe_connect_access_key' );
+            // delete announcement notice nonce
+            delete_transient( "dokan_check_stripe_access_key_valid_$vendor_id" );
+            delete_transient( 'non_connected_sellers_notice_intervals_' . $vendor_id );
         }
 
         return $vendor_id;

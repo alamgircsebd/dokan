@@ -274,4 +274,87 @@ class Announcement {
             $wpdb->query( $sql ); // phpcs:ignore
         }
     }
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @param $request
+     * @return WP_Error|\WP_Error|\WP_REST_Response
+     */
+    public function create_announcement( $request ) {
+        if ( empty( trim( $request['title'] ) ) ) {
+            return new \WP_Error( 'no_title', __( 'Announcement title must be required', 'dokan' ) );
+        }
+
+        $status    = ! empty( $request['status'] ) ? $request['status'] : 'pending';
+        $post_date = ! empty( $request['post_date'] ) ? $request['post_date'] : '';
+
+        $data = array(
+            'post_title'   => sanitize_text_field( $request['title'] ),
+            'post_content' => ! empty( $request['content'] ) ? wp_kses_post( $request['content'] ) : '',
+            'post_status'  => $status,
+            'post_type'    => 'dokan_announcement',
+            'post_author'  => $request['author'] ? intval( $request['author'] ) : get_current_user_id(),
+            'post_date'    => $post_date,
+        );
+
+        $post_id = wp_insert_post( $data );
+
+        if ( is_wp_error( $post_id ) ) {
+            return new \WP_Error( $post_id->get_error_message() );
+        }
+
+        update_post_meta( $post_id, '_announcement_type', $request['sender_type'] );
+        update_post_meta( $post_id, '_announcement_selected_user', $request['sender_ids'] );
+
+        $assigned_sellers   = ! empty( $request['sender_ids'] ) ? $request['sender_ids'] : array();
+        $announcement_types = apply_filters( 'dokan_announcement_seller_types', [ 'all_seller', 'enabled_seller', 'disabled_seller', 'featured_seller' ] );
+
+        if ( 'selected_seller' === $request['sender_type'] ) {
+            $this->process_seller_announcement_data( $assigned_sellers, $post_id );
+        } elseif ( in_array( $request['sender_type'], $announcement_types, true ) ) {
+            $assigned_sellers = array();
+
+            $args = [
+                'role__in'   => [ 'seller', 'administrator' ],
+                'fields'     => 'ID',
+            ];
+
+            switch ( $request['sender_type'] ) {
+                case 'enabled_seller':
+                    $args['meta_query'][] = [
+                        'key'     => 'dokan_enable_selling',
+                        'value'   => 'yes',
+                        'compare' => '=',
+                    ];
+                    break;
+
+                case 'disabled_seller':
+                    $args['meta_query'][] = [
+                        'key'     => 'dokan_enable_selling',
+                        'value'   => 'no',
+                        'compare' => '=',
+                    ];
+                    break;
+
+                case 'featured_seller':
+                    $args['meta_query'][] = [
+                        'key'     => 'dokan_feature_seller',
+                        'value'   => 'yes',
+                        'compare' => '=',
+                    ];
+                    break;
+            }
+
+            $users   = new \WP_User_Query( $args );
+            if ( $users->get_total() ) {
+                $assigned_sellers = $users->get_results();
+            }
+
+            $this->process_seller_announcement_data( $assigned_sellers, $post_id );
+        }
+
+        do_action( 'dokan_after_announcement_saved', $post_id, $assigned_sellers );
+
+        return $post_id;
+    }
 }

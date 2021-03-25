@@ -6,6 +6,7 @@ use Exception;
 use Stripe\Token;
 use Stripe\Charge;
 use Stripe\BalanceTransaction;
+use WeDevs\DokanPro\Modules\Stripe\Customer;
 use WeDevs\DokanPro\Modules\Stripe\Helper;
 use WeDevs\DokanPro\Modules\Stripe\StripeConnect;
 use WeDevs\DokanPro\Modules\Stripe\Interfaces\Payable;
@@ -36,40 +37,43 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
     /**
      * Pay for the order
      *
-     * @since 3.0.3
-     *
      * @return array
+     * @since 3.0.3
      */
     public function pay() {
         $order         = $this->order;
         $customer_id   = get_current_user_id();
 
-        $this->validate_minimum_order_amount( $order );
-
-        $stripe_customer = ! empty( $_POST['dokan_stripe_customer_id'] ) ? wc_clean( $_POST['dokan_stripe_customer_id'] ) : null;
-        $prepared_source = $this->prepare_source( $customer_id, false, $stripe_customer );
-        $this->validate_source( $prepared_source );
-
         try {
+            $this->validate_minimum_order_amount( $order );
+
+            $stripe_customer = ! empty( $_POST['dokan_stripe_customer_id'] ) ? wc_clean( wp_unslash( $_POST['dokan_stripe_customer_id'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification
+            $prepared_source = $this->prepare_source( $customer_id, false, $stripe_customer );
+            $this->validate_source( $prepared_source );
+
             if ( Helper::is_subscription_order( $order ) ) {
                 $product_pack = Helper::get_subscription_product_by_order( $order );
                 $subscription = dokan()->subscription->get( $product_pack->get_id() );
 
                 if ( ! $subscription->is_recurring() ) {
                     $currency   = strtolower( get_woocommerce_currency() );
-                    $order_desc = sprintf( __( '%s - Order %s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $order->get_order_number() );
-                    $charge     = Charge::create( [
-                        'amount'      => Helper::get_stripe_amount( $order->get_total() ),
-                        'currency'    => $currency,
-                        'description' => $order_desc,
-                        'customer'    => $prepared_source->customer
-                    ] );
+                    /* translators: 1) site name, 2) Order number */
+                    $order_desc = sprintf( __( '%1$s - Order %2$s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $order->get_order_number() );
+                    $charge     = Charge::create(
+                        [
+                            'amount'      => Helper::get_stripe_amount( $order->get_total() ),
+                            'currency'    => $currency,
+                            'description' => $order_desc,
+                            'customer'    => $prepared_source->customer,
+                        ]
+                    );
 
                     $order->add_order_note(
                         sprintf(
-                            __( 'Order %s payment completed via %s on Charge ID: %s', 'dokan' ),
+                            /* translators: 1) Order number, 2) Payment gateway title 3) stripe charge id */
+                            __( 'Order %1$s payment completed via %2$s on Charge ID: %3$s', 'dokan' ),
                             $order->get_order_number(),
-                            $this->title,
+                            $this->get_title(),
                             $charge->id
                         )
                     );
@@ -80,10 +84,11 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
             } else {
                 $this->process_seller_payment( $order, $prepared_source );
             }
-        } catch( Exception $e ) {
+        } catch ( Exception $e ) {
+            /* translators: 1) Error message from stripe */
             $order->add_order_note( sprintf( __( 'Stripe Payment Error: %s', 'dokan' ), $e->getMessage() ) );
-            update_post_meta( $order->get_id(), '_dwh_stripe_charge_error', $e->getMessage());
-            wc_add_notice( __( 'Error: ', 'dokan' ) . $e->getMessage() );
+            update_post_meta( $order->get_id(), '_dwh_stripe_charge_error', $e->getMessage() );
+            wc_add_notice( __( 'Error: ', 'dokan' ) . $e->getMessage(), 'error' );
             return array(
                 'result'   => 'fail',
                 'redirect' => '',
@@ -92,22 +97,22 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
 
         $response = [
             'result'   => 'success',
-            'redirect' => $this->get_return_url( $order )
+            'redirect' => $this->get_return_url( $order ),
         ];
 
         return $response;
     }
 
     /**
-    * Process Seller payment
-    *
-    * @since 1.3.3
-    *
-    * @return void
-    **/
+     * Process Seller payment
+     *
+     * @return void
+     * @throws \Stripe\Exception\ApiErrorException
+     * @throws \WeDevs\Dokan\Exceptions\DokanException
+     * @since 1.3.3
+     */
     public function process_seller_payment( $order, $prepared_source ) {
         $currency      = strtolower( get_woocommerce_currency() );
-        $order_desc    = sprintf( __( '%s - Order %s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $order->get_order_number() );
         $charge_ids    = [];
         $all_withdraws = [];
         $all_orders    = $this->get_all_orders_to_be_processed( $order );
@@ -129,7 +134,8 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
             $application_fee = $order_total - (float) $dokan_order->net_amount;
             $vendor_earning  = $order_total - $application_fee;
 
-            if ( $dokan_order->order_total == 0 ) {
+            if ( (float) $dokan_order->order_total === 0 ) {
+                /* translators: 1) order number */
                 $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed', 'dokan' ), $tmp_order->get_order_number() ) );
                 continue;
             }
@@ -141,37 +147,57 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
                 try {
                     $token = Token::create( [ 'customer' => $prepared_source->customer ], $access_token );
                 } catch ( Exception $exception ) {
+                    if ( Helper::is_customer_without_source_error( $exception->getMessage() ) && $prepared_source->token_id ) {
+                        throw new Exception( __( 'Saved payment method won\'t work for this purchase. Please provide a new card details and try again.', 'dokan' ) );
+                    }
                     // in case of api error, set token to false, [use case: maybe stored access token is invalid]
                     $token = false; // setting token to false, will create the charge from admin account
-
-                    //add order note
-                    $tmp_order->add_order_note( sprintf( __( 'Vendor payment transferred to admin account since the vendor access token is invalid.', 'dokan' ) ) );
+                    if ( Helper::is_customer_without_source_error( $exception->getMessage() ) && $prepared_source->source ) {
+                        $customer = new Customer();
+                        $customer->set_id( $prepared_source->customer );
+                        $customer->update_customer( [ 'source' => $prepared_source->source ] );
+                        $token = Token::create( [ 'customer' => $customer->get_id() ], $access_token );
+                    } elseif ( Helper::is_customer_without_source_error( $exception->getMessage() ) ) {
+                        throw new Exception( __( 'Saved payment method won\'t work for this purchase. Please provide a new card details and try again.', 'dokan' ) );
+                    }
                 }
-            } else if ( Helper::allow_non_connected_sellers() ) {
+            } elseif ( Helper::allow_non_connected_sellers() ) {
                 $token = false;
             } else {
                 throw new Exception( __( 'Unable to process with Stripe gateway', 'dokan' ) );
             }
 
-            $order_desc = sprintf( __( '%s - Order %s, suborder of %s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $tmp_order_id, $order->get_order_number() );
+            if ( $order->get_id() === $tmp_order_id ) {
+                /* translators: 1) site name 2) order number */
+                $order_desc = sprintf( __( '%1$s - Order %2$s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $order->get_order_number() );
+            } else {
+                /* translators: 1) site name 2) sub order number 3) parent order number */
+                $order_desc = sprintf( __( '%1$s - Order %2$s, suborder of %3$s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $tmp_order->get_order_number(), $order->get_order_number() );
+            }
 
             if ( $token ) {
-                $charge = Charge::create( [
-                    'amount'          => Helper::get_stripe_amount( $order_total ),
-                    'currency'        => $currency,
-                    'application_fee' => Helper::get_stripe_amount( $application_fee ),
-                    'description'     => $order_desc,
-                    'source'          => ! empty( $token->id ) ? $token->id : $prepared_source->source,
-                ], $access_token );
+                $charge = Charge::create(
+                    [
+                        'amount'          => Helper::get_stripe_amount( $order_total ),
+                        'currency'        => $currency,
+                        'application_fee' => Helper::get_stripe_amount( $application_fee ),
+                        'description'     => $order_desc,
+                        'source'          => ! empty( $token->id ) ? $token->id : $prepared_source->source,
+                    ], $access_token
+                );
+                $tmp_order->update_meta_data( '_dokan_charge_captured_account', 'seller' ); // this meta will determine which account is responsible for refund.
             } else {
-                $charge     = Charge::create( [
-                    'amount'      => Helper::get_stripe_amount( $order_total ),
-                    'currency'    => $currency,
-                    'description' => $order_desc,
-                    'customer'    => $prepared_source->customer
-                ] );
+                $charge = Charge::create(
+                    [
+                        'amount'      => Helper::get_stripe_amount( $order_total ),
+                        'currency'    => $currency,
+                        'description' => $order_desc,
+                        'customer'    => $prepared_source->customer,
+                    ]
+                );
 
                 $tmp_order->add_order_note( sprintf( __( 'Vendor payment transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
+                $tmp_order->update_meta_data( '_dokan_charge_captured_account', 'admin' );  // this meta will determine which account is responsible for refund.
             }
 
             $charge_ids[ $seller_id ] = $charge->id;
@@ -180,9 +206,10 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
             if ( $order->get_id() !== $tmp_order_id && $token ) {
                 $tmp_order->add_order_note(
                     sprintf(
-                        __( 'Order %s payment completed via %s on Charge ID: %s', 'dokan' ),
+                        /* translators: 1) sub order number 2) payment gateway title 3) stripe charge id */
+                        __( 'Order %1$s payment completed via %2$s on Charge ID: %3$s', 'dokan' ),
                         $tmp_order->get_order_number(),
-                        $this->title,
+                        $this->get_title(),
                         $charge->id
                     )
                 );
@@ -190,8 +217,7 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
 
             if ( ! empty( $token ) && $charge->balance_transaction ) {
                 $balance_transaction = BalanceTransaction::retrieve( $charge->balance_transaction, $access_token );
-            }
-            elseif( $charge->balance_transaction ) {
+            } elseif ( $charge->balance_transaction ) {
                 $balance_transaction = BalanceTransaction::retrieve( $charge->balance_transaction );
             }
 
@@ -206,7 +232,7 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
             $tmp_order->save_meta_data();
 
             // Only process withdraw request once vendor get paid.
-            if ( ! is_null( $token ) ) {
+            if ( ! empty( $token ) ) {
                 $withdraw_data = [
                     'user_id'  => $seller_id,
                     'amount'   => wc_format_decimal( $vendor_earning, 4 ),
@@ -219,9 +245,10 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
 
         $order->add_order_note(
             sprintf(
-                __( 'Order %s payment is completed via %s on (Charge ID: %s)', 'dokan' ),
+                /* translators: 1) order number 2) payment gateway title 3) stripe charge ids */
+                __( 'Order %1$s payment is completed via %2$s on (Charge ID: %3$s)', 'dokan' ),
                 $order->get_order_number(),
-                $this->title,
+                $this->get_title(),
                 implode( ', ', $charge_ids )
             )
         );

@@ -49,11 +49,14 @@ class WebhookHandler {
             $this->deregister_webhook();
 
             // create required webhook
-            $response = WebhookEndpoint::create( [
-                'api_version'    => '2020-08-27',
-                'url'            => home_url( 'wc-api/dokan_stripe' ),
-                'enabled_events' => $this->get_events()
-            ] );
+            $response = WebhookEndpoint::create(
+                [
+                    'api_version'    => '2020-08-27',
+                    'url'            => home_url( 'wc-api/dokan_stripe' ),
+                    'enabled_events' => $this->get_events(),
+                    'description'    => __( 'This webhook is created by Dokan Pro.', 'dokan' ),
+                ]
+            );
         } catch ( Exception $e ) {
             dokan_log( __( 'Could not create webhook: ', 'dokan' ) . $e->getMessage() );
             return;
@@ -91,16 +94,19 @@ class WebhookHandler {
      * @return array
      */
     public function get_events() {
-        return apply_filters( 'dokan_get_webhook_events', [
-            'charge.dispute.closed',
-            'charge.dispute.created',
-            'customer.subscription.deleted',
-            'customer.subscription.trial_will_end',
-            'customer.subscription.updated',
-            'invoice.payment_action_required',
-            'invoice.payment_failed',
-            'invoice.payment_succeeded',
-        ] );
+        return apply_filters(
+            'dokan_get_webhook_events',
+            [
+                'charge.dispute.closed',
+                'charge.dispute.created',
+                'customer.subscription.deleted',
+                'customer.subscription.trial_will_end',
+                'customer.subscription.updated',
+                'invoice.payment_action_required',
+                'invoice.payment_failed',
+                'invoice.payment_succeeded',
+            ]
+        );
     }
 
     /**
@@ -176,7 +182,7 @@ class WebhookHandler {
             status_header( 200 );
             exit;
         } catch ( Exception $e ) {
-            dokan_log( $e->getMessage(), 'error' );
+            dokan_log( 'Webhook Processing Error (Event ): ' . $e->getMessage(), 'error' );
             exit;
         }
     }

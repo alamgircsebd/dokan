@@ -19,16 +19,31 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     protected $order = null;
 
     /**
+     * @var bool|null
+     */
+    protected $force_save_source = null;
+
+    /**
+     * @var bool
+     */
+    protected $use_order_source = false;
+
+    /**
      * Constructor method
      *
      * @since 3.0.3
      *
      * @param \WC_Order
+     * @param $force_save_source bool|null
+     * @param $use_order_source bool
      *
      * @return void
      */
-    public function __construct( $order ) {
-        $this->order = $order;
+    public function __construct( $order, $force_save_source = null, $use_order_source = false ) {
+        $this->order                = $order;
+        $this->force_save_source    = $force_save_source;
+        $this->use_order_source     = $use_order_source;
+
         parent::__construct();
     }
 
@@ -41,68 +56,74 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
      */
     public function pay() {
         try {
-            $order = $this->order;
+            $order              = $this->order;
             $stripe_customer_id = null;
-            $force_save_source = false;
+            $this->force_save_source = ( null === $this->force_save_source ) ? true : $this->force_save_source;
 
             // check if this is a subscription product
-            if (Helper::has_subscription($order->get_id())) {
-                $force_save_source = true;
+            if ( Helper::has_subscription( $order->get_id() ) ) {
+                if ( Helper::is_subs_change_payment() ) {
+                    return $this->change_subs_payment_method( $order->get_id() );
+                }
             }
 
             // If it's a recurring subscription order.
-            if (Helper::is_subscription_order($order)) {
-                $force_save_source = true;
+            if ( Helper::is_subscription_order( $order ) ) {
                 $order_items = $order->get_items();
-                $product_pack_item = reset($order_items);
-                $product_pack = wc_get_product($product_pack_item->get_product_id());
-                $dokan_subscription = dokan()->subscription->get($product_pack->get_id());
+                $product_pack_item = reset( $order_items );
+                $product_pack = wc_get_product( $product_pack_item->get_product_id() );
+                $dokan_subscription = dokan()->subscription->get( $product_pack->get_id() );
 
-                if ($dokan_subscription->is_recurring()) {
-                    update_user_meta(get_current_user_id(), 'product_order_id', $order->get_id());
-                    $order->add_order_note(sprintf(__('Order payment is completed via stripe with 3d secure', 'dokan')));
+                if ( $dokan_subscription->is_recurring() ) {
+                    update_user_meta( get_current_user_id(), 'product_order_id', $order->get_id() );
+                    $order->add_order_note( sprintf( __( 'Order payment is completed via stripe with 3d secure', 'dokan' ) ) );
                     $order->payment_complete();
 
                     return [
                         'result' => 'success',
-                        'redirect' => $this->get_return_url($order)
+                        'redirect' => $this->get_return_url( $order ),
                     ];
                 }
             }
 
-            $this->validate_minimum_order_amount($order);
+            $this->validate_minimum_order_amount( $order );
 
             // Check whether there is an existing intent.
-            $intent = $this->get_intent_from_order($order);
+            $intent = $this->get_intent_from_order( $order );
 
-            if (!empty($intent->customer)) {
+            if ( ! empty( $intent->customer ) ) {
                 $stripe_customer_id = $intent->customer;
             }
 
-            $prepared_source = $this->prepare_source(get_current_user_id(), $force_save_source, $stripe_customer_id);
+            // For some payments the source should already be present in the order.
+            if ( $this->use_order_source ) {
+                $prepared_source = $this->prepare_order_source( $order );
+            } else {
+                $prepared_source = $this->prepare_source( get_current_user_id(), $this->force_save_source, $stripe_customer_id );
+            }
 
-            $this->validate_source($prepared_source);
+            $this->validate_source( $prepared_source );
 
-            if ($force_save_source) {
-                $this->save_source_to_order($order, $prepared_source);
+            if ( $this->force_save_source ) {
+                $this->save_source_to_order( $order, $prepared_source );
             }
 
             if ( $intent ) {
                 try {
-                    $intent = $this->update_existing_intent($intent, $order, $prepared_source);
+                    $intent = $this->update_existing_intent( $intent, $order, $prepared_source );
                 } catch ( DokanException $e ) {
-                    dokan_log( __( 'Error: updating payment intent error: ', 'dokan' ) .  $e->get_message() );
-                    $intent = $this->create_intent($order, $prepared_source);
+                    dokan_log( __( 'Error: updating payment intent error: ', 'dokan' ) . $e->get_message() );
+                    $intent = $this->create_intent( $order, $prepared_source );
                 }
             } else {
-                $intent = $this->create_intent($order, $prepared_source);
+                $intent = $this->create_intent( $order, $prepared_source );
             }
 
-            return $this->process_intent_status($intent, $prepared_source, $order);
+            return $this->process_intent_status( $intent, $prepared_source, $order );
         } catch ( DokanException $e ) {
             $order->add_order_note( sprintf( __( 'Stripe Payment Error: %s', 'dokan' ), $e->getMessage() ) );
-            wc_add_notice( __( 'Error: ', 'dokan' ) . $e->getMessage(), 'error'  );
-            dokan_log( 'Stripe 3ds Payment Error: Order ID: ' . $order->get_id()  . ', Error Message: ' . $e->getMessage() . ', Response Data: ' . $e->get_error_code() );
+            wc_add_notice( __( 'Error: ', 'dokan' ) . $e->getMessage(), 'error' );
+            dokan_log( 'Stripe 3ds Payment Error: Order ID: ' . $order->get_id() . ', Error Message: ' . $e->getMessage() . ', Response Data: ' . $e->get_error_code() );
             do_action( 'dokan_gateway_stripe_process_payment_error', $e, $order );
 
             /* translators: error message */
@@ -114,7 +135,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
             );
         } catch ( Exception $e ) {
             $order->add_order_note( sprintf( __( 'Stripe Payment Error: %s', 'dokan' ), $e->getMessage() ) );
-            wc_add_notice( __( 'Error: ', 'dokan' ) . $e->getMessage(), 'error'  );
+            wc_add_notice( __( 'Error: ', 'dokan' ) . $e->getMessage(), 'error' );
 
             do_action( 'dokan_gateway_stripe_process_payment_error', $e, $order );
 
@@ -145,16 +166,27 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
         }
 
         if ( 'requires_action' === $intent->status ) {
-            /**
-             * This URL contains only a hash, which will be sent to `checkout.js` where it will be set like this:
-             * `window.location = result.redirect`
-             * Once this redirect is sent to JS, the `onHashChange` function will execute `handleCardPayment`.
-             */
-            return [
-                'result'                => 'success',
-                'redirect'              => $this->get_return_url( $order ),
-                'payment_intent_secret' => $intent->client_secret,
-            ];
+            $this->unlock_order_payment( $order );
+
+            if ( is_wc_endpoint_url( 'order-pay' ) ) {
+                $redirect_url = add_query_arg( 'dokan-stripe-confirmation', 1, $order->get_checkout_payment_url( false ) );
+
+                return [
+                    'result'   => 'success',
+                    'redirect' => $redirect_url,
+                ];
+            } else {
+                /**
+                 * This URL contains only a hash, which will be sent to `checkout.js` where it will be set like this:
+                 * `window.location = result.redirect`
+                 * Once this redirect is sent to JS, the `onHashChange` function will execute `handleCardPayment`.
+                 */
+                return [
+                    'result'                => 'success',
+                    'redirect'              => $this->get_return_url( $order ),
+                    'payment_intent_secret' => $intent->client_secret,
+                ];
+            }
         }
 
         if ( 'succeeded' === $intent->status ) {
@@ -163,38 +195,37 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
 
             return [
                 'result'   => 'success',
-                'redirect' => $this->get_return_url( $order )
+                'redirect' => $this->get_return_url( $order ),
             ];
         }
 
         return [
             'result'   => 'fail',
-            'redirect' => ''
+            'redirect' => '',
         ];
     }
 
     /**
      * Create a new PaymentIntent
      *
-     * @since 3.0.3
-     *
      * @param \WC_Order $order
      * @param object $prepared_source The source that is used for the payment
      *
+     * @param null $amount
      * @return object
+     * @throws DokanException
+     * @since 3.0.3
      */
-    public function create_intent( $order, $prepared_source, $amount = NULL ) {
-        $description = sprintf(
-            __( '%1$s - Order %2$s', 'dokan' ),
-            wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ),
-            $order->get_order_number()
-        );
+    public function create_intent( $order, $prepared_source, $amount = null ) {
+        // get payment info
+        $payment_info = Helper::generate_payment_info( $order );
 
         $request = [
             'source'               => $prepared_source->source,
             'amount'               => $amount ? Helper::get_stripe_amount( $amount ) : Helper::get_stripe_amount( $order->get_total() ),
             'currency'             => strtolower( $order->get_currency() ),
-            'description'          => $description,
+            'description'          => $payment_info['description'],
+            'metadata'             => $payment_info['metadata'],
             'setup_future_usage'   => $prepared_source->setup_future_usage,
             'capture_method'       => 'automatic',
             'payment_method_types' => [
@@ -202,8 +233,16 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
             ],
         ];
 
+        if ( ! empty( $payment_info['transfer_group'] ) ) {
+            $request['transfer_group'] = $payment_info['transfer_group'];
+        }
+
         if ( $prepared_source->customer ) {
             $request['customer'] = $prepared_source->customer;
+        }
+
+        if ( isset( $prepared_source->setup_future_usage ) ) {
+            $request['setup_future_usage'] = $prepared_source->setup_future_usage;
         }
 
         try {
@@ -290,13 +329,13 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     /**
      * Confirms an intent if it is the `requires_confirmation` state.
      *
-     * @since 3.0.3
-     *
-     * @param object   $intent          The intent to confirm.
-     * @param object   $prepared_source The source that is being charged.
+     * @param object $intent The intent to confirm.
+     * @param object $prepared_source The source that is being charged.
      *
      * @return \Stripe\Paymentintent
-     **/
+     * @throws DokanException
+     * @since 3.0.3
+     */
     public function confirm_intent( $intent, $prepared_source ) {
         if ( 'requires_confirmation' !== $intent->status ) {
             return $intent;

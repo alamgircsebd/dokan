@@ -76,7 +76,10 @@ class ProductSubscription extends StripePaymentGateway {
      * @return void
      */
     public function hooks() {
+        // this hook is to process recurring vendor subscription payment via stripe 3ds method
         add_action( 'wp_ajax_dokan_send_source', [ $this, 'process_recurring_subscription' ] );
+
+        // this hook is to handle non recurring vendor subscription order via stripe 3ds and non3ds method
         add_action( 'dokan_process_subscription_order', [ $this, 'process_subscription' ], 10, 3 );
         add_action( 'dps_cancel_recurring_subscription', [ $this, 'cancel_subscription' ], 10, 3 );
         add_action( 'dps_activate_recurring_subscription', [ $this, 'activate_subscription' ], 10, 2 );
@@ -352,7 +355,7 @@ class ProductSubscription extends StripePaymentGateway {
         try {
             // Lets charge the vendor while creating new subscription
             if ( empty( $this->stripe_customer ) ) {
-                $prepared_source = $this->prepare_source( get_current_user_id() );
+                $prepared_source = $this->prepare_source( get_current_user_id(), true );
                 $this->validate_source( $prepared_source );
                 $this->stripe_customer = $prepared_source->customer;
             }
@@ -578,13 +581,3 @@ class ProductSubscription extends StripePaymentGateway {
         }
     }
 }
-
-/*try {
-    $cus = new DokanStripeCustomer( 2 );
-    $stripe_customer = Customer::retrieve( $cus->get_id() );
-    //->retrieve('sub_IQKGY0OZ20n2ig')
-    print_r( Subscription::retrieve( 'sub_IQKVDWGeRVsosm' ) );
-    die('ehhh');
-} catch ( Exception $exception ) {
-    die( 'herere: ' . $exception->getMessage() );
-}*/

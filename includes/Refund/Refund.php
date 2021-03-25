@@ -2,6 +2,8 @@
 
 namespace WeDevs\DokanPro\Refund;
 
+use Stripe\Transfer;
+use WeDevs\DokanPro\Modules\Stripe\Helper;
 use WP_Error;
 use WeDevs\Dokan\Abstracts\DokanModel;
 
@@ -546,11 +548,11 @@ class Refund extends DokanModel {
      * Approve a refund
      *
      * @since 3.0.0
-     *
+     * @param array $args
      * @return \WeDevs\DokanPro\Refund\Refund|WP_Error
      * @throws \Exception
      */
-    public function approve() {
+    public function approve( $args = [] ) {
         global $wpdb;
 
         if ( ! dokan_pro()->refund->is_approvable( $this->get_order_id() ) ) {
@@ -569,7 +571,7 @@ class Refund extends DokanModel {
 
         // Prepare line items which we are refunding.
         $line_items = [];
-        $item_ids   = array_unique( array_merge( array_keys( $this->get_item_qtys(), $this->get_item_totals() ) ) );
+        $item_ids   = array_unique( array_merge( array_keys( $this->get_item_qtys(), $this->get_item_totals(), true ) ) );
 
         foreach ( $item_ids as $item_id ) {
             $line_items[ $item_id ] = array(
@@ -589,13 +591,13 @@ class Refund extends DokanModel {
             foreach ( $this->get_item_totals() as $item_id => $total ) {
                 $item = $order->get_item( $item_id );
 
-                if ( 'line_item' == $item['type'] ) {
+                if ( 'line_item' === (string) $item['type'] ) {
                     $percentage_type    = dokan_get_commission_type( $this->get_seller_id(), $item['product_id'] );
                     $vendor_percentage  = dokan_get_seller_percentage( $this->get_seller_id(), $item['product_id'] );
-                    $vendor_refund      += $percentage_type == 'percentage' ? (float) ( $total * $vendor_percentage ) / 100 : (float) ( $total * ( ( $item['subtotal'] - $vendor_percentage ) / $item['subtotal'] ) );
+                    $vendor_refund      += $percentage_type === 'percentage' ? (float) ( $total * $vendor_percentage ) / 100 : (float) ( $total * ( ( $item['subtotal'] - $vendor_percentage ) / $item['subtotal'] ) );
                 }
 
-                $line_items[$item_id]['refund_total'] = wc_format_decimal( $total );
+                $line_items[ $item_id ]['refund_total'] = wc_format_decimal( $total );
             }
         } else {
             // Set `order_id` so that `Dokan_Commission::prepare_for_calculation()` method can access the intended WC_Order.
@@ -603,7 +605,7 @@ class Refund extends DokanModel {
 
             foreach ( $this->get_item_totals() as $item_id => $requested_refund ) {
                 $item                                 = $order->get_item( $item_id );
-                $line_items[$item_id]['refund_total'] = wc_format_decimal( $requested_refund );
+                $line_items[ $item_id ]['refund_total'] = wc_format_decimal( $requested_refund );
 
                 if ( 'line_item' === $item->get_type() ) {
                     $existing_refunds = $order->get_total_refunded_for_item( $item_id );
@@ -655,7 +657,7 @@ class Refund extends DokanModel {
         // Create the refund object.
         $refund = wc_create_refund( $arr );
 
-        if ( 'seller' == $shipping_fee_recipient ) {
+        if ( 'seller' === $shipping_fee_recipient ) {
             $vendor_refund += $shipping_refund;
         }
 
@@ -663,14 +665,15 @@ class Refund extends DokanModel {
             $vendor_refund += $tax_refund;
         }
 
-        // if paid via automatic payment such as stripe
-        if ( 'dokan-stripe-connect' === $order->get_payment_method() && ! $order->get_meta( 'paid_with_dokan_3ds' ) ) {
-            $wpdb->insert( $wpdb->dokan_vendor_balance,
+        // if refunded via stripe non3ds, add an entry in dokan vendor balance table as debit.
+        if ( isset( $args['stripe_non_3ds'], $args['refunded_account'] ) && $args['refunded_account'] === 'seller' ) {
+            $wpdb->insert(
+                $wpdb->dokan_vendor_balance,
                 [
                     'vendor_id'     => $this->get_seller_id(),
                     'trn_id'        => $this->get_order_id(),
                     'trn_type'      => 'dokan_refund',
-                    'perticulars'   => __( 'Paid Via Stripe', 'dokan' ),
+                    'perticulars'   => __( 'Refunded Via Stripe', 'dokan' ),
                     'debit'         => $vendor_refund,
                     'credit'        => 0,
                     'status'        => 'wc-completed', // see: Dokan_Vendor->get_balance() method
@@ -691,7 +694,82 @@ class Refund extends DokanModel {
             );
         }
 
-        $wpdb->insert( $wpdb->dokan_vendor_balance,
+        /**
+         * With stripe3ds refund, charge is refunded from admin stripe account. after that we need to reverse corresponding
+         * amount from vendor stripe account. If reversal is successful, we need to add a debit entry in dokan vendor balance
+         * table.
+         */
+        if ( isset( $args['stripe_3ds'] ) && isset( $args['transfer_id'] ) && ! empty( $args['transfer_id'] ) ) {
+            try {
+                // check gateway fee refunded amount
+                $gateway_fee_refunded = ! empty( $args['gateway_fee_refunded'] ) ? wc_format_decimal( $args['gateway_fee_refunded'] ) : 0;
+                $to_be_reverse_amount = $vendor_refund - $gateway_fee_refunded;
+                $to_be_reverse_amount = $to_be_reverse_amount > 0 ? $to_be_reverse_amount : 0; // making sure amount is not negative
+
+                // check if balance transaction is greater than $to_be_reverse_amount
+                $stripe_transfer = Transfer::retrieve( $args['transfer_id'] );
+                $total_retrievable_amount = ( $stripe_transfer->amount - $stripe_transfer->amount_reversed ) / 100;
+                $total_retrievable_amount = $total_retrievable_amount > 0 ? $total_retrievable_amount : 0; // making sure amount is not negative
+
+                // check gateway fee is refunded, if not we need to calculate this value manually
+                if ( $gateway_fee_refunded === 0 ) {
+                    $order_total = $order->get_total( 'edit' );
+                    $gateway_fee = (float) $order->get_meta( 'dokan_gateway_stripe_fee', true );
+                    $gateway_fee_refunded = $gateway_fee > 0 ? ( ( $gateway_fee / $order_total ) * $this->get_refund_amount() ) : 0;
+                    $to_be_reverse_amount = $vendor_refund - $gateway_fee_refunded;
+                }
+
+                // check if we are doing full refund, or this is the last amount refund for partial refund
+                if ( (float) $order->get_total_refunded() === (float) $order->get_total( 'edit' ) || $to_be_reverse_amount > $total_retrievable_amount ) {
+                    $to_be_reverse_amount = $total_retrievable_amount;
+                }
+
+                // now process transfer reverse
+                $stripe_reverse_transfer = Transfer::createReversal(
+                    $args['transfer_id'],
+                    [
+                        'amount' => Helper::get_stripe_amount( $to_be_reverse_amount ),
+                    ]
+                );
+                /* translators: 1) Stripe Transfer ID  */
+                $success_message = sprintf( __( 'Amount reversed from vendor stripe account. Transfer ID: %1$s', 'dokan' ), $args['transfer_id'] );
+                $order->add_order_note( $success_message );
+
+                // now insert into database
+                $wpdb->insert(
+                    $wpdb->dokan_vendor_balance,
+                    [
+                        'vendor_id'     => $this->get_seller_id(),
+                        'trn_id'        => $this->get_order_id(),
+                        'trn_type'      => 'dokan_refund',
+                        'perticulars'   => __( 'Refunded Via Stripe 3DS', 'dokan' ),
+                        'debit'         => $vendor_refund,
+                        'credit'        => 0,
+                        'status'        => 'wc-completed', // see: Dokan_Vendor->get_balance() method
+                        'trn_date'      => current_time( 'mysql' ),
+                        'balance_date'  => current_time( 'mysql' ),
+                    ],
+                    [
+                        '%d',
+                        '%d',
+                        '%s',
+                        '%s',
+                        '%f',
+                        '%f',
+                        '%s',
+                        '%s',
+                        '%s',
+                    ]
+                );
+            } catch ( \Exception $e ) {
+                $error_message = sprintf( 'Dokan Stripe 3ds Error: Order refunded from admin Stripe account but can not automatically reverse transferred amount from vendor Stripe account. Manual reversal required. (Refund ID: %1$s, Stripe Transfer ID: %2$s)', $refund->get_id(), $args['transfer_id'] );
+                dokan_log( $error_message );
+                $order->add_order_note( $error_message );
+            }
+        }
+
+        $wpdb->insert(
+            $wpdb->dokan_vendor_balance,
             [
                 'vendor_id'     => $this->get_seller_id(),
                 'trn_id'        => $this->get_order_id(),
@@ -717,10 +795,12 @@ class Refund extends DokanModel {
         );
 
         // update the order table with new refund amount
-        $order_data = $wpdb->get_row( $wpdb->prepare(
-            "select * from $wpdb->dokan_orders where order_id = %d",
-            $this->get_order_id()
-        ) );
+        $order_data = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM $wpdb->dokan_orders WHERE order_id = %d",
+                $this->get_order_id()
+            )
+        );
 
         if ( isset( $order_data->order_total, $order_data->net_amount ) ) {
             $new_total_amount = $order_data->order_total - $this->get_refund_amount();
@@ -738,7 +818,7 @@ class Refund extends DokanModel {
              * 4. In future we need to consider this gateway fee in case of refund and needs to use proper formatting to display refunded
              * amount both for gateway fees and application fees.
              */
-            $new_net_amount = ($new_net_amount < 0 ) ? 0.00 : $new_net_amount;
+            $new_net_amount = ( $new_net_amount < 0 ) ? 0.00 : $new_net_amount;
 
             // insert on dokan sync table
             $wpdb->update(
@@ -755,7 +835,7 @@ class Refund extends DokanModel {
                     '%f',
                 ],
                 [
-                    '%d'
+                    '%d',
                 ]
             );
         }
@@ -778,10 +858,13 @@ class Refund extends DokanModel {
 
         $current_user = wp_get_current_user();
 
-        $order->add_order_note( sprintf(
-            __( 'Refund request approved by %s' ),
-            $current_user->get( 'user_nicename' )
-        ) );
+        $order->add_order_note(
+            sprintf(
+                /* translators: 1) user name */
+                __( 'Refund request approved by %1$s', 'dokan' ),
+                $current_user->get( 'user_nicename' )
+            )
+        );
 
         $this->set_status( dokan_pro()->refund->get_status_code( 'completed' ) );
 
@@ -789,6 +872,10 @@ class Refund extends DokanModel {
 
         //remove cache for seller earning
         $cache_key = 'dokan_get_earning_from_order_table' . $this->get_order_id() . 'seller';
+        wp_cache_delete( $cache_key );
+
+        // remove cache for seller earning
+        $cache_key = 'dokan_get_earning_from_order_table' . $this->get_order_id() . 'admin';
         wp_cache_delete( $cache_key );
 
         if ( is_wp_error( $refund ) ) {

@@ -43,6 +43,30 @@ class Transaction {
     protected $currency;
 
     /**
+     * @since DOKAN_PRO_SINCE
+     * @var array
+     */
+    protected $metadata = [];
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @var string
+     */
+    protected $transfer_group;
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @var string charge id of the actual payment
+     */
+    protected $source_transaction;
+
+    /**
      * Amount to transfer
      *
      * @since 2.9.13
@@ -85,7 +109,51 @@ class Transaction {
     public function to( $vendor ) {
         $this->vendor = $vendor;
 
-        return $this->transfer();
+        return $this;
+    }
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @param $description
+     * @return $this
+     */
+    public function description( $description ) {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @param $transfer_group
+     * @return $this
+     */
+    public function group( $transfer_group ) {
+        $this->transfer_group = $transfer_group;
+
+        return $this;
+    }
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @param $metadata
+     * @return $this
+     */
+    public function meta( $metadata ) {
+        $this->metadata = $metadata;
+
+        return $this;
+    }
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * @param $charge_id
+     * @return $this
+     */
+    public function transaction( $charge_id ) {
+        $this->source_transaction = $charge_id;
+
+        return $this;
     }
 
     /**
@@ -95,7 +163,7 @@ class Transaction {
      *
      * @return void
      */
-    public function transfer() {
+    public function send() {
         try {
             $params = [
                 'amount'             => $this->amount,
@@ -104,9 +172,25 @@ class Transaction {
                 'currency'           => $this->currency ? strtolower( $this->currency ) : strtolower( get_woocommerce_currency() ),
             ];
 
+            if ( ! empty( $this->transfer_group ) ) {
+                $params['transfer_group'] = $this->transfer_group;
+            }
+
+            if ( ! empty( $this->description ) ) {
+                $params['description'] = $this->description;
+            }
+
+            if ( ! empty( $this->metadata ) ) {
+                $params['metadata'] = $this->metadata;
+            }
+
+            if ( ! empty( $this->source_transaction ) ) {
+                $params['source_transaction'] = $this->source_transaction;
+            }
+
             //dokan_log( "[Stripe Connect] Transfer params for transaction:\n" . print_r( $params, true ) );
 
-            $transfer = \Stripe\Transfer::create( $params );
+            return \Stripe\Transfer::create( $params );
 
             //dokan_log( "[Stripe Connect] Transaction transferred successfully:\n" . print_r( $transfer, true ) );
         } catch ( Exception $e ) {

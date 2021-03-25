@@ -213,83 +213,13 @@ class AnnouncementController extends DokanRESTController {
      * @return void
      */
     public function create_announcement( $request ) {
-        if ( empty( trim( $request['title'] ) ) ) {
-            return new WP_Error( 'no_title', __( 'Announcement title must be required', 'dokan' ), array( 'status' => 404 ) );
-        }
-
-        $status    = ! empty( $request['status'] ) ? $request['status'] : 'pending';
-        $post_date = ! empty( $request['post_date'] ) ? $request['post_date'] : '';
-
-        $data = array(
-            'post_title'   => sanitize_text_field( $request['title'] ),
-            'post_content' => $request['content'],
-            'post_status'  => $status,
-            'post_type'    => 'dokan_announcement',
-            'post_author'  => get_current_user_id(),
-            'post_date'    => $post_date,
-        );
-
-        $post_id = wp_insert_post( $data );
-
-        if ( is_wp_error( $post_id ) ) {
-            return new WP_Error( $post_id->get_error_message() );
-        }
-
-        update_post_meta( $post_id, '_announcement_type', $request['sender_type'] );
-        update_post_meta( $post_id, '_announcement_selected_user', $request['sender_ids'] );
-
         $announcement = new \WeDevs\DokanPro\Admin\Announcement();
+        $created_announcement = $announcement->create_announcement( $request );
 
-        $assigned_sellers   = ! empty( $request['sender_ids'] ) ? $request['sender_ids'] : array();
-        $announcement_types = apply_filters( 'dokan_announcement_seller_types', [ 'all_seller', 'enabled_seller', 'disabled_seller', 'featured_seller' ] );
-
-        if ( 'selected_seller' === $request['sender_type'] ) {
-            $announcement->process_seller_announcement_data( $assigned_sellers, $post_id );
-        } elseif ( in_array( $request['sender_type'], $announcement_types, true ) ) {
-            $assigned_sellers = array();
-
-            $args = [
-                'role__in'   => [ 'seller', 'administrator' ],
-            ];
-
-            if ( 'enabled_seller' === $request['sender_type'] ) {
-                $args['meta_query'][] = [
-                    'key'     => 'dokan_enable_selling',
-                    'value'   => 'yes',
-                    'compare' => '=',
-                ];
-            }
-
-            if ( 'disabled_seller' === $request['sender_type'] ) {
-                $args['meta_query'][] = [
-                    'key'     => 'dokan_enable_selling',
-                    'value'   => 'no',
-                    'compare' => '=',
-                ];
-            }
-
-            if ( 'featured_seller' === $request['sender_type'] ) {
-                $args['meta_query'][] = [
-                    'key'     => 'dokan_feature_seller',
-                    'value'   => 'yes',
-                    'compare' => '=',
-                ];
-            }
-
-            $users   = new WP_User_Query( $args );
-            $sellers = $users->get_results();
-
-            if ( $sellers ) {
-                foreach ( $sellers as $user ) {
-                    $assigned_sellers[] = $user->ID;
-                }
-            }
-
-            $announcement->process_seller_announcement_data( $assigned_sellers, $post_id );
+        if ( is_wp_error( $created_announcement ) ) {
+            return new WP_Error( $created_announcement->get_error_code(), $created_announcement->get_error_message(), array( 'status' => 404 ) );
         }
-
-        do_action( 'dokan_after_announcement_saved', $post_id, $assigned_sellers );
-        $data = $this->prepare_response_for_object( $this->get_object( $post_id ), $request );
+        $data = $this->prepare_response_for_object( $this->get_object( $created_announcement ), $request );
 
         return rest_ensure_response( $data );
     }
