@@ -19,7 +19,7 @@
                         <?php esc_html_e( 'Product Tags', 'dokan' ); ?>
                     </label>
 
-                    <select multiple="multiple" data-field-name="product_tag" id="product_tag_search" class="product_tag_search product_tags dokan-form-control dokan-select2" data-placeholder="<?php esc_attr_e( 'Select tags', 'dokan-lite' ); ?>">
+                    <select multiple="multiple" data-field-name="product_tag" class="product_tag_search product_tags dokan-form-control dokan-select2" data-placeholder="<?php esc_attr_e( 'Select tags', 'dokan-lite' ); ?>">
                         <?php if ( ! empty( $product_tag ) ) { ?>
                             <?php foreach ( $product_tag as $tax_term ) { ?>
                                 <option value="<?php echo esc_attr( $tax_term->term_id ); ?>" selected="selected" ><?php echo esc_html( $tax_term->name ); ?></option>
@@ -66,7 +66,7 @@
                         </div>
                     <?php } ?>
 
-                    <?php if ( 'simple' === $product_type || 'external' === $product_type ) { ?>
+                    <?php if ( 'simple' === $product_type || 'external' === $product_type || 'subscription' === $product_type ) { ?>
                         <div class="dokan-inline-edit-field-row dokan-clearfix">
                             <label class="dokan-w3">
                                 <?php esc_html_e( 'Price', 'dokan' ); ?>
@@ -219,24 +219,13 @@
                         <?php esc_html_e( 'Product categories', 'dokan' ); ?>
                     </label>
 
-                    <?php if ( ! $options['using_single_category_style'] ) { ?>
-                        <select data-field-name="product_cat" class="dokan-form-control" multiple>
-                            <?php foreach ( $options['categories'] as $category ) { ?>
-                                <option value="<?php echo esc_attr( $category->term_id ); ?>"<?php echo in_array( $category->term_id, $product_cat ) ? ' selected' : ''; ?>>
-                                    <?php echo esc_html( $category->name ); ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                    <?php } else { ?>
-                        <select data-field-name="product_cat" class="dokan-form-control">
-                            <?php foreach ( $options['categories'] as $category ) { ?>
-                                <option value="<?php echo esc_attr( $category->term_id ); ?>"<?php echo selected( $product_cat, $category->term_id ); ?>>
-                                    <?php echo esc_html( $category->name ); ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-
-                    <?php } ?>
+                    <select data-field-name="product_cat" class="dokan-form-control" <?php if ( ! $options['using_single_category_style'] ) { echo 'multiple'; }  ?> >
+                        <?php foreach ( $options['categories'] as $category ) { ?>
+                            <option value="<?php echo esc_attr( $category->term_id ); ?>" <?php echo in_array( $category->term_id, $product_cat ) ? ' selected' : ''; ?>>
+                                <?php echo esc_html( $category->name ); ?>
+                            </option>
+                        <?php } ?>
+                    </select>
                 </div>
             </div>
 
@@ -252,7 +241,16 @@
                     </button>
                 </div>
             </div>
-
+            <?php
+                /**
+                 * Do any action after product quick edit fields.
+                 *
+                 * @parm \WC_Product $product Woocommerce product object
+                 *
+                 * @since 3.2.1
+                 */
+                do_action('dokan_after_quick_edit_form_fields', $product_id );
+            ?>
             <input type="hidden" data-field-name="ID" value="<?php echo esc_attr( $product_id ); ?>">
             <input type="hidden" data-field-name="product_type" value="<?php echo esc_attr( $product_type ); ?>">
         </fieldset>

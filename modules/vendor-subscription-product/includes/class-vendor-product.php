@@ -44,9 +44,9 @@ class Dokan_VSP_Product {
         //     'products/edit/html-product-variation'
         // );
 
-        add_action( 'dokan_product_types', [ $this, 'add_subscription_product_type' ], 20 );
+        add_filter( 'dokan_product_types', [ $this, 'add_subscription_product_type' ], 20 );
         add_action( 'dokan_product_edit_after_pricing', [ $this, 'load_subscription_fields' ], 20, 2 );
-        add_action( 'dokan_product_after_variation_pricing', [ $this, 'load_variation_subscription_fields' ], 10, 3 );
+        add_action( 'dokan_regular_price_html_on_single_variation', [ $this, 'load_variation_subscription_fields' ], 10, 3 );
         add_action( 'dokan_product_updated', [ $this, 'handle_subscription_metadata' ], 10, 1 );
         add_action( 'woocommerce_save_product_variation', [ $this, 'save_variation_metadata' ], 10, 2 );
         add_filter( 'woocommerce_checkout_update_order_meta', [ $this, 'sync_parent_order_with_dokan' ], 30 );
@@ -55,6 +55,7 @@ class Dokan_VSP_Product {
         add_action( 'dokan_coupon_form_fields_end', [ $this, 'add_subscription_coupon_field' ], 10 );
         add_action( 'dokan_after_coupon_create', [ $this, 'save_subscription_coupon_field' ], 10 );
         add_action( 'dokan_coupon_list_after_usages_limit', [ $this, 'show_active_usages' ], 10 );
+        add_filter( 'dokan_update_product_quick_edit_data', [ $this, 'product_quick_view_on_save' ], 10 );
 
     }
 
@@ -63,7 +64,7 @@ class Dokan_VSP_Product {
      *
      * @since 1.0.0
      *
-     * @return void
+     * @return array
      */
     public function add_subscription_product_type( $types ) {
         $types['subscription']          = __( 'Simple subscription', 'dokan' );
@@ -87,12 +88,24 @@ class Dokan_VSP_Product {
     /**
      * Load subscription fields for variations
      *
-     * @since 1.0.0
+     * @param $loop
+     * @param $variation_data
+     * @param $variation
      *
      * @return void
+     * @since 1.0.0
      */
     public function load_variation_subscription_fields( $loop, $variation_data, $variation ) {
-        dokan_get_template_part( 'subscription/variation-price', '', [ 'is_subscription_product' => true, 'loop' => $loop, 'variation_data' => $variation_data, 'variation' => $variation ] );
+        dokan_get_template_part(
+            'subscription/variation-price',
+            '',
+            [
+                'is_subscription_product' => true,
+                'loop' => $loop,
+                'variation_data' => $variation_data,
+                'variation' => $variation,
+            ]
+        );
     }
 
     /**
@@ -391,7 +404,7 @@ class Dokan_VSP_Product {
      *
      * @since 3.0.2
      *
-     * @return void
+     * @return array
      */
     public function add_coupon_types( $discount_types ) {
         return array_merge(
@@ -469,4 +482,21 @@ class Dokan_VSP_Product {
         }
     }
 
+    /**
+     * Set subscription price from regular price.
+     *
+     * @param array $data Submitted product data in quick view.
+     *
+     * @since 3.2.1
+     * @return array
+     */
+    public function product_quick_view_on_save( $data ) {
+        if ( 'subscription' === $data['type'] ) {
+            $data['meta_data'][] = array(
+                'key' => '_subscription_price',
+                'value' => $data['regular_price'],
+            );
+        }
+        return $data;
+    }
 }

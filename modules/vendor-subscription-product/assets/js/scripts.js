@@ -33,6 +33,15 @@
             setSyncOptions( $(this) );
         });
 
+        // for sales price calculation and validation and instant type switch support.
+        $(document).on('change keyup','[name^="variable_subscription_price"]',function(){
+            var changed   = $(this).val(),
+                inputName = $(this).attr( 'name' );
+                inputName = inputName.replace( '_subscription', '_regular' );
+            $( '[name^="' + inputName + '"]' ).val(changed);
+
+        });
+
         $(document).on('keyup input paste change','[name^="_subscription_trial_length"], [name^="variable_subscription_trial_length"]',function(){
             setTrialPeriods( $(this) );
         });
@@ -141,6 +150,7 @@
         var product_type    = $( '#product_type' ).val();
         var is_virtual      = $( 'input#_virtual:checked' ).length;
         var is_downloadable = $( 'input#_downloadable:checked' ).length;
+        var sale_price_cont = $('.content-width-subscription');
 
         // Hide/Show all with rules.
         var hide_classes = '.hide_if_downloadable, .hide_if_virtual';
@@ -158,6 +168,11 @@
 
         if( is_downloadable ) {
             $( '.dokan-download-options' ).show();
+        }
+
+        sale_price_cont.width('50%');
+        if ( 'variable-subscription' === product_type ) {
+            $(sale_price_cont).width('100%');
         }
     }
 

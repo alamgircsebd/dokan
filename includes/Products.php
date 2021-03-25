@@ -858,7 +858,7 @@ class Products {
             // product informations
             'product_id'        => $product->get_id(),
             'post_title'        => $product->get_title(),
-            'product_cat'       => $cats,
+            'product_cat'       => (array) $cats,
             'product_tag'       => $tags,
             'product_type'      => $product->get_type(),
             'is_virtual'        => $product->is_virtual(),
@@ -952,95 +952,133 @@ class Products {
      * @return void
      */
     public function product_inline_edit() {
-        $post_data = wp_unslash( $_POST );
-
-        if ( ! isset( $post_data['security'] ) || ! wp_verify_nonce( $post_data['security'], 'product-inline-edit' ) ) {
+        if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['security'] ) ), 'product-inline-edit' ) ) {
             wp_send_json_error( __( 'Invalid nonce', 'dokan' ) );
         }
+        $post_data = wp_unslash( $_POST );
 
         if ( empty( $post_data['data'] ) ) {
             wp_send_json_error( __( 'data is empty', 'dokan' ), 422 );
         }
 
-        $posted_data = $post_data['data'];
+        $cleaned_data = apply_filters( 'dokan_update_product_post_data', wc_clean( $post_data['data'] ) );
 
-        if ( empty( $posted_data['ID'] ) ) {
+        if ( empty( $cleaned_data['ID'] ) ) {
             wp_send_json_error( __( 'Product ID field is required', 'dokan' ), 422 );
         }
 
-        $args = array(
-            'ID'             => 0,
-            'post_title'     => '',
-            'post_status'    => '',
-            'product_cat'    => array(),
-            'product_tag'    => array(),
-            'product_type'   => 'simple',
-            '_regular_price' => '',
-            '_sale_price'    => '',
-            '_visibility'    => 'visible',
-        );
-
-        $data = array();
-
-        foreach ( $args as $field => $default_val ) {
-            $data[ $field ] = isset( $posted_data[ $field ] ) ? $posted_data[ $field ] : $default_val;
-        }
-
-        // save post content & excerpt; (ei: see `dokan_save_product` function)
-        $saved_post           = get_post( $data['ID'] );
-        $data['post_content'] = $saved_post ? $saved_post->post_content : '';
-        $data['post_excerpt'] = $saved_post ? $saved_post->post_excerpt : '';
-        $data['post_status']  = $saved_post && 'pending' === $saved_post->post_status ? 'pending' : $data['post_status'];
-
-        $data = apply_filters( 'dokan_update_product_post_data', $data );
-
-        $product_id = dokan_save_product( $data );
-
-        if ( is_wp_error( $product_id ) ) {
-            wp_send_json_error( __( 'Error updating product data', 'dokan' ), 422 );
-        }
-
-        if ( isset( $posted_data['sku'] ) && ! empty( $posted_data['sku'] ) && ! wc_product_has_unique_sku( $product_id, $posted_data['sku'] ) ) {
-            wp_send_json_error( __( 'Invalid or duplicated SKU.', 'dokan' ), 422 );
-        }
-
-        $product = wc_get_product( $product_id );
-
-        $product_props = array(
-            'reviews_allowed',
-            'sku',
-            'weight',
-            'length',
-            'width',
-            'height',
-            'shipping_class_id',
-            'manage_stock',
-            'stock_quantity',
-            'stock_status',
-            'backorders',
-        );
-
-        foreach ( $product_props as $prop ) {
-            $method_name = "set_{$prop}";
-
-            if ( isset( $posted_data[ $prop ] ) && method_exists( $product, $method_name ) ) {
-                $product->$method_name( $posted_data[ $prop ] );
+        if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) === 'single' ) {
+            if ( intval( $cleaned_data['product_cat'] ) < 1 ) {
+                wp_send_json_error( __( 'Please select a category', 'dokan' ), 422 );
+            }
+        } else {
+            if ( ! isset( $cleaned_data['product_cat'] ) && empty( $cleaned_data['product_cat'] ) ) {
+                wp_send_json_error( __( 'Please select AT LEAST ONE category', 'dokan' ), 422 );
             }
         }
 
-        if ( version_compare( WC_VERSION, '2.7', '>' ) ) {
-            $product->set_catalog_visibility( $data['_visibility'] );
+        if ( isset( $cleaned_data['sku'] ) && ! empty( $cleaned_data['sku'] ) && ! wc_product_has_unique_sku( $cleaned_data['ID'], $cleaned_data['sku'] ) ) {
+            wp_send_json_error( __( 'Invalid or duplicated SKU.', 'dokan' ), 422 );
         }
 
-        $product_id = $product->save();
+        $data = array(
+            'id' => $cleaned_data['ID'],
+            'name' => $cleaned_data['post_title'],
+        );
 
-        if ( is_wp_error( $product_id ) ) {
+        if ( isset( $cleaned_data['reviews_allowed'] ) ) {
+            $data['reviews_allowed'] = $cleaned_data['reviews_allowed'];
+        }
+
+        if ( isset( $cleaned_data['post_status'] ) ) {
+            $data['post_status'] = $cleaned_data['post_status'];
+        }
+
+        if ( isset( $cleaned_data['sku'] ) ) {
+            $data['sku'] = $cleaned_data['sku'];
+        }
+
+        if ( isset( $cleaned_data['_regular_price'] ) ) {
+            $data['regular_price'] = $cleaned_data['_regular_price'];
+        }
+
+        if ( isset( $cleaned_data['_sale_price'] ) ) {
+            $data['sale_price'] = $cleaned_data['_sale_price'];
+        }
+
+        if ( isset( $cleaned_data['width'] ) ) {
+            $data['dimensions']['width'] = $cleaned_data['width'];
+        }
+
+        if ( isset( $cleaned_data['length'] ) ) {
+            $data['dimensions']['length'] = $cleaned_data['length'];
+        }
+
+        if ( isset( $cleaned_data['height'] ) ) {
+            $data['dimensions']['height'] = $cleaned_data['height'];
+        }
+
+        if ( isset( $cleaned_data['weight'] ) ) {
+            $data['weight'] = $cleaned_data['weight'];
+        }
+
+        if ( isset( $cleaned_data['shipping_class_id'] ) ) {
+            $data['shipping_class'] = $cleaned_data['shipping_class_id'];
+        }
+
+        if ( isset( $cleaned_data['_visibility'] ) ) {
+            $data['catalog_visibility'] = $cleaned_data['_visibility'];
+        }
+
+        if ( isset( $cleaned_data['manage_stock'] ) ) {
+            $data['manage_stock'] = $cleaned_data['manage_stock'];
+        }
+
+        if ( isset( $cleaned_data['stock_quantity'] ) ) {
+            $data['stock_quantity'] = $cleaned_data['stock_quantity'];
+        }
+
+        if ( isset( $cleaned_data['stock_status'] ) ) {
+            $data['stock_status'] = $cleaned_data['stock_status'];
+        }
+
+        if ( isset( $cleaned_data['backorders'] ) ) {
+            $data['backorders'] = $cleaned_data['backorders'];
+        }
+
+        if ( isset( $cleaned_data['product_type'] ) ) {
+            $data['type'] = $cleaned_data['product_type'];
+        }
+
+        if ( isset( $cleaned_data['product_cat'] ) ) {
+            $data['categories'] = (array) $cleaned_data['product_cat'];
+        }
+
+        if ( isset( $cleaned_data['product_tag'] ) ) {
+            $data['tags'] = (array) $cleaned_data['product_tag'];
+        }
+
+
+        $data    = apply_filters( 'dokan_update_product_quick_edit_data', $data );
+        $product = dokan()->product->update( $data );
+
+        if ( empty( $product ) ) {
             wp_send_json_error( __( 'Error updating product data', 'dokan' ), 422 );
         }
 
-        $post = get_post( $product_id );
-        $row_actions = dokan_product_get_row_action( $post );
-        $tr_class = ( $post->post_status === 'pending' ) ? 'danger' : '';
+        /**
+         * Run when product data update in quick edit.
+         *
+         * @parm int $product_id Product id.
+         * @parm array $data Data of the updated product.
+         *
+         * @since 3.2.1
+         */
+        do_action( 'dokan_product_quick_edit_updated', $product->get_id(), $data );
+
+        $post           = get_post( $product->get_id() );
+        $row_actions    = dokan_product_get_row_action( $post );
+        $tr_class       = ( $post->post_status === 'pending' ) ? 'danger' : '';
 
         $row_args = array(
             'post' => $post,

@@ -111,13 +111,16 @@ extract( $variation_data );
             </div>
 
             <div class="dokan-clearfix"></div>
-            <div class="variable_pricing show_if_variable">
-                <div class="content-half-part">
+            <div class="variable_pricing show_if_variable show_if_variable-subscription">
+
+                <?php do_action( 'dokan_regular_price_html_on_single_variation', $loop, $variation_data, $variation ); ?>
+
+                <div class="content-half-part hide_if_variable-subscription" style="padding-right: 16px;">
                     <label><?php echo __( 'Regular price', 'dokan' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
                     <span class="vendor-earning">( <?php _e( ' You Earn : ', 'dokan' ) ?><?php echo get_woocommerce_currency_symbol() ?><span class="vendor-price"><?php echo esc_html( dokan()->commission->get_earning_by_product( $variation->ID ) ); ?></span> )</span>
                     <input type="text" size="5" name="variable_regular_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_regular_price ) ) echo esc_attr( $_regular_price ); ?>" class="wc_input_price dokan-form-control dokan-product-regular-price-variable" placeholder="<?php esc_attr_e( 'Variation price (required)', 'dokan' ); ?>" />
                 </div>
-                <div class="content-half-part">
+                <div class="content-half-part content-width-subscription">
                     <label><?php echo __( 'Sale price', 'dokan' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?> <a href="#" class="sale_schedule"><?php _e( 'Schedule', 'dokan' ); ?></a><a href="#" class="cancel_sale_schedule" style="display:none"><?php _e( 'Cancel schedule', 'dokan' ); ?></a></label>
                     <input type="text" size="5" name="variable_sale_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_sale_price ) ) echo esc_attr( $_sale_price ); ?>" class="wc_input_price dokan-form-control dokan-product-sales-price-variable" />
                 </div>
@@ -130,11 +133,11 @@ extract( $variation_data );
                 <div class="sale_price_dates_fields dokan-form-group" style="display: none">
                     <div class="content-half-part">
                         <label><?php _e( 'Sale start date', 'dokan' ); ?></label>
-                        <input type="text" class="dokan-form-control sale_price_dates_from" name="variable_sale_price_dates_from[<?php echo $loop; ?>]" value="<?php echo ! empty( $_sale_price_dates_from ) ? date_i18n( 'Y-m-d', $_sale_price_dates_from ) : ''; ?>" placeholder="<?php echo esc_attr_x( 'From&hellip;', 'placeholder', 'dokan' ) ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
+                        <input type="text" class="dokan-form-control sale_price_dates_from datepicker" name="variable_sale_price_dates_from[<?php echo $loop; ?>]" value="<?php echo ! empty( $_sale_price_dates_from ) ? date_i18n( 'Y-m-d', $_sale_price_dates_from ) : ''; ?>" placeholder="<?php echo esc_attr_x( 'From&hellip;', 'placeholder', 'dokan' ) ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
                     </div>
                     <div class="content-half-part">
                         <label><?php _e( 'Sale end date', 'dokan' ); ?></label>
-                        <input type="text" class="dokan-form-control sale_price_dates_to" name="variable_sale_price_dates_to[<?php echo $loop; ?>]" value="<?php echo ! empty( $_sale_price_dates_to ) ? date_i18n( 'Y-m-d', $_sale_price_dates_to ) : ''; ?>" placeholder="<?php echo esc_attr_x('To&hellip;', 'placeholder', 'dokan') ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
+                        <input type="text" class="dokan-form-control sale_price_dates_to datepicker" name="variable_sale_price_dates_to[<?php echo $loop; ?>]" value="<?php echo ! empty( $_sale_price_dates_to ) ? date_i18n( 'Y-m-d', $_sale_price_dates_to ) : ''; ?>" placeholder="<?php echo esc_attr_x('To&hellip;', 'placeholder', 'dokan') ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
                     </div>
                     <div class="dokan-clearfix"></div>
                 </div>
