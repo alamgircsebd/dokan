@@ -256,6 +256,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
 
                                 ?>
                             </div>
+                            <?php do_action( 'dokan_auction_before_general_options', $post_id ); ?>
                         </div>
                     </div>
 
@@ -379,7 +380,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                 </div>
 
                                 <div class="dokan-clearfix"></div>
-                                
+
                                 <?php if ( time() > strtotime( $_auction_dates_to ) ): ?>
                                 <div class="dokan-auction-date-relist">
                                     <div class="content-half-part dokan-auction-dates-from">
@@ -397,7 +398,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                     </div>
                                 </div>
                                 <?php endif; ?>
-                            
+
                                 <div class="auction_relist_section">
                                     <div class="dokan-form-group dokan-auction-automatic-relist">
                                         <div class="checkbox">

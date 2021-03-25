@@ -11,6 +11,15 @@ use WP_User;
  */
 class Module {
 
+    /**
+     * Module version
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @var string
+     */
+    public $version = null;
+
     private $depends_on = array();
     private $dependency_error = array();
 
@@ -26,15 +35,18 @@ class Module {
      * @uses add_action()
      */
     public function __construct() {
+        $this->version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
+
         define( 'DOKAN_AUCTION_DIR', dirname( __FILE__ ) );
 
         $this->depends_on['WooCommerce_simple_auction'] = array(
             'name'   => 'WooCommerce_simple_auction',
+            // @codingStandardsIgnoreLine
             'notice' => sprintf( __( '<b>Auction Integration </b> requires %sWooCommerce Simple Auctions plugin%s to be installed & activated first !' , 'dokan' ), '<a target="_blank" href="https://codecanyon.net/item/woocommerce-simple-auctions-wordpress-auctions/6811382">', '</a>' ),
         );
 
         if ( ! $this->check_if_has_dependency() ) {
-            add_action( 'admin_notices', array ( $this, 'dependency_notice' ) );
+            add_action( 'admin_notices', array( $this, 'dependency_notice' ) );
             return;
         }
 
@@ -55,7 +67,7 @@ class Module {
         add_filter( 'dokan_settings_selling_option_vendor_capability', array( $this, 'add_auction_dokan_settings' ) );
         add_filter( 'dokan_query_var_filter', array( $this, 'add_dokan_auction_endpoint' ) );
         add_filter( 'dokan_set_template_path', array( $this, 'load_auction_templates' ), 10, 3 );
-        add_action( 'dokan_load_custom_template', array( $this, 'load_dokan_auction_template'), 10, 1 );
+        add_action( 'dokan_load_custom_template', array( $this, 'load_dokan_auction_template' ), 10, 1 );
         add_action( 'user_register', array( $this, 'dokan_admin_user_register_enable_auction' ), 16 );
         add_action( 'dokan_product_listing_exclude_type', array( $this, 'product_listing_exclude_auction' ), 11 );
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
@@ -63,7 +75,7 @@ class Module {
         add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_auction_active_menu' ) );
         // dokan simple auciton email
         add_filter( 'woocommerce_email_classes', array( $this, 'load_auction_email_class' ) );
-        add_filter( 'dokan_email_actions', array( $this, 'register_auction_email_action') );
+        add_filter( 'dokan_email_actions', array( $this, 'register_auction_email_action' ) );
 
         // send bid email to admin and vendor
         add_filter( 'woocommerce_email_recipient_bid_note', array( $this, 'send_bid_email' ), 99, 2 );
@@ -80,7 +92,7 @@ class Module {
      *
      * @return boolean
      */
-    function check_if_has_dependency() {
+    public function check_if_has_dependency() {
         $res = true;
 
         foreach ( $this->depends_on as $class ) {
@@ -93,11 +105,11 @@ class Module {
         return $res;
     }
 
-     /*
-     * print error notice if dependency not active
-     * @since 1.5.0
-     */
-    function dependency_notice(){
+    /*
+    * print error notice if dependency not active
+    * @since 1.5.0
+    */
+    public function dependency_notice() {
         $errors = '';
         $error = '';
         foreach ( $this->dependency_error as $error ) {
@@ -120,6 +132,7 @@ class Module {
         set_transient( 'dokan-auction', 1 );
 
         if ( class_exists( 'WP_Roles' ) && ! isset( $wp_roles ) ) {
+            // @codingStandardsIgnoreLine
             $wp_roles = new \WP_Roles();
         }
 
@@ -127,7 +140,7 @@ class Module {
             'dokan_view_auction_menu',
             'dokan_add_auction_product',
             'dokan_edit_auction_product',
-            'dokan_delete_auction_product'
+            'dokan_delete_auction_product',
         );
 
         foreach ( $all_cap as $key => $cap ) {
@@ -135,7 +148,6 @@ class Module {
             $wp_roles->add_cap( 'administrator', $cap );
             $wp_roles->add_cap( 'shop_manager', $cap );
         }
-
     }
 
     /**
@@ -146,7 +158,7 @@ class Module {
      * @return void
      */
     public function add_capabilities( $capabilities ) {
-        $capabilities['menu']['dokan_view_auction_menu'] = __( 'View auction menu');
+        $capabilities['menu']['dokan_view_auction_menu'] = __( 'View auction menu', 'dokan' );
 
         $capabilities['auction'] = array(
             'dokan_add_auction_product'    => __( 'Add auction product', 'dokan' ),
@@ -193,8 +205,8 @@ class Module {
     * @return void
     **/
     public function includes() {
-        require_once dirname(__FILE__) . '/classes/class-auction.php';
-        require_once dirname(__FILE__) . '/includes/dokan-auction-functions.php';
+        require_once dirname( __FILE__ ) . '/classes/class-auction.php';
+        require_once dirname( __FILE__ ) . '/includes/dokan-auction-functions.php';
     }
 
     /**
@@ -209,20 +221,21 @@ class Module {
     public function enqueue_scripts() {
         global $wp;
 
-        wp_enqueue_style( 'dokan-auction-styles', plugins_url( 'assets/css/dokan-auction-style.css', __FILE__ ), false, date( 'Ymd' ) );
+        wp_enqueue_style( 'dokan-auction-styles', plugins_url( 'assets/css/dokan-auction-style.css', __FILE__ ), false, $this->version );
 
-        if( isset( $wp->query_vars['new-auction-product'] ) ) {
+        if ( isset( $wp->query_vars['new-auction-product'] ) ) {
             wp_enqueue_script( 'jquery' );
             wp_enqueue_script( 'jquery-ui' );
             wp_enqueue_script( 'jquery-ui-datepicker' );
-            wp_enqueue_script( 'dokan-auctiondasd-timepicker', plugins_url( 'assets/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), false, true );
+            wp_enqueue_script( 'dokan-auctiondasd-timepicker', plugins_url( 'assets/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), $this->version, true );
         }
 
-        if( isset( $wp->query_vars['auction'] ) && isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) {
+        // @codingStandardsIgnoreLine
+        if ( isset( $wp->query_vars['auction'] ) && isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) {
             wp_enqueue_script( 'jquery' );
             wp_enqueue_script( 'jquery-ui' );
             wp_enqueue_script( 'jquery-ui-datepicker' );
-            wp_enqueue_script( 'dokan-auctiondasd-timepicker', plugins_url( 'assets/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), false, true );
+            wp_enqueue_script( 'dokan-auctiondasd-timepicker', plugins_url( 'assets/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), $this->version, true );
             wp_enqueue_media();
         }
     }
@@ -245,27 +258,27 @@ class Module {
      *
      * @param object $user
      */
-    function add_admin_user_options( $user ) {
+    public function add_admin_user_options( $user ) {
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
         }
 
-        if ( !user_can( $user, 'dokandar' ) ) {
+        if ( ! user_can( $user, 'dokandar' ) ) {
             return;
         }
 
         $auction = get_user_meta( $user->ID, 'dokan_disable_auction', true );
         ?>
         <tr>
-            <th><?php _e( 'Auction', 'dokan' ); ?></th>
+            <th><?php esc_html_e( 'Auction', 'dokan' ); ?></th>
             <td>
                 <label for="dokan_disable_auction">
                     <input type="hidden" name="dokan_disable_auction" value="no">
                     <input name="dokan_disable_auction" type="checkbox" id="dokan_disable_auction" value="yes" <?php checked( $auction, 'yes' ); ?> />
-                    <?php _e( 'Disable Auction', 'dokan' ); ?>
+                    <?php esc_html_e( 'Disable Auction', 'dokan' ); ?>
                 </label>
 
-                <p class="description"><?php _e( 'Disable auction capability for this vendor', 'dokan' ) ?></p>
+                <p class="description"><?php esc_html_e( 'Disable auction capability for this vendor', 'dokan' ); ?></p>
             </td>
         </tr>
         <?php
@@ -280,15 +293,17 @@ class Module {
      *
      * @return void
      */
-    function save_admin_user_option( $user_id ) {
+    public function save_admin_user_option( $user_id ) {
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
         }
 
+        // @codingStandardsIgnoreLine
         if ( ! isset( $_POST['dokan_enable_selling'] ) ) {
             return;
         }
 
+        // @codingStandardsIgnoreLine
         $selling = sanitize_text_field( $_POST['dokan_disable_auction'] );
         update_user_meta( $user_id, 'dokan_disable_auction', $selling );
     }
@@ -300,13 +315,13 @@ class Module {
      *
      * @param array $settings_fields
      */
-    function add_auction_dokan_settings( $settings_fields ) {
+    public function add_auction_dokan_settings( $settings_fields ) {
         $settings_fields['new_seller_enable_auction'] = array(
             'name'    => 'new_seller_enable_auction',
             'label'   => __( 'New vendor Enable Auction', 'dokan' ),
             'desc'    => __( 'Make auction status enable for new registred vendor', 'dokan' ),
             'type'    => 'checkbox',
-            'default' => 'on'
+            'default' => 'on',
         );
 
         return $settings_fields;
@@ -319,15 +334,14 @@ class Module {
      *
      * @param array $urls
      */
-    function add_auction_dashboad_menu( $urls ) {
-
-        if ( dokan_is_seller_enabled( get_current_user_id() ) && !dokan_is_seller_auction_disabled( get_current_user_id() ) ) {
+    public function add_auction_dashboad_menu( $urls ) {
+        if ( dokan_is_seller_enabled( get_current_user_id() ) && ! dokan_is_seller_auction_disabled( get_current_user_id() ) ) {
             $urls['auction'] = array(
                 'title' => __( 'Auction', 'dokan' ),
                 'icon'  => '<i class="fa fa-gavel"></i>',
-                'url'   => dokan_get_navigation_url('auction'),
+                'url'   => dokan_get_navigation_url( 'auction' ),
                 'pos'   => 185,
-                'permission' => 'dokan_view_auction_menu'
+                'permission' => 'dokan_view_auction_menu',
             );
         }
 
@@ -341,8 +355,8 @@ class Module {
      *
      * @param array $query_var
      */
-    function add_dokan_auction_endpoint( $query_var ) {
-        if ( !dokan_is_seller_auction_disabled( get_current_user_id() ) ){
+    public function add_dokan_auction_endpoint( $query_var ) {
+        if ( ! dokan_is_seller_auction_disabled( get_current_user_id() ) ) {
             $query_var[] = 'auction';
             $query_var[] = 'new-auction-product';
         }
@@ -357,7 +371,7 @@ class Module {
      *
      * @return void
      */
-    function add_rewrite_rules() {
+    public function add_rewrite_rules() {
         if ( get_transient( 'dokan-auction' ) ) {
             flush_rewrite_rules( true );
             delete_transient( 'dokan-auction' );
@@ -388,11 +402,10 @@ class Module {
      *
      * @return void
      */
-    function load_dokan_auction_template( $query_vars ) {
-
+    public function load_dokan_auction_template( $query_vars ) {
         if ( isset( $query_vars['auction'] ) ) {
             if ( ! current_user_can( 'dokan_view_auction_menu' ) ) {
-                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this auction page', 'dokan' ) ) );
+                dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this auction page', 'dokan' ) ) );
             } else {
                 dokan_get_template_part( 'auction/template-auction', '', array( 'is_auction' => true ) );
             }
@@ -401,7 +414,7 @@ class Module {
 
         if ( isset( $query_vars['new-auction-product'] ) ) {
             if ( ! current_user_can( 'dokan_add_auction_product' ) ) {
-                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
             } else {
                 dokan_get_template_part( 'auction/new-auction-product', '', array( 'is_auction' => true ) );
             }
@@ -416,12 +429,12 @@ class Module {
      *
      * @param int $user_id
      */
-    function dokan_admin_user_register_enable_auction( $user_id ) {
+    public function dokan_admin_user_register_enable_auction( $user_id ) {
         $user = new WP_User( $user_id );
         $role = reset( $user->roles );
 
-        if ( $role == 'seller' ) {
-            if ( dokan_get_option( 'new_seller_enable_auction', 'dokan_selling' ) == 'off' ) {
+        if ( 'seller' === (string) $role ) {
+            if ( 'off' === (string) dokan_get_option( 'new_seller_enable_auction', 'dokan_selling' ) ) {
                 update_user_meta( $user_id, 'dokan_disable_auction', 'yes' );
             } else {
                 update_user_meta( $user_id, 'dokan_disable_auction', 'no' );
@@ -450,8 +463,8 @@ class Module {
      *
      * @return string
      */
-    function dashboard_auction_active_menu( $active_menu ) {
-        if ( $active_menu == 'new-auction-product' ) {
+    public function dashboard_auction_active_menu( $active_menu ) {
+        if ( 'new-auction-product' === (string) $active_menu ) {
             $active_menu = 'auction';
         }
         return $active_menu;
@@ -467,7 +480,7 @@ class Module {
      * @return array
      */
     public function load_auction_email_class( $wc_emails ) {
-        $wc_emails['Dokan_Auction_Email'] = include( DOKAN_AUCTION_DIR. '/includes/emails/class-dokan-auction-email.php' );
+        $wc_emails['Dokan_Auction_Email'] = include DOKAN_AUCTION_DIR . '/includes/emails/class-dokan-auction-email.php';
 
         return $wc_emails;
     }
@@ -535,7 +548,7 @@ class Module {
                 'second'      => __( 'Second', 'dokan' ),
                 'time-zone'   => __( 'Time Zone', 'dokan' ),
                 'choose-time' => __( 'Choose Time', 'dokan' ),
-            ]
+            ],
         ];
 
         return array_merge( $args, $auction_args );

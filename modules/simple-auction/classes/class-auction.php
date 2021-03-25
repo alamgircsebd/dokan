@@ -23,6 +23,9 @@ class Dokan_Template_Auction {
         add_action( 'template_redirect', array( $this, 'handle_auction_product_delete' ) );
         add_action( 'dokan_auction_after_general_options', array( $this, 'load_attribute_options' ), 12 );
         add_action( 'dokan_auction_after_general_options', array( $this, 'load_shipping_options' ), 13 );
+
+        // Remove `load_inventory_template` hook and add inventory template only for auction product
+        add_action( 'init', [ $this, 'replace_auction_inventory_template' ], 10, 2 );
     }
 
     /**
@@ -445,6 +448,16 @@ class Dokan_Template_Auction {
                 $product->set_sku( $old_sku );
             }
 
+            // Save virtual
+            $_virtual   = isset( $_POST['_virtual'] ) ? wc_clean( $_POST['_virtual'] ) : '';
+            $is_virtual = 'on' === $_virtual ? 'yes' : 'no';
+            $product->set_virtual( $is_virtual );
+
+            // Save downloadable
+            $is_downloadable   = isset( $_POST['_downloadable'] ) ? wc_clean( $_POST['_downloadable'] ) : '';
+            $is_downloadable = 'on' === $is_downloadable ? 'yes' : 'no';
+            $product->set_downloadable( $is_downloadable );
+
             $product->save();
 
             do_action( 'dokan_update_auction_product', $post_id, wp_unslash( $_POST ) );
@@ -500,6 +513,40 @@ class Dokan_Template_Auction {
             exit;
         }
 
+    }
+
+    /**
+     * Replace action inventory template
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function replace_auction_inventory_template() {
+        $product_id = ! empty( $_GET['product_id'] ) ? wp_unslash( $_GET['product_id'] ) : 0;
+        $product    = wc_get_product( $product_id );
+
+        if ( $product && 'auction' === $product->get_type() ) {
+            remove_action( 'dokan_product_edit_after_main', [ \WeDevs\Dokan\Dashboard\Templates\Products::class, 'load_inventory_template' ], 5 );
+            add_action( 'dokan_product_edit_after_main', [ $this, 'load_inventory_template' ], 5, 2 );
+        }
+    }
+
+    /**
+     * Load inventory template
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @param WP_Post $post
+     * @param int $post_id
+     *
+     * @return void
+     */
+    public function load_inventory_template( $post, $post_id ) {
+        dokan_get_template_part( 'auction/auction-inventory', '', [
+            'post_id'    => $post_id,
+            'is_auction' => true,
+        ] );
     }
 
 }
