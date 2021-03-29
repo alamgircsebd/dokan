@@ -144,6 +144,12 @@ import MarkerClusterer from './markerclusterer';
 
             if ( parseInt( DokanGeo.is_auto_zoom ) === 1 ) {
                 self.map.fitBounds(bound);
+
+                setTimeout(function(){
+                    if ( self.map.getZoom() > parseInt(DokanGeo.map_zoom) ){
+                        self.map.setZoom( parseInt(DokanGeo.map_zoom) );
+                    }
+                }, 1500);
             }
 
             var i = 0, styles = [];
