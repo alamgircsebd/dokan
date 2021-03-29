@@ -4,7 +4,7 @@ namespace WeDevs\DokanPro;
 
 use WPSEO_Sitemaps_Router;
 use WP_User_Query;
-use WPSEO_Sitemap_Timezone;
+use Yoast\WP\SEO\Helpers\Date_Helper;
 
 /**
  * Dokan SEO class
@@ -100,7 +100,6 @@ class StoreSeo {
         if ( is_a( $wpseo_sitemaps, 'WPSEO_Sitemaps' ) ) {
             $wpseo_sitemaps->register_sitemap( 'dokan_sellers', array( $this, 'sitemap_output' ) );
         }
-
     }
     /**
      * Add dokan_sellers sitemap url to sitemap_index list
@@ -138,8 +137,8 @@ class StoreSeo {
 
         $sellers = $seller_q->get_results();
 
-        if ( class_exists( 'WPSEO_Sitemap_Timezone' ) ) {
-            $time_formater = new WPSEO_Sitemap_Timezone;
+        if ( class_exists( Date_Helper::class ) ) {
+            $time_formatter = new Date_Helper();
         }
 
         ob_start();
@@ -153,7 +152,7 @@ class StoreSeo {
                     continue;
                 }
 
-                $last_modified = $time_formater->format_date( $product->post->post_modified );
+                $last_modified = $time_formatter->format( $product->post->post_modified );
             ?>
             <url>
                 <loc><?php echo dokan_get_store_url( $seller->ID ) ?></loc>
