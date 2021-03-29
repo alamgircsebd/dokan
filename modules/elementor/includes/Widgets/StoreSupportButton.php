@@ -70,7 +70,7 @@ class StoreSupportButton extends DokanButton {
                 ],
                 'selectors' => [
                     '{{WRAPPER}} > .elementor-widget-container > .elementor-button-wrapper > .dokan-store-support-btn' => 'width: auto; margin: 0;',
-                ]
+                ],
             ]
         );
 
@@ -101,11 +101,11 @@ class StoreSupportButton extends DokanButton {
      */
     protected function get_button_class() {
         $user_logged_class = 'user_logged_out';
-        
+
         if ( is_user_logged_in() ) {
             $user_logged_class = 'user_logged';
         }
-        
+
         return 'dokan-store-support-btn ' . $user_logged_class;
     }
 
@@ -134,6 +134,10 @@ class StoreSupportButton extends DokanButton {
             if ( ! $support_button['show'] ) {
                 return;
             }
+
+            $store_user = dokan()->vendor->get( get_query_var( 'author' ) );
+
+            parent::add_render_attribute( 'button', 'data-store_id', $store_user->get_id() );
         }
 
         parent::render();
