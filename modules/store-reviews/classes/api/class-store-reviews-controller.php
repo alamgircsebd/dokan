@@ -132,7 +132,7 @@ class Dokan_REST_Store_Review_Controller extends DokanRESTController {
      */
     public function get_items( $request ) {
         $limit  = $request['per_page'];
-        $offset = ( $request['page'] - 1 ) * $request['page'];
+        $offset = ( isset( $request['page'] ) && ! empty( $request['page'] ) ) ? $request['page'] : 1;
         $status = ( empty( $request['status'] ) || $request['status'] == 'all' ) ? array( 'publish', 'pending', 'draft', 'future' ) : $request['status'];
 
         $args = array(

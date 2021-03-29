@@ -10,8 +10,8 @@
         <hr class="wp-header-end">
 
         <ul class="subsubsub">
-            <li><router-link :to="{ name: 'Store Reviews' }" active-class="current" exact v-html="sprintf( __( 'All <span class=\'count\'>(%s)</span>', 'dokan' ), counts.all )"></router-link> | </li>
-            <li><router-link :to="{ name: 'Store Reviews', query: { status: 'trash' }}" active-class="current" exact v-html="sprintf( __( 'Trash <span class=\'count\'>(%s)</span>', 'dokan' ), counts.trash )"></router-link></li>
+            <li><router-link :to="{ name: 'StoreReviews' }" active-class="current" exact v-html="sprintf( __( 'All <span class=\'count\'>(%s)</span>', 'dokan' ), counts.all )"></router-link> | </li>
+            <li><router-link :to="{ name: 'StoreReviews', query: { status: 'trash' }}" active-class="current" exact v-html="sprintf( __( 'Trash <span class=\'count\'>(%s)</span>', 'dokan' ), counts.trash )"></router-link></li>
         </ul>
 
         <list-table
@@ -421,7 +421,7 @@
             },
             setRoute( query ) {
                 this.$router.push( {
-                    name: 'Store Reviews',
+                    name: 'StoreReviews',
                     query: query
                 } );
             },

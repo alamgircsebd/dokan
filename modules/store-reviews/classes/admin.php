@@ -62,7 +62,7 @@ class DSR_Admin {
     public function vue_admin_routes( $routes ) {
         $routes[] = [
             'path'      => '/store-reviews',
-            'name'      => 'Store Reviews',
+            'name'      => 'StoreReviews',
             'component' => 'StoreReviews'
         ];
 
