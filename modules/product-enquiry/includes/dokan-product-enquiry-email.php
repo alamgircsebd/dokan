@@ -11,7 +11,7 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
      *
      * @var null
      */
-    public $IP = null;
+    public $i_p = null;
 
     /**
      * Vendor place holder
@@ -59,7 +59,7 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
         $this->template_base  = DOKAN_ENQUIRY_VIEWS . '/';
         $this->placeholders   = array(
             '{site_title}'    => $this->get_blogname(),
-            '{product_title}' => ''
+            '{product_title}' => '',
         );
 
         // Call parent constructor
@@ -94,6 +94,7 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
                 'title'         => __( 'Subject', 'dokan' ),
                 'type'          => 'text',
                 'desc_tip'      => true,
+                // translators: %s: Available placeholders
                 'description'   => sprintf( __( 'Available placeholders: %s', 'dokan' ), $available_placeholders ),
                 'placeholder'   => $this->get_default_subject(),
                 'default'       => $this->get_default_subject(),
@@ -103,6 +104,7 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
                 'title'         => __( 'Email heading', 'dokan' ),
                 'type'          => 'text',
                 'desc_tip'      => true,
+                // translators: %s: Available placeholders
                 'description'   => sprintf( __( 'Available placeholders: %s', 'dokan' ), $available_placeholders ),
                 'placeholder'   => $this->get_default_heading(),
                 'default'       => $this->get_default_heading(),
@@ -118,6 +120,7 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
      * @return string
      */
     public function get_default_subject() {
+        // translators: %s: Site title
         return sprintf( __( 'You have got a new product enquiry email from %s', 'dokan' ), '{site_title}' );
     }
 
@@ -129,6 +132,7 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
      * @return string
      */
     public function get_default_heading() {
+        // translators: %s: Product title
         return sprintf( __( 'A new product enquiry posted for your product %s', 'dokan' ), '{product_title}' );
     }
 
@@ -148,7 +152,6 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
      * @return void
      */
     public function trigger( $vendor, $product, $ip, $user_agent, $customer_name, $customer_email, $message ) {
-
         $this->setup_locale();
 
         if ( ! $this->is_enabled() && ! $this->get_email_recipient() ) {
@@ -157,15 +160,18 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
 
         $this->vendor         = $vendor;
         $this->product        = $product;
-        $this->IP             = $ip;
+        $this->i_p             = $ip;
         $this->user_agent     = $user_agent;
         $this->customer_name  = $customer_name;
         $this->customer_email = $customer_email;
         $this->message        = $message;
 
-        $this->placeholders['{product_title}']   = $product->get_title();
+        $this->placeholders['{product_title}'] = $product->get_title();
 
-        $this->send( $this->get_email_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments() );
+        $get_headers  = $this->get_headers();
+        $get_headers .= 'Reply-to: ' . $customer_name . ' <' . $customer_email . ">\r\n";
+
+        $this->send( $this->get_email_recipient(), $this->get_subject(), $this->get_content(), $get_headers, $this->get_attachments() );
 
         $this->restore_locale();
     }
@@ -194,19 +200,21 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
      */
     public function get_content() {
         ob_start();
-        wc_get_template( $this->template_html, array(
-            'email_heading'  => $this->get_heading(),
-            'sent_to_admin'  => false,
-            'plain_text'     => false,
-            'email'          => $this,
-            'vendor'         => $this->vendor,
-            'product'        => $this->product,
-            'message'        => $this->message,
-            'IP'             => $this->IP,
-            'user_agent'     => $this->user_agent,
-            'customer_name'  => $this->customer_name,
-            'customer_email' => $this->customer_email,
-        ), 'dokan/', $this->template_base );
+        wc_get_template(
+            $this->template_html, array(
+				'email_heading'  => $this->get_heading(),
+				'sent_to_admin'  => false,
+				'plain_text'     => false,
+				'email'          => $this,
+				'vendor'         => $this->vendor,
+				'product'        => $this->product,
+				'message'        => $this->message,
+				'IP'             => $this->i_p,
+				'user_agent'     => $this->user_agent,
+				'customer_name'  => $this->customer_name,
+				'customer_email' => $this->customer_email,
+            ), 'dokan/', $this->template_base
+        );
         return ob_get_clean();
     }
 }
