@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin new order email
+ * Staff new order email
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/admin-new-order.php.
  *
@@ -10,8 +10,8 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see         https://docs.woocommerce.com/document/template-structure/
- * @author WooThemes
+ * @see     https://docs.woocommerce.com/document/template-structure/
+ * @author  Dokan
  * @package WooCommerce/Templates/Emails/HTML
  * @version 2.5.0
  */
@@ -30,9 +30,9 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 $order_url = esc_url(
     add_query_arg(
         array(
-			'order_id'   => $order->get_order_number(),
-			'_view_mode' => 'email',
-			'permission' => '1',
+            'order_id'   => $order->get_order_number(),
+            '_view_mode' => 'email',
+            'permission' => '1',
         ), dokan_get_navigation_url( 'orders' )
     )
 );
@@ -63,47 +63,47 @@ $order_url = esc_url(
                 <th class="td" scope="col" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Price', 'dokan' ); ?></th>
             </tr>
         </thead>
+        <tbody>
+            <?php
+            echo wc_get_email_order_items( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                $order,
+                array(
+                    'show_sku'      => $sent_to_admin,
+                    'show_image'    => false,
+                    'image_size'    => array( 32, 32 ),
+                    'plain_text'    => $plain_text,
+                    'sent_to_admin' => $sent_to_admin,
+                )
+            );
+            ?>
+        </tbody>
+        <tfoot>
+            <?php
+            $item_totals = $order->get_order_item_totals();
 
-    <tbody>
-
-        <?php $total_price = array(); ?>
-        <?php foreach ( $order_info as $value ) : ?>
-            <tr class="order_item">
-            <?php foreach ( $value as $key => $info ) : ?>
-                <?php
-				if ( 'total' === $key ) {
-					array_push( $total_price, $info );
-				}
+            if ( $item_totals ) {
+                $i = 0;
+                foreach ( $item_totals as $total ) {
+                    $i++;
+                    ?>
+                    <tr>
+                        <th class="td" scope="row" colspan="2" style="text-align:<?php echo esc_attr( $text_align ); ?>; <?php echo ( 1 === $i ) ? 'border-top-width: 4px;' : ''; ?>"><?php echo wp_kses_post( $total['label'] ); ?></th>
+                        <td class="td" style="text-align:<?php echo esc_attr( $text_align ); ?>; <?php echo ( 1 === $i ) ? 'border-top-width: 4px;' : ''; ?>"><?php echo wp_kses_post( $total['value'] ); ?></td>
+                    </tr>
+                    <?php
+                }
+            }
+            if ( $order->get_customer_note() ) {
                 ?>
-
-                <td class="td" style="text-align: left;vertical-align: middle;font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;color: #636363;border: 1px solid #e5e5e5;padding: 12px"><?php echo $info; ?></td>
-            <?php endforeach; ?>
-            </tr>
-        <?php endforeach; ?>
-
-        <tr>
-            <th class="td" scope="row" colspan="2" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px"><?php esc_attr_e( 'Payment Method', 'dokan' ); ?>:
-            </th>
-
-            <td class="td" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px">
-                <?php echo esc_attr( $order->get_payment_method_title() ); ?>
-            </td>
-        </tr>
-
-        <tr>
-            <th class="td" scope="row" colspan="2" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px"><?php esc_attr_e( 'Total', 'dokan' ); ?>:
-            </th>
-
-            <td class="td" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px">
-                <?php echo wc_price( array_sum( $total_price ) ); ?>
-            </td>
-        </tr>
-
-    </tbody>
-
+                <tr>
+                    <th class="td" scope="row" colspan="2" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Note:', 'dokan' ); ?></th>
+                    <td class="td" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php echo wp_kses_post( nl2br( wptexturize( $order->get_customer_note() ) ) ); ?></td>
+                </tr>
+                <?php
+            }
+            ?>
+        </tfoot>
     </table>
-
-
 </div>
 
 <?php
