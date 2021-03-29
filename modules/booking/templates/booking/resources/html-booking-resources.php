@@ -14,7 +14,7 @@
                     <i class="fa fa-question-circle"></i>
                 </span>
             </label>
-            <?php dokan_post_input_box( $post_id, '_wc_booking_resource_label', array( 'placeholder' => __( 'Type', 'dokan' ), 'value' => $booking_resource_label ), 'text' ); ?>
+            <?php dokan_post_input_box( $post_id, 'wc_booking_resource_label', array( 'placeholder' => __( 'Type', 'dokan' ), 'value' => $booking_resource_label, 'name' => '_wc_booking_resource_label' ), 'text' ); ?>
         </div>
         <div id="resource_options" class="dokan-input-group options_group">
             <label for="_wc_booking_resources_assignment" class="form-label"><?php _e( 'Resources are...', 'dokan' ); ?>

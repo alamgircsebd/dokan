@@ -281,12 +281,12 @@ if ( ! empty( $_GET['errors'] ) ) {
                     $cancellation_limit_unit           = get_post_meta( $post_id, '_wc_booking_cancel_limit_unit', true );
                     //costs
                     //resources
-                    $booking_resource_label            = get_post_meta( $post_id, '_wc_booking_resource_label', true );
                     $booking_resource_assignment       = get_post_meta( $post_id, '_wc_booking_resources_assignment', true );
 
                     $calendar_display_mode             = get_post_meta( $post_id,'_wc_booking_calendar_display_mode',true );
 
                     $booking_product                   = new WC_Product_Booking( $post_id );
+                    $booking_resource_label            = $booking_product->get_resource_label();
                     $booking_has_restricted_days       = $booking_product->has_restricted_days();
                     $booking_restricted_days           = $booking_product->get_restricted_days();
 
