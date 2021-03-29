@@ -38,8 +38,7 @@ class Dokan_Live_Search_Widget extends WP_Widget {
             extract( $args, EXTR_SKIP );
         }
 
-        $title              = !empty ( $instance['title'] ) ? $instance['title'] : '';
-        $title              = apply_filters('widget_title', $title, $instance, $this->id_base);
+        $title              = isset( $instance['title'] ) ? apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) : '';
         $live_search_option = dokan_get_option( 'live_search_option', 'dokan_live_search_setting', 'default' );
 
         if( 'default' == $live_search_option ) {

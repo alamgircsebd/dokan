@@ -34,7 +34,7 @@ class BestSeller extends WP_Widget {
     public function widget( $args, $instance ) {
         extract( $args, EXTR_SKIP );
 
-        $title = apply_filters( 'widget_title', $instance['title'] );
+        $title = isset( $instance['title'] ) ? apply_filters( 'widget_title', $instance['title'] ) : '';
         $limit = absint( $instance['count'] ) ? absint( $instance['count'] ) : 10;
 
         $seller = dokan_get_best_sellers( $limit );

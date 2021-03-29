@@ -21,7 +21,10 @@ class FeatureSeller extends WP_Widget {
      * @return void
      */
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-feature-seller-widget', 'description' => 'Dokan featured vendor widget' );
+        $widget_ops = array(
+			'classname' => 'dokan-feature-seller-widget',
+			'description' => 'Dokan featured vendor widget',
+		);
         parent::__construct( 'dokan-feature-seller-widget', 'Dokan: Featured Vendors', $widget_ops );
     }
 
@@ -34,10 +37,10 @@ class FeatureSeller extends WP_Widget {
      * @return void Echoes it's output
      */
     public function widget( $args, $instance ) {
-        extract( $args, EXTR_SKIP );
+        extract( $args, EXTR_SKIP ); //phpcs:ignore
 
-        $title = apply_filters( 'widget_title', $instance['title'] );
-        $limit = absint( $instance['count'] ) ? absint( $instance['count'] ) : 10;
+        $title = isset( $instance['title'] ) ? apply_filters( 'widget_title', $instance['title'] ) : '';
+        $limit = isset( $instance['count'] ) ? absint( $instance['count'] ) : 10;
 
         $sellers = dokan_get_feature_sellers( $limit );
 
@@ -47,10 +50,12 @@ class FeatureSeller extends WP_Widget {
             echo $args['before_title'] . $title . $args['after_title'];
         }
 
-        dokan_get_template_part( 'widgets/feature-seller', '', array(
-            'pro' => true,
-            'sellers' => $sellers,
-        ) );
+        dokan_get_template_part(
+            'widgets/feature-seller', '', array(
+				'pro' => true,
+				'sellers' => $sellers,
+            )
+        );
 
         echo $after_widget;
     }
@@ -65,7 +70,6 @@ class FeatureSeller extends WP_Widget {
      * @return array
      */
     public function update( $new_instance, $old_instance ) {
-
         // update logic goes here
         $updated_instance = $new_instance;
         return $updated_instance;
@@ -79,20 +83,22 @@ class FeatureSeller extends WP_Widget {
      * @return void Echoes it's output
      */
     public function form( $instance ) {
-        $instance = wp_parse_args( (array) $instance, array(
-            'title' => __( 'Featured Vendor', 'dokan' ),
-            'count' => __( '3', 'dokan' )
-        ) );
+        $instance = wp_parse_args(
+            (array) $instance, array(
+				'title' => __( 'Featured Vendor', 'dokan' ),
+				'count' => __( '3', 'dokan' ),
+            )
+        );
 
         $title = $instance['title'];
         $count = $instance['count'];
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'dokan' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'dokan' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e( 'No of Vendor:', 'dokan' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php esc_html_e( 'No of Vendor:', 'dokan' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'count' ); ?>" name="<?php echo $this->get_field_name( 'count' ); ?>" type="text" value="<?php echo esc_attr( $count ); ?>" />
         </p>
         <?php

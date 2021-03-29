@@ -89,7 +89,8 @@ class Dokan_Geolocation_Widget_Product_Location extends WP_Widget {
 
         echo $before_widget;
 
-        $title = empty( $instance['title'] ) ? __( 'Product Location', 'dokan' ) : $instance['title'];
+        $title = isset( $instance['title'] ) ? apply_filters( 'widget_title', $instance['title'] ) : '';
+        $title = empty( $title ) ? __( 'Product Location', 'dokan' ) : $title;
 
         echo $args['before_title'] . $title . $args['after_title'];
 
