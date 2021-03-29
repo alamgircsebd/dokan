@@ -2,6 +2,7 @@
 
 namespace WeDevs\DokanPro\REST;
 
+use WC_Admin_Settings;
 use WP_Error;
 use WP_REST_Server;
 use WeDevs\Dokan\REST\StoreController as StoreControllerLite;
@@ -89,6 +90,19 @@ class StoreController extends StoreControllerLite {
                 'permission_callback' => array( $this, 'permission_check_for_manageable_part' ),
             ),
         ) );
+
+        register_rest_route(
+            $this->namespace, '/' . $this->base . '/current-visitor',
+            array(
+                'args' => array(),
+                array(
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => array( $this, 'get_current_visitor_information' ),
+                    'args'                => $this->get_collection_params(),
+                    'permission_callback' => array( $this, 'permission_check_for_manageable_part' ),
+                ),
+            )
+        );
     }
 
     /**
@@ -253,20 +267,47 @@ class StoreController extends StoreControllerLite {
     /**
      * Send email to the vendor
      *
-     * @param  WP_REST_Request $request
+     * @param  \WP_REST_Request $request
      *
-     * @return WP_REST_Response
+     * @return WP_Error|\WP_HTTP_Response|\WP_REST_Response
      */
     public function send_email( $request ) {
         $response  = array( 'success' => true );
         $vendor_id = $request['id'];
         $vendor    = dokan()->vendor->get( $vendor_id );
 
+        $from_name = WC_Admin_Settings::get_option( 'woocommerce_email_from_name' );
+        $from_mail = WC_Admin_Settings::get_option( 'woocommerce_email_from_address' );
         $subject   = $request['subject'];
         $body      = $request['body'];
+        $headers   = array(
+            "From: {$from_name} <{$from_mail}>",
+            "Reply-To: {$request['replyto']}",
+        );
+        $response['success'] = wp_mail( $vendor->get_email(), $subject, $body, $headers );
 
-        $response['success'] = wp_mail( $vendor->get_email(), $subject, $body );
+        return rest_ensure_response( $response );
+    }
 
+    /**
+     * Get the current admin information
+     * visiting the vendor page.
+     *
+     * @since 3.2.1
+     *
+     * @return WP_Error|\WP_HTTP_Response|\WP_REST_Response
+     */
+    public function get_current_visitor_information() {
+        $user = wp_get_current_user();
+        $response  = array(
+            'user' => array(
+                'user_login' => $user->user_login,
+                'email' => $user->user_email,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'display_name' => $user->display_name,
+            ),
+        );
         return rest_ensure_response( $response );
     }
 }

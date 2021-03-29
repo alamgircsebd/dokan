@@ -20,6 +20,11 @@
                 </div>
 
                 <div class="form-row">
+                    <label for="replyto">{{ __( 'Reply-To', 'dokan' ) }}</label>
+                    <input type="email" id="replyto" v-model="mail.replyto">
+                </div>
+
+                <div class="form-row">
                     <label for="subject">{{ __( 'Subject', 'dokan' ) }}</label>
                     <input type="text" id="subject" v-model="mail.subject">
                 </div>
@@ -327,7 +332,15 @@ export default {
             stats: null,
             mail: {
                 subject: '',
-                body: ''
+                body: '',
+                replyto: ''
+            },
+            user: {
+                user_login: '',
+                email: '',
+                first_name: '',
+                last_name: '',
+                display_name: '',
             },
             editMode: false,
             isUpdating: false,
@@ -389,6 +402,11 @@ export default {
 
         mailTo() {
             return this.store.store_name + ' <' + this.store.email + '>';
+        },
+
+        replyTo() {
+            this.mail.replyto = this.user.email;
+            return this.user.email;
         },
 
         hasBank() {
@@ -475,6 +493,12 @@ export default {
                     self.categories = response;
                     self.isCategoryMultiple = ( 'multiple' === xhr.getResponseHeader( 'X-WP-Store-Category-Type' ) );
                 } );
+
+            dokan.api.get( '/stores/current-visitor' )
+            .done( response => {
+                self.user = response.user;
+                self.mail.replyto = response.user.email;
+            } );
         },
 
         // map response props to store props
@@ -557,7 +581,8 @@ export default {
 
             dokan.api.post('/stores/' + this.id + '/email', {
                 subject: this.mail.subject,
-                body: this.mail.body
+                body: this.mail.body,
+                replyto: this.mail.replyto
             } ).done(response => {
                 this.$notify({
                     title: this.__( 'Success!', 'dokan' ),
@@ -568,7 +593,8 @@ export default {
 
             this.mail = {
                 subject: '',
-                body: ''
+                body: '',
+                replyto: this.replyTo
             };
         },
 
