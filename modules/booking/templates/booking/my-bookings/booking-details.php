@@ -35,7 +35,7 @@ if ( ! $can_edit ) {
 
 $order_url = wp_nonce_url( add_query_arg( array( 'order_id' => $order_id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' );
 $product   = $the_booking->get_product();
-
+$in_cart   = 'in-cart' === $the_booking->get_status();
 $statuses = array_unique( array_merge( get_wc_booking_statuses( 'user' ), get_wc_booking_statuses( 'cancel' ) ) );
 ?>
 
@@ -45,8 +45,13 @@ $statuses = array_unique( array_merge( get_wc_booking_statuses( 'user' ), get_wc
     </h1>
     <h4>
         <?php
-        // @codingStandardsIgnoreLine
-        echo sprintf( __( 'Booking Number: #%1$d. Order Number:<a href="%2$s"> #%3$d </a>', 'dokan' ), $booking_id, $order_url, $order_id );
+        if ( $in_cart ) {
+            // @codingStandardsIgnoreLine
+            echo sprintf( __( 'Booking Number: #%1$d.', 'dokan' ), $booking_id );
+        } else {
+            // @codingStandardsIgnoreLine
+            echo sprintf( __( 'Booking Number: #%1$d. Order Number:<a href="%2$s"> #%3$d </a>', 'dokan' ), $booking_id, $order_url, $order_id );
+        }
         ?>
     </h4>
 </header><!-- .entry-header -->
@@ -233,12 +238,14 @@ $statuses = array_unique( array_merge( get_wc_booking_statuses( 'user' ), get_wc
                                     echo esc_html( $order->get_billing_phone() );
                                     echo '</td>';
                                     echo '</tr>';
-                                    echo '<tr class="view">';
-                                    echo '<th>&nbsp;</th>';
-                                    echo '<td>';
-                                    echo '<a class="dokan-btn dokan-btn-sm dokan-btn-theme" target="_blank" href="' . $order_url . '">' . __( 'View Order', 'dokan' ) . '</a>';
-                                    echo '</td>';
-                                    echo '</tr>';
+                                    if ( ! $in_cart ) {
+                                        echo '<tr class="view">';
+                                        echo '<th>&nbsp;</th>';
+                                        echo '<td>';
+                                        echo '<a class="dokan-btn dokan-btn-sm dokan-btn-theme" target="_blank" href="' . $order_url . '">' . __( 'View Order', 'dokan' ) . '</a>';
+                                        echo '</td>';
+                                        echo '</tr>';
+                                    }
 
                                     $has_data = true;
                                 }
