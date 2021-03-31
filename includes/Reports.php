@@ -31,7 +31,7 @@ class Reports {
     /**
      * Export statement
      *
-     * @return vois
+     * @return void
      */
     function handle_statement() {
         if ( ! is_user_logged_in() ) {
@@ -46,12 +46,12 @@ class Reports {
             $start_date = date( 'Y-m-01', current_time('timestamp') );
             $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 
-            if ( isset( $_GET['start_date'] ) ) {
-                $start_date = date( 'Y-m-d', strtotime( $_GET['start_date'] ) );
+            if ( isset( $_GET['start_date_alt'] ) ) {
+                $start_date = date( 'Y-m-d', strtotime( $_GET['start_date_alt'] ) );
             }
 
-            if ( isset( $_GET['end_date'] ) ) {
-                $end_date = date( 'Y-m-d', strtotime( $_GET['end_date'] ) );
+            if ( isset( $_GET['end_date_alt'] ) ) {
+                $end_date = date( 'Y-m-d', strtotime( $_GET['end_date_alt'] ) );
             }
 
             $filename = "Statement-".date( 'Y-m-d',time() );
