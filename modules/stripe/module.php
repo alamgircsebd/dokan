@@ -114,8 +114,8 @@ class Module {
         $access_token = get_user_meta( $seller_id, 'dokan_connected_vendor_id', true );
         $announcement = new \WeDevs\DokanPro\Admin\Announcement();
 
-        if ( empty( $access_token ) && false === get_transient( "non_connected_sellers_notice_intervals_$seller_id" ) ) {
-            if ( Helper::display_notice_to_non_connected_sellers() ) {
+        if ( empty( $access_token ) ) {
+            if ( Helper::display_notice_to_non_connected_sellers() && false === get_transient( "non_connected_sellers_notice_intervals_$seller_id" ) ) {
                 // sent announcement message
                 $args = [
                     'title'         => __( 'Your account is not connected with Stripe. Connect your Stripe account to receive automatic payouts.', 'dokan' ),
