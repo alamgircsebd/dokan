@@ -750,14 +750,3 @@ function dokan_pro() {
 }
 
 dokan_pro();
-
-add_action( 'wp', function() {
-    $all_vendors = dokan()->vendor->get_vendors( [ 'number' => -1, 'fields' => 'ID' ] );
-    echo '<pre>';
-    foreach ( $all_vendors as $vendor_id ) {
-        echo $vendor_id . PHP_EOL;
-        $vendor = dokan()->vendor->get( $vendor_id );
-        print_r( $vendor );
-    }
-    die();
-} );
