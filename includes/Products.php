@@ -781,6 +781,12 @@ class Products {
      * @return void
      */
     public function external_product_content( $post, $post_id ) {
+        $product_types = apply_filters( 'dokan_product_types', 'simple' );
+
+        if ( ! array_key_exists( 'external', $product_types ) ) {
+            return;
+        }
+
         dokan_get_template_part(
             'products/external-product',
             '',
@@ -1058,7 +1064,6 @@ class Products {
             $data['tags'] = (array) $cleaned_data['product_tag'];
         }
 
-
         $data    = apply_filters( 'dokan_update_product_quick_edit_data', $data );
         $product = dokan()->product->update( $data );
 
@@ -1124,7 +1129,7 @@ class Products {
 
         // If SKU is already empty, we don't need to create a new SKU
         if ( empty( $unique_sku ) ) {
-            return  $unique_sku;
+            return $unique_sku;
         }
 
         global $wpdb;
