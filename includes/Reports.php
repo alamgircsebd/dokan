@@ -33,7 +33,7 @@ class Reports {
      *
      * @return void
      */
-    function handle_statement() {
+    public function handle_statement() {
         if ( ! is_user_logged_in() ) {
             return;
         }
@@ -42,21 +42,29 @@ class Reports {
             return;
         }
 
+        if ( ! isset( $_GET['dokan_report_filter_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['dokan_report_filter_nonce'] ) ), 'dokan_report_filter' ) ) {
+            return;
+        }
+
         if ( isset( $_GET['dokan_statement_export_all'] ) ) {
-            $start_date = date( 'Y-m-01', current_time('timestamp') );
-            $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+            $start_date = dokan_current_datetime()->modify( 'first day of this month' )->format( 'Y-m-d' );
+            $end_date   = dokan_current_datetime()->format( 'Y-m-d' );
 
             if ( isset( $_GET['start_date_alt'] ) ) {
-                $start_date = date( 'Y-m-d', strtotime( $_GET['start_date_alt'] ) );
+                $start_date = dokan_current_datetime()
+                    ->modify( sanitize_text_field( wp_unslash( $_GET['start_date_alt'] ) ) )
+                    ->format( 'Y-m-d' );
             }
 
             if ( isset( $_GET['end_date_alt'] ) ) {
-                $end_date = date( 'Y-m-d', strtotime( $_GET['end_date_alt'] ) );
+                $end_date = dokan_current_datetime()
+                    ->modify( sanitize_text_field( wp_unslash( $_GET['end_date_alt'] ) ) )
+                    ->format( 'Y-m-d' );
             }
 
-            $filename = "Statement-".date( 'Y-m-d',time() );
-            header( "Content-Type: application/csv; charset=" . get_option( 'blog_charset' ) );
-            header( "Content-Disposition: attachment; filename=$filename.csv" );
+            $filename = 'Statement-' . dokan_current_datetime()->format( 'Y-m-d' );
+            header( 'Content-Type: application/csv; charset=' . get_option( 'blog_charset' ) );
+            header( "Content-Disposition: attachment; filename={$filename}.csv" );
             $currency = get_woocommerce_currency_symbol();
             $headers  = array(
                 'date'         => __( 'Trn Date', 'dokan' ),
@@ -68,8 +76,8 @@ class Reports {
                 'balance'      => __( 'Balance', 'dokan' ),
             );
 
-            foreach ( (array)$headers as $label ) {
-                echo $label .', ';
+            foreach ( (array) $headers as $label ) {
+                echo $label . ', ';
             }
 
             echo "\r\n";
@@ -77,7 +85,7 @@ class Reports {
             //calculate opening balance
             global $wpdb;
             $vendor = dokan()->vendor->get( dokan_get_current_user_id() );
-            $opening_balance = $vendor->get_balance( false, date( 'Y-m-d', strtotime( $start_date . ' -1 days' ) ) );
+            $opening_balance = $vendor->get_balance( false, dokan_current_datetime()->modify( $start_date . ' -1 days' )->format( 'Y-m-d' ) );
             $status = implode( "', '", dokan_withdraw_get_active_order_status() );
 
             $sql = "SELECT * from {$wpdb->prefix}dokan_vendor_balance WHERE vendor_id = %d AND DATE(balance_date) >= %s AND DATE(balance_date) <= %s AND ( ( trn_type = 'dokan_orders' AND status IN ('{$status}') ) OR trn_type IN ( 'dokan_withdraw', 'dokan_refund' ) ) ORDER BY balance_date";
@@ -85,17 +93,16 @@ class Reports {
             $statements = $wpdb->get_results( $wpdb->prepare( $sql, $vendor->id, $start_date, $end_date ) );
 
             echo $start_date . ', ';
-            echo '--' . ', ';
-            echo '#' .'--' . ', ';
-            echo 'Opening Balance' . ', ';
-            echo '--' . ', ';
-            echo '--' . ', ';
+            echo '--, ';
+            echo '#--, ';
+            echo 'Opening Balance, ';
+            echo '--, ';
+            echo '--, ';
             echo $opening_balance . ', ';
             echo "\r\n";
 
             $balance = $opening_balance;
             foreach ( $statements as $key => $statement ) {
-
                 $balance += $statement->debit - $statement->credit;
 
                 switch ( $statement->trn_type ) {
@@ -112,8 +119,8 @@ class Reports {
                         break;
                 }
 
-                echo date( 'Y-m-d', strtotime( $statement->trn_date ) ) . ', ';
-                echo date( 'Y-m-d', strtotime( $statement->balance_date ) ) . ', ';
+                echo dokan_current_datetime()->modify( $statement->trn_date )->format( 'Y-m-d' ) . ', ';
+                echo dokan_current_datetime()->modify( $statement->balance_date )->format( 'Y-m-d' ) . ', ';
                 echo '#' . $statement->trn_id . ', ';
                 echo $type . ', ';
                 echo $statement->debit . ', ';

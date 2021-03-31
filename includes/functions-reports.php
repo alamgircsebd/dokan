@@ -56,12 +56,16 @@ function dokan_get_reports_charts() {
  * @return
  */
 function dokan_seller_sales_statement() {
-    $start_date = date( 'Y-m-01', current_time( 'timestamp' ) );
-    $end_date   = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+    $start_date = dokan_current_datetime()->modify( 'first day of this month' )->format( 'Y-m-d' );
+    $end_date   = dokan_current_datetime()->format( 'Y-m-d' );
 
-    if ( isset( $_GET['dokan_report_filter'] ) ) {
-        $start_date = date( 'Y-m-d', strtotime( $_GET['start_date_alt'] ) );
-        $end_date   = date( 'Y-m-d', strtotime( $_GET['end_date_alt'] ) );
+    if ( isset( $_GET['dokan_report_filter'] ) && isset( $_GET['dokan_report_filter_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['dokan_report_filter_nonce'] ) ), 'dokan_report_filter' ) && isset( $_GET['start_date_alt'] ) && isset( $_GET['end_date_alt'] ) ) {
+        $start_date = dokan_current_datetime()
+            ->modify( sanitize_text_field( wp_unslash( $_GET['start_date_alt'] ) ) )
+            ->format( 'Y-m-d' );
+        $end_date   = dokan_current_datetime()
+            ->modify( sanitize_text_field( wp_unslash( $_GET['end_date_alt'] ) ) )
+            ->format( 'Y-m-d' );
     } ?>
 
     <form method="get" class="dokan-form-inline report-filter dokan-clearfix" action="">
@@ -71,13 +75,14 @@ function dokan_seller_sales_statement() {
 
         <input type="hidden" name="start_date_alt" id="from_alt" value="<?php echo esc_attr( $start_date ); ?>">
         <input type="hidden" name="end_date_alt" id="to_alt" value="<?php echo esc_attr( $end_date ); ?>">
+        <?php wp_nonce_field( 'dokan_report_filter', 'dokan_report_filter_nonce' ); ?>
 
         <div class="dokan-form-group">
-            <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
+            <label for="to"><?php esc_html_e( 'To:', 'dokan' ); ?></label>
             <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ); ?>" />
 
             <input type="hidden" name="chart" value="sales_statement">
-            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
+            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php esc_attr_e( 'Show', 'dokan' ); ?>" />
         </div>
         <input type="submit" name="dokan_statement_export_all"  class="dokan-btn dokan-right dokan-btn-sm dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Export All', 'dokan' ); ?>">
     </form>
@@ -93,13 +98,13 @@ function dokan_seller_sales_statement() {
     <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php _e( 'Balance Date', 'dokan' ); ?></th>
-                <th><?php _e( 'Trn Date', 'dokan' ); ?></th>
-                <th><?php _e( 'ID', 'dokan' ); ?></th>
-                <th><?php _e( 'Type', 'dokan' ); ?></th>
-                <th><?php _e( 'Debit', 'dokan' ); ?></th>
-                <th><?php _e( 'Credit', 'dokan' ); ?></th>
-                <th><?php _e( 'Balance', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Balance Date', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Trn Date', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'ID', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Type', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Debit', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Credit', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Balance', 'dokan' ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -108,7 +113,7 @@ function dokan_seller_sales_statement() {
                     <td><?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?></td>
                     <td><?php echo '--'; ?></td>
                     <td><?php echo '--'; ?></td>
-                    <td><?php _e( 'Opening Balance', 'dokan' ); ?></td>
+                    <td><?php esc_html_e( 'Opening Balance', 'dokan' ); ?></td>
                     <td><?php echo '--'; ?></td>
                     <td><?php echo '--'; ?></td>
                     <td><?php echo wc_price( $opening_balance ); ?></td>
@@ -442,8 +447,8 @@ function dokan_sales_overview() {
  * @return void
  */
 function dokan_dashboard_sales_overview() {
-    $start_date = date( 'Y-m-01', current_time( 'timestamp' ) );
-    $end_date   = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+    $start_date = dokan_current_datetime()->modify( 'first day of this month' )->format( 'Y-m-d' );
+    $end_date   = dokan_current_datetime()->format( 'Y-m-d' );
 
     dokan_sales_overview_chart_data( $start_date, $end_date, 'day' );
 }
@@ -458,13 +463,18 @@ function dokan_dashboard_sales_overview() {
 function dokan_daily_sales() {
     global $wpdb;
 
-    $start_date = date( 'Y-m-01', current_time( 'timestamp' ) );
-    $end_date   = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+    $start_date = dokan_current_datetime()->modify( 'first day of this month' )->format( 'Y-m-d' );
+    $end_date   = dokan_current_datetime()->format( 'Y-m-d' );
 
-    if ( isset( $_POST['dokan_report_filter'] ) ) {
-        $start_date = date( 'Y-m-d', strtotime( $_POST['start_date_alt'] ) );
-        $end_date   = date( 'Y-m-d', strtotime( $_POST['end_date_alt'] ) );
-    } ?>
+    if ( isset( $_POST['dokan_report_filter'] ) && isset( $_POST['dokan_report_filter_daily_sales_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['dokan_report_filter_daily_sales_nonce'] ) ), 'dokan_report_filter_daily_sales' ) && isset( $_POST['start_date_alt'] ) && isset( $_POST['end_date_alt'] ) ) {
+        $start_date = dokan_current_datetime()
+            ->modify( sanitize_text_field( wp_unslash( $_POST['start_date_alt'] ) ) )
+            ->format( 'Y-m-d' );
+        $end_date   = dokan_current_datetime()
+            ->modify( sanitize_text_field( wp_unslash( $_POST['end_date_alt'] ) ) )
+            ->format( 'Y-m-d' );
+    }
+    ?>
 
     <form method="post" class="dokan-form-inline report-filter dokan-clearfix" action="">
         <div class="dokan-form-group">
@@ -473,12 +483,13 @@ function dokan_daily_sales() {
 
         <input type="hidden" name="start_date_alt" id="from_alt" value="<?php echo esc_attr( $start_date ); ?>">
         <input type="hidden" name="end_date_alt" id="to_alt" value="<?php echo esc_attr( $end_date ); ?>">
+        <?php wp_nonce_field( 'dokan_report_filter_daily_sales', 'dokan_report_filter_daily_sales_nonce' ); ?>
 
         <div class="dokan-form-group">
-            <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
+            <label for="to"><?php esc_html_e( 'To:', 'dokan' ); ?></label>
             <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ); ?>" />
 
-            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
+            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php esc_attr_e( 'Show', 'dokan' ); ?>" />
         </div>
     </form>
     <?php
@@ -786,15 +797,16 @@ function dokan_top_sellers() {
     global $start_date, $end_date, $woocommerce, $wpdb;
     $current_user = dokan_get_current_user_id();
 
-    $start_date = isset( $_POST['start_date_alt'] ) ? $_POST['start_date_alt'] : '';
-    $end_date   = isset( $_POST['end_date_alt'] ) ? $_POST['end_date_alt'] : '';
+    $start_date = dokan_current_datetime()->modify( 'first day of this month' )->format( 'Y-m-d' );
+    $end_date   = dokan_current_datetime()->format( 'Y-m-d' );
 
-    if ( ! $start_date ) {
-        $start_date = date( 'Ymd', strtotime( date( 'Ym', current_time( 'timestamp' ) ) . '01' ) );
-    }
-
-    if ( ! $end_date ) {
-        $end_date = date( 'Ymd', current_time( 'timestamp' ) );
+    if ( isset( $_POST['dokan_report_filter_top_seller'] ) && isset( $_POST['dokan_report_filter_top_seller_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['dokan_report_filter_top_seller_nonce'] ) ), 'dokan_report_filter_top_seller' ) && isset( $_POST['start_date_alt'] ) && isset( $_POST['end_date_alt'] ) ) {
+        $start_date = dokan_current_datetime()
+            ->modify( sanitize_text_field( wp_unslash( $_POST['start_date_alt'] ) ) )
+            ->format( 'Y-m-d' );
+        $end_date   = dokan_current_datetime()
+            ->modify( sanitize_text_field( wp_unslash( $_POST['end_date_alt'] ) ) )
+            ->format( 'Y-m-d' );
     }
 
     // Get order ids and dates in range
@@ -829,7 +841,8 @@ function dokan_top_sellers() {
     asort( $found_products );
     $found_products = array_reverse( $found_products, true );
     $found_products = array_slice( $found_products, 0, 25, true );
-    reset( $found_products ); ?>
+    reset( $found_products );
+    ?>
     <form method="post" action="" class="report-filter dokan-form-inline dokan-clearfix">
         <div class="dokan-form-group">
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
@@ -838,21 +851,22 @@ function dokan_top_sellers() {
 
         <input type="hidden" name="start_date_alt" id="from_alt" value="<?php echo esc_attr( $start_date ); ?>">
         <input type="hidden" name="end_date_alt" id="to_alt" value="<?php echo esc_attr( $end_date ); ?>">
+        <?php wp_nonce_field( 'dokan_report_filter_top_seller', 'dokan_report_filter_top_seller_nonce' ); ?>
 
         <div class="dokan-form-group">
-            <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
+            <label for="to"><?php esc_html_e( 'To:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ); ?>" />
         </div>
 
-        <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
+        <input type="submit" name="dokan_report_filter_top_seller" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php esc_attr_e( 'Show', 'dokan' ); ?>" />
     </form>
 
 
     <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php _e( 'Product', 'dokan' ); ?></th>
-                <th><?php _e( 'Sales', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Product', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Sales', 'dokan' ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -891,15 +905,16 @@ function dokan_top_earners() {
     $current_user          = dokan_get_current_user_id();
     $withdraw_order_status = dokan_get_option( 'withdraw_order_status', 'dokan_withdraw' );
 
-    $start_date = isset( $_POST['start_date_alt'] ) ? $_POST['start_date_alt'] : '';
-    $end_date   = isset( $_POST['end_date_alt'] ) ? $_POST['end_date_alt'] : '';
+    $start_date = dokan_current_datetime()->modify( 'first day of this month' )->format( 'Y-m-d' );
+    $end_date   = dokan_current_datetime()->format( 'Y-m-d' );
 
-    if ( ! $start_date ) {
-        $start_date = date( 'Ymd', strtotime( date( 'Ym', current_time( 'timestamp' ) ) . '01' ) );
-    }
-
-    if ( ! $end_date ) {
-        $end_date = date( 'Ymd', current_time( 'timestamp' ) );
+    if ( isset( $_POST['dokan_report_filter_top_earners'] ) && isset( $_POST['dokan_report_filter_top_earners_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['dokan_report_filter_top_earners_nonce'] ) ), 'dokan_report_filter_top_earners' ) && isset( $_POST['start_date_alt'] ) && isset( $_POST['end_date_alt'] ) ) {
+        $start_date = dokan_current_datetime()
+            ->modify( sanitize_text_field( wp_unslash( $_POST['start_date_alt'] ) ) )
+            ->format( 'Y-m-d' );
+        $end_date   = dokan_current_datetime()
+            ->modify( sanitize_text_field( wp_unslash( $_POST['end_date_alt'] ) ) )
+            ->format( 'Y-m-d' );
     }
 
     // Get order ids and dates in range
@@ -944,21 +959,22 @@ function dokan_top_earners() {
         </div>
         <input type="hidden" name="start_date_alt" id="from_alt" value="<?php echo esc_attr( $start_date ); ?>">
         <input type="hidden" name="end_date_alt" id="to_alt" value="<?php echo esc_attr( $end_date ); ?>">
+        <?php wp_nonce_field( 'dokan_report_filter_top_earners', 'dokan_report_filter_top_earners_nonce' ); ?>
 
         <div class="dokan-form-group">
-            <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
+            <label for="to"><?php esc_html_e( 'To:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ); ?>" />
         </div>
 
-        <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
+        <input type="submit" name="dokan_report_filter_top_earners" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php esc_attr_e( 'Show', 'dokan' ); ?>" />
     </form>
 
     <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php _e( 'Product', 'dokan' ); ?></th>
-                <th colspan="2"><?php _e( 'Sales', 'dokan' ); ?></th>
-                <th><?php _e( 'Earning', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Product', 'dokan' ); ?></th>
+                <th colspan="2"><?php esc_html_e( 'Sales', 'dokan' ); ?></th>
+                <th><?php esc_html_e( 'Earning', 'dokan' ); ?></th>
             </tr>
         </thead>
         <tbody>
