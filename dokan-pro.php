@@ -361,7 +361,7 @@ class Dokan_Pro {
         $this->container['refund']      = new \WeDevs\DokanPro\Refund\Manager();
         $this->container['brands']      = new \WeDevs\DokanPro\Brands\Manager();
         $this->container['coupon']      = new \WeDevs\DokanPro\Coupons\Manager();
-        $this->container['bg_sync_vendor_zone_data'] = new \WeDevs\DokanPro\BackgroundProcesses\SyncVendorZoneData();
+        $this->container['bg_sync_vendor_zone_data'] = new \WeDevs\DokanPro\BackgroundProcess\SyncVendorZoneData();
 
         $this->container = apply_filters( 'dokan_pro_get_class_container', $this->container );
 

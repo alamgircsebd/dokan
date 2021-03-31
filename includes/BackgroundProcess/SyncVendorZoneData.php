@@ -1,5 +1,5 @@
 <?php
-namespace WeDevs\DokanPro\BackgroundProcesses;
+namespace WeDevs\DokanPro\BackgroundProcess;
 
 defined( 'ABSPATH' ) || exit;
 
