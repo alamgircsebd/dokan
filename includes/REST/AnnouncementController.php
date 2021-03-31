@@ -538,8 +538,9 @@ class AnnouncementController extends DokanRESTController {
             foreach ( $sender_ids as  $id ) {
                 $vendor = dokan()->vendor->get( $id );
                 $data['sender_ids'][] = array(
-                    'id' => $id,
-                    'name' => $vendor->get_shop_name() . '(' . $vendor->get_email() . ')',
+                    'id'        => $id,
+                    'name'      => $vendor->get_shop_name() . '(' . $vendor->get_email() . ')',
+                    'shop_name' => $vendor->get_shop_name(),
                 );
             }
         }

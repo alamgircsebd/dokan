@@ -57,11 +57,16 @@
             </template>
 
             <template slot="send_to" slot-scope="data">
-                <span v-if="'all_seller' === data.row.sender_type">{{ __( 'All Vendor', 'dokan' ) }}</span>
-                <span v-if="'selected_seller' === data.row.sender_type">{{ __( 'Selected Vendor', 'dokan' ) }}</span>
-                <span v-if="'enabled_seller' === data.row.sender_type">{{ __( 'Enabled Vendors', 'dokan' ) }}</span>
-                <span v-if="'disabled_seller' === data.row.sender_type">{{ __( 'Disabled Vendors', 'dokan' ) }}</span>
-                <span v-if="'featured_seller' === data.row.sender_type">{{ __( 'Featured Vendors', 'dokan' ) }}</span>
+                <template v-if="data.row.sender_type === 'selected_seller' && data.row.sender_ids.length === 1">
+                    <span>{{data.row.sender_ids[0].shop_name}}</span>
+                </template>
+                <template v-else>
+                    <span v-if="'all_seller' === data.row.sender_type">{{ __( 'All Vendor', 'dokan' ) }}</span>
+                    <span v-if="'selected_seller' === data.row.sender_type">{{ __( 'Selected Vendor', 'dokan' ) }}</span>
+                    <span v-if="'enabled_seller' === data.row.sender_type">{{ __( 'Enabled Vendors', 'dokan' ) }}</span>
+                    <span v-if="'disabled_seller' === data.row.sender_type">{{ __( 'Disabled Vendors', 'dokan' ) }}</span>
+                    <span v-if="'featured_seller' === data.row.sender_type">{{ __( 'Featured Vendors', 'dokan' ) }}</span>
+                </template>
             </template>
 
             <template slot="row-actions" slot-scope="data">
@@ -91,9 +96,10 @@
             v-if="showDialog"
             @close="showDialog = false"
             :footer="false"
+            height="300px"
         >
             <template slot="body">
-                <div v-html="modalContent"></div>
+                <div v-html="modalContent" class="announcement-modal-content"></div>
             </template>
         </modal>
 
@@ -414,6 +420,16 @@
                 background: #8080805c;
                 color: #000000e0;
             }
+        }
+        .dokan-modal {
+            header.modal-header  {
+                h1 {
+                    width: 90%;
+                }
+            }
+        }
+        .announcement-modal-content {
+            height: 200px;
         }
     }
 
