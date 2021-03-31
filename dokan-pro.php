@@ -360,7 +360,8 @@ class Dokan_Pro {
         $this->container['notice']      = new \WeDevs\DokanPro\Notice();
         $this->container['refund']      = new \WeDevs\DokanPro\Refund\Manager();
         $this->container['brands']      = new \WeDevs\DokanPro\Brands\Manager();
-        $this->container['coupon']      = new WeDevs\DokanPro\Coupons\Manager();
+        $this->container['coupon']      = new \WeDevs\DokanPro\Coupons\Manager();
+        $this->container['bg_sync_vendor_zone_data'] = new \WeDevs\DokanPro\BackgroundProcesses\SyncVendorZoneData();
 
         $this->container = apply_filters( 'dokan_pro_get_class_container', $this->container );
 
@@ -749,3 +750,14 @@ function dokan_pro() {
 }
 
 dokan_pro();
+
+add_action( 'wp', function() {
+    $all_vendors = dokan()->vendor->get_vendors( [ 'number' => -1, 'fields' => 'ID' ] );
+    echo '<pre>';
+    foreach ( $all_vendors as $vendor_id ) {
+        echo $vendor_id . PHP_EOL;
+        $vendor = dokan()->vendor->get( $vendor_id );
+        print_r( $vendor );
+    }
+    die();
+} );

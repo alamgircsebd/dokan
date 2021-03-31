@@ -463,7 +463,7 @@ class Hooks {
             $p_seller_id = isset( $package['seller_id'] ) ? (int) $package['seller_id'] : 0;
 
             foreach ( $package['contents'] as $content ) {
-               
+
                 $product = ! empty( $content['product_id'] ) ? wc_get_product( $content['product_id'] ) : '';
                 if ( $product && $product->needs_shipping() ) {
                     $seller_id = (int) get_post_field( 'post_author', $content['product_id'] );
@@ -522,7 +522,6 @@ class Hooks {
             return;
         }
 
-        $zone_id        = $zone->get_id();
         $zone_data      = $zone->get_data();
         $zone_locations = $zone_data['zone_locations'];
 
@@ -530,67 +529,16 @@ class Hooks {
             return;
         }
 
-        $location    = array();
-        $all_vendors = dokan()->vendor->get_vendors( [ 'number' => -1 ] );
-
-        foreach ( $all_vendors as $vendor ) {
-            $seller_id     = $vendor->id;
-            $get_locations = ShippingZone::get_locations( $zone_id, $seller_id );
-
-            if ( $get_locations && $zone_locations ) {
-                foreach ( $zone_locations as $zone_location ) {
-                    if ( 'continent' === $zone_location->type ) {
-                        $continent_array = array();
-                        $continent_array[] = array(
-                            'code' => $zone_location->code,
-                            'type' => 'continent',
-                        );
-
-                        $location = array_merge( $location, $continent_array );
-                    }
-
-                    if ( 'country' === $zone_location->type ) {
-                        $country_array = array();
-                        $country_array[] = array(
-                            'code' => $zone_location->code,
-                            'type' => 'country',
-                        );
-
-                        $location = array_merge( $location, $country_array );
-                    }
-
-                    if ( 'state' === $zone_location->type ) {
-                        $state_array = array();
-                        $state_array[] = array(
-                            'code' => $zone_location->code,
-                            'type' => 'state',
-                        );
-
-                        $location = array_merge( $location, $state_array );
-                    }
-
-                    if ( $zone_location->type === 'postcode' ) {
-                        $postcodes      = explode( ',', $zone_location->code );
-                        $postcode_array = array();
-
-                        foreach ( $postcodes as $postcode ) {
-                            if ( false !== strpos( $postcode, '...' ) ) {
-                                $postcode = implode( '...', array_map( 'trim', explode( '...', $postcode ) ) );
-                            }
-
-                            $postcode_array[] = array(
-                                'code' => trim( $postcode ),
-                                'type' => 'postcode',
-                            );
-                        }
-
-                        $location = array_merge( $location, $postcode_array );
-                    }
-                }
-
-                // update shipping data
-                ShippingZone::save_location( $location, $zone_id, $seller_id );
-            }
+        $all_vendors = dokan()->vendor->get_vendors( [ 'number' => -1, 'fields' => 'ID' ] ); //phpcs:ignore
+        foreach ( $all_vendors as $vendor_id ) {
+            $args = [
+                'seller_id'         => $vendor_id,
+                'zone'              => $zone,
+                'zone_locations'    => $zone_locations,
+            ];
+            dokan_pro()->bg_sync_vendor_zone_data->push_to_queue( $args );
         }
+
+        dokan_pro()->bg_sync_vendor_zone_data->save()->dispatch();
     }
 }

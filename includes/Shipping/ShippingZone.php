@@ -239,20 +239,22 @@ class ShippingZone {
      *
      * @since 2.8.0
      *
-     * @return void
+     * @return array
      */
     public static function get_locations( $zone_id, $seller_id = null ) {
         global $wpdb;
-
-        $table_name = "{$wpdb->prefix}dokan_shipping_zone_locations";
 
         if ( ! $seller_id ) {
             $seller_id = dokan_get_current_user_id();
         }
 
-        $sql = "SELECT * FROM {$table_name} WHERE zone_id=$zone_id AND seller_id=$seller_id";
-
-        $results = $wpdb->get_results( $sql );
+        $table_name = "{$wpdb->prefix}dokan_shipping_zone_locations";
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$table_name} WHERE zone_id=%d AND seller_id=%d",
+                array( $zone_id, $seller_id )
+            )
+        );
 
         $locations = array();
 
