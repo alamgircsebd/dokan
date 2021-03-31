@@ -60,14 +60,17 @@ function dokan_seller_sales_statement() {
     $end_date   = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 
     if ( isset( $_GET['dokan_report_filter'] ) ) {
-        $start_date = date( 'Y-m-d', strtotime( $_GET['start_date'] ) );
-        $end_date   = date( 'Y-m-d', strtotime( $_GET['end_date'] ) );
+        $start_date = date( 'Y-m-d', strtotime( $_GET['start_date_alt'] ) );
+        $end_date   = date( 'Y-m-d', strtotime( $_GET['end_date_alt'] ) );
     } ?>
 
     <form method="get" class="dokan-form-inline report-filter dokan-clearfix" action="">
         <div class="dokan-form-group">
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
         </div>
+
+        <input type="hidden" name="start_date_alt" id="from_alt" value="<?php echo esc_attr( $start_date ); ?>">
+        <input type="hidden" name="end_date_alt" id="to_alt" value="<?php echo esc_attr( $end_date ); ?>">
 
         <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
@@ -783,8 +786,8 @@ function dokan_top_sellers() {
     global $start_date, $end_date, $woocommerce, $wpdb;
     $current_user = dokan_get_current_user_id();
 
-    $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
-    $end_date   = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
+    $start_date = isset( $_POST['start_date_alt'] ) ? $_POST['start_date_alt'] : '';
+    $end_date   = isset( $_POST['end_date_alt'] ) ? $_POST['end_date_alt'] : '';
 
     if ( ! $start_date ) {
         $start_date = date( 'Ymd', strtotime( date( 'Ym', current_time( 'timestamp' ) ) . '01' ) );
@@ -832,6 +835,9 @@ function dokan_top_sellers() {
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
         </div>
+
+        <input type="hidden" name="start_date_alt" id="from_alt" value="<?php echo esc_attr( $start_date ); ?>">
+        <input type="hidden" name="end_date_alt" id="to_alt" value="<?php echo esc_attr( $end_date ); ?>">
 
         <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
@@ -885,8 +891,8 @@ function dokan_top_earners() {
     $current_user          = dokan_get_current_user_id();
     $withdraw_order_status = dokan_get_option( 'withdraw_order_status', 'dokan_withdraw' );
 
-    $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
-    $end_date   = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
+    $start_date = isset( $_POST['start_date_alt'] ) ? $_POST['start_date_alt'] : '';
+    $end_date   = isset( $_POST['end_date_alt'] ) ? $_POST['end_date_alt'] : '';
 
     if ( ! $start_date ) {
         $start_date = date( 'Ymd', strtotime( date( 'Ym', current_time( 'timestamp' ) ) . '01' ) );
@@ -936,6 +942,8 @@ function dokan_top_earners() {
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
         </div>
+        <input type="hidden" name="start_date_alt" id="from_alt" value="<?php echo esc_attr( $start_date ); ?>">
+        <input type="hidden" name="end_date_alt" id="to_alt" value="<?php echo esc_attr( $end_date ); ?>">
 
         <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
