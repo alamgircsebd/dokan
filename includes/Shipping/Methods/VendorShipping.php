@@ -2,7 +2,7 @@
 
 namespace WeDevs\DokanPro\Shipping\Methods;
 
-/*
+/**
  * Table Rate Shipping Method Extender Class
  */
 
@@ -12,12 +12,12 @@ use WeDevs\DokanPro\Shipping\ShippingZone;
 
 class VendorShipping extends WC_Shipping_Method {
 
-    /*
+    /**
      * Table Rates from Database
      */
     protected $options_save_name;
 
-    /*
+    /**
      * Table Rates from Database
      */
     public $default_option;
@@ -46,13 +46,13 @@ class VendorShipping extends WC_Shipping_Method {
      * @access public
      * @return void
      */
-    function __construct( $instance_id = 0 ) {
+    public function __construct( $instance_id = 0 ) {
         $this->id                   = 'dokan_vendor_shipping';
         $this->instance_id          = absint( $instance_id );
-        $this->method_title         = __( 'Vendor Shipping', 'be-table-ship' );
-        $this->method_description   = __( 'Charge varying rates based on user defined conditions', 'be-table-ship' );
+        $this->method_title         = __( 'Vendor Shipping', 'dokan' );
+        $this->method_description   = __( 'Charge varying rates based on user defined conditions', 'dokan' );
         $this->supports             = array( 'shipping-zones', 'instance-settings', 'instance-settings-modal' );
-        $this->default              = "";
+        $this->default              = '';
 
         // Initialize settings
         $this->init();
@@ -60,9 +60,7 @@ class VendorShipping extends WC_Shipping_Method {
         // additional hooks for post-calculations settings
         add_filter( 'woocommerce_shipping_chosen_method', array( $this, 'select_default_rate' ), 10, 2 );
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
-
     }
-
 
     /**
      * Evaluate a cost from a sum/string.
@@ -71,7 +69,7 @@ class VendorShipping extends WC_Shipping_Method {
      * @return string
      */
     protected function evaluate_cost( $sum, $args = array() ) {
-        include_once( WC()->plugin_path() . '/includes/libraries/class-wc-eval-math.php' );
+        include_once WC()->plugin_path() . '/includes/libraries/class-wc-eval-math.php';
 
         // Allow 3rd parties to process shipping cost arguments
         $args           = apply_filters( 'woocommerce_evaluate_shipping_cost_args', $args, $sum, $this );
@@ -82,17 +80,19 @@ class VendorShipping extends WC_Shipping_Method {
         // Expand shortcodes
         add_shortcode( 'fee', array( $this, 'fee' ) );
 
-        $sum = do_shortcode( str_replace(
-            array(
-                '[qty]',
-                '[cost]',
-            ),
-            array(
-                $args['qty'],
-                $args['cost'],
-            ),
-            $sum
-        ) );
+        $sum = do_shortcode(
+            str_replace(
+                array(
+                    '[qty]',
+                    '[cost]',
+                ),
+                array(
+                    $args['qty'],
+                    $args['cost'],
+                ),
+                $sum
+            )
+        );
 
         remove_shortcode( 'fee', array( $this, 'fee' ) );
 
@@ -115,11 +115,13 @@ class VendorShipping extends WC_Shipping_Method {
      * @return string
      */
     public function fee( $atts ) {
-        $atts = shortcode_atts( array(
-            'percent' => '',
-            'min_fee' => '',
-            'max_fee' => '',
-        ), $atts, 'fee' );
+        $atts = shortcode_atts(
+            array(
+                'percent' => '',
+                'min_fee' => '',
+                'max_fee' => '',
+            ), $atts, 'fee'
+        );
 
         $calculated_fee = 0;
 
@@ -140,7 +142,9 @@ class VendorShipping extends WC_Shipping_Method {
 
     /**
      * Get items in package.
+     *
      * @param  array $package
+     *
      * @return int
      */
     public function get_package_item_qty( $package ) {
@@ -150,6 +154,7 @@ class VendorShipping extends WC_Shipping_Method {
                 $total_quantity += $values['quantity'];
             }
         }
+
         return $total_quantity;
     }
 
@@ -179,13 +184,13 @@ class VendorShipping extends WC_Shipping_Method {
     }
 
     /**
-    * init function.
-    * initialize variables to be used
-    *
-    * @access public
-    * @return void
-    */
-    function init() {
+     * Init function.
+     * initialize variables to be used
+     *
+     * @access public
+     * @return void
+     */
+    public function init() {
         $this->instance_form_fields = array(
             'title' => array(
                 'title'         => __( 'Method title', 'dokan' ),
@@ -203,7 +208,7 @@ class VendorShipping extends WC_Shipping_Method {
                     'taxable'   => __( 'Taxable', 'dokan' ),
                     'none'      => _x( 'None', 'Tax status', 'dokan' ),
                 ),
-            )
+            ),
         );
 
         $this->title      = $this->get_option( 'title' );
@@ -211,15 +216,16 @@ class VendorShipping extends WC_Shipping_Method {
     }
 
     /**
-     * calculate_shipping function.
+     * Calculate_shipping function.
      *
      * @access public
      * @param array $package (default: array())
      * @return void
      */
-    function calculate_shipping( $package = array() ) {
+    public function calculate_shipping( $package = array() ) {
         $rates = array();
         $zone = ShippingZone::get_zone_matching_package( $package );
+
         $seller_id = $package['seller_id'];
 
         if ( empty( $seller_id ) ) {
@@ -233,8 +239,8 @@ class VendorShipping extends WC_Shipping_Method {
         }
 
         foreach ( $shipping_methods as $key => $method ) {
-            $tax_rate = ( $method['settings']['tax_status'] == 'none' ) ? false : '';
-            $has_costs     = false;
+            $tax_rate  = ( $method['settings']['tax_status'] == 'none' ) ? false : '';
+            $has_costs = false;
 
             if ( 'yes' != $method['enabled'] ) {
                 continue;
@@ -245,10 +251,12 @@ class VendorShipping extends WC_Shipping_Method {
 
                 if ( '' !== $setting_cost ) {
                     $has_costs = true;
-                    $cost = $this->evaluate_cost( $setting_cost, array(
-                        'qty'  => $this->get_package_item_qty( $package ),
-                        'cost' => $package['contents_cost'],
-                    ) );
+                    $cost = $this->evaluate_cost(
+                        $setting_cost, array(
+                            'qty'  => $this->get_package_item_qty( $package ),
+                            'cost' => $package['contents_cost'],
+                        )
+                    );
                 }
 
                 // Add shipping class costs.
@@ -257,24 +265,26 @@ class VendorShipping extends WC_Shipping_Method {
                 if ( ! empty( $shipping_classes ) ) {
                     $found_shipping_classes = $this->find_shipping_classes( $package );
                     $highest_class_cost     = 0;
-                    $calculation_type = ! empty( $method['settings']['calculation_type'] ) ? $method['settings']['calculation_type'] : 'class';
+                    $calculation_type       = ! empty( $method['settings']['calculation_type'] ) ? $method['settings']['calculation_type'] : 'class';
                     foreach ( $found_shipping_classes as $shipping_class => $products ) {
                         // Also handles BW compatibility when slugs were used instead of ids
                         $shipping_class_term = get_term_by( 'slug', $shipping_class, 'product_shipping_class' );
                         $class_cost_string   = $shipping_class_term && $shipping_class_term->term_id
-                                                ? ( ! empty( $method['settings']['class_cost_' . $shipping_class_term->term_id ] ) ? stripslashes_deep( $method['settings']['class_cost_' . $shipping_class_term->term_id] ) : '' )
+                                                ? ( ! empty( $method['settings'][ 'class_cost_' . $shipping_class_term->term_id ] ) ? stripslashes_deep( $method['settings'][ 'class_cost_' . $shipping_class_term->term_id ] ) : '' )
                                                 : ( ! empty( $method['settings']['no_class_cost'] ) ? $method['settings']['no_class_cost'] : '' );
 
                         if ( '' === $class_cost_string ) {
                             continue;
                         }
 
-                        $has_costs  = true;
+                        $has_costs = true;
 
-                        $class_cost = $this->evaluate_cost( $class_cost_string, array(
-                            'qty'  => array_sum( wp_list_pluck( $products, 'quantity' ) ),
-                            'cost' => array_sum( wp_list_pluck( $products, 'line_total' ) ),
-                        ) );
+                        $class_cost = $this->evaluate_cost(
+                            $class_cost_string, array(
+                                'qty'  => array_sum( wp_list_pluck( $products, 'quantity' ) ),
+                                'cost' => array_sum( wp_list_pluck( $products, 'line_total' ) ),
+                            )
+                        );
 
                         if ( 'class' === $calculation_type ) {
                             $cost += $class_cost;
@@ -287,24 +297,22 @@ class VendorShipping extends WC_Shipping_Method {
                         $cost += $highest_class_cost;
                     }
                 }
-
             } elseif ( 'free_shipping' == $method['id'] ) {
                 $is_available = $this->free_shipping_is_available( $package, $method );
 
                 if ( $is_available ) {
-                    $cost = '0';
+                    $cost      = '0';
                     $has_costs = true;
                 }
             } else {
                 if ( ! empty( $method['settings']['cost'] ) ) {
                     $has_costs = true;
-                    $cost = $method['settings']['cost'];
+                    $cost      = $method['settings']['cost'];
                 } else {
                     $has_costs = true;
-                    $cost = '0';
+                    $cost      = '0';
                 }
             }
-
 
             if ( ! $has_costs ) {
                 continue;
@@ -316,31 +324,31 @@ class VendorShipping extends WC_Shipping_Method {
                 'cost'        => $cost,
                 'description' => ! empty( $method['settings']['description'] ) ? $method['settings']['description'] : '',
                 'taxes'       => $tax_rate,
-                'default'     => 'off'
+                'default'     => 'off',
             );
         }
 
         // send shipping rates to WooCommerce
-        if( is_array( $rates ) && count( $rates ) > 0 ) {
+        if ( is_array( $rates ) && count( $rates ) > 0 ) {
 
             // cycle through rates to send and alter post-add settings
-            foreach( $rates as $key => $rate ) {
+            foreach ( $rates as $key => $rate ) {
+                $this->add_rate(
+                    array(
+                        'id'        => $rate['id'],
+                        'label'     => apply_filters( 'dokan_vendor_shipping_rate_label', $rate['label'], $rate ),
+                        'cost'      => $rate['cost'],
+                        'meta_data' => array( 'description' => $rate['description'] ),
+                        'package'   => $package,
+                    )
+                );
 
-                $this->add_rate( array(
-                    'id'        => $rate['id'],
-                    'label'     => apply_filters( 'dokan_vendor_shipping_rate_label', $rate['label'], $rate ),
-                    'cost'      => $rate['cost'],
-                    'meta_data' => array( 'description' => $rate['description'] ),
-                    'package'   => $package,
-                ));
-
-                if( $rate['default'] == 'on' ) {
+                if ( $rate['default'] == 'on' ) {
                     $this->default = $rate['id'];
                 }
             }
         }
     }
-
 
     /**
      * See if free shipping is available based on the package and cart.
@@ -351,7 +359,7 @@ class VendorShipping extends WC_Shipping_Method {
      */
     public function free_shipping_is_available( $package, $method ) {
         $has_met_min_amount = false;
-        $min_amount = ! empty( $method['settings']['min_amount'] ) ? $method['settings']['min_amount'] : 0;
+        $min_amount         = ! empty( $method['settings']['min_amount'] ) ? $method['settings']['min_amount'] : 0;
 
         $line_subtotal      = wp_list_pluck( $package['contents'], 'line_subtotal', null );
         $line_total         = wp_list_pluck( $package['contents'], 'line_total', null );
@@ -375,7 +383,6 @@ class VendorShipping extends WC_Shipping_Method {
         return apply_filters( 'dokaan_shipping_free_shipping_is_available', $has_met_min_amount, $package, $method );
     }
 
-
     /**
      * Is available in specific zone locations
      *
@@ -397,7 +404,7 @@ class VendorShipping extends WC_Shipping_Method {
             $shipping_methods = ShippingZone::get_shipping_methods( $shipping_zone->get_id(), $seller_id );
 
             if ( ! empty( $shipping_methods ) ) {
-                $is_available = true ;
+                $is_available = true;
             }
         }
 
@@ -417,7 +424,7 @@ class VendorShipping extends WC_Shipping_Method {
     }
 
     /**
-     * alter the default rate if one is chosen in settings.
+     * Alter the default rate if one is chosen in settings.
      *
      * @access public
      *
@@ -425,11 +432,9 @@ class VendorShipping extends WC_Shipping_Method {
      *
      * @return bool
      */
-    function select_default_rate( $chosen_method, $_available_methods ) {
-
+    public function select_default_rate( $chosen_method, $_available_methods ) {
         //Select the 'Default' method from WooCommerce settings
-        if( array_key_exists( $this->default, $_available_methods ) ) {
-
+        if ( array_key_exists( $this->default, $_available_methods ) ) {
             return $this->default;
         }
 
@@ -447,8 +452,10 @@ class VendorShipping extends WC_Shipping_Method {
      *
      * @return array
      */
-    function hide_shipping_when_free_is_available( $rates ) {
-        if( $this->hide_method !== 'yes' ) return $rates;
+    public function hide_shipping_when_free_is_available( $rates ) {
+        if ( $this->hide_method !== 'yes' ) {
+            return $rates;
+        }
 
         // determine if free shipping is available
         $free_shipping = false;
@@ -459,9 +466,9 @@ class VendorShipping extends WC_Shipping_Method {
             }
         }
         // if available, remove all options from this method
-        if( $free_shipping ) {
+        if ( $free_shipping ) {
             foreach ( $rates as $rate_id => $rate ) {
-                if ( $this->id === $rate->method_id && strpos( $rate_id, $this->id . ':' . $this->instance_id . '-') !== false ) {
+                if ( $this->id === $rate->method_id && strpos( $rate_id, $this->id . ':' . $this->instance_id . '-' ) !== false ) {
                     unset( $rates[ $rate_id ] );
                 }
             }
@@ -480,21 +487,22 @@ class VendorShipping extends WC_Shipping_Method {
      *
      * @return array
      */
-    function hide_other_options( $rates ) {
+    public function hide_other_options( $rates ) {
         $hide_key = false;
 
         // return if no rates have been added
-        if( ! isset( $rates ) || empty( $rates ) )
+        if ( ! isset( $rates ) || empty( $rates ) ) {
             return $rates;
+        }
 
         // cycle through available rates
-        foreach( $rates as $key => $rate ) {
-            if( $rate['hide_ops'] === 'on' ) {
+        foreach ( $rates as $key => $rate ) {
+            if ( $rate['hide_ops'] === 'on' ) {
                 $hide_key = $key;
             }
         }
 
-        if( $hide_key ) {
+        if ( $hide_key ) {
             return array( $hide_key => $rates[ $hide_key ] );
         }
 

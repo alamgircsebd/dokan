@@ -3,10 +3,10 @@
 namespace WeDevs\DokanPro\Shipping;
 
 /**
-* Dokan Shipping Zone Class
-*
-* @package dokan
-*/
+ * Dokan Shipping Zone Class
+ *
+ * @package dokan
+ */
 class ShippingZone {
 
     /**
@@ -27,7 +27,20 @@ class ShippingZone {
             $enabled_methods  = $zone->get_shipping_methods( true );
             $methods_id = wp_list_pluck( $enabled_methods, 'id' );
 
-            if ( in_array( 'dokan_vendor_shipping', $methods_id ) ) {
+            if ( ! $zone ) {
+                continue;
+            }
+
+            // Prepare locations.
+            $locations = array();
+
+            foreach ( $zone->get_zone_locations() as $location ) {
+                if ( 'postcode' !== $location->type ) {
+                    $locations[] = $location->type . ':' . $location->code;
+                }
+            }
+
+            if ( in_array( 'dokan_vendor_shipping', $methods_id ) && ! empty( $locations ) ) {
                 $zones[ $zone->get_id() ]                            = $zone->get_data();
                 $zones[ $zone->get_id() ]['zone_id']                 = $zone->get_id();
                 $zones[ $zone->get_id() ]['formatted_zone_location'] = $zone->get_formatted_location();
@@ -36,7 +49,7 @@ class ShippingZone {
         }
 
         // Everywhere zone if has method called vendor shipping
-        $overall_zone    = new \WC_Shipping_Zone(0);
+        $overall_zone    = new \WC_Shipping_Zone( 0 );
         $enabled_methods = $overall_zone->get_shipping_methods( true );
         $methods_id      = wp_list_pluck( $enabled_methods, 'id' );
 
@@ -58,7 +71,7 @@ class ShippingZone {
      * @return void
      */
     public static function get_zone( $zone_id ) {
-        $zone = array();
+        $zone      = array();
         $seller_id = dokan_get_current_user_id();
 
         $zone_obj = \WC_Shipping_Zones::get_zone_by( 'zone_id', $zone_id );
@@ -93,14 +106,14 @@ class ShippingZone {
                 'zone_id'    => $data['zone_id'],
                 'seller_id'  => dokan_get_current_user_id(),
                 'is_enabled' => 1,
-                'settings'   => maybe_serialize( $data['settings'] )
+                'settings'   => maybe_serialize( $data['settings'] ),
             ),
             array(
                 '%s',
                 '%d',
                 '%d',
                 '%d',
-                '%s'
+                '%s',
             )
         );
 
@@ -152,18 +165,18 @@ class ShippingZone {
                 'title'       => self::get_method_label( $result->method_id ),
                 'description' => __( 'Lets you charge a rate for shipping', 'dokan' ),
                 'cost'        => '0',
-                'tax_status'  => 'none'
+                'tax_status'  => 'none',
             );
 
-            $method_id = $result->method_id .':'. $result->instance_id;
+            $method_id = $result->method_id . ':' . $result->instance_id;
             $settings = ! empty( $result->settings ) ? maybe_unserialize( $result->settings ) : array();
             $settings = wp_parse_args( $settings, $default_settings );
 
-            $method[$method_id]['instance_id'] = $result->instance_id;
-            $method[$method_id]['id']          = $result->method_id;
-            $method[$method_id]['enabled']     = ( $result->is_enabled ) ? 'yes' : 'no';
-            $method[$method_id]['title']       = $settings['title'];
-            $method[$method_id]['settings']    = array_map( 'stripslashes_deep', maybe_unserialize( $settings ) );
+            $method[ $method_id ]['instance_id'] = $result->instance_id;
+            $method[ $method_id ]['id']          = $result->method_id;
+            $method[ $method_id ]['enabled']     = ( $result->is_enabled ) ? 'yes' : 'no';
+            $method[ $method_id ]['title']       = $settings['title'];
+            $method[ $method_id ]['settings']    = array_map( 'stripslashes_deep', maybe_unserialize( $settings ) );
         }
 
         return $method;
@@ -183,11 +196,11 @@ class ShippingZone {
             'method_id' => $args['method_id'],
             'zone_id'   => $args['zone_id'],
             'seller_id' => empty( $args['seller_id'] ) ? dokan_get_current_user_id() : $args['seller_id'],
-            'settings'  => maybe_serialize( $args['settings'] )
+            'settings'  => maybe_serialize( $args['settings'] ),
         );
 
         $table_name = "{$wpdb->prefix}dokan_shipping_zone_methods";
-        $updated = $wpdb->update( $table_name, $data, array( 'instance_id' => $args['instance_id' ] ), array( '%s', '%d', '%d', '%s' ) );
+        $updated = $wpdb->update( $table_name, $data, array( 'instance_id' => $args['instance_id'] ), array( '%s', '%d', '%d', '%s' ) );
 
         if ( $updated ) {
             return $data;
@@ -206,7 +219,13 @@ class ShippingZone {
     public static function toggle_shipping_method( $data ) {
         global $wpdb;
         $table_name = "{$wpdb->prefix}dokan_shipping_zone_methods";
-        $updated    = $wpdb->update( $table_name, array( 'is_enabled' => $data['checked']  ), array( 'instance_id' => $data['instance_id' ], 'zone_id' => $data['zone_id'], 'seller_id' => dokan_get_current_user_id() ), array( '%d' ) );
+        $updated    = $wpdb->update(
+            $table_name, array( 'is_enabled' => $data['checked'] ), array(
+                'instance_id' => $data['instance_id'],
+                'zone_id' => $data['zone_id'],
+                'seller_id' => dokan_get_current_user_id(),
+            ), array( '%d' )
+        );
 
         if ( ! $updated ) {
             return new \WP_Error( 'method-not-toggled', __( 'Method enable or disable not working', 'dokan' ) );
@@ -228,7 +247,7 @@ class ShippingZone {
         $table_name = "{$wpdb->prefix}dokan_shipping_zone_locations";
 
         if ( ! $seller_id ) {
-            $seller_id  = dokan_get_current_user_id();
+            $seller_id = dokan_get_current_user_id();
         }
 
         $sql = "SELECT * FROM {$table_name} WHERE zone_id=$zone_id AND seller_id=$seller_id";
@@ -241,7 +260,7 @@ class ShippingZone {
             foreach ( $results as $key => $result ) {
                 $locations[] = array(
                     'code' => $result->location_code,
-                    'type'  => $result->location_type
+                    'type'  => $result->location_type,
                 );
             }
         }
@@ -256,24 +275,24 @@ class ShippingZone {
      *
      * @return void
      */
-    public static function save_location( $location, $zone_id ) {
+    public static function save_location( $location, $zone_id, $seller_id = 0 ) {
         global $wpdb;
 
         // Setup arrays for Actual Values, and Placeholders
         $values        = array();
         $place_holders = array();
-        $seller_id     = dokan_get_current_user_id();
+        $seller_id     = empty( $seller_id ) ? dokan_get_current_user_id() : $seller_id;
         $table_name    = "{$wpdb->prefix}dokan_shipping_zone_locations";
 
         $query = "INSERT INTO {$table_name} (seller_id, zone_id, location_code, location_type) VALUES ";
 
         if ( ! empty( $location ) ) {
-            foreach( $location as $key => $value ) {
+            foreach ( $location as $key => $value ) {
                 array_push( $values, $seller_id, $zone_id, $value['code'], $value['type'] );
                 $place_holders[] = "('%d', '%d', '%s', '%s')";
             }
 
-            $query .= implode(', ', $place_holders);
+            $query .= implode( ', ', $place_holders );
 
             $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND seller_id=%d", $zone_id, $seller_id ) );
 
@@ -281,7 +300,7 @@ class ShippingZone {
                 return true;
             }
         } else {
-            if( $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND seller_id=%d", $zone_id, $seller_id ) ) ) {
+            if ( $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND seller_id=%d", $zone_id, $seller_id ) ) ) {
                 return true;
             }
         }
@@ -301,7 +320,7 @@ class ShippingZone {
             return __( 'Flat Rate', 'dokan' );
         } elseif ( 'local_pickup' == $method_id ) {
             return __( 'Local Pickup', 'dokan' );
-        } elseif( 'free_shipping' == $method_id ) {
+        } elseif ( 'free_shipping' == $method_id ) {
             return __( 'Free Shipping', 'dokan' );
         } else {
             return __( 'Custom Shipping', 'dokan' );
@@ -351,6 +370,7 @@ class ShippingZone {
         $criteria[] = $wpdb->prepare( "( ( locations.location_type = 'country' AND locations.location_code = %s )", $country );
         $criteria[] = $wpdb->prepare( "OR ( locations.location_type = 'state' AND locations.location_code = %s )", $country . ':' . $state );
         $criteria[] = $wpdb->prepare( "OR ( locations.location_type = 'continent' AND locations.location_code = %s )", $continent );
+        $criteria[] = $wpdb->prepare( "OR ( locations.location_type = 'postcode' AND locations.location_code = %s )", $postcode );
         $criteria[] = 'OR ( locations.location_type IS NULL ) )';
 
         // Postcode range and wildcard matching.
@@ -397,13 +417,13 @@ class ShippingZone {
                 "SELECT locations.zone_id, locations.location_code, locations.location_type
                 FROM {$wpdb->prefix}dokan_shipping_zone_locations as locations
                 LEFT JOIN {$wpdb->prefix}woocommerce_shipping_zones as wc_zones ON locations.zone_id = wc_zones.zone_id
-                WHERE seller_id={$vendor_id} AND locations.zone_id IN (" . implode( ', ', $shipping_zone_ids ) . ")
-                ORDER BY wc_zones.zone_order ASC",
+                WHERE seller_id={$vendor_id} AND locations.zone_id IN (" . implode( ', ', $shipping_zone_ids ) . ')
+                ORDER BY wc_zones.zone_order ASC',
                 ARRAY_A
             );
 
             if ( ! empty( $zone_locations ) ) {
-                foreach( $zone_locations as $location ) {
+                foreach ( $zone_locations as $location ) {
                     $zone_id = $location['zone_id'];
 
                     if ( ! isset( $shipping_zones[ $zone_id ] ) ) {
@@ -444,11 +464,11 @@ class ShippingZone {
                     [ 1, 1, 0, 0 ],
                     [ 0, 1, 0, 0 ],
                     [ 1, 0, 0, 0 ],
-                    [ 0, 0, 0, 0 ]
+                    [ 0, 0, 0, 0 ],
                 ];
 
-                foreach( $shipping_zones as $shipping_zone ) {
-                    foreach( $use_cases as $use_case ) {
+                foreach ( $shipping_zones as $shipping_zone ) {
+                    foreach ( $use_cases as $use_case ) {
                         if ( $use_case[0] ) {
                             $check_continent = in_array( $continent, $shipping_zone['continent'] );
                         } else {
@@ -543,9 +563,11 @@ class ShippingZone {
         $table_name = "{$wpdb->prefix}dokan_shipping_zone_methods";
         $results    = $wpdb->get_results( $wpdb->prepare( "SELECT zone_id FROM {$table_name} WHERE seller_id=%d", $vendor_id ) );
 
-        $zone_ids = array_map( function( $zone ) {
-            return (int) $zone->zone_id;
-        }, $results );
+        $zone_ids = array_map(
+            function( $zone ) {
+                return (int) $zone->zone_id;
+            }, $results
+        );
 
         return apply_filters( 'dokan_get_vendor_all_zone_ids', $zone_ids, $package );
     }
@@ -582,9 +604,11 @@ class ShippingZone {
          * @since 3.0.0
          */
         $wc_zone_ids = $wpdb->get_results( "select zone_id from {$wc_shipping_zones}" );
-        $wc_zone_ids = array_map( function( $zone ) {
-            return intval( $zone->zone_id );
-        }, $wc_zone_ids );
+        $wc_zone_ids = array_map(
+            function( $zone ) {
+                return intval( $zone->zone_id );
+            }, $wc_zone_ids
+        );
 
         $zone_id = in_array( $vendor_zone_id, $wc_zone_ids ) ? $vendor_zone_id : '';
 

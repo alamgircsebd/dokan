@@ -5,6 +5,7 @@ namespace WeDevs\DokanPro\Shipping;
 use WC_Countries;
 use WeDevs\DokanPro\Shipping\Methods\ProductShipping;
 use WeDevs\DokanPro\Shipping\Methods\VendorShipping;
+use WeDevs\DokanPro\Shipping\ShippingZone;
 
 /**
  * Dokan Shipping Class
@@ -27,6 +28,9 @@ class Hooks {
         add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
         add_filter( 'woocommerce_package_rates', array( $this, 'calculate_shipping_tax' ), 10, 2 );
         add_filter( 'woocommerce_shipping_packages', array( $this, 'filter_packages' ) );
+        add_action( 'woocommerce_delete_shipping_zone', array( $this, 'delete_shipping_zone_data' ), 35, 1 );
+        add_action( 'woocommerce_after_shipping_zone_object_save', array( $this, 'vendor_zone_data_sync' ), 10, 2 );
+
     }
 
     /**
@@ -58,7 +62,7 @@ class Hooks {
         $shipping_method = WC()->session->get( 'chosen_shipping_methods' );
 
         // per product shipping was not chosen
-        if ( ! is_array( $shipping_method ) || !in_array( 'dokan_product_shipping', $shipping_method ) ) {
+        if ( ! is_array( $shipping_method ) || ! in_array( 'dokan_product_shipping', $shipping_method ) ) {
             return;
         }
 
@@ -73,7 +77,7 @@ class Hooks {
 
         reset( $packages );
 
-        if ( !isset( $packages[0]['contents'] ) ) {
+        if ( ! isset( $packages[0]['contents'] ) ) {
             return;
         }
 
@@ -112,10 +116,9 @@ class Hooks {
 
                 $has_found   = false;
                 $dps_country = ( isset( $dps_country_rates ) ) ? $dps_country_rates : array();
-                $dps_state   = ( isset( $dps_state_rates[$destination_country] ) ) ? $dps_state_rates[$destination_country] : array();
+                $dps_state   = ( isset( $dps_state_rates[ $destination_country ] ) ) ? $dps_state_rates[ $destination_country ] : array();
 
                 if ( array_key_exists( $destination_country, $dps_country ) ) {
-
                     if ( $dps_state ) {
                         if ( array_key_exists( $destination_state, $dps_state ) ) {
                             $has_found = true;
@@ -212,17 +215,16 @@ class Hooks {
             }
 
             if ( isset( $_POST['dps_country_to'] ) ) {
-
-                foreach ($_POST['dps_country_to'] as $key => $value) {
+                foreach ( $_POST['dps_country_to'] as $key => $value ) {
                     $country = $value;
-                    $c_price = floatval( $_POST['dps_country_to_price'][$key] );
+                    $c_price = wc_format_decimal( $_POST['dps_country_to_price'][ $key ] );
 
-                    if( !$c_price && empty( $c_price ) ) {
+                    if ( ! $c_price && empty( $c_price ) ) {
                         $c_price = 0;
                     }
 
-                    if ( !empty( $value ) ) {
-                        $rates[$country] = $c_price;
+                    if ( ! empty( $value ) ) {
+                        $rates[ $country ] = $c_price;
                     }
                 }
             }
@@ -231,18 +233,17 @@ class Hooks {
 
             if ( isset( $_POST['dps_state_to'] ) ) {
                 foreach ( $_POST['dps_state_to'] as $country_code => $states ) {
-
                     foreach ( $states as $key_val => $name ) {
                         $country_c = $country_code;
                         $state_code = $name;
-                        $s_price = floatval( $_POST['dps_state_to_price'][$country_c][$key_val] );
+                        $s_price = wc_format_decimal( $_POST['dps_state_to_price'][ $country_c ][ $key_val ] );
 
-                        if ( !$s_price || empty( $s_price ) ) {
+                        if ( ! $s_price || empty( $s_price ) ) {
                             $s_price = 0;
                         }
 
-                        if ( !empty( $name ) ) {
-                            $s_rates[$country_c][$state_code] = $s_price;
+                        if ( ! empty( $name ) ) {
+                            $s_rates[ $country_c ][ $state_code ] = $s_price;
                         }
                     }
                 }
@@ -250,7 +251,7 @@ class Hooks {
 
             update_user_meta( $user_id, '_dps_state_rates', $s_rates );
 
-            do_action( 'dokan_after_shipping_options_updated' ,$rates, $s_rates );
+            do_action( 'dokan_after_shipping_options_updated', $rates, $s_rates );
 
             $shipping_url = dokan_get_navigation_url( 'settings/regular-shipping' );
             wp_redirect( add_query_arg( array( 'message' => 'shipping_saved' ), $shipping_url ) );
@@ -270,11 +271,11 @@ class Hooks {
     public function register_product_tab( $tabs ) {
         global $post;
 
-        if( get_post_meta( $post->ID, '_disable_shipping', true ) == 'yes' ) {
+        if ( get_post_meta( $post->ID, '_disable_shipping', true ) == 'yes' ) {
             return $tabs;
         }
 
-        if( get_post_meta( $post->ID, '_downloadable', true ) == 'yes' ) {
+        if ( get_post_meta( $post->ID, '_downloadable', true ) == 'yes' ) {
             return $tabs;
         }
 
@@ -283,9 +284,9 @@ class Hooks {
         }
 
         $tabs['shipping'] = array(
-            'title' => __( 'Shipping', 'dokan' ),
+            'title'    => __( 'Shipping', 'dokan' ),
             'priority' => 12,
-            'callback' => array( $this, 'shipping_tab' )
+            'callback' => array( $this, 'shipping_tab' ),
         );
 
         return $tabs;
@@ -299,33 +300,65 @@ class Hooks {
      * @return void
      */
     public function shipping_tab() {
-        global $post;
+        global $wpdb, $post;
+
+        $vendor_id = $post->post_author;
+
+        $shipping_zone = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT locations.zone_id, locations.settings, locations.method_id, wc_zones.location_code, wc_zones.location_type FROM {$wpdb->prefix}dokan_shipping_zone_methods as locations INNER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as wc_zones ON locations.zone_id = wc_zones.zone_id WHERE seller_id=%d ORDER BY wc_zones.zone_id ASC", $vendor_id
+            ), ARRAY_A
+        );
 
         $_overwrite_shipping     = get_post_meta( $post->ID, '_overwrite_shipping', true );
-        $dps_processing          = get_user_meta( $post->post_author, '_dps_pt', true );
-        $from                    = get_user_meta( $post->post_author, '_dps_form_location', true );
-        $dps_country_rates       = get_user_meta( $post->post_author, '_dps_country_rates', true );
-        $shipping_policy         = get_user_meta( $post->post_author, '_dps_ship_policy', true );
-        $refund_policy           = get_user_meta( $post->post_author, '_dps_refund_policy', true );
+        $dps_processing          = get_user_meta( $vendor_id, '_dps_pt', true );
+        $from                    = get_user_meta( $vendor_id, '_dps_form_location', true );
+        $dps_country_rates       = get_user_meta( $vendor_id, '_dps_country_rates', true );
+        $shipping_policy         = get_user_meta( $vendor_id, '_dps_ship_policy', true );
+        $refund_policy           = get_user_meta( $vendor_id, '_dps_refund_policy', true );
         $product_processing_time = get_post_meta( $post->ID, '_dps_processing_time', true );
         $processing_time         = $dps_processing;
 
         if ( $_overwrite_shipping == 'yes' ) {
-            $processing_time  = ( $product_processing_time ) ? $product_processing_time : $dps_processing;
+            $processing_time = ( $product_processing_time ) ? $product_processing_time : $dps_processing;
         }
 
         $country_obj = new WC_Countries();
         $countries   = $country_obj->countries;
+        $states      = $country_obj->states;
+
+        $shipping_countries = '';
+        $location_code      = '';
+        $check_countries    = array();
+
+        if ( $shipping_zone ) {
+            foreach ( $shipping_zone as $zone ) {
+                $location_code = $zone['location_code'];
+                if ( $zone['location_type'] === 'country' && $countries[ $location_code ] && ! in_array( $countries[ $location_code ], $check_countries, true ) ) {
+                    $location_code                     = $countries[ $location_code ];
+                    $check_countries[ $location_code ] = $location_code;
+                    $shipping_countries               .= $location_code . ', ';
+                }
+            }
+        }
         ?>
+
+        <?php if ( $shipping_countries ) { ?>
+            <p>
+                <?php esc_html_e( 'Shipping Countries', 'dokan' ); ?>:
+                <strong><?php echo rtrim( $shipping_countries, ', ' ); ?></strong>
+            </p>
+            <hr>
+        <?php } ?>
 
         <?php if ( $processing_time ) { ?>
             <p>
                 <strong>
-                    <?php _e( 'Ready to ship in', 'dokan' ); ?> <?php echo dokan_get_processing_time_value( $processing_time ); ?>
+                    <?php esc_html_e( 'Ready to ship in', 'dokan' ); ?> <?php echo dokan_get_processing_time_value( $processing_time ); ?>
 
                     <?php
                     if ( $from ) {
-                        echo __( 'from', 'dokan' ) . ' ' . $countries[$from];
+                        echo __( 'from', 'dokan' ) . ' ' . $countries[ $from ];
                     }
                     ?>
                 </strong>
@@ -335,7 +368,7 @@ class Hooks {
 
         <?php if ( $shipping_policy ) { ?>
             <p>&nbsp;</p>
-            <strong><?php _e( 'Shipping Policy', 'dokan' ); ?></strong>
+            <strong><?php esc_html_e( 'Shipping Policy', 'dokan' ); ?></strong>
             <hr>
             <?php echo wpautop( $shipping_policy ); ?>
         <?php } ?>
@@ -343,7 +376,7 @@ class Hooks {
         <?php if ( $refund_policy ) { ?>
             <hr>
             <p>&nbsp;</p>
-            <strong><?php _e( 'Refund Policy', 'dokan' ); ?></strong>
+            <strong><?php esc_html_e( 'Refund Policy', 'dokan' ); ?></strong>
             <hr>
             <?php echo wpautop( $refund_policy ); ?>
         <?php } ?>
@@ -379,7 +412,7 @@ class Hooks {
             }
 
             // so it's a non taxable shipping, lets remove the taxes
-            foreach( $package_rates as $shipping_rate ) {
+            foreach ( $package_rates as $shipping_rate ) {
                 $rfc = new \ReflectionClass( $shipping_rate );
 
                 if ( ! $rfc->hasProperty( 'data' ) ) {
@@ -393,7 +426,7 @@ class Hooks {
                     array_merge(
                         $data->getValue( $shipping_rate ),
                         [
-                            'taxes' => []
+                            'taxes' => [],
                         ]
                     )
                 );
@@ -427,13 +460,22 @@ class Hooks {
                 return $package;
             }
 
+            $p_seller_id = isset( $package['seller_id'] ) ? (int) $package['seller_id'] : 0;
+
             foreach ( $package['contents'] as $content ) {
-                $product = ! empty( $content['product_id' ] ) ? wc_get_product( $content['product_id'] ) : '';
+               
+                $product = ! empty( $content['product_id'] ) ? wc_get_product( $content['product_id'] ) : '';
                 if ( $product && $product->needs_shipping() ) {
+                    $seller_id = (int) get_post_field( 'post_author', $content['product_id'] );
+
+                    if ( isset( $p_seller_id ) && $p_seller_id !== $seller_id ) {
+                        $packages[$key]['seller_id'] = $seller_id;
+                    }
+
                     array_push( $package_to_keep, $key );
                 }
 
-                if ( $product && ! $product->needs_shipping() && ! in_array( $key, $package_to_keep ) ) {
+                if ( $product && ! $product->needs_shipping() && ! in_array( $key, $package_to_keep, true ) ) {
                     array_push( $package_to_remove, $key );
                 }
             }
@@ -446,4 +488,109 @@ class Hooks {
         return apply_filters( 'dokan_shipping_packages', $packages, $package_to_keep );
     }
 
+    /**
+     * Delete shipping data when zone deleted from admin
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param id $zone_id
+     *
+     * @return void
+     */
+    public function delete_shipping_zone_data( $zone_id ) {
+        if ( $zone_id ) {
+            global $wpdb;
+
+            // Delete dokan shipping data when deleted zone from admin area
+            $wpdb->delete( $wpdb->prefix . 'dokan_shipping_zone_locations', array( 'zone_id' => $zone_id ) );
+            $wpdb->delete( $wpdb->prefix . 'dokan_shipping_zone_methods', array( 'zone_id' => $zone_id ) );
+
+            do_action( 'dokan_delete_shipping_zone_data', $zone_id );
+        }
+    }
+
+    /**
+     * Vendors shipping data syncronize when zone update by admin
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param \WC_Shipping_Zone $zone Shipping zone.
+     * @param \WC_Data_Store    $data_store Shipping zone data store.
+     */
+    public function vendor_zone_data_sync( $zone, $data_store ) {
+        if ( empty( $zone->get_id() ) ) {
+            return;
+        }
+
+        $zone_id        = $zone->get_id();
+        $zone_data      = $zone->get_data();
+        $zone_locations = $zone_data['zone_locations'];
+
+        if ( empty( $zone_locations ) ) {
+            return;
+        }
+
+        $location    = array();
+        $all_vendors = dokan()->vendor->get_vendors( [ 'number' => -1 ] );
+
+        foreach ( $all_vendors as $vendor ) {
+            $seller_id     = $vendor->id;
+            $get_locations = ShippingZone::get_locations( $zone_id, $seller_id );
+
+            if ( $get_locations && $zone_locations ) {
+                foreach ( $zone_locations as $zone_location ) {
+                    if ( 'continent' === $zone_location->type ) {
+                        $continent_array = array();
+                        $continent_array[] = array(
+                            'code' => $zone_location->code,
+                            'type' => 'continent',
+                        );
+
+                        $location = array_merge( $location, $continent_array );
+                    }
+
+                    if ( 'country' === $zone_location->type ) {
+                        $country_array = array();
+                        $country_array[] = array(
+                            'code' => $zone_location->code,
+                            'type' => 'country',
+                        );
+
+                        $location = array_merge( $location, $country_array );
+                    }
+
+                    if ( 'state' === $zone_location->type ) {
+                        $state_array = array();
+                        $state_array[] = array(
+                            'code' => $zone_location->code,
+                            'type' => 'state',
+                        );
+
+                        $location = array_merge( $location, $state_array );
+                    }
+
+                    if ( $zone_location->type === 'postcode' ) {
+                        $postcodes      = explode( ',', $zone_location->code );
+                        $postcode_array = array();
+
+                        foreach ( $postcodes as $postcode ) {
+                            if ( false !== strpos( $postcode, '...' ) ) {
+                                $postcode = implode( '...', array_map( 'trim', explode( '...', $postcode ) ) );
+                            }
+
+                            $postcode_array[] = array(
+                                'code' => trim( $postcode ),
+                                'type' => 'postcode',
+                            );
+                        }
+
+                        $location = array_merge( $location, $postcode_array );
+                    }
+                }
+
+                // update shipping data
+                ShippingZone::save_location( $location, $zone_id, $seller_id );
+            }
+        }
+    }
 }
