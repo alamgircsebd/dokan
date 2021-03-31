@@ -1,6 +1,192 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.2.2',
+        'released' => '2021-31-03',
+        'changes'  => array(
+            array(
+                'title'       => 'Added 3DS Auth Flow for Changing Payment Method [Stripe]',
+                'type'        => 'Improvement',
+                'description' => 'Added 3DS auth flow for changing payment method from My Account -> Payment Methods page',
+            ),
+            array(
+                'title'       => 'Added Change Payment Method for Subscriptions from My Account [Stripe]',
+                'type'        => 'Improvement',
+                'description' => 'Added Change payment method for subscriptions from My Account -> Subscriptions for Stripe 3ds mode.',
+            ),
+            array(
+                'title'       => 'Added Failed Order Processing Feature [Stripe]',
+                'type'        => 'Improvement',
+                'description' => 'Added failed order processing feature for both Stripe 3ds and non3ds payment method.',
+            ),
+            array(
+                'title'       => 'Added Metadata for Stripe Transactions for 3ds Mode [Stripe]',
+                'type'        => 'Improvement',
+                'description' => 'Added metadata for stripe transactions for 3ds mode, this will help track transfers made on vendors account and the vendors will also be able to track orders made on their account..',
+            ),
+            array(
+                'title'       => 'Added Support for Renewing Subscription Via Modal [Stripe]',
+                'type'        => 'Improvement',
+                'description' => 'Added support for renewing subscription via modal for stripe 3ds mode.',
+            ),
+            array(
+                'title'       => 'Implemented Automatic Refund for Stripe 3ds Mode [Stripe]',
+                'type'        => 'Improvement',
+                'description' => 'Implemented automatic refund for stripe 3ds mode (refund will be processed from admin stripe account, then the transferred amount from vendor account will be automatically reversed to admin account).',
+            ),
+            array(
+                'title'       => 'Added Announcement Notice if Vendors Stripe Account is Not Connected [Stripe]',
+                'type'        => 'Improvement',
+                'description' => 'Added announcement notice if vendors stripe account is not connected with stripe (both 3ds and non-3ds). In 3ds mode, if vendor stripe currency is not similar to site currency they will also receive announcement notice. Added two new admin settings to control this behavior..',
+            ),
+            array(
+                'title'       => 'New Action Hook Added - dokan_auction_before_general_options [Auction]',
+                'type'        => 'Improvement',
+                'description' => 'New action hook added - dokan_auction_before_general_options.',
+            ),
+            array(
+                'title'       => 'Product Image Support Added for New Order Email Vendor Staff [Vendor Staff]',
+                'type'        => 'Improvement',
+                'description' => 'Product image support added for new order email vendor staff. Now can show the product image by using filter hooks which one support WooCommerce.',
+            ),
+            array(
+                'title'       => 'Dokan Shipping Multiple Issues Fixed and Some Enhancements',
+                'type'        => 'Improvement',
+                'description' => 'Dokan shipping multiple issues fixed and some enhancements. Now delete vendor shipping data when main zone delete from admin area, if admin update any zone from admin then it will effect all vendor shipping methods, single product tab shipping info updated.',
+            ),
+            array(
+                'title'       => 'Show Store Name Instead of Selected Vendors if Announcement Sent to a Single Vendor',
+                'type'        => 'Improvement',
+                'description' => 'Show store name instead of selected vendors if announcement sent to a single vendor in announcement listing page..',
+            ),
+            array(
+                'title'       => 'Dokan Tools Page "Install Pages Button" Disabled',
+                'type'        => 'Improvement',
+                'description' => 'Dokan tools page "Install Pages Button" disabled after successful Installation of page',
+            ),
+            array(
+                'title'       => 'Stock Unwanted Management Options Removed',
+                'type'        => 'Improvement',
+                'description' => 'Stock unwanted management options removed now.',
+            ),
+            array(
+                'title'       => 'Fixes Non3ds Refund-related Issues Settings to Control This Behavior [Stripe]',
+                'type'        => 'Fix',
+                'description' => 'Fixes non3ds refund-related issues (refund doesn\'t work if a vendor is not connected with stripe.)settings to control this behavior [Stripe].',
+            ),
+            array(
+                'title'       => 'Floating Point Error on Wirecard Integration [Wirecard]',
+                'type'        => 'Fix',
+                'description' => '[Wirecard] Floating point error on Wirecard integration.',
+            ),
+            array(
+                'title'       => 'Dokan Seller XML File Returns Uncaught Error [Store SEO]',
+                'type'        => 'Fix',
+                'description' => '[Store SEO] dokan_sellers-sitemap.xml file returns uncaught error.',
+            ),
+            array(
+                'title'       => 'Product Review List, Empty Bulk Action Error',
+                'type'        => 'Fix',
+                'description' => 'Product review list, empty bulk action error fixed now.',
+            ),
+            array(
+                'title'       => 'Variable Subscription and Variable Product Conflict',
+                'type'        => 'Fix',
+                'description' => 'Variable subscription and variable product conflict issue fixed now.',
+            ),
+            array(
+                'title'       => 'Sale Price is Not Working with the Variable Product.',
+                'type'        => 'Fix',
+                'description' => 'Sale Price: Sale price is not working with the variable product.',
+            ),
+            array(
+                'title'       => 'Date Picker is Unavailable for Product Variations',
+                'type'        => 'Fix',
+                'description' => 'Products: Date Picker is unavailable for product variations.',
+            ),
+            array(
+                'title'       => 'Store Email Sends an Email from the WordPress Email Instead of the Site Admin Email',
+                'type'        => 'Fix',
+                'description' => 'Store Email: The Store Email sends an email from the WordPress email instead of the site admin email.',
+            ),
+            array(
+                'title'       => 'Booking Shows Order Number When the Booking Status is In Cart ',
+                'type'        => 'Fix',
+                'description' => 'Booking: Booking shows order number when the booking status is In Cart.',
+            ),
+            array(
+                'title'       => 'Booking Resource Label Does not Display After Save',
+                'type'        => 'Fix',
+                'description' => 'Booking resource label does not display after save.',
+            ),
+            array(
+                'title'       => 'Store Review Data Display and Pagination',
+                'type'        => 'Fix',
+                'description' => 'Store review data display and pagination.',
+            ),
+            array(
+                'title'       => 'Loco Translate Strings Can Not be Translated',
+                'type'        => 'Fix',
+                'description' => 'Loco translate strings can not be translated issue fixed now.',
+            ),
+            array(
+                'title'       => 'Featured Stores Elementor Widgets is Broken Issue Fixed',
+                'type'        => 'Fix',
+                'description' => 'Featured stores Elementor widget is broken issue fixed #1146.',
+            ),
+            array(
+                'title'       => 'Reply to Custom Email Added on Product Inquiry Email',
+                'type'        => 'Fix',
+                'description' => 'Reply to custom email added on product inquiry email #1181.',
+            ),
+            array(
+                'title'       => 'Store Support form Conflicting with Elementor',
+                'type'        => 'Fix',
+                'description' => 'Store support form conflicting with Elementor in the single store page.',
+            ),
+            array(
+                'title'       => 'Fatal error on RMA Details Page Issue Fixed',
+                'type'        => 'Fix',
+                'description' => 'Fatal error on RMA details page when product somehow got deleted issue fixed.',
+            ),
+            array(
+                'title'       => 'Pagination Not Working on Vendor Return Request Page',
+                'type'        => 'Fix',
+                'description' => 'Pagination not working on vendor return request page issue fixed.',
+            ),
+            array(
+                'title'       => 'Store Link Added on RMA Request',
+                'type'        => 'Fix',
+                'description' => 'Store link added on RMA request page on store name.',
+            ),
+            array(
+                'title'       => 'Vendor Search Filter form Widget Not Working Issue Fixed',
+                'type'        => 'Fix',
+                'description' => 'Vendor search filter form widget not working for vendor search issue fixed.',
+            ),
+            array(
+                'title'       => 'Auto-zoom Set Minimum Zoom Label',
+                'type'        => 'Fix',
+                'description' => 'Auto-zoom set minimum zoom label check with admin option.',
+            ),
+            array(
+                'title'       => 'The External Product Type Fields Show Permanently',
+                'type'        => 'Fix',
+                'description' => 'The external product type fields show permanently issue fixed now.',
+            ),
+            array(
+                'title'       => 'Report Export and Filter Date Range in Different Language',
+                'type'        => 'Fix',
+                'description' => 'Report Export and filter date range in different language does not work fixed now.',
+            ),
+            array(
+                'title'       => 'Germanized Plugin Support for Email Verification',
+                'type'        => 'Fix',
+                'description' => 'Germanized plugin support for email verification footer placement.',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.2.1',
         'released' => '2021-05-03',
         'changes'  => array(
