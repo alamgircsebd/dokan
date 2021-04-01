@@ -91,7 +91,7 @@ class Helper {
     /**
      * Check if secret key and publishable keys are valid
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      *
      * @return bool
      */
@@ -182,7 +182,7 @@ class Helper {
     /**
      * Check if non-connected sellers gets notice to connect their stripe account
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      *
      * @return bool
      */
@@ -195,7 +195,7 @@ class Helper {
     /**
      * Check if non-connected sellers gets notice to connect their stripe account
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      *
      * @return int
      */
@@ -318,7 +318,7 @@ class Helper {
     /**
      * Checks if page is pay for order and change subs payment page.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @return bool
      */
     public static function is_subs_change_payment() {
@@ -552,7 +552,7 @@ class Helper {
      *
      * @param string $error_message
      * @return false|int
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public static function is_customer_without_source_error( $error_message ) {
         return preg_match( '/You provided a customer without specifying a source./i', $error_message );
@@ -564,7 +564,7 @@ class Helper {
      *
      * @param array $error_message
      * @return false|int
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public static function is_no_such_token_error( $error_message ) {
         return preg_match( '/No such token./i', $error_message );
@@ -640,7 +640,7 @@ class Helper {
     /**
      * Generate extra information for orders to send with stripe.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @param  WC_Order $order
      * @param  WC_Order $sub_order
      * @param  array $extra_metadata
@@ -694,7 +694,7 @@ class Helper {
     /**
      * Checks whether a source exists.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @param  object $prepared_source The source that should be verified.
      * @throws DokanException     An exception if the source ID is missing.
      */

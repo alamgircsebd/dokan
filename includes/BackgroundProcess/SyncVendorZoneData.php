@@ -13,7 +13,7 @@ use WeDevs\DokanPro\Shipping\ShippingZone;
 /**
  * Class SyncVendorZoneData
  * @package WeDevs\DokanPro\BackgroundProcesses
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.2
  */
 class SyncVendorZoneData extends WC_Background_Process {
 

@@ -84,7 +84,7 @@ class Module {
     /**
      * This method will check if connected vendor access key is valid.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public function check_vendor_access_key_is_valid() {
         if ( ! is_user_logged_in() ) {

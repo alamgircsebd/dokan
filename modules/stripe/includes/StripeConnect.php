@@ -739,7 +739,7 @@ class StripeConnect extends StripePaymentGateway {
      * @param object $order
      * @return object
      * @throws DokanException
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public function prepare_order_source( $order = null ) {
         $stripe_customer = new Customer();
@@ -1264,7 +1264,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Preserves the "dokan-stripe-confirmation" URL parameter so the user can complete the SCA authentication after logging in.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @param string $pay_url Current computed checkout URL for the given order.
      * @param WC_Order $order Order object.
      *
@@ -1284,7 +1284,7 @@ class StripeConnect extends StripePaymentGateway {
      *
      * @param WC_Payment_Gateway[] $gateways A list of all available gateways.
      * @return WC_Payment_Gateway[]          Either the same list or an empty one in the right conditions.
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public function prepare_order_pay_page( $gateways ) {
         if ( ! is_wc_endpoint_url( 'order-pay' ) || ! isset( $_GET['dokan-stripe-confirmation'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
@@ -1312,7 +1312,7 @@ class StripeConnect extends StripePaymentGateway {
      * Changes the text of the "No available methods" message to one that indicates
      * the need for a PaymentIntent to be confirmed.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @return string the new message.
      */
     public function change_no_available_methods_message() {
@@ -1325,7 +1325,7 @@ class StripeConnect extends StripePaymentGateway {
      * @param WC_Order|null $order Order object, or null to get the order from the "order-pay" URL parameter
      *
      * @throws DokanException
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public function render_payment_intent_inputs( $order = null ) {
         if ( ! isset( $order ) || empty( $order ) ) {
@@ -1356,7 +1356,7 @@ class StripeConnect extends StripePaymentGateway {
      * @param WC_Order|null $order Order object, or null to get the order from the "order-pay" URL parameter
      *
      * @throws DokanException
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public function prepare_intent_for_order_pay_page( $order = null ) {
         if ( ! isset( $order ) || empty( $order ) ) {
@@ -1414,7 +1414,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Create webhook url on stripe end via api.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @return void
      */
     public function process_admin_options() {

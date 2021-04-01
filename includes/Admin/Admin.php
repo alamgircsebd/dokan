@@ -1012,7 +1012,7 @@ class Admin {
     /**
      * Checks if all dokan pages are created
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.2.2
      *
      * @return void
      *

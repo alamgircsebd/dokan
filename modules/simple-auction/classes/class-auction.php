@@ -518,7 +518,7 @@ class Dokan_Template_Auction {
     /**
      * Replace action inventory template
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.2.2
      *
      * @return void
      */
@@ -535,7 +535,7 @@ class Dokan_Template_Auction {
     /**
      * Load inventory template
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.2.2
      *
      * @param WP_Post $post
      * @param int $post_id
