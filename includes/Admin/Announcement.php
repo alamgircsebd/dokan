@@ -276,7 +276,7 @@ class Announcement {
     }
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @param $request
      * @return WP_Error|\WP_Error|\WP_REST_Response
      */
@@ -293,7 +293,7 @@ class Announcement {
             'post_content' => ! empty( $request['content'] ) ? wp_kses_post( $request['content'] ) : '',
             'post_status'  => $status,
             'post_type'    => 'dokan_announcement',
-            'post_author'  => $request['author'] ? intval( $request['author'] ) : get_current_user_id(),
+            'post_author'  => isset( $request['author'] ) ? intval( $request['author'] ) : get_current_user_id(),
             'post_date'    => $post_date,
         );
 

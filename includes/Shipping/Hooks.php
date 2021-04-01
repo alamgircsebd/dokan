@@ -491,7 +491,7 @@ class Hooks {
     /**
      * Delete shipping data when zone deleted from admin
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      *
      * @param id $zone_id
      *
@@ -512,7 +512,7 @@ class Hooks {
     /**
      * Vendors shipping data syncronize when zone update by admin
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      *
      * @param \WC_Shipping_Zone $zone Shipping zone.
      * @param \WC_Data_Store    $data_store Shipping zone data store.

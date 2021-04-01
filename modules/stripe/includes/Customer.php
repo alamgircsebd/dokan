@@ -241,7 +241,7 @@ class Customer {
      *
      * @param array $error
      * @return false|int
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public function is_no_such_customer_error( $error ) {
         return preg_match( '/No such customer/i', $error );
@@ -251,7 +251,7 @@ class Customer {
      * Checks to see if error is of invalid request
      * error and it is no such customer.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @param array $error
      * @return bool
      */

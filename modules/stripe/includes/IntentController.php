@@ -419,7 +419,7 @@ class IntentController extends StripePaymentGateway {
 
     /**
      * Creates a Setup Intent through AJAX while adding cards.
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public function create_setup_intent() {
         if (

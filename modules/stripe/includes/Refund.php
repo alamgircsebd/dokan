@@ -136,9 +136,10 @@ class Refund {
         } catch ( Exception $e ) {
             $error_message = sprintf(
                 /* translators: 1) Refund ID, 2) Order ID */
-                __( 'Dokan Stripe Refund Error: Automatic refund was not successful for this order. Manual Refund Required. Reason: %1$s. Refund id: %2$s, Order ID: %3$s', 'dokan' ),
-                $refund->get_id(), $refund->get_order_id()
+                __( 'Dokan Stripe Refund Error: Automatic refund was not successful for this order. Manual Refund Required. Reason: %1$s Refund id: %2$s, Order ID: %3$s', 'dokan' ),
+                $e->getMessage(), $refund->get_id(), $refund->get_order_id()
             );
+            $order->add_order_note( $error_message );
             dokan_log( $error_message, 'error' );
         }
     }
@@ -148,7 +149,7 @@ class Refund {
      *
      * @param \WeDevs\DokanPro\Refund\Refund $refund
      * @throws Exception
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      */
     public function process_3ds_refund( $refund ) {
         // get code editor suggestion on refund object

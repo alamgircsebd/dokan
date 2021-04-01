@@ -43,25 +43,25 @@ class Transaction {
     protected $currency;
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @var array
      */
     protected $metadata = [];
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @var string
      */
     protected $transfer_group;
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @var string
      */
     protected $description;
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @var string charge id of the actual payment
      */
     protected $source_transaction;
@@ -113,7 +113,7 @@ class Transaction {
     }
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @param $description
      * @return $this
      */
@@ -124,7 +124,7 @@ class Transaction {
     }
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @param $transfer_group
      * @return $this
      */
@@ -135,7 +135,7 @@ class Transaction {
     }
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @param $metadata
      * @return $this
      */
@@ -146,7 +146,7 @@ class Transaction {
     }
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.2
      * @param $charge_id
      * @return $this
      */

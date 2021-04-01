@@ -1,3 +1,44 @@
+v3.2.2 Mar 31, 2021
+----------------------------------
+
+- **new:** [Stripe] Added 3DS auth flow for changing payment method from My Account -> Payment Methods page
+- **new:** [Stripe] Added Change payment method for subscriptions from My Account -> Subscriptions for Stripe 3ds mode
+- **new:** [Stripe] Added failed order processing feature for both Stripe 3ds and non3ds payment method
+- **new:** [Stripe] added metadata for stripe transactions for 3ds mode, this will help track transfers made on vendors account and the vendors will also be able to track orders made on their account.
+- **new:** [Stripe] Added support for renewing subscription via modal for stripe 3ds mode
+- **new:** [Stripe] Implemented automatic refund for stripe 3ds mode (refund will be processed from admin stripe account, then the transferred amount from vendor account will be automatically reversed to admin account)
+- **new:** [Stripe] added announcement notice if vendors stripe account is not connected with stripe (both 3ds and non-3ds). In 3ds mode, if vendor stripe currency is not similar to site currency they will also receive announcement notice. Added two new admin settings to control this behavior.
+- **new:** New action hook added - dokan_auction_before_general_options
+- **update:** Product image support added for new order email vendor staff
+- **update:** Dokan shipping multiple issues fixed and some enhancements
+- **update:** show store name instead of selected vendors if announcement sent to a single vendor in announcement listing page.
+- **Enhancement:** Dokan tools page "Install Pages Button" disabled after successful Installation of page
+- **Enhancement:** Stock unwanted management options removed
+- **fix:** [Stripe] fixes non3ds refund-related issues (refund doesn't work if a vendor is not connected with stripe.)
+- **fix:** [Wirecard] Floating point error on Wirecard integration
+- **fix:** [Store SEO] dokan_sellers-sitemap.xml file returns uncaught error
+- **fix:** Product review list, empty bulk action error
+- **fix:** variable subscription and variable product conflict
+- **fix:** Sale Price: Sale price is not working with the variable product.
+- **fix:** Products: Date Picker is unavailable for product variations
+- **fix:** Store Email: The Store Email sends an email from the WordPress email instead of the site admin email
+- **fix:** Booking: Booking shows order number when the booking status is In Cart
+- **fix:** Booking resource label does not display after save
+- **fix:** store review data display and pagination
+- **fix:** loco translate strings can not be translated
+- **fix:** Featured stores Elementor widget is broken issue fixed #1146
+- **fix:** Reply to custom email added on product inquiry email #1181
+- **fix:** Store support form conflicting with Elementor in the single store page
+- **fix:** Fatal error on RMA details page when product somehow got deleted issue fixed
+- **fix:** Pagination not working on vendor return request page issue fixed #1152
+- **fix:** Store link added on RMA request page
+- **fix:** Vendor search filter form widget not working for vendor search issue fixed
+- **fix:** Auto-zoom set minimum zoom label check with admin option
+- **fix:** The external product type fields show permanently
+- **fix:** Report Export and filter date range in different language does not work
+- **fix:** Germanized plugin support for email verification footer placement
+
+
 v3.2.1 Mar 05, 2021
 ----------------------------------
 
