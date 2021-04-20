@@ -997,7 +997,7 @@ class Products {
         }
 
         if ( isset( $cleaned_data['post_status'] ) ) {
-            $data['post_status'] = $cleaned_data['post_status'];
+            $data['status'] = $cleaned_data['post_status'];
         }
 
         if ( isset( $cleaned_data['sku'] ) ) {
