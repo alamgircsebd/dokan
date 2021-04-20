@@ -22,7 +22,7 @@ class Module {
     }
 
     /**
-     * hooks
+     * Hooks
      *
      * @since 1.0.0
      *
@@ -46,7 +46,7 @@ class Module {
     }
 
     /**
-     * includes all necessary class a functions file
+     * Includes all necessary class a functions file
      *
      * @since 1.0.0
      *
@@ -126,8 +126,8 @@ class Module {
      * @return void
      */
     public function load_rma_email_classes( $wc_emails ) {
-        $wc_emails['Dokan_Send_Coupon_Email']         = include( DOKAN_RMA_INC_DIR. '/emails/class-dokan-rma-send-coupin-email.php' );
-        $wc_emails['Dokan_Rma_Send_Warranty_Request'] = include( DOKAN_RMA_INC_DIR. '/emails/class-dokan-rma-send-warranty-request.php' );
+        $wc_emails['Dokan_Send_Coupon_Email']         = include DOKAN_RMA_INC_DIR . '/emails/class-dokan-rma-send-coupin-email.php';
+        $wc_emails['Dokan_Rma_Send_Warranty_Request'] = include DOKAN_RMA_INC_DIR . '/emails/class-dokan-rma-send-warranty-request.php';
 
         return $wc_emails;
     }
@@ -156,25 +156,26 @@ class Module {
     public function load_scripts() {
         global $wp;
 
-        if ( ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'rma' )
-            || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
+        if ( ( isset( $wp->query_vars['settings'] ) && 'rma' === (string) $wp->query_vars['settings'] )
+            || ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && ! empty( $_GET['product_id'] ) ) ) { //phpcs:ignore
             wp_enqueue_script( 'dokan-rma-script', DOKAN_RMA_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
-            wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+            wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false, DOKAN_PLUGIN_VERSION, 'all' );
         }
 
-
-        if ( is_account_page() && ( isset( $wp->query_vars[ 'request-warranty' ] ) || isset( $wp->query_vars['view-rma-requests'] ) ) ) {
-            wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+        if ( is_account_page() && ( isset( $wp->query_vars['request-warranty'] ) || isset( $wp->query_vars['view-rma-requests'] ) ) ) {
+            wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false, DOKAN_PLUGIN_VERSION, 'all' );
         }
 
-        if ( isset( $wp->query_vars[ 'return-request' ] ) ) {
-            wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+        if ( isset( $wp->query_vars['return-request'] ) ) {
+            wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false, DOKAN_PLUGIN_VERSION, 'all' );
             wp_enqueue_script( 'dokan-rma-script', DOKAN_RMA_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
 
-            wp_localize_script( 'dokan-rma-script', 'DokanRMA', [
-                'ajaxurl' => admin_url( 'admin-ajax.php' ),
-                'nonce'   => wp_create_nonce( 'dokan_rma_nonce' )
-            ] );
+            wp_localize_script(
+                'dokan-rma-script', 'DokanRMA', [
+					'ajaxurl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'dokan_rma_nonce' ),
+				]
+            );
         }
 
         if ( is_account_page() ) {
@@ -196,8 +197,8 @@ class Module {
     public static function activate() {
         global $wp_roles;
 
-        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
-            $wp_roles = new \WP_Roles();
+        if ( class_exists( 'WP_Roles' ) && ! isset( $wp_roles ) ) {
+            $wp_roles = new \WP_Roles(); //phpcs:ignore
         }
 
         $wp_roles->add_cap( 'seller', 'dokan_view_store_rma_menu' );
