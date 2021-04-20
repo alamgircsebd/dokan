@@ -48,7 +48,12 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
             $this->validate_minimum_order_amount( $order );
 
             $stripe_customer = ! empty( $_POST['dokan_stripe_customer_id'] ) ? wc_clean( wp_unslash( $_POST['dokan_stripe_customer_id'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification
-            $prepared_source = $this->prepare_source( $customer_id, false, $stripe_customer );
+
+            $force_save_source = false;
+            if ( Helper::is_subscription_order( $order ) ) {
+                $force_save_source = true;
+            }
+            $prepared_source = $this->prepare_source( $customer_id, $force_save_source, $stripe_customer );
             $this->validate_source( $prepared_source );
 
             if ( Helper::is_subscription_order( $order ) ) {

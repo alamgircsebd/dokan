@@ -555,7 +555,15 @@ class Helper {
      * @since 3.2.2
      */
     public static function is_customer_without_source_error( $error_message ) {
-        return preg_match( '/You provided a customer without specifying a source./i', $error_message );
+        if ( preg_match( '/You provided a customer without specifying a source./i', $error_message ) ) {
+            return true;
+        }
+
+        if ( preg_match( '/The customer must have an active payment source attached./i', $error_message ) ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
