@@ -485,12 +485,9 @@ class Module {
                 <?php if ( ! empty( $customer_orders ) ) { ?>
                     <select class="dokan-form-control dokan-select" name="order_id">
                         <option><?php esc_html_e( 'Select Order ID', 'dokan' ); ?></option>
-
-                        <?php
-                        foreach ( $customer_orders as $order ) {
-                            echo "<option value='$order'>Order #$order</option>";
-                        }
-                        ?>
+                        <?php foreach ( $customer_orders as $order ) : ?>
+                            <option value='<?php echo esc_attr( $order ); ?>'><?php esc_html_e( 'Order', 'dokan' ); ?> #<?php echo esc_html( $order ); ?></option>
+                        <?php endforeach; ?>
                     </select>
                 <?php } ?>
             </div>
