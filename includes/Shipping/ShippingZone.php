@@ -177,6 +177,10 @@ class ShippingZone {
             $method[ $method_id ]['enabled']     = ( $result->is_enabled ) ? 'yes' : 'no';
             $method[ $method_id ]['title']       = $settings['title'];
             $method[ $method_id ]['settings']    = array_map( 'stripslashes_deep', maybe_unserialize( $settings ) );
+
+            if ( 'flat_rate' === $result->method_id && ! isset( $method[ $method_id ]['settings']['calculation_type'] ) ) {
+                $method[ $method_id ]['settings']['calculation_type'] = 'class';
+            }
         }
 
         return $method;
