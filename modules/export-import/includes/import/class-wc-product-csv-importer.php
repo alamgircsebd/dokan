@@ -811,22 +811,41 @@ class WC_Product_CSV_Importer extends WC_Product_Importer {
             if ( $id ) {
                 $product   = wc_get_product( $id );
                 $id_exists = $product && 'importing' !== $product->get_status();
-            } elseif ( $sku && ( $id_from_sku = wc_get_product_id_by_sku( $sku ) ) ) {
-                $product    = wc_get_product( $id_from_sku );
+            }
+
+            if ( $id_exists && ! $this->is_my_product( $product ) ) {
+                unset( $parsed_data['id'] );
+                $id_exists = false;
+            }
+
+            if ( $sku && wc_get_product_id_by_sku( $sku ) ) {
+                $product    = wc_get_product( wc_get_product_id_by_sku( $sku ) );
                 $sku_exists = $product && 'importing' !== $product->get_status();
             }
 
-            if ( $id_exists && !$update_existing ) {
+            if ( $sku_exists && ! $this->is_my_product( $product ) ) {
+                $data['skipped'][] = new WP_Error(
+                    'woocommerce_product_importer_error',
+                    __( 'A product with this SKU already exists in another vendor.', 'dokan' ),
+                    array(
+                        'sku' => $sku,
+                        'row' => $this->get_row_id( $parsed_data ),
+                    )
+                );
+                continue;
+            }
+
+            if ( $id_exists && ! $update_existing ) {
                 $data['skipped'][] = new WP_Error( 'woocommerce_product_importer_error', __( 'A product with this ID already exists.', 'dokan' ), array( 'id' => $id, 'row' => $this->get_row_id( $parsed_data ) ) );
                 continue;
             }
 
-            if ( $sku_exists && !$update_existing ) {
+            if ( $sku_exists && ! $update_existing ) {
                 $data['skipped'][] = new WP_Error( 'woocommerce_product_importer_error', __( 'A product with this SKU already exists.', 'dokan' ), array( 'sku' => $sku, 'row' => $this->get_row_id( $parsed_data ) ) );
                 continue;
             }
 
-            if ( $update_existing && ( $id || $sku ) && !$id_exists && !$sku_exists ) {
+            if ( $update_existing && ( $id || $sku ) && ! $id_exists && ! $sku_exists ) {
                 $data['skipped'][] = new WP_Error( 'woocommerce_product_importer_error', __( 'No matching product exists to update.', 'dokan' ), array( 'id' => $id, 'sku' => $sku, 'row' => $this->get_row_id( $parsed_data ) ) );
                 continue;
             }
@@ -845,12 +864,23 @@ class WC_Product_CSV_Importer extends WC_Product_Importer {
             $index ++;
 
             if ( $this->params['prevent_timeouts'] && ( $this->time_exceeded() || $this->memory_exceeded() ) ) {
-                $this->file_position = $this->file_positions[$index];
+                $this->file_position = $this->file_positions[ $index ];
                 break;
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Check if the product is from my store
+     *
+     * @param int|WC_Product $product
+     *
+     * @return bool
+     */
+    private function is_my_product( $product ) {
+        return dokan_get_current_user_id() === dokan_get_vendor_by_product( $product )->get_id();
     }
 
 }
