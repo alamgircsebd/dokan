@@ -17,7 +17,6 @@ class Assets {
         // Use minified libraries if SCRIPT_DEBUG is turned off
         $this->suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', [ $this, 'register' ], 5 );
             add_action( 'dokan-vue-admin-scripts', [ $this, 'enqueue_admin_scripts' ] );
@@ -72,10 +71,30 @@ class Assets {
             wp_enqueue_style( 'dokan-pro-vue-frontend-shipping' );
             wp_enqueue_script( 'dokan-pro-vue-frontend-shipping' );
 
+            $continents        = WC()->countries->get_continents();
+            $allowed_countries = WC()->countries->get_allowed_countries();
+            $continents_data   = array();
+
+            if ( $continents && is_array( $continents ) ) {
+                foreach ( $continents as $continent => $countries ) {
+                    if ( isset( $countries['countries'] ) && isset( $countries['name'] ) && is_array( $countries['countries'] ) ) {
+                        $continents_data[ $continent ]['name'] = $countries['name'];
+                        $countries_data = array();
+
+                        foreach ( $countries['countries'] as $country ) {
+                            if ( array_key_exists( $country, $allowed_countries ) ) {
+                                $countries_data[] = $country;
+                            }
+                        }
+                        $continents_data[ $continent ]['countries'] = $countries_data;
+                    }
+                }
+            }
+
             $localize_array = array(
                 'nonce'             => wp_create_nonce( 'dokan_shipping_nonce' ),
                 'allowed_countries' => WC()->countries->get_allowed_countries(),
-                'continents'        => WC()->countries->get_continents(),
+                'continents'        => ! empty( $continents_data ) ? $continents_data : $continents,
                 'states'            => WC()->countries->get_states(),
                 'shipping_class'    => WC()->shipping->get_shipping_classes(),
                 'i18n'              => array( 'dokan' => dokan_get_jed_locale_data( 'dokan' ) ),
@@ -162,11 +181,11 @@ class Assets {
     public function get_styles() {
         $styles = [
             'dokan-pro-vue-admin' => [
-                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-admin' . $this->suffix . '.css',
+                'src'     => DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-admin' . $this->suffix . '.css',
                 'version' => $this->script_version,
             ],
             'dokan-pro-vue-frontend-shipping' => [
-                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-frontend-shipping' . $this->suffix . '.css',
+                'src'     => DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-frontend-shipping' . $this->suffix . '.css',
                 'version' => $this->script_version,
             ],
             'dokan-pro-wp-version-before-5-3' => [

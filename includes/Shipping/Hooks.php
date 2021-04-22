@@ -306,7 +306,7 @@ class Hooks {
 
         $shipping_zone = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT locations.zone_id, locations.settings, locations.method_id, wc_zones.location_code, wc_zones.location_type FROM {$wpdb->prefix}dokan_shipping_zone_methods as locations INNER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as wc_zones ON locations.zone_id = wc_zones.zone_id WHERE seller_id=%d ORDER BY wc_zones.zone_id ASC", $vendor_id
+                "SELECT locations.zone_id, locations.seller_id, locations.location_type as vendor_location_type, locations.location_code  as vendor_location_code, wc_zones.location_code, wc_zones.location_type FROM {$wpdb->prefix}dokan_shipping_zone_locations as locations INNER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as wc_zones ON locations.zone_id = wc_zones.zone_id WHERE seller_id=%d ORDER BY wc_zones.zone_id ASC", $vendor_id
             ), ARRAY_A
         );
 
@@ -319,7 +319,7 @@ class Hooks {
         $product_processing_time = get_post_meta( $post->ID, '_dps_processing_time', true );
         $processing_time         = $dps_processing;
 
-        if ( $_overwrite_shipping == 'yes' ) {
+        if ( 'yes' === $_overwrite_shipping ) {
             $processing_time = ( $product_processing_time ) ? $product_processing_time : $dps_processing;
         }
 
@@ -328,13 +328,29 @@ class Hooks {
         $states      = $country_obj->states;
 
         $shipping_countries = '';
+        $shipping_states    = '';
         $location_code      = '';
         $check_countries    = array();
+        $check_states       = array();
 
         if ( $shipping_zone ) {
             foreach ( $shipping_zone as $zone ) {
-                $location_code = $zone['location_code'];
-                if ( $zone['location_type'] === 'country' && $countries[ $location_code ] && ! in_array( $countries[ $location_code ], $check_countries, true ) ) {
+                $location_code = $zone['vendor_location_code'];
+
+                if ( $zone['vendor_location_type'] === 'state' ) {
+                    $location_codes = explode( ':', $location_code );
+                    $country_code   = isset( $location_codes[0] ) ? $location_codes[0] : '';
+                    $state_code     = isset( $location_codes[1] ) ? $location_codes[1] : '';
+
+                    if ( isset( $states[ $country_code ][ $state_code ] ) && isset( $countries[ $country_code ] ) && ! in_array( $states[ $country_code ][ $state_code ], $check_states, true ) ) {
+                        $get_state_name = $states[ $country_code ][ $state_code ];
+
+                        $check_states[ $get_state_name ] = $get_state_name;
+                        $shipping_states                .= $get_state_name . ' (' . $countries[ $country_code ] . '), ';
+                    }
+                }
+
+                if ( $zone['vendor_location_type'] === 'country' && $countries[ $location_code ] && ! in_array( $countries[ $location_code ], $check_countries, true ) ) {
                     $location_code                     = $countries[ $location_code ];
                     $check_countries[ $location_code ] = $location_code;
                     $shipping_countries               .= $location_code . ', ';
@@ -347,6 +363,14 @@ class Hooks {
             <p>
                 <?php esc_html_e( 'Shipping Countries', 'dokan' ); ?>:
                 <strong><?php echo rtrim( $shipping_countries, ', ' ); ?></strong>
+            </p>
+            <hr>
+        <?php } ?>
+
+        <?php if ( $shipping_states ) { ?>
+            <p>
+                <?php esc_html_e( 'Shipping States', 'dokan' ); ?>:
+                <strong><?php echo rtrim( $shipping_states, ', ' ); ?></strong>
             </p>
             <hr>
         <?php } ?>
