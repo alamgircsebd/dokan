@@ -40,14 +40,23 @@ class EmailVerification {
     }
 
     /**
-     * call actions and hooks
+     * Call actions and hooks
      */
     public function init_hooks() {
         add_filter( 'dokan_settings_sections', array( $this, 'dokan_email_verification_settings' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'dokan_email_settings_fields' ) );
-        add_action( 'woocommerce_created_customer', array( $this,'send_verification_email'), 5, 3 );
+        add_action( 'woocommerce_created_customer', array( $this, 'send_verification_email' ), 5, 3 );
 
         if ( $this->maybe_verification_not_needed() ) {
+            return;
+        }
+
+        if ( is_admin() ) {
+            add_action( 'wp_ajax_woocommerce_germanized_double_opt_in_ajax', array( $this, 'woocommerce_germanized_double_opt_in_ajax' ) );
+        }
+
+        if ( $this->woocommerce_germanized_double_opt_in() ) {
+            $this->display_double_opt_in_admin_notice();
             return;
         }
 
@@ -274,10 +283,9 @@ class EmailVerification {
     /**
      * Show the resend email notification message
      *
-     * @return string
+     * @return void
      */
     public function show_resend_email_notification() {
-
         if ( ! isset( $_GET['resend_email'] ) || $_GET['resend_email'] !== 'sent' ) {
             return;
         }
@@ -296,7 +304,7 @@ class EmailVerification {
     /**
      * Filter admin menu settings section
      *
-     * @param type $sections
+     * @param array $sections
      *
      * @return array
      */
@@ -304,7 +312,7 @@ class EmailVerification {
         $sections[] = array(
             'id'    => 'dokan_email_verification',
             'title' => __( 'Email Verification', 'dokan' ),
-            'icon'  => 'dashicons-shield'
+            'icon'  => 'dashicons-shield',
         );
         return $sections;
     }
@@ -317,7 +325,6 @@ class EmailVerification {
      * @return array
      */
     public function dokan_email_settings_fields( $settings_fields ) {
-
         $settings_fields['dokan_email_verification'] = array(
             'enabled' => array(
                 'name'  => 'enabled',
@@ -338,7 +345,7 @@ class EmailVerification {
                 'type'  => 'text',
                 'desc'  => __( 'This notice will be shown when a user tries to login without email verification.', 'dokan' ),
                 'default' => __( 'Please check your email and complete email verification to login.', 'dokan' ),
-            )
+            ),
         );
 
         return $settings_fields;
@@ -353,11 +360,16 @@ class EmailVerification {
      */
     public function get_post_type( $post_type ) {
         $pages_array = array( '-1' => __( '- select -', 'dokan' ) );
-        $pages = get_posts( array('post_type' => $post_type, 'numberposts' => -1) );
+        $pages = get_posts(
+            array(
+                'post_type' => $post_type,
+                'numberposts' => -1,
+            )
+        );
 
         if ( $pages ) {
-            foreach ($pages as $page) {
-                $pages_array[$page->ID] = $page->post_title;
+            foreach ( $pages as $page ) {
+                $pages_array[ $page->ID ] = $page->post_title;
             }
         }
 
@@ -389,6 +401,88 @@ class EmailVerification {
      * @return boolean
      */
     protected function is_vendor() {
-        return ! empty( $this->user->roles ) && in_array( 'seller', $this->user->roles );
+        return ! empty( $this->user->roles ) && in_array( 'seller', $this->user->roles, true );
+    }
+
+    /**
+     * Check if Germanized for WooCommerce Double Opt In activated
+     *
+     * @since 3.2.3
+     *
+     * @return bool
+     */
+    private function woocommerce_germanized_double_opt_in() {
+        if ( is_plugin_active( 'woocommerce-germanized/woocommerce-germanized.php' ) && 'yes' === get_option( 'woocommerce_gzd_customer_activation', 'no' ) ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Show `Double Opt In` admin notice
+     *
+     * @since 3.2.3
+     *
+     * @return void
+     */
+    public function double_opt_in_admin_notice() {
+        $germannized_option_url       = sprintf(
+            '<a href="%1$s" title="%2$s">%3$s</a>',
+            esc_attr( admin_url( 'admin.php?page=wc-settings&tab=germanized-double_opt_in' ) ),
+            esc_attr__( 'Germanized for WooCommerce Double Opt In', 'dokan' ),
+            esc_html__( 'Double Opt In', 'dokan' )
+        );
+        $email_verification_option_url = sprintf(
+            '<a href="%1$s" title="%2$s">%3$s</a>',
+            esc_attr( admin_url( 'admin.php?page=dokan#/settings' ) ),
+            esc_attr__( 'Dokan Email Verification', 'dokan' ),
+            esc_attr__( 'Email Verification', 'dokan' )
+        );
+
+        $class = 'notice notice-warning is-dismissible dokan-email-verification-germanized-notice';
+
+        // translators: Germanized for WooCommerce double opt in option page anchor URL; Dokan admin settings page anchor URL.
+        $message = sprintf( __( 'Please disable %1$s in Germanized for WooCommerce to enable Dokan %2$s', 'dokan' ), $germannized_option_url, $email_verification_option_url );
+        $nonce   = wp_create_nonce( 'email_verification_double_opt_in_admin_notice_nonce' );
+        printf(
+            '<div class="%1$s" data-dismiss-nonce="%2$s"><p>%3$s</p></div>',
+            esc_attr( $class ),
+            esc_attr( $nonce ),
+            wp_kses(
+                $message,
+                array(
+                    'a' => array(
+                        'href' => array(),
+                        'title' => array(),
+                    ),
+                )
+            )
+        );
+    }
+
+    /**
+     * Admin Notice ajax action
+     *
+     * @since 3.2.3
+     *
+     * @return void
+     */
+    public function woocommerce_germanized_double_opt_in_ajax() {
+        check_ajax_referer( 'email_verification_double_opt_in_admin_notice_nonce', 'opt_in_security' );
+        set_transient( 'dokan_email_verification_double_opt_in_admin_notice', true, 30 * DAY_IN_SECONDS );
+        wp_send_json_success();
+    }
+
+    /**
+     * Display admin notice if needed
+     *
+     * @since 3.2.3
+     *
+     * @return void
+     */
+    private function display_double_opt_in_admin_notice() {
+        if ( ! get_transient( 'dokan_email_verification_double_opt_in_admin_notice' ) ) {
+            add_action( 'admin_notices', array( $this, 'double_opt_in_admin_notice' ) );
+        }
     }
 }

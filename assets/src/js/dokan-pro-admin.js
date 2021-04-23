@@ -67,5 +67,18 @@
 
     $(document).ready(function(){
         Dokan_Admin.init();
+
+        $( '.dokan-email-verification-germanized-notice' ).on( 'click', '.notice-dismiss', function( event, el ) {
+            var $notice       = $(this).parent('.notice.is-dismissible');
+            var dismiss_nonce = $notice.attr('data-dismiss-nonce');
+            var data          = {
+                action : "woocommerce_germanized_double_opt_in_ajax",
+                opt_in_security  : dismiss_nonce
+            };
+
+            $.post( ajaxurl, data );
+
+        });
+
     });
 })(jQuery);
