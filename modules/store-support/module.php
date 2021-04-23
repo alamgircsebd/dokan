@@ -181,7 +181,7 @@ class Module {
      */
     public function enqueue_scripts() {
         wp_enqueue_style( 'dokan-store-support-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, gmdate( 'Ymd' ) );
-        wp_enqueue_script( 'dokan-store-support-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), [ 'jquery' ], DOKAN_PRO_PLUGIN_VERSION, true );
+        wp_enqueue_script( 'dokan-store-support-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), [ 'jquery' ], gmdate( 'Ymd' ), true );
         wp_localize_script( 'dokan-store-support-scripts', 'wait_string', [ 'wait' => __( 'wait...', 'dokan' ) ] );
     }
 
@@ -516,7 +516,6 @@ class Module {
 
         $seller_id = $seller_id == '' ? ( ( isset( $_POST['store_id'] ) ) ? $_POST['store_id'] : 0 ) : $seller_id;
         $order_id  = isset( $_POST['order_id'] ) ? (int) $_POST['order_id'] : 0;
-        wp_get_current_user();
 
         $customer_orders = apply_filters( 'dokan_store_support_order_id_select_in_form', dokan_get_customer_orders_by_seller( dokan_get_current_user_id(), $seller_id ) );
 
@@ -830,10 +829,12 @@ class Module {
      * @return void
      */
     public function print_support_topics_by_seller( $seller_id ) {
-        $query = $this->get_support_topics_by_seller( $seller_id ); ?>
+        $query = $this->get_support_topics_by_seller( $seller_id );
+        ?>
         <div class="dokan-support-topics-list">
-             <?php
-                if ( $query->posts ) { ?>
+            <?php
+                if ( $query->posts ) {
+                    ?>
             <table class="dokan-table dokan-support-table">
                 <thead>
                     <tr>
@@ -846,14 +847,15 @@ class Module {
                     </tr>
                 </thead>
                 <tbody>
-                <?php
+                    <?php
                     foreach ( $query->posts as $topic ) {
-                        $topic_url = trailingslashit( dokan_get_navigation_url( 'support' ) . '' . $topic->ID ); ?>
+                        $topic_url = trailingslashit( dokan_get_navigation_url( 'support' ) . '' . $topic->ID );
+                        ?>
                         <tr>
                             <td>
                                 <a href="<?php echo $topic_url; ?>"
                                     <strong>
-                                       <?php echo '#' . $topic->ID; ?>
+                                        <?php echo '#' . $topic->ID; ?>
                                     </strong>
                                 </a>
                             </td>
@@ -867,10 +869,10 @@ class Module {
                             <td data-title="<?php esc_html_e( 'Customer', 'dokan' ); ?>">
                                 <div class="dokan-support-customer-name">
                                     <?php echo get_avatar( $topic->post_author, 50 ); ?>
-                                    <strong><?php  echo get_user_meta( $topic->post_author, 'nickname', true ); ?></strong>
+                                    <strong><?php echo get_user_meta( $topic->post_author, 'nickname', true ); ?></strong>
                                 </div>
                             </td>
-                             <?php
+                            <?php
                                 switch ( $topic->post_status ) {
                                     case 'open':
                                         $c_status     = __( 'closed', 'dokan' );
@@ -892,7 +894,8 @@ class Module {
                                         $topic_status = 'dokan-label-success';
                                         $btn_title    = __( 'close topic', 'dokan' );
                                         break;
-                                } ?>
+                                }
+                            ?>
                             <td data-title="<?php esc_attr_e( 'Status', 'dokan' ); ?>"><span class="dokan-label <?php echo $topic_status; ?>"><?php echo 'open' === $topic->post_status ? __( 'Open', 'dokan' ) : __( 'Close', 'dokan' ); ?></span></td>
                             <td class="dokan-order-date" data-title="<?php esc_attr_e( 'Date', 'dokan' ); ?>"><span><?php echo get_the_date( 'F j, Y \a\t g:i a', $topic->ID ); ?></span></td>
                             <td data-title="<?php esc_attr_e( 'Action', 'dokan' ); ?>">
@@ -900,7 +903,8 @@ class Module {
                             </td>
                         </tr>
                         <?php
-                    } ?>
+                    }
+                    ?>
                 <?php } else { ?>
                     <div class="dokan-error">
                         <?php esc_html_e( 'No tickets found!', 'dokan' ); ?>
@@ -1537,10 +1541,12 @@ class Module {
                             <input type="hidden" name="support_checkbox" value="no">
                             <input type="checkbox" id="support_checkbox" name="support_checkbox" value="yes" <?php checked( $enable_support, 'yes' ); ?>> <?php esc_html_e( 'Show support button in store', 'dokan' ); ?>
                         </label>
+                        <?php if ( 'dont_show' !== $store_support_product_page ) : ?>
                         <label>
                             <input type="hidden" name="support_checkbox_product" value="no">
-                            <input type="checkbox" id="support_checkbox_product" name="support_checkbox_product" value="yes" <?php checked( $enable_support_product, 'yes' ); ?> <?php echo $store_support_product_page === 'dont_show' ? 'disabled="disabled"' : ''; ?>  > <?php esc_html_e( 'Show support button in single product', 'dokan' ); ?>
+                            <input type="checkbox" id="support_checkbox_product" name="support_checkbox_product" value="yes" <?php checked( $enable_support_product, 'yes' ); ?>> <?php esc_html_e( 'Show support button in single product', 'dokan' ); ?>
                         </label>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
