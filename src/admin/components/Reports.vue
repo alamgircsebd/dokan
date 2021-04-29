@@ -296,40 +296,7 @@ export default {
             actions: [],
             bulkActions: [],
             noLogFound: this.__( 'No logs found.', 'dokan' ),
-            order_statuses: [
-                {
-                    id: 0,
-                    text: this.__( 'Filter by status', 'dokan' )
-                },
-                {
-                    id: 1,
-                    text: this.__( 'Processing', 'dokan' )
-                },
-                {
-                    id: 2,
-                    text: this.__( 'Completed', 'dokan' )
-                },
-                {
-                    id: 3,
-                    text: this.__( 'On-hold', 'dokan' )
-                },
-                {
-                    id: 4,
-                    text: this.__( 'Cancelled', 'dokan' )
-                },
-                {
-                    id: 5,
-                    text: this.__( 'Refunded', 'dokan' )
-                },
-                {
-                    id: 6,
-                    text: this.__( 'Failed', 'dokan' )
-                },
-                {
-                    id: 7,
-                    text: this.__( 'Pending Payment', 'dokan' )
-                }
-            ],
+            order_statuses: this.getAllOrderStatus(),
             filter: {
                 query: {
                     tab: 'logs'
@@ -560,6 +527,45 @@ export default {
             }
 
             return yearRange;
+        },
+
+        getAllOrderStatus() {
+            const orderStatus = [
+                {
+                    id: 0,
+                    text: this.__( 'Filter by status', 'dokan' )
+                },
+                {
+                    id: 1,
+                    text: this.__( 'Processing', 'dokan' )
+                },
+                {
+                    id: 2,
+                    text: this.__( 'Completed', 'dokan' )
+                },
+                {
+                    id: 3,
+                    text: this.__( 'On-hold', 'dokan' )
+                },
+                {
+                    id: 4,
+                    text: this.__( 'Cancelled', 'dokan' )
+                },
+                {
+                    id: 5,
+                    text: this.__( 'Refunded', 'dokan' )
+                },
+                {
+                    id: 6,
+                    text: this.__( 'Failed', 'dokan' )
+                },
+                {
+                    id: 7,
+                    text: this.__( 'Pending Payment', 'dokan' )
+                }
+            ];
+
+            return dokan.hooks.applyFilters( 'dokan_admin_report_order_statues', orderStatus );
         },
 
         searchStore: debounce( function( payload ) {
