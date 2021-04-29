@@ -28,6 +28,7 @@
          */
         init: function() {
             $( '#dokan-store-listing-filter-form-wrap .store-lists-category .category-input' ).on( 'click', this.toggleCategory );
+            $( 'body' ).on( 'click', this.hideCategory );
             $( '#dokan-store-listing-filter-form-wrap .store-lists-category .category-box ul li' ).on( 'click', this.selectCategory );
             $( '#dokan-store-listing-filter-form-wrap .featured.item #featured' ).on( 'change', this.toggleFeatured );
             $( '#dokan-store-listing-filter-form-wrap .open-now.item #open-now' ).on( 'change', this.toggleIsOpen );
@@ -52,6 +53,20 @@
         toggleCategory: function() {
             $( '.store-lists-category .category-box' ).slideToggle();
             $( '.store-lists-category .category-input .dokan-icon' ).toggleClass( 'dashicons-arrow-down-alt2 dashicons-arrow-up-alt2' );
+        },
+
+        /**
+         * Hide category
+         *
+         * @return void
+         */
+        hideCategory: function(event) {
+            const item = $( event.target );
+
+            if( ! item.is('div.store_category') && ! item.is('span.dokan-icon') && ! item.is('div.store-lists-category') && ! item.is('li') && ! item.is('ul') && ! item.is('div.category-input') && ! item.is('span.category-label') && ! item.is('span.category-items') ){
+               $( '.store-lists-category .category-box' ).hide();
+               $( '.store-lists-category .category-input .dokan-icon' ).addClass( 'dashicons-arrow-down-alt2' ); 
+            }
         },
 
         /**
