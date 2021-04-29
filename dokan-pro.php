@@ -351,16 +351,17 @@ class Dokan_Pro {
         new \WeDevs\DokanPro\EmailVerification();
         new \WeDevs\DokanPro\SocialLogin();
 
-        $this->container['store']       = new \WeDevs\DokanPro\Store();
-        $this->container['store_seo']   = new \WeDevs\DokanPro\StoreSeo();
-        $this->container['product_seo'] = new \WeDevs\DokanPro\ProductSeo();
-        $this->container['store_share'] = new \WeDevs\DokanPro\StoreShare();
-        $this->container['products']    = new \WeDevs\DokanPro\Products();
-        $this->container['review']      = new \WeDevs\DokanPro\Review();
-        $this->container['notice']      = new \WeDevs\DokanPro\Notice();
-        $this->container['refund']      = new \WeDevs\DokanPro\Refund\Manager();
-        $this->container['brands']      = new \WeDevs\DokanPro\Brands\Manager();
-        $this->container['coupon']      = new \WeDevs\DokanPro\Coupons\Manager();
+        $this->container['store']                    = new \WeDevs\DokanPro\Store();
+        $this->container['store_seo']                = new \WeDevs\DokanPro\StoreSeo();
+        $this->container['product_seo']              = new \WeDevs\DokanPro\ProductSeo();
+        $this->container['store_share']              = new \WeDevs\DokanPro\StoreShare();
+        $this->container['products']                 = new \WeDevs\DokanPro\Products();
+        $this->container['review']                   = new \WeDevs\DokanPro\Review();
+        $this->container['notice']                   = new \WeDevs\DokanPro\Notice();
+        $this->container['refund']                   = new \WeDevs\DokanPro\Refund\Manager();
+        $this->container['brands']                   = new \WeDevs\DokanPro\Brands\Manager();
+        $this->container['coupon']                   = new \WeDevs\DokanPro\Coupons\Manager();
+        $this->container['digital_product']          = new \WeDevs\DokanPro\DigitalProduct();
         $this->container['bg_sync_vendor_zone_data'] = new \WeDevs\DokanPro\BackgroundProcess\SyncVendorZoneData();
 
         $this->container = apply_filters( 'dokan_pro_get_class_container', $this->container );

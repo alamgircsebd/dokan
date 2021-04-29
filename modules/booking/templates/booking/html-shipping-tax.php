@@ -16,13 +16,15 @@ $dokan_shipping_enabled = $dokan_shipping_enabled == 'yes' ? true : false;
 $store_shipping_enabled = get_user_meta( get_current_user_id(), '_dps_shipping_enable', true ) == 'yes' ? true : false;
 $wc_shipping_enabled    = get_option( 'woocommerce_calc_shipping' ) == 'yes' ? true : false;
 $wc_tax_enabled         = get_option( 'woocommerce_calc_taxes' ) == 'yes' ? true : false;
+$tab_title              = $is_shipping_disabled ? __( 'Tax', 'dokan' ) : __( 'Shipping and Tax', 'dokan' );
+$tab_desc               = $is_shipping_disabled ? __( 'Manage tax for this product', 'dokan' ) : __( 'Manage shipping and tax for this product', 'dokan' );
 ?>
 
-<?php if ( $wc_shipping_enabled || $wc_tax_enabled ) : ?>
+<?php if ( ( $wc_shipping_enabled && ! $is_shipping_disabled ) || $wc_tax_enabled ) : ?>
 <div class="dokan-product-shipping-tax hide_if_virtual dokan-edit-row dokan-clearfix dokan-border-top <?php echo ! $wc_shipping_enabled ? 'woocommerce-no-shipping' : '' ?> <?php echo ! $wc_tax_enabled ? 'woocommerce-no-tax' : '' ?>">
     <div class="dokan-section-heading" data-togglehandler="dokan_product_shipping_tax">
-        <h2><i class="fa fa-truck" aria-hidden="true"></i> <?php _e( 'Shipping and Tax', 'dokan' ); ?></h2>
-        <p><?php _e( 'Manage shipping and tax for this product', 'dokan' ); ?></p>
+        <h2><i class="fa fa-truck" aria-hidden="true"></i> <?php echo esc_html( $tab_title ); ?></h2>
+        <p><?php echo esc_html( $tab_desc ); ?></p>
         <a href="#" class="dokan-section-toggle">
             <i class="fa fa-sort-desc fa-flip-vertical" aria-hidden="true"></i>
         </a>
@@ -30,7 +32,7 @@ $wc_tax_enabled         = get_option( 'woocommerce_calc_taxes' ) == 'yes' ? true
     </div>
 
     <div class="dokan-section-content">
-        <?php if ( $wc_shipping_enabled ) : ?>
+        <?php if ( $wc_shipping_enabled  && ! $is_shipping_disabled ) : ?>
             <div class="dokan-clearfix dokan-shipping-container">
                 <input type="hidden" name="product_shipping_class" value="0">
                 <div class="dokan-form-group">

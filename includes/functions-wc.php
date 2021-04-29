@@ -1471,7 +1471,12 @@ function dokan_custom_split_shipping_packages( $packages ) {
             continue;
         }
 
-        $post_author                         = get_post_field( 'post_author', $item['data']->get_id() );
+        $post_author = get_post_field( 'post_author', $item['data']->get_id() );
+
+        if ( 'sell_digital' === dokan_pro()->digital_product->get_selling_product_type() ) {
+            continue;
+        }
+
         $seller_pack[ $post_author ][ $key ] = $item;
     }
 

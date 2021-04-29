@@ -411,6 +411,11 @@ if ( ! empty( $_GET['errors'] ) ) {
                         $dps_pt                  = get_user_meta( $user_id, '_dps_pt', true );
                         $classes_options         = dokan_pro()->products->get_tax_class_option();
                         $porduct_shipping_pt     = ( $_processing_time ) ? $_processing_time : $dps_pt;
+                        $is_shipping_disabled    = false;
+
+                        if ( 'sell_digital' === dokan_pro()->digital_product->get_selling_product_type() ) {
+                            $is_shipping_disabled = true;
+                        }
 
                         dokan_get_template_part( 'booking/html-shipping-tax', '', array(
                             'is_booking'              => true,
@@ -427,6 +432,7 @@ if ( ! empty( $_GET['errors'] ) ) {
                             'dps_pt'                  => $dps_pt,
                             'classes_options'         => $classes_options,
                             'porduct_shipping_pt'     => $porduct_shipping_pt,
+                            'is_shipping_disabled'    => $is_shipping_disabled,
                         ) );
                     ?>
                     <input type="hidden" name="dokan-edit-product-id" id="dokan-edit-product-id" value="<?php echo $post_id; ?>">

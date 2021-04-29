@@ -71,9 +71,16 @@ class Dokan_Template_Auction {
     * @return void
     **/
     public function load_shipping_options( $post_id ) {
+        $is_shipping_disabled = false;
+
+        if ( 'sell_digital' === dokan_pro()->digital_product->get_selling_product_type() ) {
+            $is_shipping_disabled = true;
+        }
+
         dokan_get_template_part( 'auction/auction-shipping', '', array(
             'is_auction'           => true,
             'post_id'              => $post_id,
+            'is_shipping_disabled' => $is_shipping_disabled,
         ) );
     }
 

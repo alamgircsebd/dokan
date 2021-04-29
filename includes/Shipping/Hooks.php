@@ -43,6 +43,10 @@ class Hooks {
      * @return array
      */
     public function register_shipping( $methods ) {
+        if ( 'sell_digital' === dokan_pro()->digital_product->get_selling_product_type() ) {
+            return $methods;
+        }
+
         $methods['dokan_product_shipping'] = ProductShipping::class;
         $methods['dokan_vendor_shipping']  = VendorShipping::class;
 
@@ -280,6 +284,10 @@ class Hooks {
         }
 
         if ( 'yes' != get_option( 'woocommerce_calc_shipping' ) ) {
+            return $tabs;
+        }
+
+        if ( 'sell_digital' === dokan_pro()->digital_product->get_selling_product_type() ) {
             return $tabs;
         }
 

@@ -59,25 +59,26 @@ extract( $variation_data );
         <div class="dokan-clearfix"></div>
     </h3>
     <div class="actions">
-        <i class="fa fa-bars sort tips" data-title="<?php _e( 'Drag and drop, or click to set admin variation order', 'dokan' ); ?>" aria-hidden="true" ></i>
+        <i class="fa fa-bars sort tips" data-title="<?php esc_attr_e( 'Drag and drop, or click to set admin variation order', 'dokan' ); ?>" aria-hidden="true" ></i>
         <i class="fa fa-sort-desc fa-flip-horizointal toggle-variation-content" aria-hidden="true"></i>
-        <a href="#" class="remove_variation delete" rel="<?php echo esc_attr( $variation_id ); ?>"><?php _e( 'Remove', 'dokan' ); ?></a>
+        <a href="#" class="remove_variation delete" rel="<?php echo esc_attr( $variation_id ); ?>"><?php esc_html_e( 'Remove', 'dokan' ); ?></a>
     </div>
 
     <div class="dokan-variable-attributes woocommerce_variable_attributes wc-metabox-content" style="display: none;">
         <div class="data">
             <div class="content-half-part thumbnail-checkbox-options">
                 <div class="upload_image">
-                    <a href="#" class="upload_image_button tips <?php if ( $_thumbnail_id > 0 ) echo 'dokan-img-remove'; ?>" title="<?php if ( $_thumbnail_id > 0 ) { echo _e( 'Remove this image', 'dokan' ); } else { echo _e( 'Upload an image', 'dokan' ); } ?>" rel="<?php echo esc_attr( $variation_id ); ?>">
+                    <a href="#" class="upload_image_button tips <?php if ( $_thumbnail_id > 0 ) echo 'dokan-img-remove'; ?>" title="<?php if ( $_thumbnail_id > 0 ) { echo esc_attr_e( 'Remove this image', 'dokan' ); } else { echo esc_attr_e( 'Upload an image', 'dokan' ); } ?>" rel="<?php echo esc_attr( $variation_id ); ?>">
                         <img src="<?php if ( ! empty( $image ) ) echo esc_attr( $image ); else echo esc_attr( wc_placeholder_img_src() ); ?>" width="130px" height="130px"/>
                         <input type="hidden" name="upload_image_id[<?php echo $loop; ?>]" class="upload_image_id" value="<?php echo esc_attr( $_thumbnail_id ); ?>" />
                     </a>
                 </div>
                 <div class="dokan-form-group options">
-                    <label><input type="checkbox" class="" name="variable_enabled[<?php echo $loop; ?>]" <?php checked( $variation->post_status, 'publish' ); ?> /> <?php _e( 'Enabled', 'dokan' ); ?></label>
-                    <label><input type="checkbox" class="variable_is_downloadable" name="variable_is_downloadable[<?php echo $loop; ?>]" <?php checked( isset( $_downloadable ) ? $_downloadable : '', 'yes' ); ?> /> <?php _e( 'Downloadable', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" title="<?php _e( 'Enable this option if access is given to a downloadable file upon purchase of a product', 'dokan' ); ?>"></i></label>
-                    <label><input type="checkbox" class="variable_is_virtual" name="variable_is_virtual[<?php echo $loop; ?>]" <?php checked( isset( $_virtual ) ? $_virtual : '', 'yes' ); ?> /> <?php _e( 'Virtual', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" title="<?php _e( 'Enable this option if a product is not shipped or there is no shipping cost', 'dokan' ); ?>"></i></label>
-
+                    <label><input type="checkbox" class="" name="variable_enabled[<?php echo $loop; ?>]" <?php checked( $variation->post_status, 'publish' ); ?> /> <?php esc_html_e( 'Enabled', 'dokan' ); ?></label>
+                    <?php if ( 'sell_physical' !== dokan_pro()->digital_product->get_selling_product_type() ) : ?>
+                        <label><input type="checkbox" class="variable_is_downloadable" name="variable_is_downloadable[<?php echo $loop; ?>]" <?php checked( isset( $_downloadable ) ? $_downloadable : '', 'yes' ); ?> /> <?php _e( 'Downloadable', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" title="<?php _e( 'Enable this option if access is given to a downloadable file upon purchase of a product', 'dokan' ); ?>"></i></label>
+                        <label><input type="checkbox" class="variable_is_virtual" name="variable_is_virtual[<?php echo $loop; ?>]" <?php checked( isset( $_virtual ) ? $_virtual : '', 'yes' ); ?> /> <?php _e( 'Virtual', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" title="<?php _e( 'Enable this option if a product is not shipped or there is no shipping cost', 'dokan' ); ?>"></i></label>
+                    <?php endif; ?>
                     <?php if ( get_option( 'woocommerce_manage_stock' ) == 'yes' ) : ?>
                         <label><input type="checkbox" class="variable_manage_stock" name="variable_manage_stock[<?php echo $loop; ?>]" <?php checked( isset( $_manage_stock ) ? $_manage_stock : '', 'yes' ); ?> /> <?php _e( 'Manage stock?', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Enable this option to enable stock management at variation level', 'dokan' ); ?>"></i></label>
                     <?php endif; ?>
@@ -232,23 +233,26 @@ extract( $variation_data );
             <?php endif; ?>
 
             <div>
-                <div class="dokan-form-group hide_if_variation_virtual">
-                    <label><?php _e( 'Shipping class', 'dokan' ); ?></label>
-                    <?php
-                        $args = array(
-                            'taxonomy'          => 'product_shipping_class',
-                            'hide_empty'        => 0,
-                            'show_option_none'  => __( 'Same as parent', 'dokan' ),
-                            'name'              => 'variable_shipping_class[' . $loop . ']',
-                            'id'                => '',
-                            'class'             => 'dokan-form-control',
-                            'selected'          => isset( $shipping_class ) ? esc_attr( $shipping_class ) : '',
-                            'echo'              => 0
-                        );
+                <?php if ( 'sell_digital' !== dokan_pro()->digital_product->get_selling_product_type() ) : ?>
+                    <div class="dokan-form-group hide_if_variation_virtual">
+                        <label><?php _e( 'Shipping class', 'dokan' ); ?></label>
+                        <?php
+                            $args = array(
+                                'taxonomy'          => 'product_shipping_class',
+                                'hide_empty'        => 0,
+                                'show_option_none'  => __( 'Same as parent', 'dokan' ),
+                                'name'              => 'variable_shipping_class[' . $loop . ']',
+                                'id'                => '',
+                                'class'             => 'dokan-form-control',
+                                'selected'          => isset( $shipping_class ) ? esc_attr( $shipping_class ) : '',
+                                'echo'              => 0
+                            );
 
-                        echo wp_dropdown_categories( $args );
-                    ?>
-                </div>
+                            echo wp_dropdown_categories( $args );
+                        ?>
+                    </div>
+                <?php endif; ?>
+
                 <?php if ( wc_tax_enabled() ) : ?>
 
 

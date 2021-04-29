@@ -178,6 +178,11 @@ class Products {
         $dps_pt                  = get_user_meta( $user_id, '_dps_pt', true );
         $classes_options         = $this->get_tax_class_option();
         $porduct_shipping_pt     = ( $_processing_time ) ? $_processing_time : $dps_pt;
+        $is_shipping_disabled    = false;
+
+        if ( 'sell_digital' === dokan_pro()->digital_product->get_selling_product_type() ) {
+            $is_shipping_disabled = true;
+        }
 
         dokan_get_template_part(
             'products/product-shipping-content',
@@ -198,6 +203,7 @@ class Products {
                 'dps_pt'                  => $dps_pt,
                 'classes_options'         => $classes_options,
                 'porduct_shipping_pt'     => $porduct_shipping_pt,
+                'is_shipping_disabled'    => $is_shipping_disabled,
             )
         );
     }
