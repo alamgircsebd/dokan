@@ -23,6 +23,7 @@ class Dokan_Staffs {
         add_action( 'dokan_product_updated', array( $this, 'update_product' ), 10 );
         add_action( 'dokan_product_listing_arg', array( $this, 'listing_product' ), 10 );
         add_action( 'dokan_is_product_author', array( $this, 'dokan_is_product_author_modified' ), 10, 2 );
+        add_filter( 'wp_new_user_notification_email', array( $this, 'link_add_staff_notification_email' ), 35, 2 );
     }
 
     /**
@@ -38,8 +39,8 @@ class Dokan_Staffs {
                 if ( is_wp_error( $error ) ) {
                     dokan_get_template_part(
                         'global/dokan-error', '', array(
-							'deleted' => true,
-							'message' => $error->get_error_message(),
+                            'deleted' => true,
+                            'message' => $error->get_error_message(),
                         )
                     );
                 }
@@ -390,5 +391,56 @@ class Dokan_Staffs {
         $vendor_id = get_user_meta( $staff_id, '_vendor_id', true );
 
         return (int) $vendor_id;
+    }
+
+    /**
+     * Activation link add on new staff notify email body
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $notify_email
+     * @param obj   $user
+     *
+     * @return array $notify_email
+     */
+    public function link_add_staff_notification_email( $notify_email, $user ) {
+        if ( ! in_array( 'vendor_staff', $user->roles, true ) ) {
+            return;
+        }
+
+        $key = get_password_reset_key( $user );
+        if ( is_wp_error( $key ) ) {
+            return;
+        }
+
+        add_filter(
+            'lostpassword_url',
+            function( $url ) use ( $user ) {
+                $key = get_password_reset_key( $user );
+                return add_query_arg(
+                    [
+                        'action' => 'rp',
+                        'key' => $key,
+                        'login' => rawurlencode( $user->user_login ),
+                    ], $url
+                );
+            }
+        );
+
+        $network_site_url = wp_lostpassword_url();
+
+        /* translators: %s: User login. */
+        $message  = sprintf( __( 'Username: %s', 'dokan' ), $user->user_login ) . "\r\n\r\n";
+        $message .= __( 'To set your password, visit the following address:', 'dokan' ) . "\r\n\r\n";
+        $message .= $network_site_url . "\r\n\r\n";
+        $message .= __( 'or', 'dokan' ) . "\r\n\r\n";
+        /* translators: %s: Network link, %s: Click here text */
+        $message .= sprintf( '<a href="%s" target="_blank">%s</a>', $network_site_url, __( 'Click here', 'dokan' ) ) . "\r\n\r\n";
+
+        $message .= wp_login_url() . "\r\n";
+
+        $notify_email['message'] = apply_filters( 'dokan_new_staff_notification_email_message', $message, $user );
+
+        return $notify_email;
     }
 }
