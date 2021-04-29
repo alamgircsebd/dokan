@@ -189,7 +189,6 @@ function dokan_get_order_item_warranty( $item ) {
 
     foreach ( $meta as $key => $value ) {
         $value = version_compare( WC_VERSION, '3.0', '<' ) ? stripslashes( $value[0] ) : $value;
-
         if ( $key == '_dokan_item_warranty' ) {
             $warranty = array_merge( $warranty, (array) maybe_unserialize( $value ) );
         } elseif ( $key == '_dokan_item_warranty_selected' ) {
@@ -221,7 +220,6 @@ function dokan_get_warranty_duration_string( $warranty, $order ) {
 
     $order_paid_date = $order->get_date_paid();
     $order_paid_date = $order_paid_date ? $order_paid_date->date( 'Y-m-d H:i:s' ) : '';
-
     if ( $warranty['type'] == 'no_warranty' ) {
         $warranty_string = __( 'Product has no warranty', 'dokan' );
     } elseif ( $warranty['type'] == 'included_warranty' ) {

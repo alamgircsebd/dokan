@@ -154,7 +154,18 @@ class Module {
      * @return void
     */
     public function load_scripts() {
-        global $wp;
+        global $wp, $post;
+
+        $post_id = 0;
+
+        if ( isset( $post->ID ) && $post->ID && 'product' == $post->post_type ) {
+            $post_id = $post->ID;
+        }
+
+        if ( isset( $_GET['product_id'] ) ) {
+            $post_id = intval( $_GET['product_id'] );
+        }
+
 
         if ( ( isset( $wp->query_vars['settings'] ) && 'rma' === (string) $wp->query_vars['settings'] )
             || ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && ! empty( $_GET['product_id'] ) ) ) { //phpcs:ignore

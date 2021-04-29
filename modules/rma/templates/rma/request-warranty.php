@@ -14,6 +14,7 @@ $default_reasons        = dokan_rma_refund_reasons();
 $store_warranty         = get_user_meta( $vendor->get_id(), '_dokan_rma_settings', true );
 $count_warranty_product = 0;
 $count_general_product  = 0;
+$current_reasons        = array();
 ?>
 
 <?php wc_print_notices(); ?>
@@ -48,13 +49,16 @@ $count_general_product  = 0;
                     continue;
                 }
 
-                $vendor_id     = get_post_field( 'post_author', $_product->get_id() );
+                $_product_id   = isset( $_product->variation_id ) ? $_product->get_parent_id() : $_product->get_id();
+                $vendor_id     = get_post_field( 'post_author', $_product_id );
                 $warranty_item = new Dokan_Warranty_Item( $item->get_id() );
                 $has_warranty  = $warranty_item->has_warranty();
 
                 if ( $has_warranty ) {
                     $count_warranty_product++;
                 }
+
+                $current_reasons = $warranty_item->reasons;
 
                 $count_general_product++;
                 ?>
@@ -110,12 +114,15 @@ $count_general_product  = 0;
             </select>
         </div>
 
-        <?php if ( ! empty( $store_warranty['reasons'] ) ) : ?>
+        <?php
+            $store_warranty = ! empty( $current_reasons ) ? $current_reasons : $store_warranty['reasons'];
+        ?>
+        <?php if ( ! empty( $store_warranty ) ) : ?>
             <div class="warranty-form-row">
                 <label for=""><?php esc_html_e( 'Select reason to request for warranty', 'dokan' ); ?></label>
                 <select name="reasons" id="reasons">
                     <?php foreach ( $default_reasons as $key => $reason ) : ?>
-                        <?php if ( in_array( $key, $store_warranty['reasons'], true ) ) : ?>
+                        <?php if ( in_array( $key, $store_warranty, true ) ) : ?>
                             <option value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $reason ); ?></option>
                         <?php endif ?>
                     <?php endforeach ?>

@@ -272,6 +272,7 @@ class Dokan_RMA_Order {
     public function order_item_meta( $item, $cart_item_key, $values ) {
         $_product       = $values['data'];
         $_product_id    = ( version_compare( WC_VERSION, '3.0', '<' ) && isset( $_product->variation_id ) ) ? $_product->variation_id : $_product->get_id();
+        $_product_id    = ( version_compare( WC_VERSION, '3.0', '>' ) && isset( $_product->variation_id ) ) ? $_product->get_parent_id() : $_product->get_id();
         $warranty       = $this->get_settings( $_product_id );
         $warranty_label = $warranty['label'];
 
