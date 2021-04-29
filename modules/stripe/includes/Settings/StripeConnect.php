@@ -133,13 +133,7 @@ return apply_filters(
             'title' => __( 'Live credentials', 'dokan' ),
             'type'  => 'title',
         ],
-        'secret_key' => [
-            'title'       => __( 'Secret Key', 'dokan' ),
-            'type'        => 'text',
-            'description' => __( 'Get your API keys from your stripe account.', 'dokan' ),
-            'default'     => '',
-            'desc_tip'    => true,
-        ],
+
         'publishable_key' => [
             'title'       => __( 'Publishable Key', 'dokan' ),
             'type'        => 'text',
@@ -147,6 +141,15 @@ return apply_filters(
             'default'     => '',
             'desc_tip'    => true,
         ],
+
+        'secret_key' => [
+            'title'       => __( 'Secret Key', 'dokan' ),
+            'type'        => 'text',
+            'description' => __( 'Get your API keys from your stripe account.', 'dokan' ),
+            'default'     => '',
+            'desc_tip'    => true,
+        ],
+        
         'client_id' => [
             'title'       => __( 'Client ID', 'dokan' ),
             'type'        => 'text',
@@ -158,13 +161,7 @@ return apply_filters(
             'title' => __( 'Test credentials', 'dokan' ),
             'type'  => 'title',
         ],
-        'test_secret_key' => [
-            'title'       => __( 'Test Secret Key', 'dokan' ),
-            'type'        => 'text',
-            'description' => __( 'Get your API keys from your stripe account.', 'dokan' ),
-            'default'     => '',
-            'desc_tip'    => true,
-        ],
+
         'test_publishable_key' => [
             'title'       => __( 'Test Publishable Key', 'dokan' ),
             'type'        => 'text',
@@ -172,6 +169,14 @@ return apply_filters(
             'default'     => '',
             'desc_tip'    => true,
         ],
+        'test_secret_key' => [
+            'title'       => __( 'Test Secret Key', 'dokan' ),
+            'type'        => 'text',
+            'description' => __( 'Get your API keys from your stripe account.', 'dokan' ),
+            'default'     => '',
+            'desc_tip'    => true,
+        ],
+        
         'test_client_id' => [
             'title'       => __( 'Test Client ID', 'dokan' ),
             'type'        => 'text',
