@@ -77,7 +77,7 @@
         <input type="hidden" id="dokan-seller-vacation-schedules" value="<?php echo esc_attr( json_encode( $seller_vacation_schedules ) ); ?>">
     </div>
 
-    <div class="dokan-text-left <?php echo $show_schedules ? 'dokan-hide' : ''; ?>" id="dokan-seller-vacation-vacation-instant-vacation-message">
+    <div class="dokan-text-left <?php echo $show_schedules ? '' : 'dokan-hide'; ?>" id="dokan-seller-vacation-vacation-instant-vacation-message">
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label"><?php _e( 'Set Vacation Message', 'dokan' ); ?></label>
             <div class="dokan-w6">
