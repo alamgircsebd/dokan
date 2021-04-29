@@ -120,7 +120,7 @@ class Dokan_Geolocation_Admin_Settings {
             'map_zoom'     => array(
                 'name'    => 'map_zoom',
                 'label'   => __( 'Map Zoom Level', 'dokan' ),
-                'desc'    => __( 'To zoom out increase the number, to zoom in decrease the number.', 'dokan' ),
+                'desc'    => __( 'To zoom in increase the number, to zoom out decrease the number.', 'dokan' ),
                 'type'    => 'number',
                 'min'     => 1,
                 'max'     => 18,

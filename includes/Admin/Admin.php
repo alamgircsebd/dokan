@@ -333,22 +333,6 @@ class Admin {
         );
 
         $new_settings_fields['dokan_withdraw'] = array(
-            'withdraw_order_status' => array(
-                'name'    => 'withdraw_order_status',
-                'label'   => __( 'Order Status for Withdraw', 'dokan' ),
-                'desc'    => __( 'Order status for which vendor can make a withdraw request.', 'dokan' ),
-                'type'    => 'multicheck',
-                'default' => array(
-                    'wc-completed' => __( 'Completed', 'dokan' ),
-                    'wc-processing' => __( 'Processing', 'dokan' ),
-                    'wc-on-hold' => __( 'On-hold', 'dokan' ),
-                ),
-                'options' => array(
-                    'wc-completed' => __( 'Completed', 'dokan' ),
-                    'wc-processing' => __( 'Processing', 'dokan' ),
-                    'wc-on-hold' => __( 'On-hold', 'dokan' ),
-                ),
-            ),
             'withdraw_date_limit'   => array(
                 'name'    => 'withdraw_date_limit',
                 'label'   => __( 'Withdraw Threshold', 'dokan' ),
