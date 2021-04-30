@@ -5,7 +5,7 @@ namespace WeDevs\DokanPro;
 /**
  * Digital Porduct class
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.3
  *
  * @package dokan
  */
@@ -14,7 +14,7 @@ class DigitalProduct {
     /**
      * Load autometically when class initiate
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.3
      *
      * @uses actions
      * @uses filters
@@ -38,7 +38,7 @@ class DigitalProduct {
     /**
      * Add vendor store options in general settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.3
      *
      * @param array $settings_fields
      *
@@ -67,7 +67,7 @@ class DigitalProduct {
     /**
      * Get dokan selling product type
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.3
      *
      * @return string
      */
@@ -78,7 +78,7 @@ class DigitalProduct {
     /**
      * Add store digitial product option template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.3
      *
      * @return void
      */
@@ -103,7 +103,7 @@ class DigitalProduct {
     /**
      * Set store categories after wizard settings is saved
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.3
      *
      * @param \WeDevs\Dokan\Vendor\SetupWizard $wizard
      *
@@ -123,7 +123,7 @@ class DigitalProduct {
     /**
      * Remove shipping menu when digital mode only
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.3
      *
      * @param  array $sub_settins
      *

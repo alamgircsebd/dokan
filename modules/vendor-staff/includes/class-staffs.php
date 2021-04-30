@@ -396,7 +396,7 @@ class Dokan_Staffs {
     /**
      * Activation link add on new staff notify email body
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.3
      *
      * @param array $notify_email
      * @param obj   $user
