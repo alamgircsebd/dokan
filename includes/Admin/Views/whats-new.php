@@ -1,6 +1,122 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.2.3',
+        'released' => '2021-30-04',
+        'changes'  => array(
+            array(
+                'title'       => 'Digital and Physical Product Types Vendors',
+                'type'        => 'New',
+                'description' => 'Digital and Physical product types selling option for vendors.',
+            ),
+            array(
+                'title'       => 'Verification Clickable Link Added Staff Notify Email',
+                'type'        => 'Improvement',
+                'description' => 'Verification clickable link added on new staff notify email body.',
+            ),
+            array(
+                'title'       => 'IP and Agent Info Removed from Product Enquiry Email',
+                'type'        => 'Improvement',
+                'description' => 'IP and agent info removed from product enquiry email, which send by customer from single product page.',
+            ),
+            array(
+                'title'       => 'Store Support for Customer Order Details Page',
+                'type'        => 'Improvement',
+                'description' => 'Store support for WooCommerce customer my account order details page.',
+            ),
+            array(
+                'title'       => 'Product Shipping Tab Added Continent Countries and States Data',
+                'type'        => 'Improvement',
+                'description' => 'Product shipping tab added continent countries and states data.',
+            ),
+            array(
+                'title'       => 'The Per Class calculation Type Option is Selected Flat Rate Shipping',
+                'type'        => 'Improvement',
+                'description' => 'The Per Class calculation type option is selected by default for flat rate shipping.',
+            ),
+            array(
+                'title'       => 'Add New Filter Hook on Admin Vendor Report Order Status Filters',
+                'type'        => 'Improvement',
+                'description' => 'Add new filter hook on admin vendor report order status filters options.',
+            ),
+            array(
+                'title'       => 'Rearranged Stripe API Credentials Fields on Stripe Connect Payment',
+                'type'        => 'Improvement',
+                'description' => 'Rearranged Stripe API Credentials Fields on Stripe Connect Payment Gateway Setting page.',
+            ),
+            array(
+                'title'       => 'Vendor Category Box Hide When Outside Click',
+                'type'        => 'Fix',
+                'description' => 'Vendor category box hide when outside click on store listing page search filter area.',
+            ),
+            array(
+                'title'       => 'Translation Issue Fixed on Store Support Modal',
+                'type'        => 'Fix',
+                'description' => 'Translation issue fixed on store support modal.',
+            ),
+            array(
+                'title'       => 'Vendor Product Quick Edit Product Status Not Changing Resolved',
+                'type'        => 'Fix',
+                'description' => 'Vendor product quick edit product status not changing issue fixed.',
+            ),
+            array(
+                'title'       => 'RMA Script Loading Issue Fixed',
+                'type'        => 'Fix',
+                'description' => 'RMA script loading issue on vendor product edit page.',
+            ),
+            array(
+                'title'       => 'Variation Product Not Working with RMA',
+                'type'        => 'Fix',
+                'description' => 'Variation product not working with RMA issue fixed.',
+            ),
+            array(
+                'title'       => 'Customer is Seeing the Default Refund Reasons Instead of the Selected Reasons [RMA]',
+                'type'        => 'Fix',
+                'description' => 'RMA: Customer is seeing the default Refund Reasons instead of the overridden refund reasons set in the edit product form.',
+            ),
+            array(
+                'title'       => 'Store Support for Product Option Fully Disable When Disabled it from Admin',
+                'type'        => 'Fix',
+                'description' => 'Vendor setting page store support for product option fully disable when disabled it from admin.',
+            ),
+            array(
+                'title'       => 'Wrong Instruction for the Map Zoom Level Dokan Admin Settings',
+                'type'        => 'Fix',
+                'description' => 'Wrong instruction for the map zoom level in the geolocation settings fixed now.',
+            ),
+            array(
+                'title'       => 'Cannot Charge a Customer That has no Active Card, While Checking Out as Guest [Stripe]',
+                'type'        => 'Fix',
+                'description' => '[Stripe] Error: Cannot charge a customer that has no active card, while checking out as guest.',
+            ),
+            array(
+                'title'       => 'Fix the dokan-hide Class Placement on the Store Settings',
+                'type'        => 'Fix',
+                'description' => 'Fix the dokan-hide class placement on the store settings.',
+            ),
+            array(
+                'title'       => 'Germanized for WooCommerce and Email Verification conflict',
+                'type'        => 'Fix',
+                'description' => 'Germanized for WooCommerce and Email Verification conflict issue fixed.',
+            ),
+            array(
+                'title'       => 'User Subscription Pagination Query',
+                'type'        => 'Fix',
+                'description' => 'User subscription pagination query issue fixed.',
+            ),
+            array(
+                'title'       => 'Generate Shortcode Button Error',
+                'type'        => 'Fix',
+                'description' => 'Generate Shortcode Button doing_it_wrong error fixed now.',
+            ),
+            array(
+                'title'       => 'Product Import Updating Another Vendor Product',
+                'type'        => 'Fix',
+                'description' => 'Product import updating another vendor product issue fixed now.',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.2.2',
         'released' => '2021-31-03',
         'changes'  => array(
