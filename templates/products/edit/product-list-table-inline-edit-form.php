@@ -19,7 +19,7 @@
                         <?php esc_html_e( 'Product Tags', 'dokan' ); ?>
                     </label>
 
-                    <select multiple="multiple" data-field-name="product_tag" class="product_tag_search product_tags dokan-form-control dokan-select2" data-placeholder="<?php esc_attr_e( 'Select tags', 'dokan-lite' ); ?>">
+                    <select multiple="multiple" data-field-name="product_tag" class="product_tag_search product_tags dokan-form-control dokan-select2" data-placeholder="<?php esc_attr_e( 'Select tags', 'dokan' ); ?>">
                         <?php if ( ! empty( $product_tag ) ) { ?>
                             <?php foreach ( $product_tag as $tax_term ) { ?>
                                 <option value="<?php echo esc_attr( $tax_term->term_id ); ?>" selected="selected" ><?php echo esc_html( $tax_term->name ); ?></option>
@@ -116,7 +116,7 @@
                         </div>
                     <?php } ?>
 
-                    <?php if ( ( 'simple' === $product_type && ! $is_virtual ) || 'variable' === $product_type ) { ?>
+                    <?php if ( ( ( 'simple' === $product_type && ! $is_virtual ) || 'variable' === $product_type ) && 'sell_digital' !== $selling_type ) { ?>
                         <div class="dokan-inline-edit-field-row dokan-clearfix">
                             <label class="dokan-w3">
                                 <?php esc_html_e( 'Shipping class', 'dokan' ); ?>
@@ -219,9 +219,14 @@
                         <?php esc_html_e( 'Product categories', 'dokan' ); ?>
                     </label>
 
-                    <select data-field-name="product_cat" class="dokan-form-control" <?php if ( ! $options['using_single_category_style'] ) { echo 'multiple'; }  ?> >
+                    <select data-field-name="product_cat" class="dokan-form-control" 
+                    <?php
+                    if ( ! $options['using_single_category_style'] ) {
+                        echo 'multiple'; }
+                    ?>
+                    >
                         <?php foreach ( $options['categories'] as $category ) { ?>
-                            <option value="<?php echo esc_attr( $category->term_id ); ?>" <?php echo in_array( $category->term_id, $product_cat ) ? ' selected' : ''; ?>>
+                            <option value="<?php echo esc_attr( $category->term_id ); ?>" <?php echo in_array( $category->term_id, $product_cat, true ) ? ' selected' : ''; ?>>
                                 <?php echo esc_html( $category->name ); ?>
                             </option>
                         <?php } ?>
@@ -231,13 +236,13 @@
 
             <div class="dokan-clearfix quick-edit-submit-wrap">
                 <button type="button" class="dokan-btn dokan-btn-default inline-edit-cancel">
-                    <?php _e( 'Cancel', 'dokan' ); ?>
+                    <?php esc_html_e( 'Cancel', 'dokan' ); ?>
                 </button>
 
                 <div class="dokan-right inline-edit-submit-button">
                     <div class="dokan-spinner"></div>
                     <button type="button" class="dokan-btn dokan-btn-default dokan-btn-theme dokan-right inline-edit-update">
-                        <?php _e( 'Update', 'dokan' ); ?>
+                        <?php esc_html_e( 'Update', 'dokan' ); ?>
                     </button>
                 </div>
             </div>
@@ -249,7 +254,7 @@
                  *
                  * @since 3.2.1
                  */
-                do_action('dokan_after_quick_edit_form_fields', $product_id );
+                do_action( 'dokan_after_quick_edit_form_fields', $product_id );
             ?>
             <input type="hidden" data-field-name="ID" value="<?php echo esc_attr( $product_id ); ?>">
             <input type="hidden" data-field-name="product_type" value="<?php echo esc_attr( $product_type ); ?>">

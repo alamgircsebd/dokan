@@ -889,6 +889,7 @@ class Products {
             'stock_quantity'    => $product->get_stock_quantity(),
             'stock_status'      => $product->get_stock_status(),
             'backorders'        => $product->get_backorders(),
+            'selling_type'      => dokan_pro()->digital_product->get_selling_product_type(),
         );
 
         dokan_get_template_part( 'products/edit/product-list-table-inline-edit-form', '', $args );
