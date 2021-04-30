@@ -56,7 +56,7 @@ return apply_filters(
             'title'       => __( '3D Secure and SCA', 'dokan' ),
             'label'       => __( 'Enable 3D Secure and Strong Customer Authentication', 'dokan' ),
             'type'        => 'checkbox',
-            'description' => __( 'Note: 3D Secure and SCA ready transaction is only supported when both your platform and the connected account (Vendor) are in the same region: both in Europe or both in the U.S. Also automatic refund through stripe is not supported as well.', 'dokan' ),
+            'description' => __( 'Note: 3D Secure and SCA ready transaction is only supported when both your platform and the connected account (Vendor) are in the same region: both in Europe or both in the U.S.', 'dokan' ),
             'default'     => 'no',
             'desc_tip'    => true,
         ],
@@ -149,7 +149,7 @@ return apply_filters(
             'default'     => '',
             'desc_tip'    => true,
         ],
-        
+
         'client_id' => [
             'title'       => __( 'Client ID', 'dokan' ),
             'type'        => 'text',
@@ -176,7 +176,7 @@ return apply_filters(
             'default'     => '',
             'desc_tip'    => true,
         ],
-        
+
         'test_client_id' => [
             'title'       => __( 'Test Client ID', 'dokan' ),
             'type'        => 'text',

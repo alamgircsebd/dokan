@@ -1,4 +1,32 @@
-v3.2.2 Mar 31, 2021
+v3.2.3 Apr 30, 2021
+----------------------------------
+
+- **feat:** Digital and Physical product types selling option for vendors
+- **new:** Verification clickable link added on new staff notify email body
+- **new:** IP and agent info removed from product enquiry email
+- **new:** Store support for WooCommerce customer my account order details page
+- **new:** Product shipping tab added continent countries and states data
+- **new:** The Per Class calculation type option is selected by default for flat rate shipping
+- **new:** Add new filter hook on admin vendor report order status filters
+- **fix:** Vendor category box hide when outside click on store listing page
+- **fix:** Translation issue fixed on store support modal
+- **fix:** Vendor product quick edit product status not changing issue fixed
+- **fix:** RMA script loading issue on product edit page
+- **fix:** Variation product not working with RMA issue fixed
+- **fix:** RMA: Customer is seeing the default Refund Reasons instead of the overridden refund reasons set in the edit product form
+- **fix:** Vendor setting page store support for product option fully disable when disabled it from admin
+- **fix:** Wrong instruction for the map zoom level in the geolocation settings fixed now
+- **update:** [Stripe] Rearranged Stripe  API Credentials Fields on Stripe Connect Payment Gateway Setting page
+- **fix:** [Stripe] Error: Cannot charge a customer that has no active card, while checking out as guest
+- **fix:** Fix the dokan-hide class placement on the store-settings.php
+- **fix:** Germanized for WooCommerce and Email Verification conflict
+- **fix:** user subscription pagination query
+- **fix:** Generate Shortcode Button doing_it_wrong error
+- **fix:** RMA individual product warranty type
+- **fix:** product import updating another vendor product
+
+
+v3.2.2 Apr 01, 2021
 ----------------------------------
 
 - **new:** [Stripe] Added 3DS auth flow for changing payment method from My Account -> Payment Methods page

@@ -394,7 +394,7 @@ class Module {
     /**
      * Prints Get support button on order details page for customers
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.3
      *
      * @param obj $order
      */
