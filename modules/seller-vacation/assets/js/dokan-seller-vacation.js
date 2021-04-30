@@ -142,6 +142,10 @@
 
         actions: function () {
             var self = this;
+            
+            if ( self.is_activate && 'datewise' !== self.closing_style ) {
+                $( '#dokan-seller-vacation-vacation-instant-vacation-message' ).removeClass( 'dokan-hide' );
+            }
 
             $( 'body' ).on( 'dokan:seller_vacation:activate', function () {
                 if ( self.is_activate ) {
