@@ -533,35 +533,43 @@ export default {
             const orderStatus = [
                 {
                     id: 0,
-                    text: this.__( 'Filter by status', 'dokan' )
+                    text: this.__( 'Filter by status', 'dokan' ),
+                    status: 'filter-status'
                 },
                 {
                     id: 1,
-                    text: this.__( 'Processing', 'dokan' )
+                    text: this.__( 'Processing', 'dokan' ),
+                    status: 'processing'
                 },
                 {
                     id: 2,
-                    text: this.__( 'Completed', 'dokan' )
+                    text: this.__( 'Completed', 'dokan' ),
+                    status: 'completed'
                 },
                 {
                     id: 3,
-                    text: this.__( 'On-hold', 'dokan' )
+                    text: this.__( 'On-hold', 'dokan' ),
+                    status: 'on-hold'
                 },
                 {
                     id: 4,
-                    text: this.__( 'Cancelled', 'dokan' )
+                    text: this.__( 'Cancelled', 'dokan' ),
+                    status: 'cancelled'
                 },
                 {
                     id: 5,
-                    text: this.__( 'Refunded', 'dokan' )
+                    text: this.__( 'Refunded', 'dokan' ),
+                    status: 'refunded'
                 },
                 {
                     id: 6,
-                    text: this.__( 'Failed', 'dokan' )
+                    text: this.__( 'Failed', 'dokan' ),
+                    status: 'failed'
                 },
                 {
                     id: 7,
-                    text: this.__( 'Pending Payment', 'dokan' )
+                    text: this.__( 'Pending Payment', 'dokan' ),
+                    status: 'pending'
                 }
             ];
 
@@ -827,7 +835,7 @@ export default {
             } );
 
             $( '#filter-status' ).on('select2:select', (e) => {
-                let status = e.params.data.text.toLowerCase();
+                let status = e.params.data.status.toLowerCase();
 
                 // on order status change, reset the page query
                 if ( this.filter.query.page ) {
