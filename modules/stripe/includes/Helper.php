@@ -563,6 +563,10 @@ class Helper {
             return true;
         }
 
+        if ( preg_match( '/Cannot charge a customer that has no active card/i', $error_message ) ) {
+            return true;
+        }
+
         return false;
     }
 

@@ -58,7 +58,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
         try {
             $order              = $this->order;
             $stripe_customer_id = null;
-            $this->force_save_source = ( null === $this->force_save_source ) ? true : $this->force_save_source;
+            $this->force_save_source = ( null === $this->force_save_source ) ? false : $this->force_save_source;
 
             // check if this is a subscription product
             if ( Helper::has_subscription( $order->get_id() ) ) {

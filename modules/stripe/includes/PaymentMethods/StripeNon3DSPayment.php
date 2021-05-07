@@ -126,6 +126,9 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
             throw new Exception( __( 'No orders found to process!', 'dokan' ) );
         }
 
+        // no matter what we need to store source to stripe customer object if customer used a new card to make payments
+        $this->add_source_to_customer( $prepared_source );
+
         foreach ( $all_orders as $tmp_order ) {
             $tmp_order_id = $tmp_order->get_id();
             $seller_id    = dokan_get_seller_id_by_order( $tmp_order_id );
@@ -155,16 +158,7 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
                     if ( Helper::is_customer_without_source_error( $exception->getMessage() ) && $prepared_source->token_id ) {
                         throw new Exception( __( 'Saved payment method won\'t work for this purchase. Please provide a new card details and try again.', 'dokan' ) );
                     }
-                    // in case of api error, set token to false, [use case: maybe stored access token is invalid]
-                    $token = false; // setting token to false, will create the charge from admin account
-                    if ( Helper::is_customer_without_source_error( $exception->getMessage() ) && $prepared_source->source ) {
-                        $customer = new Customer();
-                        $customer->set_id( $prepared_source->customer );
-                        $customer->update_customer( [ 'source' => $prepared_source->source ] );
-                        $token = Token::create( [ 'customer' => $customer->get_id() ], $access_token );
-                    } elseif ( Helper::is_customer_without_source_error( $exception->getMessage() ) ) {
-                        throw new Exception( __( 'Saved payment method won\'t work for this purchase. Please provide a new card details and try again.', 'dokan' ) );
-                    }
+                    throw $exception;
                 }
             } elseif ( Helper::allow_non_connected_sellers() ) {
                 $token = false;
@@ -266,6 +260,43 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
         foreach ( $charge_ids as $seller_id => $charge_id ) {
             $meta_key = $this->stripe_meta_key . $seller_id;
             update_post_meta( $order->get_id(), $meta_key, $charge_id );
+        }
+
+        $this->delete_source_from_customer( $prepared_source );
+    }
+
+    /**
+     * This method will add a source to a stripe customer
+     *
+     * @since DOKAN_PRO_SINCE
+     * @param $prepared_source
+     *
+     * @throws \WeDevs\Dokan\Exceptions\DokanException
+     */
+    private function add_source_to_customer( $prepared_source ) {
+        if ( empty( $prepared_source->token_id ) && ! empty( $prepared_source->source ) && ! empty( $prepared_source->customer ) && ! $prepared_source->token_saved ) {
+            $customer = new Customer();
+            $customer->set_id( $prepared_source->customer );
+            $customer->update_customer( [ 'source' => $prepared_source->source ] );
+
+        } elseif ( ! empty( $prepared_source->token_id ) && ! empty( $prepared_source->customer ) ) {
+            $customer = new Customer();
+            $customer->set_id( $prepared_source->customer );
+            $customer->set_default_source( $prepared_source->source );
+        }
+    }
+
+    /**
+     * This method will delete a source from a stripe customer
+     *
+     * @since DOKAN_PRO_SINCE
+     * @param $prepared_source
+     */
+    private function delete_source_from_customer( $prepared_source ) {
+        if ( empty( $prepared_source->token_id ) && ! empty( $prepared_source->source ) && ! empty( $prepared_source->customer ) && ! $prepared_source->token_saved ) {
+            $customer = new Customer();
+            $customer->set_id( $prepared_source->customer );
+            $customer->delete_source( $prepared_source->source );
         }
     }
 }

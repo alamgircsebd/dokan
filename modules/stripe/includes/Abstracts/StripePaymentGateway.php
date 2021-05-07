@@ -48,6 +48,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
         $source_object      = '';
         $source_id          = '';
         $wc_token_id        = '';
+        $token_saved        = false;
         $payment_method     = isset( $posted['payment_method'] ) ? wc_clean( $posted['payment_method'] ) : 'dokan-stripe-connect';
         $is_token           = false;
         $setup_future_usage = false;
@@ -68,6 +69,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
                     throw new DokanException( print_r( $response, true ), Helper::get_localized_error_message_from_response( $response ) );
                 }
                 $setup_future_usage = true;
+                $token_saved = true;
             }
         } elseif ( $this->is_using_saved_payment_method() ) {
             $wc_token_id = wc_clean( $posted[ 'wc-' . $payment_method . '-payment-token' ] );
@@ -100,6 +102,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
                 }
                 $source_id    = $response;
                 $setup_future_usage = true;
+                $token_saved = true;
             } else {
                 $source_id    = $stripe_token;
                 $is_token     = true;
@@ -125,6 +128,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             'source'             => $source_id,
             'source_object'      => $source_object,
             'setup_future_usage' => $setup_future_usage ? 'off_session' : null,
+            'token_saved'        => $token_saved,
         ];
     }
 

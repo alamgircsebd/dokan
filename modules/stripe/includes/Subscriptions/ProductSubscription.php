@@ -329,6 +329,15 @@ class ProductSubscription extends StripePaymentGateway {
             $subscription_args['proration_behavior']    = 'create_prorations';
             $subscription_args['items'][0]['id']        = $subscription->items->data[0]->id;
 
+            // Lets charge the vendor while creating new subscription
+            if ( empty( $this->stripe_customer ) ) {
+                $prepared_source = $this->prepare_source( get_current_user_id(), true );
+                // check for source id
+                if ( isset( $prepared_source->source ) ) {
+                    $subscription_args['default_source'] = $prepared_source->source;
+                }
+            }
+
             try {
                 $upgrade = Subscription::update(
                     $already_has_subscription, $subscription_args

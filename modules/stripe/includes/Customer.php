@@ -276,6 +276,8 @@ class Customer {
 
         try {
             $response = StripeCustomer::createSource( $this->get_id(), [ 'source' => $source_id ] );
+            //make this source as default
+            $this->set_default_source( $response->id );
         } catch ( Exception $e ) {
             if ( $this->is_no_such_customer_error( $e->getMessage() ) ) {
                 $this->delete_id_from_meta();
