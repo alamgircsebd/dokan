@@ -9,3 +9,4 @@ import './reviews.min';
 import './shipping';
 import './store-lists';
 import './store-seo';
+import './orders';

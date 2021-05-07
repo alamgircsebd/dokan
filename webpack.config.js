@@ -14,6 +14,7 @@ const rootEntryPoints = {
     'dokan-single-product-shipping': './assets/src/js/dokan-single-product-shipping.js',
     'vue-pro-frontend-shipping': './src/frontend/shipping.js',
     'vue-pro-admin': './src/admin/main.js',
+    'dokan-pro-admin-style': './assets/src/less/dokan-pro-admin.less',
 };
 
 const moduleEntryPoints = {

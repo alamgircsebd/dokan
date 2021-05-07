@@ -15,7 +15,7 @@
  *
  * @return output
  */
-if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
+if ( ! function_exists( 'dokan_get_profile_progressbar' ) ) {
 
 	function dokan_get_profile_progressbar() {
         $profile_info  = dokan_get_store_info( dokan_get_current_user_id() );
@@ -660,4 +660,434 @@ function dokan_is_single_seller_mode_enable() {
     $is_single_seller_mode = apply_filters_deprecated( 'dokan_signle_seller_mode', [ dokan_get_option( 'enable_single_seller_mode', 'dokan_general', 'off' ) ], '3.0.0', 'dokan_single_seller_mode' );
 
     return apply_filters( 'dokan_single_seller_mode', $is_single_seller_mode );
+}
+
+
+/**
+ * Dokan get shipping tracking providers list
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return array
+ */
+function dokan_shipping_status_tracking_providers_list() {
+    $providers = array(
+        'sp-australia-post' => array(
+            'label' => __( 'Australia Post', 'dokan' ),
+            'url'   => 'https://auspost.com.au/mypost/track/#/search?tracking={tracking_number}',
+        ),
+        'sp-canada-post' => array(
+            'label' => __( 'Canada Post', 'dokan' ),
+            'url'   => 'https://www.canadapost.ca/track-reperage/en#/home/?tracking={tracking_number}',
+        ),
+        'sp-city-link' => array(
+            'label' => __( 'City Link', 'dokan' ),
+            'url'   => 'https://www.citylinkexpress.com/tracking-result/?track0={tracking_number}',
+        ),
+        'sp-dhl' => array(
+            'label' => __( 'DHL', 'dokan' ),
+            'url'   => 'https://www.dhl.com/en/express/tracking.html?AWB={tracking_number}&brand=DHL',
+        ),
+        'sp-dpd' => array(
+            'label' => __( 'DPD', 'dokan' ),
+            'url'   => 'https://tracking.dpd.de/status/en_NL/parcel/{tracking_number}',
+        ),
+        'sp-fastway-south-africa' => array(
+            'label' => __( 'Fastway South Africa', 'dokan' ),
+            'url'   => 'https://www.fastway.co.za/our-services/track-your-parcel/?track={tracking_number}',
+        ),
+        'sp-fedex' => array(
+            'label' => __( 'Fedex', 'dokan' ),
+            'url'   => 'https://www.fedex.com/fedextrack/no-results-found?trknbr={tracking_number}',
+        ),
+        'sp-ontrac' => array(
+            'label' => __( 'OnTrac', 'dokan' ),
+            'url'   => 'https://www.ontrac.com/trackingdetail.asp/?track={tracking_number}',
+        ),
+        'sp-parcelforce' => array(
+            'label' => __( 'ParcelForce', 'dokan' ),
+            'url'   => 'https://www.parcelforce.com/track-trace/?trackNumber={tracking_number}',
+        ),
+        'sp-polish-shipping-providers' => array(
+            'label' => __( 'Polish shipping providers', 'dokan' ),
+            'url'   => 'https://www.parcelmonitor.com/track-poland/track-it-online/?pParcelIds={tracking_number}',
+        ),
+        'sp-royal-mail' => array(
+            'label' => __( 'Royal Mail', 'dokan' ),
+            'url'   => 'https://www.royalmail.com/track-your-item#/?track={tracking_number}',
+        ),
+        'sp-sapo' => array(
+            'label' => __( 'SAPO', 'dokan' ),
+            'url'   => 'https://tracking.postoffice.co.za/TrackNTrace/TrackNTrace.aspx?id={tracking_number}',
+        ),
+        'sp-tnt-express-consignment' => array(
+            'label' => __( 'TNT Express (consignment)', 'dokan' ),
+            'url'   => 'https://www.tnt.com/express/site/tracking.html/?track={tracking_number}',
+        ),
+        'sp-tnt-express-reference' => array(
+            'label' => __( 'TNT Express (reference)', 'dokan' ),
+            'url'   => 'https://www.tnt.com/express/site/tracking.html/?track={tracking_number}',
+        ),
+        'sp-fedex-sameday' => array(
+            'label' => __( 'FedEx Sameday', 'dokan' ),
+            'url'   => 'https://www.fedex.com/fedextrack/?action=track&tracknumbers={tracking_number}',
+        ),
+        'sp-ups' => array(
+            'label' => __( 'UPS', 'dokan' ),
+            'url'   => 'https://www.ups.com/track/?trackingNumber={tracking_number}',
+        ),
+        'sp-usps' => array(
+            'label' => __( 'USPS', 'dokan' ),
+            'url'   => 'https://tools.usps.com/go/TrackConfirmAction?tRef=fullpage&tLabels={tracking_number}',
+        ),
+        'sp-dhl-us' => array(
+            'label' => __( 'DHL US', 'dokan' ),
+            'url'   => 'https://www.dhl.com/us-en/home/tracking/tracking-global-forwarding.html?submit=1&tracking-id={tracking_number}',
+        ),
+        'sp-other' => array(
+            'label' => __( 'Other', 'dokan' ),
+            'url'   => '',
+        ),
+    );
+
+    return apply_filters( 'dokan_shipping_status_tracking_providers_list', $providers );
+}
+
+/**
+ * Dokan get shipping tracking providers list
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return array
+ */
+function dokan_get_shipping_tracking_providers_list() {
+    $providers = [];
+
+    if ( ! empty( dokan_shipping_status_tracking_providers_list() ) && is_array( dokan_shipping_status_tracking_providers_list() ) ) {
+        foreach ( dokan_shipping_status_tracking_providers_list() as $data_key => $data_label ) {
+            $providers[ $data_key ] = $data_label['label'];
+        }
+    }
+
+    return apply_filters( 'dokan_get_shipping_tracking_providers_list', $providers );
+}
+
+/**
+ * Dokan get shipping tracking default providers list
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return array
+ */
+function dokan_get_shipping_tracking_default_providers_list() {
+    $providers = array(
+        'sp-dhl'                       => 'sp-dhl',
+        'sp-dpd'                       => 'sp-dpd',
+        'sp-fedex'                     => 'sp-fedex',
+        'sp-polish-shipping-providers' => 'sp-polish-shipping-providers',
+        'sp-ups'                       => 'sp-ups',
+        'sp-usps'                      => 'sp-usps',
+        'sp-other'                     => 'sp-other',
+    );
+
+    return apply_filters( 'dokan_shipping_status_default_providers', $providers );
+}
+
+/**
+ * Dokan get shipping tracking default providers list
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param string $key_data
+ *
+ * @return string
+ */
+function dokan_get_shipping_tracking_status_by_key( $key_data ) {
+    $status_list = dokan_get_option( 'shipping_status_list', 'dokan_shipping_status_setting' );
+
+    if ( ! empty( $status_list ) && is_array( $status_list ) ) {
+        foreach ( $status_list as $s_status ) {
+            if ( isset( $s_status['id'] ) && $s_status['id'] === $key_data ) {
+                return $s_status['value'];
+            }
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Dokan get shipping tracking provider name by key
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param string $key_data
+ * @param string $return_type
+ * @param string $tracking_number
+ *
+ * @return string
+ */
+function dokan_get_shipping_tracking_provider_by_key( $key_data, $return_type = 'label', $tracking_number = '' ) {
+    if ( empty( $key_data ) ) {
+        return;
+    }
+
+    $providers_list = dokan_shipping_status_tracking_providers_list();
+
+    if ( ! empty( $providers_list ) && is_array( $providers_list ) && isset( $providers_list[ $key_data ] ) && isset( $providers_list[ $key_data ][ $return_type ] ) ) {
+        $provider = $providers_list[ $key_data ][ $return_type ];
+
+        if ( 'url' === $return_type && ! empty( $tracking_number ) ) {
+            $provider = str_replace( '{tracking_number}', $tracking_number, $provider );
+        }
+
+        return $provider;
+    }
+
+    return 'N/A';
+}
+
+/**
+ * Dokan get shipping tracking current status by order id
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param id $order_id
+ * @param id $need_label
+ *
+ * @return string
+ */
+function dokan_shipping_tracking_status_by_orderid( $order_id, $need_label = 0 ) {
+    if ( empty( $order_id ) ) {
+        return;
+    }
+
+    $order = dokan()->order->get( $order_id );
+
+    if ( $order ) {
+        $tracking_info = $order->get_meta( '_dokan_shipping_status_tracking_info' );
+    }
+
+    if ( is_array( $tracking_info ) && isset( $tracking_info['status'] ) ) {
+        return $need_label === 0 ? $tracking_info['status'] : dokan_get_shipping_tracking_status_by_key( $tracking_info['status'] );
+    }
+}
+
+/**
+ * Dokan get shipping tracking current provider by oder id
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param id $order_id
+ *
+ * @return string
+ */
+function dokan_shipping_tracking_provider_by_orderid( $order_id ) {
+    if ( empty( $order_id ) ) {
+        return;
+    }
+
+    $order = dokan()->order->get( $order_id );
+
+    if ( $order ) {
+        $tracking_info = $order->get_meta( '_dokan_shipping_status_tracking_info' );
+    }
+
+    if ( is_array( $tracking_info ) && isset( $tracking_info['provider'] ) ) {
+        return $tracking_info['provider'];
+    }
+}
+
+/**
+ * Get order current shipment status
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param int $order_id
+ *
+ * @param mix
+ */
+function dokan_get_order_shipment_current_status( $order_id, $get_only_status = false ) {
+    if ( empty( $order_id ) ) {
+        return;
+    }
+
+    $cache_group = 'dokan_cache_seller_shipment_tracking_data_' . $order_id;
+    $cache_key   = 'dokan_order_shipment_tracking_status_' . $order_id;
+    $get_status  = wp_cache_get( $cache_key, $cache_group );
+
+    // early return if cached data found
+    if ( false !== $get_status ) {
+        if ( $get_only_status ) {
+            return $get_status;
+        }
+        return dokan_get_order_shipment_status_html( $get_status );
+    }
+
+    // store cache key on db if already not stored
+    $get_old_cache = get_option( $cache_group, [] );
+
+    if ( ! in_array( $cache_key, $get_old_cache, true ) ) {
+        $get_old_cache[] = $cache_key;
+        update_option( $cache_group, $get_old_cache );
+    }
+
+    $shipment_tracking_data = dokan_pro()->shipment->get_shipping_tracking_data( $order_id );
+
+    // early return if no shipment tracking data found
+    if ( empty( $shipment_tracking_data ) ) {
+        $get_status = '--';
+        // set cache
+        wp_cache_set( $cache_key, $get_status, $cache_group );
+        if ( $get_only_status ) {
+            return $get_status;
+        }
+        return dokan_get_order_shipment_status_html( $get_status );
+    }
+
+    $order = wc_get_order( $order_id );
+    // total item remaining for shipping
+    $shipment_remaining_count = 0;
+    // order line items total count
+    $order_qty_count = 0;
+    // total delivered shipping status count
+    $delivered_count = isset( $shipment_tracking_data['shipping_status_count']['ss_delivered'] ) ? intval( $shipment_tracking_data['shipping_status_count']['ss_delivered'] ) : 0;
+    // no of shipping item without cancel status
+    $total_shipments = isset( $shipment_tracking_data['total_except_cancelled'] ) ? intval( $shipment_tracking_data['total_except_cancelled'] ) : 0;
+
+    // count total order items
+    $line_item_count = $shipment_tracking_data['line_item_count'];
+    foreach ( $order->get_items() as $item_id => $item ) {
+        // count remaining item
+        $shipped_item   = isset( $line_item_count[ $item_id ] ) ? intval( $line_item_count[ $item_id ] ) : 0;
+        $remaining_item = intval( $item['qty'] ) - $shipped_item;
+        $shipment_remaining_count += $remaining_item;
+
+        // order line item total count
+        $order_qty_count += intval( $item['qty'] );
+    }
+
+    if ( 0 === $shipment_remaining_count && $delivered_count === $total_shipments ) {
+        $get_status = 'shipped';
+    } elseif ( $shipment_remaining_count < $order_qty_count && $delivered_count > 0 ) {
+        $get_status = 'partially';
+    } else {
+        $get_status = 'not_shipped';
+    }
+
+    wp_cache_set( $cache_key, $get_status, $cache_group );
+
+    if ( $get_only_status ) {
+        return $get_status;
+    }
+
+    return dokan_get_order_shipment_status_html( $get_status );
+}
+
+/**
+ * Get main order current shipment status
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param int $order_id
+ *
+ * @param mix
+ */
+function dokan_get_main_order_shipment_current_status( $order_id ) {
+    if ( empty( $order_id ) ) {
+        return;
+    }
+
+    $user_id     = dokan_get_current_user_id();
+    $cache_group = 'dokan_cache_seller_shipment_tracking_data_' . $order_id;
+    $cache_key   = 'dokan_order_shipment_tracking_status_' . $order_id;
+    $get_status  = wp_cache_get( $cache_key, $cache_group );
+
+    if ( false === $get_status ) {
+        $sub_orders = get_children(
+            array(
+                'post_parent' => $order_id,
+                'post_type'   => 'shop_order',
+            )
+        );
+
+        $shipped       = 0;
+        $partially     = 0;
+        $others_status = 0;
+        $count_total   = 0;
+
+        if ( $sub_orders ) {
+            foreach ( $sub_orders as $order_post ) {
+                $get_status = dokan_get_order_shipment_current_status( $order_post->ID, true );
+
+                if ( 'shipped' === $get_status ) {
+                    $shipped++;
+                }
+
+                if ( 'partially' === $get_status ) {
+                    $partially++;
+                }
+
+                if ( 'shipped' === $get_status || 'partially' === $get_status || 'not_shipped' === $get_status ) {
+                    $others_status++;
+                }
+
+                $count_total++;
+            }
+        }
+
+        if ( $count_total === $shipped ) {
+            $get_status = 'shipped';
+        } elseif ( $partially > 0 || $shipped > 0 ) {
+            $get_status = 'partially';
+        } elseif ( $others_status > 0 ) {
+            $get_status = 'not_shipped';
+        } else {
+            $get_status = '--';
+        }
+
+        wp_cache_set( $cache_key, $get_status, $cache_group );
+    }
+
+    return dokan_get_order_shipment_status_html( $get_status );
+}
+
+/**
+ * Get order current shipment status html view
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param string $get_status
+ *
+ * @param string
+ */
+function dokan_get_order_shipment_status_html( $get_status ) {
+    if ( 'shipped' === $get_status ) {
+        return sprintf( '<span class="dokan-label dokan-label-success">%s</span>', apply_filters( 'dokan_shipment_status_label_shipped', __( 'Shipped', 'dokan' ) ) );
+    } elseif ( 'partially' === $get_status ) {
+        return sprintf( '<span class="dokan-label dokan-label-info">%s</span>', apply_filters( 'dokan_shipment_status_label_partially_shipped', __( 'Partially', 'dokan' ) ) );
+    } elseif ( 'not_shipped' === $get_status ) {
+        return sprintf( '<span class="dokan-label dokan-label-default">%s</span>', apply_filters( 'dokan_shipment_status_label_not_shipped', __( 'Not-Shipped', 'dokan' ) ) );
+    } else {
+        return apply_filters( 'dokan_shipment_status_label_null', '--' );
+    }
+}
+
+/**
+ * Shipping clear cache values by group name
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param int $order_id
+ *
+ * @return void
+ */
+function dokan_shipment_cache_clear_group( $order_id ) {
+    $group                    = 'dokan_cache_seller_shipment_tracking_data_' . $order_id;
+    $tracking_data_key        = 'dokan_get_shipping_tracking_data_' . $order_id;
+    $tracking_status_key      = 'dokan_order_shipment_tracking_status_' . $order_id;
+
+    wp_cache_delete( $tracking_data_key, $group );
+    wp_cache_delete( $tracking_status_key, $group );
+    wp_cache_delete( $tracking_status_main_key, $group );
 }

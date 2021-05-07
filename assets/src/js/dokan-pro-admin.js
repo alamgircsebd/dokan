@@ -4,6 +4,28 @@
 
         init: function() {
             $('.dokan-modules').on( 'change', 'input.dokan-toggle-module', this.toggleModule );
+
+            $( 'body' ).on( 'click', '.shipment-item-details-tab-toggle', function() {
+                var shipment_id = $(this).data( 'shipment_id' );
+
+                $('.shipment_body_' + shipment_id).toggle();
+                $('.shipment_footer_' + shipment_id).toggle();
+                $('.shipment_notes_area_' + shipment_id).toggle();
+
+                $(this).find('span').toggleClass( 'dashicons-arrow-down-alt2 dashicons-arrow-up-alt2' );
+                
+                return false;
+            });
+
+            $('body').on('click', '.shipment-notes-details-tab-toggle', function(e) {
+                e.preventDefault();
+
+                var shipment_id = $(this).data( 'shipment_id' );
+
+                $(".shipment-list-notes-inner-area" + shipment_id).toggle();
+                
+                $(this).find('span').toggleClass( 'dashicons-arrow-down-alt2 dashicons-arrow-up-alt2' );
+            });
         },
 
         toggleModule: function(e) {
