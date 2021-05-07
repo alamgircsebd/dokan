@@ -1,7 +1,9 @@
 <?php
 
 // don't call the file directly
-if ( !defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 /**
  * Dokan_Live_Search_Widget class
@@ -17,10 +19,10 @@ class Dokan_Live_Search_Widget extends WP_Widget {
      *
      * @uses is_admin()
      */
-    function __construct() {
+    public function __construct() {
         parent::__construct(
             'dokna_product_search',
-            __('Dokan Live Search', 'dokan' ),
+            __( 'Dokan Live Search', 'dokan' ),
             array( 'description' => __( 'Search products live', 'dokan' ) )
         );
     }
@@ -34,47 +36,53 @@ class Dokan_Live_Search_Widget extends WP_Widget {
      * @param array $instance Saved values from database.
      */
     public function widget( $args, $instance ) {
-        if ( is_array( $args ) ) {
-            extract( $args, EXTR_SKIP );
+        if ( $args && is_array( $args ) ) {
+            extract( $args, EXTR_SKIP ); // phpcs:ignore
         }
 
         $title              = isset( $instance['title'] ) ? apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) : '';
         $live_search_option = dokan_get_option( 'live_search_option', 'dokan_live_search_setting', 'default' );
 
-        if( 'default' == $live_search_option ) {
+        if ( 'old_live_search' === $live_search_option ) {
             $live_search_option_class = '';
         } else {
             $live_search_option_class = 'dokan-ajax-search-suggestion';
         }
 
-        echo $before_widget;
+        echo isset( $before_widget ) ? $before_widget : '';
 
-        if ( $title ) echo $before_title . $title . $after_title;
+        if ( $title ) {
+            echo $before_title . $title . $after_title;
+        }
         ?>
         <div class="dokan-product-search">
-            <form role="search" method="get" class="ajaxsearchform ajaxsearchform-dokan" action="<?php echo esc_url( home_url( '/'  ) ); ?>">
+            <form role="search" method="get" class="ajaxsearchform ajaxsearchform-dokan" action="<?php echo esc_url( home_url( '/' ) ); ?>">
                 <div class="input-group">
                     <input type="text" autocomplete="off" class="form-control dokan-ajax-search-textfield <?php echo $live_search_option_class; ?>" value="<?php echo get_search_query(); ?>" name="s" placeholder="<?php echo __( 'Just type ...', 'dokan' ); ?>" />
                     <span class="input-group-addon">
-                        <?php wp_dropdown_categories( array(
-                            'taxonomy' => 'product_cat',
-                            'show_option_all' => __( 'All', 'dokan' ),
-                            'hierarchical' => true,
-                            'hide_empty' => false,
-                            'orderby' => 'name',
-                            'order' => 'ASC',
-                            'class' => 'orderby dokan-ajax-search-category',
-                            'walker' => new Dokan_LS_Walker_CategoryDropdown()
-                        ) ); ?>
+                        <?php
+                        wp_dropdown_categories(
+                            array(
+                                'taxonomy' => 'product_cat',
+                                'show_option_all' => __( 'All', 'dokan' ),
+                                'hierarchical' => true,
+                                'hide_empty' => false,
+                                'orderby' => 'name',
+                                'order' => 'ASC',
+                                'class' => 'orderby dokan-ajax-search-category',
+                                'walker' => new Dokan_LS_Walker_CategoryDropdown(),
+                            )
+                        );
+                        ?>
                     </span>
                     <input type="hidden" name="dokan-live-search-option" value="<?php echo $live_search_option; ?>" class="dokan-live-search-option" id="dokan-live-search-option">
                 </div>
                 <div id="dokan-ajax-search-suggestion-result" class="dokan-ajax-search-result">
                 </div>
-             </form>
-         </div>
+            </form>
+        </div>
         <?php
-        echo $after_widget;
+        echo isset( $after_widget ) ? $after_widget : '';
     }
 
     /**
@@ -85,15 +93,14 @@ class Dokan_Live_Search_Widget extends WP_Widget {
      * @param array $instance Previously saved values from database.
      */
     public function form( $instance ) {
-        if ( isset( $instance[ 'title' ] ) ) {
-            $title = $instance[ 'title' ];
-        }
-        else {
+        if ( isset( $instance['title'] ) ) {
+            $title = $instance['title'];
+        } else {
             $title = __( 'Live Search', 'dokan' );
         }
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:','dokan' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'dokan' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
         </p>
         <?php
@@ -128,13 +135,16 @@ class Dokan_LS_Walker_CategoryDropdown extends Walker {
      * @see Walker::$tree_type
      * @var string
      */
-    var $tree_type = 'category';
+    public $tree_type = 'category';
 
     /**
      * @see Walker::$db_fields
      * @var array
      */
-    var $db_fields = array ('parent' => 'parent', 'id' => 'term_id');
+    public $db_fields = array(
+        'parent' => 'parent',
+        'id'     => 'term_id',
+    );
 
     /**
      * Start the element output.
@@ -146,16 +156,17 @@ class Dokan_LS_Walker_CategoryDropdown extends Walker {
      * @param int    $depth    Depth of category. Used for padding.
      * @param array  $args     Uses 'selected' and 'show_count' keys, if they exist. @see wp_dropdown_categories()
      */
-    function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
-        $pad = str_repeat('&nbsp;', $depth * 3);
+    public function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
+        $pad = str_repeat( '&nbsp;', $depth * 3 );
 
-        $cat_name = apply_filters('list_cats', $category->name, $category);
-        $output .= "\t<option class=\"level-$depth\" value=\"". esc_attr( $category->slug ) . "\"";
+        $cat_name = apply_filters( 'list_cats', $category->name, $category );
+        $output .= "\t<option class=\"level-$depth\" value=\"" . esc_attr( $category->slug ) . '"';
 
         $output .= '>';
-        $output .= $pad.$cat_name;
-        if ( $args['show_count'] )
-            $output .= '&nbsp;&nbsp;('. $category->count .')';
+        $output .= $pad . $cat_name;
+        if ( $args['show_count'] ) {
+            $output .= '&nbsp;&nbsp;(' . $category->count . ')';
+        }
         $output .= "</option>\n";
     }
 }
