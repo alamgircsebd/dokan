@@ -33,17 +33,22 @@
                     </label>
 
                     <label>
-                        <?php esc_html_e( 'Status', 'dokan' ); ?> &nbsp;
+                        <?php esc_html_e( 'Status', 'dokan' ); ?>
 
                         <?php if ( 'pending' === $post_status ) { ?>
                             <span class="dokan-label dokan-label-danger">
                                 <?php esc_html_e( 'Pending Review', 'dokan' ); ?>
                                 <input type="hidden" data-field-name="post_status" value="<?php echo esc_attr( 'pending' ); ?>">
                             </span>
+                        <?php } elseif ( dokan_seller_vacation_is_seller_on_vacation( dokan_get_current_user_id() ) ) { ?>
+                            <span class="dokan-label dokan-label-info">
+                                <?php esc_html_e( 'In Vacation', 'dokan' ); ?>
+                                <input type="hidden" data-field-name="post_status" value="<?php echo esc_attr( 'vacation' ); ?>">
+                            </span>
                         <?php } else { ?>
                             <select data-field-name="post_status" style="min-width: 100px;">
                                 <?php foreach ( $options['post_statuses'] as $post_status_slug => $post_status_label ) { ?>
-                                    <option value="<?php echo esc_attr( $post_status_slug ); ?>"<?php selected( $post_status, $post_status_slug ); ?>>
+                                    <option value="<?php echo esc_attr( $post_status_slug ); ?>" <?php selected( $post_status, $post_status_slug ); ?>>
                                         <?php echo esc_html( $post_status_label ); ?>
                                     </option>
                                 <?php } ?>
