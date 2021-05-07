@@ -33,6 +33,8 @@ class Module {
         add_action( 'dokan_product_updated', array( $this, 'product_status_modified_on_vacation' ), 12 );
         add_action( 'dokan_product_duplicate_after_save', array( $this, 'set_vacation_duplicate_product_save' ), 35 );
         add_filter( 'dokan_bulk_product_statuses', array( $this, 'set_vacation_bulk_edit_product_statuses' ), 35 );
+
+        add_action( 'plugins_loaded', [ $this, 'load_bg_class' ] );
     }
 
     /**
@@ -64,6 +66,18 @@ class Module {
         require_once DOKAN_SELLER_VACATION_INCLUDES . '/class-dokan-seller-vacation-store-settings.php';
         require_once DOKAN_SELLER_VACATION_INCLUDES . '/class-dokan-seller-vacation-ajax.php';
         require_once DOKAN_SELLER_VACATION_INCLUDES . '/class-dokan-seller-vacation-cron.php';
+    }
+
+    /**
+     * Load background process file on plugins_loaded hook
+     *
+     * @since DOKAN_PRO_SINCE
+     * @return void
+     */
+    public function load_bg_class() {
+        require_once DOKAN_SELLER_VACATION_INCLUDES . '/class-dokan-seller-vacation-update-seller-product-status.php';
+        global $dokan_pro_sv_update_seller_product_status;
+        $dokan_pro_sv_update_seller_product_status = new \Dokan_Seller_Vacation_Update_Seller_Product_Status();
     }
 
     /**

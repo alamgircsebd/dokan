@@ -58,28 +58,29 @@ function dokan_seller_vacation_get_vacation_schedules( $profile_info ) {
  * @return void
  */
 function dokan_seller_vacation_update_product_status( $vendors = array(), $cancel_all_process = true ) {
-    $processor_file = DOKAN_SELLER_VACATION_INCLUDES . '/class-dokan-seller-vacation-update-seller-product-status.php';
-
-    require_once $processor_file;
-
-    $processor = new Dokan_Seller_Vacation_Update_Seller_Product_Status();
+    global $dokan_pro_sv_update_seller_product_status;
 
     if ( $cancel_all_process ) {
-        $processor->cancel_process();
+        $dokan_pro_sv_update_seller_product_status->kill_process();
     }
 
-    if ( ! $vendors ) {
-        $vendors = dokan()->vendor->all();
+    if ( empty( $vendors ) ) {
+        $vendors = dokan()->vendor->all( [ 'fields' => 'ID' ] );
     }
 
-    $vendor = array_pop( $vendors );
-
-    $args = array(
-        'vendors' => $vendors,
-        'vendor'  => $vendor,
-    );
-
-    $processor->push_to_queue( $args )->dispatch_process( $processor_file );
+    foreach ( $vendors as $vendor ) {
+        if ( $vendor instanceof \WeDevs\Dokan\Vendor\Vendor ) {
+            $vendor = $vendor->get_id();
+        }
+        if ( intval( $vendor ) ) {
+            $dokan_pro_sv_update_seller_product_status->push_to_queue(
+                [
+                    'vendor_id' => intval( $vendor ),
+                ]
+            );
+        }
+    }
+    $dokan_pro_sv_update_seller_product_status->save()->dispatch();
 }
 
 /**
