@@ -1268,12 +1268,17 @@ class Module {
                     "
             );
 
+            $url_to_redirect = add_query_arg( array( '_wpnonce' => wp_create_nonce( 'woocommerce-csv-importer' ) ), dokan_get_navigation_url() . 'tools/csv-import?step=done' );
+            if ( substr($_SERVER['HTTP_REFERER'], 0, strlen( get_admin_url() ) ) === get_admin_url() ) {
+                $url_to_redirect = add_query_arg( array( '_wpnonce' => wp_create_nonce( 'woocommerce-csv-importer' ) ), admin_url( 'edit.php?post_type=product&page=product_importer&step=done' ) );
+            }
+
             // Send success.
             wp_send_json_success(
                 [
                     'position'   => 'done',
                     'percentage' => 100,
-                    'url'        => dokan_get_navigation_url() . 'tools/csv-import?step=done',
+                    'url'        => $url_to_redirect,
                     'imported'   => count( $results['imported'] ),
                     'failed'     => count( $results['failed'] ),
                     'updated'    => count( $results['updated'] ),
