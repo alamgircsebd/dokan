@@ -48,6 +48,7 @@ class StoreSeo {
      * @return void
      */
     public function output_meta_tags() {
+        global $wp_version;
         if ( !dokan_is_store_page() ) {
             return;
         }
@@ -84,8 +85,11 @@ class StoreSeo {
             add_filter( 'wpseo_twitter_image', array( $this, 'replace_twitter_img' ) );
             add_action( 'wpseo_frontend_presenters', array( $this, 'print_twitter_img' ), 20 );
         } else {
-
-            add_filter( 'wp_title', array( $this, 'replace_title' ), 100 );
+            if ( version_compare( $wp_version, '4.4.0', '<' ) ) {
+                add_filter( 'wp_title', array( $this, 'replace_title' ), 100 );
+            } else {
+                add_filter( 'document_title_parts', array( $this, 'replace_title_new' ), 100 );
+            }
             add_action( 'wp_head', array( $this, 'print_tags' ), 1 );
             add_action( 'wp_head', array( $this, 'print_social_tags' ), 1 );
         }
@@ -261,7 +265,6 @@ class StoreSeo {
      * @return string $meta
      */
     public function replace_meta( $val_default, $meta, $type = '' ) {
-
         $meta_values = $this->store_info;
 
         if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
@@ -285,10 +288,25 @@ class StoreSeo {
      *
      * @param string $title
      *
-     * @return string title
+     * @return string
      */
     public function replace_title( $title ) {
+
         return $this->replace_meta( $title, 'title', 'meta' );
+    }
+    /**
+     * Replace title meta of other SEO plugin
+     * for WP version greater than 4.4.0
+     *
+     * @since 3.2.4
+     *
+     * @param array $title_array
+     *
+     * @return array
+     */
+    public function replace_title_new( $title_array ) {
+        $title_array['title'] = $this->replace_meta( $title_array['title'], 'title', 'meta' );
+        return $title_array;
     }
 
     /**
