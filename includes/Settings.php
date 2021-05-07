@@ -424,8 +424,7 @@ class Settings extends DokanSettings {
      *
      * @return array
      */
-    function calculate_profile_completeness_value( $dokan_settings ) {
-
+    public function calculate_profile_completeness_value( $dokan_settings ) {
         $profile_val = 0;
         $next_add    = '';
         $track_val   = [];

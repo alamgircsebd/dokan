@@ -137,6 +137,7 @@ class RegisterWithdrawMethods {
         }
 
         $get_data = wp_unslash( $_GET );
+        $store_id = get_current_user_id();
 
         $nonce = str_replace( 'dokan-stripe-connect:', '', $get_data['state'] );
 
@@ -162,11 +163,22 @@ class RegisterWithdrawMethods {
             );
         }
 
-        update_user_meta( get_current_user_id(), 'dokan_connected_vendor_id', $response->stripe_user_id );
-        update_user_meta( get_current_user_id(), '_stripe_connect_access_key', $response->access_token );
+        update_user_meta( $store_id, 'dokan_connected_vendor_id', $response->stripe_user_id );
+        update_user_meta( $store_id, '_stripe_connect_access_key', $response->access_token );
+
+        // Update stripe data and store progress bar
+        $dokan_settings                      = get_user_meta( $store_id, 'dokan_profile_settings', true );
+        $dokan_settings['payment']['stripe'] = 1;
+
+        update_user_meta( $store_id, 'dokan_profile_settings', $dokan_settings );
+
+        $dokan_settings['profile_completion'] = dokan_pro()->store_settings->calculate_profile_completeness_value( $dokan_settings );
+
+        update_user_meta( $store_id, 'dokan_profile_settings', $dokan_settings );
+
         // delete announcement transient
-        delete_transient( 'dokan_check_stripe_access_key_valid_' . get_current_user_id() );
-        delete_transient( 'non_connected_sellers_notice_intervals_' . get_current_user_id() );
+        delete_transient( 'dokan_check_stripe_access_key_valid_' . $store_id );
+        delete_transient( 'non_connected_sellers_notice_intervals_' . $store_id );
         wp_safe_redirect( dokan_get_navigation_url( 'settings/payment' ) );
         exit;
     }
@@ -210,6 +222,17 @@ class RegisterWithdrawMethods {
 
         delete_user_meta( $vendor_id, '_stripe_connect_access_key' );
         delete_user_meta( $vendor_id, 'dokan_connected_vendor_id' );
+
+        // Update store stripe data and progress bar
+        $dokan_settings                      = get_user_meta( $vendor_id, 'dokan_profile_settings', true );
+        $dokan_settings['payment']['stripe'] = 0;
+
+        update_user_meta( $vendor_id, 'dokan_profile_settings', $dokan_settings );
+
+        $dokan_settings['profile_completion'] = dokan_pro()->store_settings->calculate_profile_completeness_value( $dokan_settings );
+
+        update_user_meta( $vendor_id, 'dokan_profile_settings', $dokan_settings );
+
         // delete announcement transient
         delete_transient( "dokan_check_stripe_access_key_valid_$vendor_id" );
         delete_transient( 'non_connected_sellers_notice_intervals_' . $vendor_id );

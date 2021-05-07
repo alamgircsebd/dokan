@@ -365,14 +365,15 @@ class Dokan_Pro {
         $this->container['shipment']                 = new \WeDevs\DokanPro\Shipping\ShippingStatus();
         $this->container['bg_sync_vendor_zone_data'] = new \WeDevs\DokanPro\BackgroundProcess\SyncVendorZoneData();
 
-        $this->container = apply_filters( 'dokan_pro_get_class_container', $this->container );
-
         if ( is_user_logged_in() ) {
             new \WeDevs\DokanPro\Dashboard();
             new WeDevs\DokanPro\Reports();
             new WeDevs\DokanPro\Withdraws();
-            new WeDevs\DokanPro\Settings();
+            
+            $this->container['store_settings'] = new \WeDevs\DokanPro\Settings();
         }
+
+        $this->container = apply_filters( 'dokan_pro_get_class_container', $this->container );
 
         new \WeDevs\DokanPro\Assets();
 
