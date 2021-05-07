@@ -247,6 +247,8 @@ class Request implements ArrayAccess {
             }
         }
 
+        $this->validate_refund_amount( $data );
+
         foreach ( $data as $param => $value ) {
             $method = "validate_$param";
 
@@ -281,6 +283,92 @@ class Request implements ArrayAccess {
                 } else {
                     $this->set_param( $param, $sanitized );
                 }
+            }
+        }
+    }
+
+    /**
+     * Validate amount for over issue.
+     *
+     * @param array $data Refund request data.
+     *
+     * @since 3.2.3
+     *
+     * @return void
+     */
+    public function validate_refund_amount( $data ) {
+        global $wpdb;
+        $order_id                = $data['order_id'];
+        $order                   = wc_get_order( $order_id );
+        $item_totals_request     = json_decode( $data['item_totals'], true );
+        $item_tax_totals_request = json_decode( $data['item_tax_totals'], true );
+        $already_refunded        = array();
+        $results                 = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$wpdb->prefix}dokan_refund WHERE order_id=%d AND status != %d",
+                $order_id,
+                2  // 2 is refund status cancel.
+            )
+        );
+
+        foreach ( $results as $previous_refund ) {
+            if ( ! empty( $previous_refund->item_totals ) ) {
+                $item_totals_arr = json_decode( $previous_refund->item_totals, true );
+
+                foreach ( $item_totals_arr as $line_item_id => $amount ) {
+                    $already_refunded[ $line_item_id ]['item_totals'] = ( isset( $already_refunded[ $line_item_id ]['item_totals'] ) ) ? ( (float) $already_refunded[ $line_item_id ]['item_totals'] + (float) $amount ) : (float) $amount;
+                }
+            }
+
+            if ( ! empty( $previous_refund->item_tax_totals ) ) {
+                $item_tax_totals_arr = json_decode( $previous_refund->item_tax_totals, true );
+
+                foreach ( $item_tax_totals_arr as $line_item_id => $amount_array ) {
+                    $already_refunded[ $line_item_id ]['item_tax_totals'] = ( isset( $already_refunded[ $line_item_id ]['item_tax_totals'] ) ) ? ( (float) $already_refunded[ $line_item_id ]['item_tax_totals'] + (float) array_sum( $amount_array ) ) : (float) array_sum( $amount_array );
+                }
+            }
+            unset( $item_totals_arr );
+            unset( $item_tax_totals_arr );
+        }
+
+        foreach ( $order->get_items( array( 'line_item', 'shipping', 'fee' ) ) as $order_line_item_id => $order_line_item ) {
+            $refunded_amount = ( isset( $already_refunded[ $order_line_item_id ]['item_totals'] ) && ! empty( $already_refunded[ $order_line_item_id ]['item_totals'] ) ) ? $already_refunded[ $order_line_item_id ]['item_totals'] : 0.00;
+            $refunded_tax    = ( isset( $already_refunded[ $order_line_item_id ]['item_tax_totals'] ) && ! empty( $already_refunded[ $order_line_item_id ]['item_tax_totals'] ) ) ? $already_refunded[ $order_line_item_id ]['item_tax_totals'] : 0.00;
+
+            if ( isset( $item_totals_request[ $order_line_item_id ] ) && ( $order_line_item->get_total() < ( $refunded_amount + wc_format_decimal( $item_totals_request[ $order_line_item_id ] ) ) ) ) {
+                $this->add_error(
+                    new WP_Error(
+                        'dokan_pro_refund_error_excess_refund',
+                        __( 'Refund amount is more than permitted amount.', 'dokan' )
+                    )
+                );
+            }
+
+            if ( isset( $item_totals_request[ $order_line_item_id ] ) && ( wc_format_decimal( $item_totals_request[ $order_line_item_id ] < 0 ) ) ) {
+                $this->add_error(
+                    new WP_Error(
+                        'dokan_pro_refund_error_negative_refund_amount',
+                        __( 'Refund amount is negative number.', 'dokan' )
+                    )
+                );
+            }
+
+            if ( isset( $item_tax_totals_request[ $order_line_item_id ] ) && ( $order_line_item->get_total_tax() < ( $refunded_tax + (float) array_sum( $item_tax_totals_request[ $order_line_item_id ] ) ) ) ) {
+                $this->add_error(
+                    new WP_Error(
+                        'dokan_pro_refund_error_tax_excess_refund',
+                        __( 'Refund tax amount is more than permitted amount.', 'dokan' )
+                    )
+                );
+            }
+
+            if ( isset( $item_tax_totals_request[ $order_line_item_id ] ) && ( min( $item_tax_totals_request[ $order_line_item_id ] ) < 0 ) ) {
+                $this->add_error(
+                    new WP_Error(
+                        'dokan_pro_refund_error_negative_refund_tax_amount',
+                        __( 'Refund tax amount is negative number.', 'dokan' )
+                    )
+                );
             }
         }
     }

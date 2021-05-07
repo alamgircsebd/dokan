@@ -639,9 +639,9 @@ class Refund extends DokanModel {
         }
 
         foreach ( $this->get_item_tax_totals() as $item_id => $tax_totals ) {
-            foreach ( $tax_totals as $total_tax ) {
+            foreach ( $tax_totals as $total_tax_key => $total_tax ) {
                 $tax_refund += $total_tax;
-                $line_items[ $item_id ]['refund_tax'] = wc_format_decimal( $total_tax );
+                $line_items[ $item_id ]['refund_tax'][ $total_tax_key ] = wc_format_decimal( $total_tax );
             }
         }
 
