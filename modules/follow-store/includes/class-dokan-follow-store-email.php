@@ -117,7 +117,7 @@ class Dokan_Follow_Store_Email extends WC_Email {
 
         $this->setup_locale();
 
-        if ( ! $this->is_enabled() && ! $this->get_recipient() ) {
+        if ( ! $this->is_enabled() || ! $this->get_recipient() ) {
             return;
         }
 
