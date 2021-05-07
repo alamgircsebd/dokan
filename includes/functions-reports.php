@@ -36,7 +36,7 @@ function dokan_get_reports_charts() {
                 'function'    => 'dokan_top_earners',
                 'permission'  => 'dokan_view_top_earning_report',
             ],
-             'sales_statement' => [
+            'sales_statement' => [
                 'title'       => __( 'Statement', 'dokan' ),
                 'description' => '',
                 'function'    => 'dokan_seller_sales_statement',
@@ -296,6 +296,7 @@ function dokan_get_order_report_data( $args, $start_date, $end_date, $current_us
         AND     posts.post_status   != 'trash'
         AND     do.seller_id = {$current_user}
         AND     do.order_status IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', [ 'wc-completed', 'wc-processing', 'wc-on-hold' ] ) ) . "')
+        AND     do.order_status NOT IN ('wc-cancelled','wc-refunded','wc-failed')
         ";
 
     if ( $filter_range ) {
@@ -406,11 +407,20 @@ function dokan_get_order_report_data( $args, $start_date, $end_date, $current_us
         printf( '<pre>%s</pre>', print_r( $query, true ) );
     }
 
-    if ( $debug || $nocache || ( false === ( $result = get_transient( 'dokan_wc_report_' . $query_hash ) ) ) ) {
+    $cache_group = 'dokan_cache_report_data_seller_' . $current_user;
+    $tracked_cache_hashes = get_option( $cache_group, array() );
+    $cache_key = 'dokan_wc_report_' . $query_hash;
+    if ( ! in_array( $cache_key, $tracked_cache_hashes, true ) ) {
+        $tracked_cache_hashes[] = $cache_key;
+        update_option( $cache_group, $tracked_cache_hashes );
+    }
+
+    $result = get_transient( $cache_key );
+    if ( $debug || $nocache || ( false === $result ) ) {
         $result = apply_filters( 'dokan_reports_get_order_report_data', $wpdb->$query_type( $query ), $data );
 
         if ( $filter_range ) {
-            if ( $end_date == date( 'Y-m-d', current_time( 'timestamp' ) ) ) {
+            if ( $end_date === dokan_current_datetime()->format( 'Y-m-d' ) ) {
                 $expiration = 60 * 60 * 1; // 1 hour
             } else {
                 $expiration = 60 * 60 * 24; // 24 hour
@@ -419,7 +429,7 @@ function dokan_get_order_report_data( $args, $start_date, $end_date, $current_us
             $expiration = 60 * 60 * 24; // 24 hour
         }
 
-        set_transient( 'dokan_wc_report_' . $query_hash, $result, $expiration );
+        set_transient( $cache_key, $result, $expiration );
     }
 
     return $result;
@@ -433,8 +443,8 @@ function dokan_get_order_report_data( $args, $start_date, $end_date, $current_us
  * @return void
  */
 function dokan_sales_overview() {
-    $start_date = date( 'Y-m-01', current_time( 'timestamp' ) );
-    $end_date   = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+    $start_date = dokan_current_datetime()->modify( 'first day of this month' )->format( 'Y-m-d' );
+    $end_date   = dokan_current_datetime()->format( 'Y-m-d' );
 
     dokan_report_sales_overview( $start_date, $end_date, __( 'This month\'s sales', 'dokan' ) );
 }
@@ -493,7 +503,6 @@ function dokan_daily_sales() {
         </div>
     </form>
     <?php
-
     dokan_report_sales_overview( $start_date, $end_date, __( 'Sales in this period', 'dokan' ) );
 }
 
@@ -507,9 +516,9 @@ function dokan_daily_sales() {
  * @global type $wp_locale
  * @global WP_User $current_user
  *
- * @param type $start_date
- * @param type $end_date
- * @param type $heading
+ * @param string $start_date
+ * @param string $end_date
+ * @param string $heading
  */
 function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
     global $woocommerce, $wpdb, $wp_locale;
@@ -535,7 +544,7 @@ function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
             ],
         ],
         'filter_range' => true,
-        // 'debug' => true
+//         'debug' => true
     ], $start_date, $end_date );
 
     $total_sales    = $order_totals->total_sales;
@@ -623,11 +632,11 @@ function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
  *
  * @since 1.0
  *
- * @global type $wp_locale
+ * @global WP_Locale $wp_locale
  *
- * @param type $start_date
- * @param type $end_date
- * @param type $group_by
+ * @param string $start_date
+ * @param string $end_date
+ * @param string $group_by
  */
 function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
     global $wp_locale;
@@ -682,15 +691,18 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
     $order_amounts     = dokan_prepare_chart_data( $orders, 'post_date', 'total_sales', $chart_interval, $start_date_to_time, $group_by );
 
     // Encode in json format
-    $chart_data = json_encode( [
-        'order_counts'      => array_values( $order_counts ),
-        'order_amounts'     => array_values( $order_amounts ),
-    ] );
+    $chart_data = wp_json_encode(
+        [
+            'order_counts'  => array_values( $order_counts ),
+            'order_amounts' => array_values( $order_amounts ),
+        ]
+    );
 
     $chart_colours = [
-        'order_counts'    => '#3498db',
-        'order_amounts'   => '#1abc9c',
-    ]; ?>
+        'order_counts'  => '#3498db',
+        'order_amounts' => '#1abc9c',
+    ];
+    ?>
     <div class="chart-container">
         <div class="chart-placeholder main" style="width: 100%; height: 350px;"></div>
     </div>
@@ -845,7 +857,7 @@ function dokan_top_sellers() {
     ?>
     <form method="post" action="" class="report-filter dokan-form-inline dokan-clearfix">
         <div class="dokan-form-group">
-            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
+            <label for="from"><?php esc_html_e( 'From:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
         </div>
 
@@ -886,7 +898,7 @@ function dokan_top_sellers() {
         }
 
         $orders_link = apply_filters( 'dokan_reports_order_link', $orders_link, $product_id, $product_title );
-        $orders_link = ''; //FIXME : order link
+
 
         echo '<tr><th class="60%">' . $product_name . '</th><td width="1%"><span>' . esc_html( $sales ) . '</span></td><td width="30%"><div class="progress"><a class="progress-bar" href="' . esc_url( $orders_link ) . '" style="width:' . esc_attr( $width ) . '%">&nbsp;</a></div></td></tr>';
     } ?>

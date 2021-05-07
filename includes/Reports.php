@@ -26,6 +26,9 @@ class Reports {
         add_action( 'dokan_report_content_area_header', array( $this, 'report_header_render' ) );
         add_action( 'dokan_report_content', array( $this, 'render_review_content' ) );
         add_action( 'template_redirect', array( $this, 'handle_statement' ) );
+        add_action( 'woocommerce_order_status_changed', array( $this, 'refresh_reports_cache' ) );
+        add_action( 'woocommerce_new_order', array( $this, 'refresh_reports_cache' ) );
+        add_action( 'woocommerce_update_order', array( $this, 'refresh_reports_cache' ) );
     }
 
     /**
@@ -220,6 +223,36 @@ class Reports {
             'link' => $link,
             'current' => $current,
         ) );
+    }
+
+    /**
+     * Delete the reports cache for vendors.
+     *
+     * @param int $order_id Order ID.
+     *
+     * @since 3.2.4
+     *
+     * @return void
+     */
+    public function refresh_reports_cache( $order_id ) {
+        $order = wc_get_order( $order_id );
+        $all_vendor_ids = array();
+
+        foreach ( $order->get_items() as $order_line_item_id => $order_item ) {
+            $vendor    = dokan_get_vendor_by_product( $order_item->get_product() );
+            $vendor_id = $vendor->get_id();
+
+            if ( ! in_array( $vendor_id, $all_vendor_ids, true ) ) {
+                array_push( $all_vendor_ids, $vendor_id );
+            }
+        }
+
+        foreach ( $all_vendor_ids as $id ) {
+            $cache_group              = 'dokan_cache_report_data_seller_' . $id;
+            $tracked_cache_keys_array = get_option( $cache_group, array() );
+            array_map( 'delete_transient', $tracked_cache_keys_array );
+            delete_option( $cache_group );
+        }
     }
 
 }
