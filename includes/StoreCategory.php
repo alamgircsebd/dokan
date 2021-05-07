@@ -237,7 +237,12 @@ class StoreCategory {
      */
     public function after_seller_wizard_store_field_save( $wizard ) {
         $get_postdata = wp_unslash( $_POST ); // phpcs:ignore
-        $store_categories = ! empty( $get_postdata['dokan_store_categories'] ) ? sanitize_text_field( $get_postdata['dokan_store_categories'] ) : null;
+        $store_categories = ! empty( $get_postdata['dokan_store_categories'] ) ? $get_postdata['dokan_store_categories'] : null;
+        if ( is_array( $store_categories ) ) {
+            array_walk( $store_categories, function ( &$value ) {
+                $value = intval( $value );
+            } );
+        }
         dokan_set_store_categories( $wizard->store_id, $store_categories );
     }
 
