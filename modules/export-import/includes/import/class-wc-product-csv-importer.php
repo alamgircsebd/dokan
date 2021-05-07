@@ -363,13 +363,16 @@ class WC_Product_CSV_Importer extends WC_Product_Importer {
         $tags  = array();
 
         foreach ( $names as $name ) {
-            $term = get_term_by( 'name', $name, 'product_tag' );
+            $term           = get_term_by( 'name', $name, 'product_tag' );
+            $can_create_tag = 'on' === dokan_get_option( 'product_vendors_can_create_tags', 'dokan_selling', 'off' );
 
-            if ( !$term || is_wp_error( $term ) ) {
+            if ( ( ! $term || is_wp_error( $term ) ) && $can_create_tag ) {
+                $term = (object) wp_create_term( $name, 'product_tag' );
+            } elseif ( ( ! $term || is_wp_error( $term ) ) && ! $can_create_tag ) {
                 continue; //skipping this because we dont give vendor to create tags
             }
 
-            if ( !is_wp_error( $term ) ) {
+            if ( ! is_wp_error( $term ) ) {
                 $tags[] = $term->term_id;
             }
         }
