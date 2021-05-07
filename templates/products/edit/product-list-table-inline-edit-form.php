@@ -126,7 +126,7 @@
                                     <option value="_no_shipping_class"><?php esc_html_e( 'No shipping class', 'dokan' ); ?></option>
 
                                     <?php foreach ( $options['shipping_classes'] as $shipping_class_obj ) { ?>
-                                        <option value="<?php echo esc_attr( $shipping_class_obj->term_id ); ?>"<?php selected( $shipping_class_id, $shipping_class_obj->term_id ); ?>>
+                                        <option value="<?php echo esc_attr( $shipping_class_obj->slug ); ?>"<?php selected( $shipping_class_id, $shipping_class_obj->term_id ); ?>>
                                             <?php echo esc_html( $shipping_class_obj->name ); ?>
                                         </option>
                                     <?php } ?>
@@ -219,7 +219,7 @@
                         <?php esc_html_e( 'Product categories', 'dokan' ); ?>
                     </label>
 
-                    <select data-field-name="product_cat" class="dokan-form-control" 
+                    <select data-field-name="product_cat" class="dokan-form-control"
                     <?php
                     if ( ! $options['using_single_category_style'] ) {
                         echo 'multiple'; }
