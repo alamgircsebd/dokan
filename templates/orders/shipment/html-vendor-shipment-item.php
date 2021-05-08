@@ -89,13 +89,13 @@
                 <div class="dokan-form-group shipped-status-update-is-notify">
                     <label class="dokan-control-label shipped-status-update-label" for="shipment_update_is_notify_<?php echo esc_attr( $shipment_id ); ?>">
                         <input type="checkbox" name="shipment_update_is_notify_<?php echo esc_attr( $shipment_id ); ?>" id="shipment_update_is_notify_<?php echo esc_attr( $shipment_id ); ?>" value="on">
-                        <?php esc_html_e( 'Notify to customer', 'dokan' ); ?>
+                        <?php esc_html_e( 'Notify Customer', 'dokan' ); ?>
                     </label>
                 </div>
             <?php endif; ?>
         </div>
         <div class="shippments-tracking-footer-button">
-            <?php if ( $is_editable ) : ?>
+            <?php if ( $is_editable && ! $disabled_update_btn ) : ?>
                 <input id="update-tracking-status-details" type="button" class="btn btn-primary" value="<?php esc_attr_e( 'Update Shipment', 'dokan' ); ?>" data-shipment_id="<?php echo esc_attr( $shipment_id ); ?>">
             <?php endif; ?>
             <p id="shipment-update-response-area_<?php echo esc_attr( $shipment_id ); ?>" class="shipment-update-response-box"> </p>
@@ -104,7 +104,7 @@
     </div>
     <?php if ( $shipment_timeline ) : ?>
         <div class="dokan-customer-shipment-notes-list-area dokan-hide shipment_footer_<?php echo esc_attr( $shipment_id ); ?>">
-            <h5><strong><?php esc_html_e( 'Shipments Updates Details', 'dokan' ); ?></strong></h5>
+            <h5><strong><?php esc_html_e( 'Shipment Updates Timeline', 'dokan' ); ?></strong></h5>
             <span class="shipment-notes-details-tab-toggle" data-shipment_id="<?php echo esc_attr( $shipment_id ); ?>">
                 <span class="dashicons dashicons-arrow-down-alt2 details-tab-toggle-sort-desc"></span>
             </span>

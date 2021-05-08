@@ -28,25 +28,26 @@
 
                     dokan_get_template_part(
                         'orders/shipment/html-vendor-shipment-item', '', array(
-                            'pro'               => true,
-                            'shipment_id'       => $shipment_id,
-                            'order_id'          => $order_id,
-                            'provider'          => $provider,
-                            'provider_label'    => $provider_label,
-                            'number'            => $number,
-                            'date'              => $date,
-                            'status'            => $status_label,
-                            'shipping_status'   => $shipping_status,
-                            'provider_url'      => $provider_url,
-                            'item_qty'          => $item_qty,
-                            'order'             => $order,
-                            'line_items'        => $line_items,
-                            'incre'             => $incre,
-                            'status_list'       => $status_list,
-                            's_providers'       => $s_providers,
-                            'd_providers'       => $d_providers,
-                            'is_editable'       => $is_editable,
-                            'shipment_timeline' => $shipment_timeline,
+                            'pro'                 => true,
+                            'shipment_id'         => $shipment_id,
+                            'order_id'            => $order_id,
+                            'provider'            => $provider,
+                            'provider_label'      => $provider_label,
+                            'number'              => $number,
+                            'date'                => $date,
+                            'status'              => $status_label,
+                            'shipping_status'     => $shipping_status,
+                            'provider_url'        => $provider_url,
+                            'item_qty'            => $item_qty,
+                            'order'               => $order,
+                            'line_items'          => $line_items,
+                            'incre'               => $incre,
+                            'status_list'         => $status_list,
+                            's_providers'         => $s_providers,
+                            'd_providers'         => $d_providers,
+                            'is_editable'         => $is_editable,
+                            'shipment_timeline'   => $shipment_timeline,
+                            'disabled_update_btn' => $disabled_create_btn,
                         )
                     );
 
@@ -170,7 +171,7 @@
                 <p class="no-shipment-found-desc"><?php esc_html_e( 'No shipment found', 'dokan' ); ?></p>
             <?php endif; ?>
 
-            <?php if ( ! $is_shipped ) : ?>
+            <?php if ( ! $is_shipped && ! $disabled_create_btn ) : ?>
                 <button id="create-tracking-status-action" type="button" class="dokan-btn dokan-btn-theme create-shipping-tracking"><?php esc_html_e( 'Create New Shipment', 'dokan' ); ?></button>
             <?php endif ?>
         </div>

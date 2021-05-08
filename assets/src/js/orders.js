@@ -120,6 +120,7 @@
 
             $('#add-tracking-status-details').prop('disabled', true);
             $('#shipment-update-response-area').html('');
+            $('#shipment-update-response-area').removeClass( 'dokan-alert dokan-alert-success dokan-alert-warning' );
 
             // Get line item shippments
             var item_qty = {};
@@ -162,8 +163,10 @@
             $.post( dokan.ajaxurl, shipping_tracking_info, function(response) {
                 if ( response ) {
                     $('#shipment-update-response-area').html( response );
+                    $('#shipment-update-response-area').addClass( 'dokan-alert dokan-alert-success' );
                 } else {
                     $('#shipment-update-response-area').html( dokan.shipment_status_error_msg );
+                    $('#shipment-update-response-area').addClass( 'dokan-alert dokan-alert-warning' );
                 }
                 
                 $('#dokan-order-shipping-status-tracking').unblock();

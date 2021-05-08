@@ -205,29 +205,35 @@ class ShippingStatus {
             return;
         }
 
-        $_nonce             = isset( $_REQUEST['_wpnonce'] ) ? sanitize_key( $_REQUEST['_wpnonce'] ) : '';
-        $default_providers  = dokan_get_shipping_tracking_providers_list();
-        $selected_providers = dokan_get_option( 'shipping_status_provider', 'dokan_shipping_status_setting' );
-        $status_list        = dokan_get_option( 'shipping_status_list', 'dokan_shipping_status_setting' );
-        $order              = dokan()->order->get( $order_id );
+        $_nonce              = isset( $_REQUEST['_wpnonce'] ) ? sanitize_key( $_REQUEST['_wpnonce'] ) : '';
+        $default_providers   = dokan_get_shipping_tracking_providers_list();
+        $selected_providers  = dokan_get_option( 'shipping_status_provider', 'dokan_shipping_status_setting' );
+        $status_list         = dokan_get_option( 'shipping_status_list', 'dokan_shipping_status_setting' );
+        $order               = dokan()->order->get( $order_id );
+        $disabled_create_btn = false;
 
         if ( $order ) {
             $line_items    = $order->get_items( apply_filters( 'woocommerce_admin_order_item_types', 'line_item' ) );
             $shipment_info = dokan_pro()->shipment->get_shipping_tracking_info( $order_id );
             $is_shipped    = $this->is_order_shipped( $order );
+
+            if ( $order->get_status() === 'cancelled' || $order->get_status() === 'refunded' ) {
+                $disabled_create_btn = true;
+            }
         }
 
         dokan_get_template_part(
             'orders/shipment/html-shipping-status', '', array(
-                'pro'           => true,
-                'd_providers'   => $default_providers,
-                's_providers'   => $selected_providers,
-                'status_list'   => $status_list,
-                'order_id'      => $order_id,
-                'order'         => $order,
-                'line_items'    => $line_items,
-                'shipment_info' => $shipment_info,
-                'is_shipped'    => $is_shipped,
+                'pro'                 => true,
+                'd_providers'         => $default_providers,
+                's_providers'         => $selected_providers,
+                'status_list'         => $status_list,
+                'order_id'            => $order_id,
+                'order'               => $order,
+                'line_items'          => $line_items,
+                'shipment_info'       => $shipment_info,
+                'is_shipped'          => $is_shipped,
+                'disabled_create_btn' => $disabled_create_btn,
             )
         );
     }

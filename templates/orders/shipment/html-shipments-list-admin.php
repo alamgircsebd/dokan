@@ -34,7 +34,7 @@
     </div>
     <?php if ( $shipment_timeline ) : ?>
         <div class="dokan-customer-shipment-notes-list-area dokan-hide shipment_notes_area_<?php echo esc_attr( $shipment_id ); ?>">
-            <h5><strong><?php esc_html_e( 'Shipments Updates Details', 'dokan' ); ?></strong></h5>
+            <h5><strong><?php esc_html_e( 'Shipment Updates Timeline', 'dokan' ); ?></strong></h5>
             <span class="shipment-notes-details-tab-toggle" data-shipment_id="<?php echo esc_attr( $shipment_id ); ?>">
                 <span class="dashicons dashicons-arrow-down-alt2 details-tab-toggle-sort-desc"></span>
             </span>
