@@ -301,6 +301,10 @@ class ShippingStatus {
 
         $order = dokan()->order->get( $post_id );
 
+        if ( $order->get_status() === 'cancelled' || $order->get_status() === 'refunded' ) {
+            die( -1 );
+        }
+
         if ( empty( $order ) || $tracking_info['number'] === '' || $tracking_info['shipping_status'] === '' || $tracking_info['provider'] === '' ) {
             die();
         }
@@ -375,6 +379,10 @@ class ShippingStatus {
         }
 
         $order = dokan()->order->get( $post_id );
+
+        if ( $order->get_status() === 'cancelled' || $order->get_status() === 'refunded' ) {
+            die( -1 );
+        }
 
         if ( empty( $order ) || $number === '' || $status === '' || $provider === '' || $post_id < 1 || $shipment_id < 1 ) {
             die( -1 );
