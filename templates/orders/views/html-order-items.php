@@ -171,7 +171,7 @@ if ( wc_tax_enabled() ) {
             <?php
             echo '<li><strong>' . __( 'Coupon(s) Used', 'dokan' ) . '</strong></li>';
             foreach ( $coupons as $item_id => $item ) {
-                $post_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'shop_coupon' AND post_status = 'publish' LIMIT 1;", $item['name'] ) );
+                $post_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'shop_coupon' AND post_status = 'publish' LIMIT 1;", $item->get_name() ) );
 
                 $item_link = $post_item_id ? add_query_arg(
                     array(
@@ -181,7 +181,7 @@ if ( wc_tax_enabled() ) {
                     ), dokan_get_navigation_url( 'coupons' )
                 ) : dokan_get_navigation_url( 'coupons' );
 
-                echo '<li class="code"><a href="' . esc_url( $item_link ) . '" class="tips" data-tip="' . esc_attr( wc_price( $item['discount_amount'], array( 'currency' => dokan_replace_func( 'get_order_currency', 'get_currency', $order ) ) ) ) . '"><span>' . esc_html( $item['name'] ) . '</span></a></li>';
+                echo '<li class="code"><a href="' . esc_url( $item_link ) . '" class="tips" data-tip="' . esc_attr( wc_price( $item->get_discount(), array( 'currency' => dokan_replace_func( 'get_order_currency', 'get_currency', $order ) ) ) ) . '"><span>' . esc_html( $item->get_name() ) . '</span></a></li>';
             }
             ?>
             </ul>
