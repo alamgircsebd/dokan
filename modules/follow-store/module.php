@@ -37,12 +37,12 @@ final class Module {
      * @return void
      */
     private function define_constants() {
-        define( 'DOKAN_FOLLOW_STORE_VERSION' , $this->version );
-        define( 'DOKAN_FOLLOW_STORE_FILE' , __FILE__ );
-        define( 'DOKAN_FOLLOW_STORE_PATH' , dirname( DOKAN_FOLLOW_STORE_FILE ) );
-        define( 'DOKAN_FOLLOW_STORE_INCLUDES' , DOKAN_FOLLOW_STORE_PATH . '/includes' );
-        define( 'DOKAN_FOLLOW_STORE_URL' , plugins_url( '', DOKAN_FOLLOW_STORE_FILE ) );
-        define( 'DOKAN_FOLLOW_STORE_ASSETS' , DOKAN_FOLLOW_STORE_URL . '/assets' );
+        define( 'DOKAN_FOLLOW_STORE_VERSION', $this->version );
+        define( 'DOKAN_FOLLOW_STORE_FILE', __FILE__ );
+        define( 'DOKAN_FOLLOW_STORE_PATH', dirname( DOKAN_FOLLOW_STORE_FILE ) );
+        define( 'DOKAN_FOLLOW_STORE_INCLUDES', DOKAN_FOLLOW_STORE_PATH . '/includes' );
+        define( 'DOKAN_FOLLOW_STORE_URL', plugins_url( '', DOKAN_FOLLOW_STORE_FILE ) );
+        define( 'DOKAN_FOLLOW_STORE_ASSETS', DOKAN_FOLLOW_STORE_URL . '/assets' );
         define( 'DOKAN_FOLLOW_STORE_VIEWS', DOKAN_FOLLOW_STORE_PATH . '/views' );
     }
 
@@ -92,11 +92,20 @@ final class Module {
      */
     public function load_hooks() {
         add_filter( 'dokan_rest_api_class_map', [ $this, 'rest_api_class_map' ] );
+        add_action( 'plugins_loaded', [ $this, 'load_background_class' ] );
     }
 
-    public function rest_api_class_map($class_map) {
+    public function rest_api_class_map( $class_map ) {
         $class_map[ DOKAN_FOLLOW_STORE_PATH . '/includes/class-dokan-follow-store-rest-controller.php' ] = DokanFollowStoreRestController::class;
 
         return $class_map;
+    }
+
+    public function load_background_class() {
+        $processor_file = DOKAN_FOLLOW_STORE_INCLUDES . '/class-dokan-follow-store-send-updates.php';
+        require_once $processor_file;
+
+        global $dokan_follow_store_updates_bg;
+        $dokan_follow_store_updates_bg = new \Dokan_Follow_Store_Send_Updates();
     }
 }

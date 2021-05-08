@@ -37,12 +37,8 @@ class Dokan_Follow_Store_Install {
         $this->queue_flash_rewrite_rules();
         Dokan_Follow_Store_Cron::unschedule_event();
 
-        $processor_file = DOKAN_FOLLOW_STORE_INCLUDES . '/class-dokan-follow-store-send-updates.php';
-
-        require_once $processor_file;
-
-        $processor = new Dokan_Follow_Store_Send_Updates();
-        $processor->cancel_process();
+        global $dokan_follow_store_updates_bg;
+        $dokan_follow_store_updates_bg->cancel_process();
     }
 
     /**

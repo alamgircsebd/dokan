@@ -39,14 +39,10 @@ class Dokan_Follow_Store_Cron {
      * @return void
      */
     public function send_updates() {
-        global $wpdb;
-
         $processor_file = DOKAN_FOLLOW_STORE_INCLUDES . '/class-dokan-follow-store-send-updates.php';
 
-        require_once $processor_file;
-
-        $processor = new Dokan_Follow_Store_Send_Updates();
-        $processor->cancel_process();
+        global $dokan_follow_store_updates_bg;
+        $dokan_follow_store_updates_bg->cancel_process();
 
         $yesterday = date( 'Y-m-d', strtotime( '-24 hours', current_time( 'timestamp' ) ) );
         $from      = $yesterday . ' 00:00:00';
@@ -58,6 +54,6 @@ class Dokan_Follow_Store_Cron {
             'to'    => $to,
         );
 
-        $processor->push_to_queue( $args )->dispatch_process( $processor_file );
+        $dokan_follow_store_updates_bg->push_to_queue( $args )->dispatch_process( $processor_file );
     }
 }

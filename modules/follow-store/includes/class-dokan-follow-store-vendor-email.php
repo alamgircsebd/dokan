@@ -128,13 +128,17 @@ class Dokan_Follow_Store_Vendor_Email extends WC_Email {
     public function trigger( $vendor_id, $follower_id, $status ) {
         $this->setup_locale();
 
-        if ( ! $this->is_enabled() || ! $this->get_email_recipient() ) {
+        if ( ! $this->is_enabled() ) {
             return;
         }
 
         $this->follower = get_userdata( $follower_id );
         $this->vendor   = dokan()->vendor->get( $vendor_id );
         $this->status   = $status;
+
+        if ( ! $this->get_email_recipient() ) {
+            return;
+        }
 
         $this->placeholders['{follower_name}'] = $this->follower->display_name;
 
