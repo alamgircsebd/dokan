@@ -1,6 +1,102 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.2.4',
+        'released' => '2021-30-04',
+        'changes'  => array(
+            array(
+                'title'       => 'Shipping Status for Vendor Orders',
+                'type'        => 'New',
+                'description' => 'Shipping Status for vendor orders. Now vendors can manage thir shipments for customers.',
+            ),
+            array(
+                'title'       => 'Attach Source to Customer Object First so That Payment Get Processed',
+                'type'        => 'Improvement',
+                'description' => 'Attach source to customer object first so that payment get processed successfully and then remove source if necessary: stripe non3ds.',
+            ),
+            array(
+                'title'       => 'Live Search with Suggestion Set Default',
+                'type'        => 'Improvement',
+                'description' => 'Live search with suggestion set default, also make on dokan live search widgets.',
+            ),
+            array(
+                'title'       => 'Vendor Variation Product Import Error',
+                'type'        => 'Fix',
+                'description' => 'Vendor variation product import error fixed.',
+            ),
+            array(
+                'title'       => 'Store Category Not Saving from Setup Widget',
+                'type'        => 'Fix',
+                'description' => 'Store category not saving from setup widget issue fixed.',
+            ),
+            array(
+                'title'       => 'Updating Product Details Quick Edit Resets Shipping Class',
+                'type'        => 'Fix',
+                'description' => 'Updating product details using Quick Edit resets the Shipping Class fixed.',
+            ),
+            array(
+                'title'       => 'Does Not Reflect Today\'s Report in Sales by Day',
+                'type'        => 'Fix',
+                'description' => 'Does not reflect today\'s report in sales by day or overview.',
+            ),
+            array(
+                'title'       => 'Product Doesn\'t Go Offline While Activating Vacation',
+                'type'        => 'Fix',
+                'description' => 'Product doesn\'t go offline while activating vacation mode issue fixed.',
+            ),
+            array(
+                'title'       => 'All Log Table Filter in Translation',
+                'type'        => 'Fix',
+                'description' => 'All log table filter in translation for admin reports.',
+            ),
+            array(
+                'title'       => 'Vendor Can Create Tag with Product Import',
+                'type'        => 'Fix',
+                'description' => 'Vendor can create tag in product import support.',
+            ),
+            array(
+                'title'       => 'Product Live Search Not Work With Android',
+                'type'        => 'Fix',
+                'description' => 'Android product live search issues fixed.',
+            ),
+            array(
+                'title'       => 'Vendor Store Page Title Replace with Store SEO Title',
+                'type'        => 'Fix',
+                'description' => 'Vendor store page title replace with store seo title.',
+            ),
+            array(
+                'title'       => 'Store Follow Email Triggering Though Email is Disabled in WC Email',
+                'type'        => 'Fix',
+                'description' => 'Store follow email triggering though email is disabled in WC email.',
+            ),
+            array(
+                'title'       => 'Update Store Progress When Stripe Connected',
+                'type'        => 'Fix',
+                'description' => 'Update store progress bar when stripe connected by vendor.',
+            ),
+            array(
+                'title'       => 'Refund Amount and Tax Over Refund Check',
+                'type'        => 'Fix',
+                'description' => 'Refund amount and tax over refund check.',
+            ),
+            array(
+                'title'       => 'Cannot Charge a Customer That Has no Active Card Error',
+                'type'        => 'Fix',
+                'description' => 'Cannot charge a customer that has no active card - error if trying to process payment from guest user with non-connected vendors.',
+            ),
+            array(
+                'title'       => 'Set Newly Added Card as Default Payment Source',
+                'type'        => 'Fix',
+                'description' => 'Set newly added card as default payment source while updating a vendor subscription.',
+            ),
+            array(
+                'title'       => 'Don\'t Save Card If Save Card Checkbox is Not Selected',
+                'type'        => 'Fix',
+                'description' => 'Don\'t save card if save card checkbox is not selected - Stripe 3DS.',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.2.3',
         'released' => '2021-30-04',
         'changes'  => array(

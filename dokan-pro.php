@@ -226,7 +226,7 @@ class Dokan_Pro {
      * @return void
      * */
     public function install_dokan_lite() {
-        if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'dokan-pro-installer-nonce' ) ) {
+        if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'dokan-pro-installer-nonce' ) ) { // phpcs:ignore
             wp_send_json_error( __( 'Error: Nonce verification failed', 'dokan' ) );
         }
 
@@ -256,10 +256,6 @@ class Dokan_Pro {
      * @return void
      */
     public function includes() {
-        if ( is_admin() ) {
-            // require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
-        }
-
         require_once DOKAN_PRO_INC . '/functions.php';
         require_once DOKAN_PRO_INC . '/Coupons/functions.php';
         require_once DOKAN_PRO_INC . '/function-orders.php';
@@ -369,7 +365,7 @@ class Dokan_Pro {
             new \WeDevs\DokanPro\Dashboard();
             new WeDevs\DokanPro\Reports();
             new WeDevs\DokanPro\Withdraws();
-            
+
             $this->container['store_settings'] = new \WeDevs\DokanPro\Settings();
         }
 
@@ -456,8 +452,8 @@ class Dokan_Pro {
             || dokan_is_store_listing()
             || apply_filters( 'dokan_forced_load_scripts', false )
             ) {
-            // wp_enqueue_style( 'dokan-pro-style' );
-            wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/dokan-pro' . $suffix . '.css', false, time(), 'all' );
+            // Load dokan pro styles
+            wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/dokan-pro' . $suffix . '.css', false, DOKAN_PRO_PLUGIN_VERSION, 'all' );
 
             // Load accounting scripts
             wp_enqueue_script( 'serializejson' );
@@ -466,7 +462,7 @@ class Dokan_Pro {
             //localize script for refund and dashboard image options
             $dokan_refund = dokan_get_refund_localize_data();
             wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
-            wp_enqueue_script( 'dokan-pro-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/dokan-pro' . $suffix . '.js', [ 'jquery', 'dokan-script' ], time(), true );
+            wp_enqueue_script( 'dokan-pro-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/dokan-pro' . $suffix . '.js', [ 'jquery', 'dokan-script' ], DOKAN_PRO_PLUGIN_VERSION, true );
         }
 
         // Load in Single product pages only
