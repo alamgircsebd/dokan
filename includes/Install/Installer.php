@@ -61,7 +61,7 @@ class Installer {
     /** 
      * Add new table for shipping tracking
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @return void
      */

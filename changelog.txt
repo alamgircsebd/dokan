@@ -1,3 +1,26 @@
+v3.2.4 May 8, 2021
+----------------------------------
+
+- **feat:** Shipping Status for vendors
+- **new:** Attach source to customer object first so that payment get processed successfully and then remove source if necessary: stripe non3ds
+- **fix:** Android product live search issues fixed
+- **fix:** Vendor variation product import error fixed
+- **fix;** Store category not saving from setup widget
+- **fix:** Updating product details using Quick Edit resets the Shipping Class
+- **fix:** Does not reflect today's report in sales by day or overview
+- **fix:** Product doesn't go offline while activating vacation mode
+- **fix:** Product status changes to online if product updated from quick edit in vacation mode.
+- **fix:** All log table filter in translation for admin reports
+- **fix:** Vendor can create tag in product import support
+- **fix:** Vendor store page title replace with store SEO title
+- **fix:** Store follow email triggering though email is disabled in WC email
+- **fix:** Update store progress bar when stripe connected
+- **fix:** Refund amount and tax over refund check
+- **fix:** 'Cannot charge a customer that has no active card' error if trying to process payment from guest user with non-connected vendors
+- **fix:** Set newly added card as default payment source while updating a vendor subscription
+- **fix:** Don't save card if save card checkbox is not selected - Stripe 3DS
+- **new:** Live search with suggestion set by default
+
 v3.2.3 Apr 30, 2021
 ----------------------------------
 

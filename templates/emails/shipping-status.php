@@ -6,7 +6,7 @@
  *
  * @class    ShippingStatus
  *
- * @version  DOKAN_PRO_SINCE
+ * @version  3.2.4
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -12,7 +12,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends WC_Background_P
     /**
      * Initiate new background process.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      * @return void
      */
     public function __construct() {
@@ -28,7 +28,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends WC_Background_P
      *
      * Updater will still run via cron job if this fails for any reason.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      * @return void
      */
     public function dispatch() {
@@ -48,7 +48,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends WC_Background_P
      * Restart the background process if not already running
      * and data exists in the queue.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      * @return void
      */
     public function handle_cron_healthcheck() {
@@ -69,7 +69,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends WC_Background_P
     /**
      * Schedule fallback event.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      * @return void
      */
     protected function schedule_event() {
@@ -168,7 +168,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends WC_Background_P
      * Override if applicable, but ensure that the below actions are
      * performed, or, call parent::complete().
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      * @return void
      */
     protected function complete() {

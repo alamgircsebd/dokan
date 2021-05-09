@@ -268,7 +268,7 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
     /**
      * This method will add a source to a stripe customer
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      * @param $prepared_source
      *
      * @throws \WeDevs\Dokan\Exceptions\DokanException
@@ -289,7 +289,7 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
     /**
      * This method will delete a source from a stripe customer
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      * @param $prepared_source
      */
     private function delete_source_from_customer( $prepared_source ) {

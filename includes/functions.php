@@ -666,7 +666,7 @@ function dokan_is_single_seller_mode_enable() {
 /**
  * Dokan get shipping tracking providers list
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @return array
  */
@@ -756,7 +756,7 @@ function dokan_shipping_status_tracking_providers_list() {
 /**
  * Dokan get shipping tracking providers list
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @return array
  */
@@ -775,7 +775,7 @@ function dokan_get_shipping_tracking_providers_list() {
 /**
  * Dokan get shipping tracking default providers list
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @return array
  */
@@ -796,7 +796,7 @@ function dokan_get_shipping_tracking_default_providers_list() {
 /**
  * Dokan get shipping tracking default providers list
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @param string $key_data
  *
@@ -819,7 +819,7 @@ function dokan_get_shipping_tracking_status_by_key( $key_data ) {
 /**
  * Dokan get shipping tracking provider name by key
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @param string $key_data
  * @param string $return_type
@@ -850,7 +850,7 @@ function dokan_get_shipping_tracking_provider_by_key( $key_data, $return_type = 
 /**
  * Dokan get shipping tracking current status by order id
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @param id $order_id
  * @param id $need_label
@@ -876,7 +876,7 @@ function dokan_shipping_tracking_status_by_orderid( $order_id, $need_label = 0 )
 /**
  * Dokan get shipping tracking current provider by oder id
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @param id $order_id
  *
@@ -901,7 +901,7 @@ function dokan_shipping_tracking_provider_by_orderid( $order_id ) {
 /**
  * Get order current shipment status
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @param int $order_id
  *
@@ -987,7 +987,7 @@ function dokan_get_order_shipment_current_status( $order_id, $get_only_status = 
 /**
  * Get main order current shipment status
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @param int $order_id
  *
@@ -1055,7 +1055,7 @@ function dokan_get_main_order_shipment_current_status( $order_id ) {
 /**
  * Get order current shipment status html view
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @param string $get_status
  *
@@ -1076,7 +1076,7 @@ function dokan_get_order_shipment_status_html( $get_status ) {
 /**
  * Shipping clear cache values by group name
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.2.4
  *
  * @param int $order_id
  *

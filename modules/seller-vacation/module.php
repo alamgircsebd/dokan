@@ -71,7 +71,7 @@ class Module {
     /**
      * Load background process file on plugins_loaded hook
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      * @return void
      */
     public function load_bg_class() {
