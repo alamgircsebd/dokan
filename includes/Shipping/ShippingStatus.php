@@ -14,21 +14,21 @@ class ShippingStatus {
     /**
      * Shipping status option
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      */
     public $enabled;
 
     /**
      * Shipping status option
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      */
     public $wc_shipping_enabled;
 
     /**
      * Shipping Status class construct
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      */
     public function __construct() {
         $this->wc_shipping_enabled = get_option( 'woocommerce_calc_shipping' ) === 'yes' ? true : false;
@@ -46,7 +46,7 @@ class ShippingStatus {
      * Load hooks for this shippping
      * tracking
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @return void
      */
@@ -70,7 +70,7 @@ class ShippingStatus {
     /**
      * Add shipping status section in Dokan settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param array $sections
      *
@@ -90,7 +90,7 @@ class ShippingStatus {
     /**
      * Load all settings fields
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @return void
      */
@@ -146,7 +146,7 @@ class ShippingStatus {
     /**
      * Add default shipping status when get blank
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @return void
      */
@@ -192,7 +192,7 @@ class ShippingStatus {
     /**
      * Get shipping status main content
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @return void
      */
@@ -241,7 +241,7 @@ class ShippingStatus {
     /**
      * Get order shipment status
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param obj $order
      *
@@ -272,7 +272,7 @@ class ShippingStatus {
     /**
      * Add shipping tracking info via ajax
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param void
      */
@@ -339,7 +339,7 @@ class ShippingStatus {
     /**
      * Update shipping tracking info via ajax
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param void
      */
@@ -464,7 +464,7 @@ class ShippingStatus {
     /**
      * Add shipping tracking info as customer notes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param int    $post_id
      * @param string $ship_info
@@ -509,7 +509,7 @@ class ShippingStatus {
     /**
      * Get all approved shipment tracking notes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param int $order_id
      * @param int $shipment_id
@@ -542,7 +542,7 @@ class ShippingStatus {
     /**
      * Create a shipping tracking info
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param array $data
      *
@@ -567,7 +567,7 @@ class ShippingStatus {
     /**
      * Prepare shipping tracking data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param array $post_data
      *
@@ -647,7 +647,7 @@ class ShippingStatus {
     /**
      * Get shipping tracking data by order id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param int $order_id
      *
@@ -717,7 +717,7 @@ class ShippingStatus {
     /**
      * Change the columns shown in admin area
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param array $existing_columns
      *
@@ -736,7 +736,7 @@ class ShippingStatus {
     /**
      * Adds custom column on dokan admin shop order table
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @global type $post
      * @global \WC_Order $the_order
@@ -775,7 +775,7 @@ class ShippingStatus {
     /**
      * Shipment order meta box for admin order page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @return void
      */
@@ -801,7 +801,7 @@ class ShippingStatus {
     /**
      * Get shipping tracking info by order/shipment id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param int    $id
      * @param string $context
@@ -836,7 +836,7 @@ class ShippingStatus {
     /**
      * Is order item fully shiptted
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param int $order_id
      * @param int $item_id
@@ -884,7 +884,7 @@ class ShippingStatus {
     /**
      * Shipment order details meta box for admin area order page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @return void
      */
@@ -945,7 +945,7 @@ class ShippingStatus {
     /**
      * Shipment order details show after order table WC my account
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param Obj $order
      *
@@ -977,7 +977,7 @@ class ShippingStatus {
     /**
      * Shipment column added on my account page order listing page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param array $columns
      *
@@ -1001,7 +1001,7 @@ class ShippingStatus {
     /**
      * Shipment data show on my account page order listing page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param obj $order
      *
@@ -1021,7 +1021,7 @@ class ShippingStatus {
     /**
      * Add Dokan Pro localized vars
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.2.4
      *
      * @param array $args
      *
