@@ -40,7 +40,7 @@
                                 <?php esc_html_e( 'Pending Review', 'dokan' ); ?>
                                 <input type="hidden" data-field-name="post_status" value="<?php echo esc_attr( 'pending' ); ?>">
                             </span>
-                        <?php } elseif ( dokan_seller_vacation_is_seller_on_vacation( dokan_get_current_user_id() ) ) { ?>
+                        <?php } elseif ( function_exists( 'dokan_seller_vacation_is_seller_on_vacation' ) &&  dokan_seller_vacation_is_seller_on_vacation( dokan_get_current_user_id() ) ) { ?>
                             <span class="dokan-label dokan-label-info">
                                 <?php esc_html_e( 'In Vacation', 'dokan' ); ?>
                                 <input type="hidden" data-field-name="post_status" value="<?php echo esc_attr( 'vacation' ); ?>">
