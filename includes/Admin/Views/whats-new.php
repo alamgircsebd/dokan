@@ -2,7 +2,7 @@
 $changelog = array(
     array(
         'version'  => 'Version 3.2.5',
-        'released' => '2021-11-05',
+        'released' => '2021-05-11',
         'changes'  => array(
             array(
                 'title'       => 'Products not showing on vendor dashboard product listing page',
@@ -13,7 +13,7 @@ $changelog = array(
     ),
     array(
         'version'  => 'Version 3.2.4',
-        'released' => '2021-08-05',
+        'released' => '2021-05-08',
         'changes'  => array(
             array(
                 'title'       => 'Shipping Status for Vendor Orders',
@@ -109,7 +109,7 @@ $changelog = array(
     ),
     array(
         'version'  => 'Version 3.2.3',
-        'released' => '2021-30-04',
+        'released' => '2021-04-30',
         'changes'  => array(
             array(
                 'title'       => 'Digital and Physical Product Types Vendors',
@@ -225,7 +225,7 @@ $changelog = array(
     ),
     array(
         'version'  => 'Version 3.2.2',
-        'released' => '2021-31-03',
+        'released' => '2021-03-31',
         'changes'  => array(
             array(
                 'title'       => 'Added 3DS Auth Flow for Changing Payment Method [Stripe]',
