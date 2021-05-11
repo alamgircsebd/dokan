@@ -1,8 +1,19 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.2.5',
+        'released' => '2021-11-05',
+        'changes'  => array(
+            array(
+                'title'       => 'Products not showing on vendor dashboard product listing page',
+                'type'        => 'Fix',
+                'description' => 'Fatal error on vendor dashboard product listing page when vacation module is disabled or doesn\'t installed.',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.2.4',
-        'released' => '2021-30-04',
+        'released' => '2021-08-05',
         'changes'  => array(
             array(
                 'title'       => 'Shipping Status for Vendor Orders',
