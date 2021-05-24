@@ -377,9 +377,9 @@ if ( ! empty( $_GET['errors'] ) ) {
                         <input type="number" class="dokan-form-control" name="_wc_booking_cancel_limit" id="_wc_booking_cancel_limit" value="<?php echo max( absint( $cancellation_limit ), 1 ); ?>" step="1" min="1" style="display: inline-block; margin-right: 7px; width: 4em;">
                         <select name="_wc_booking_cancel_limit_unit" id="_wc_booking_cancel_limit_unit" class="dokan-form-control short" style="display: inline; width: auto; margin-right: 7px;">
                             <option value="month" <?php selected( $cancellation_limit_unit, 'month' ); ?>><?php _e( 'Month(s)', 'dokan' ); ?></option>
-                            <option value="week" <?php selected( $cancellation_limit_unit, 'week' ); ?>><?php _e( 'Week(s)', 'dokan' ); ?></option>
                             <option value="day" <?php selected( $cancellation_limit_unit, 'day' ); ?>><?php _e( 'Day(s)', 'dokan' ); ?></option>
                             <option value="hour" <?php selected( $cancellation_limit_unit, 'hour' ); ?>><?php _e( 'Hour(s)', 'dokan' ); ?></option>
+                            <option value="minute" <?php selected( $cancellation_limit_unit, 'minute' ); ?>><?php _e( 'Minute(s)', 'dokan' ); ?></option>
                         </select>
                         <span class="form-label"><?php _e( 'before start date', 'dokan' ); ?></span>
                     </div>
