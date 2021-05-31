@@ -36,7 +36,7 @@ class ProductReportAbuse extends Widget_Base {
      * @return string
      */
     public function get_icon() {
-        return 'eicon-coding';
+        return 'eicon-alert';
     }
 
     /**
@@ -88,14 +88,6 @@ class ProductReportAbuse extends Widget_Base {
             ]
         );
 
-        $this->add_control(
-            'icon',
-            [
-                'label'   => __( 'Icon', 'dokan' ),
-                'default' => 'fa fa-flag',
-            ]
-        );
-
         $this->end_controls_section();
     }
 
@@ -113,7 +105,7 @@ class ProductReportAbuse extends Widget_Base {
         ?>
         <div <?php echo $this->get_render_attribute_string( 'wrapper' ); ?>>
             <a href="#report-abuse" class="dokan-report-abuse-button">
-                <i class="<?php echo $this->get_settings( 'icon' ); ?>"></i> <?php echo $this->get_settings( 'text' ); ?>
+                <i class="fa fa-flag"></i> <?php echo $this->get_settings( 'text' ); ?>
             </a>
         </div>
         <?php
