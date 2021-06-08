@@ -672,15 +672,6 @@ if ( ! function_exists( 'dokan_user_update_to_seller' ) ) {
 
         $user_id = $user->ID;
 
-        $current_roles = (array) $user->roles;
-
-        // Remove role
-        if ( is_array( $current_roles ) ) {
-            foreach ( $current_roles as $current_role ) {
-                $user->remove_role( $current_role );
-            }
-        }
-
         // Add role
         $user->add_role( 'seller' );
 
