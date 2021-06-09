@@ -179,7 +179,7 @@ class StoreProductFilter extends Widget_Base {
         <div class="dokan-store-products-filter-area dokan-clearfix">
             <form class="dokan-store-products-ordeby" method="get">
                 <?php if ( 'yes' === $filter_orderby ) : ?>
-                    <select name="product_orderby" class="orderby orderby-search" aria-label="<?php esc_attr_e( 'Shop order', 'dokan-lite' ); ?>" onchange='if(this.value != 0) { this.form.submit(); }'>
+                    <select name="product_orderby" class="orderby orderby-search" aria-label="<?php esc_attr_e( 'Shop order', 'dokan' ); ?>" onchange='if(this.value != 0) { this.form.submit(); }'>
                         <?php foreach ( $catalog_orderby_options as $id => $name ) : ?>
                             <option value="<?php echo esc_attr( $id ); ?>" <?php selected( $orderby, $id ); ?>><?php echo esc_html( $name ); ?></option>
                         <?php endforeach; ?>
