@@ -175,19 +175,22 @@ class StoreProductFilter extends Widget_Base {
         $filter_product      = $this->get_settings( 'filter_product_name' );
         $product_placeholder = $this->get_settings( 'filter_product_name_placeholder' );
         $filter_orderby      = $this->get_settings( 'filter_orderby' );
+        $store_user          = dokan()->vendor->get( get_query_var( 'author' ) );
+        $store_id            = $store_user->get_id();
         ?>
         <div class="dokan-store-products-filter-area dokan-clearfix">
             <form class="dokan-store-products-ordeby" method="get">
+                <?php if ( 'yes' === $filter_product ) : ?>
+                    <input type="text" autocomplete="off" name="product_name" class="product-name-search dokan-store-products-filter-search" placeholder="<?php echo esc_attr( $product_placeholder ); ?>" data-store_id="<?php echo esc_attr( $store_id ); ?>">
+                    <div id="dokan-store-products-search-result" class="dokan-ajax-store-products-search-result"></div>
+                    <input type="submit" name="search_store_products" class="search-store-products dokan-btn-theme" value="<?php echo esc_attr( $button_label ); ?>">
+                <?php endif; ?>
                 <?php if ( 'yes' === $filter_orderby ) : ?>
                     <select name="product_orderby" class="orderby orderby-search" aria-label="<?php esc_attr_e( 'Shop order', 'dokan' ); ?>" onchange='if(this.value != 0) { this.form.submit(); }'>
                         <?php foreach ( $catalog_orderby_options as $id => $name ) : ?>
                             <option value="<?php echo esc_attr( $id ); ?>" <?php selected( $orderby, $id ); ?>><?php echo esc_html( $name ); ?></option>
                         <?php endforeach; ?>
                     </select>
-                <?php endif; ?>
-                <?php if ( 'yes' === $filter_product ) : ?>
-                    <input type="submit" name="search_store_products" class="search-store-products dokan-btn-theme" value="<?php echo esc_attr( $button_label ); ?>">
-                    <input type="text" name="product_name" class="product-name-search" placeholder="<?php echo esc_attr( $product_placeholder ); ?>">
                 <?php endif; ?>
                 <input type="hidden" name="paged" value="1" />
             </form>
