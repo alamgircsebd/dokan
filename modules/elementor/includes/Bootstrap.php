@@ -70,6 +70,7 @@ class Bootstrap extends ModuleBase {
             'StoreFollowButton',
             'StoreVacationMessage',
             'StoreCoupons',
+            'ProductReportAbuse',
         ];
     }
 
@@ -113,13 +114,16 @@ class Bootstrap extends ModuleBase {
             'StoreDummyProducts',
             'StoreVacationMessage',
             'StoreCoupons',
+            'ProductReportAbuse',
         ];
 
         $module = dokan_elementor()->elementor()->dynamic_tags;
 
-        $module->register_group( self::DOKAN_GROUP, [
-            'title' => __( 'Dokan', 'dokan' ),
-        ] );
+        $module->register_group(
+            self::DOKAN_GROUP, [
+                'title' => __( 'Dokan', 'dokan' ),
+            ]
+        );
 
         foreach ( $tags as $tag ) {
             $module->register_tag( "\\WeDevs\\DokanPro\\Modules\\Elementor\\Tags\\{$tag}" );
@@ -199,9 +203,11 @@ class Bootstrap extends ModuleBase {
 
             $page_templates_module = dokan_elementor()->elementor()->modules_manager->get_modules( 'page-templates' );
 
-            $page_templates_module->set_print_callback( function() {
-                \ElementorPro\Modules\ThemeBuilder\Module::instance()->get_locations_manager()->do_location( 'single' );
-            } );
+            $page_templates_module->set_print_callback(
+                function() {
+                    \ElementorPro\Modules\ThemeBuilder\Module::instance()->get_locations_manager()->do_location( 'single' );
+                }
+            );
 
             $template_path = $page_templates_module->get_template_path( $page_templates_module::TEMPLATE_HEADER_FOOTER );
 
@@ -231,7 +237,7 @@ class Bootstrap extends ModuleBase {
                     ],
                 ],
                 [
-                    'position' => [ 'of' => 'padding' ]
+                    'position' => [ 'of' => 'padding' ],
                 ]
             );
         }
