@@ -88,62 +88,16 @@ class StoreSocialProfile extends Widget_Social_Icons {
                 'label_block' => true,
                 'default'     => 'fa fa-wordpress',
                 'include'     => [
-                    'fa fa-android',
-                    'fa fa-apple',
-                    'fa fa-behance',
-                    'fa fa-bitbucket',
-                    'fa fa-codepen',
-                    'fa fa-delicious',
-                    'fa fa-deviantart',
-                    'fa fa-digg',
-                    'fa fa-dribbble',
-                    'fa fa-envelope',
                     'fa fa-facebook',
-                    'fa fa-flickr',
-                    'fa fa-foursquare',
-                    'fa fa-free-code-camp',
-                    'fa fa-github',
-                    'fa fa-gitlab',
-                    'fa fa-google-plus',
-                    'fa fa-houzz',
-                    'fa fa-instagram',
-                    'fa fa-jsfiddle',
-                    'fa fa-linkedin',
-                    'fa fa-medium',
-                    'fa fa-meetup',
-                    'fa fa-mixcloud',
-                    'fa fa-odnoklassniki',
-                    'fa fa-pinterest',
-                    'fa fa-product-hunt',
-                    'fa fa-reddit',
-                    'fa fa-rss',
-                    'fa fa-shopping-cart',
-                    'fa fa-skype',
-                    'fa fa-slideshare',
-                    'fa fa-snapchat',
-                    'fa fa-soundcloud',
-                    'fa fa-spotify',
-                    'fa fa-stack-overflow',
-                    'fa fa-steam',
-                    'fa fa-stumbleupon',
-                    'fa fa-telegram',
-                    'fa fa-thumb-tack',
-                    'fa fa-tripadvisor',
-                    'fa fa-tumblr',
-                    'fa fa-twitch',
                     'fa fa-twitter',
-                    'fa fa-vimeo',
-                    'fa fa-vk',
-                    'fa fa-weibo',
-                    'fa fa-weixin',
-                    'fa fa-whatsapp',
-                    'fa fa-wordpress',
-                    'fa fa-xing',
-                    'fa fa-yelp',
+                    'fa fa-pinterest',
+                    'fa fa-linkedin',
                     'fa fa-youtube',
-                    'fa fa-500px',
+                    'fa fa-instagram',
+                    'fa fa-flickr',
+                    'fa fa-wordpress',
                 ],
-            ]
+            ],
         );
 
         $repeater->add_control(
@@ -167,29 +121,58 @@ class StoreSocialProfile extends Widget_Social_Icons {
             'social_icon_list',
             [
                 'fields'  => $repeater->get_controls(),
+                'item_actions' => [
+                    'add'       => false,
+                    'duplicate' => false,
+                ],
                 'default' => [
                     [
+                        'social_icon' => [
+                            'value' => 'fa fa-facebook',
+                            'library' => 'fa-brands',
+                        ],
                         'social' => 'fa fa-facebook',
                     ],
                     [
-                        'social' => 'fa fa-google-plus',
-                    ],
-                    [
+                        'social_icon' => [
+                            'value' => 'fa fa-twitter',
+                            'library' => 'fa-brands',
+                        ],
                         'social' => 'fa fa-twitter',
                     ],
                     [
+                        'social_icon' => [
+                            'value' => 'fa fa-pinterest',
+                            'library' => 'fa-brands',
+                        ],
                         'social' => 'fa fa-pinterest',
                     ],
                     [
+                        'social_icon' => [
+                            'value' => 'fa fa-linkedin',
+                            'library' => 'fa-brands',
+                        ],
                         'social' => 'fa fa-linkedin',
                     ],
                     [
+                        'social_icon' => [
+                            'value' => 'fa fa-youtube',
+                            'library' => 'fa-brands',
+                        ],
                         'social' => 'fa fa-youtube',
                     ],
                     [
+                        'social_icon' => [
+                            'value' => 'fa fa-instagram',
+                            'library' => 'fa-brands',
+                        ],
                         'social' => 'fa fa-instagram',
                     ],
                     [
+                        'social_icon' => [
+                            'value' => 'fa fa-flickr',
+                            'library' => 'fa-brands',
+                        ],
                         'social' => 'fa fa-flickr',
                     ],
                 ],
@@ -203,7 +186,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
                 'selector' => '{{WRAPPER}} .elementor-social-icon',
             ],
             [
-                'position' => [ 'of' => 'icon_spacing' ]
+                'position' => [ 'of' => 'icon_spacing' ],
             ]
         );
 
@@ -214,7 +197,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
                 'dynamic' => [
                     'default' => dokan_elementor()->elementor()->dynamic_tags->tag_data_to_tag_text( null, 'dokan-store-social-profile-tag' ),
                     'active'  => true,
-                ]
+                ],
             ],
             [
                 'position' => [ 'of' => 'social_icon_list' ],
