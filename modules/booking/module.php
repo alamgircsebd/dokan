@@ -531,7 +531,7 @@ class Module {
             'resource_block_costs'       => wp_list_pluck( $resources, 'block_cost' ),
             'resource_ids'               => array_keys( $resources ),
             'resources_assignment'       => isset( $post_data['_wc_booking_resources_assignment'] ) ? wc_clean( $post_data['_wc_booking_resources_assignment'] ) : '',
-            'user_can_cancel'            => isset( $post_data['_wc_booking_user_can_cancel'] ),
+            'user_can_cancel'            => isset( $post_data['_wc_booking_user_can_cancel'] ) ? wc_clean( $post_data['_wc_booking_user_can_cancel'] ) : '',
             'has_restricted_days'        => isset( $post_data['_wc_booking_has_restricted_days'] ) ? wc_clean( $post_data['_wc_booking_has_restricted_days'] ) : '',
             'restricted_days'            => isset( $post_data['_wc_booking_restricted_days'] ) ? wc_clean( $post_data['_wc_booking_restricted_days'] ) : '',
         );
