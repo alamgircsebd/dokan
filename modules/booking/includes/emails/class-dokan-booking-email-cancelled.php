@@ -27,8 +27,8 @@ class Dokan_Email_Booking_Cancelled extends WC_Email {
         $this->description      = __( 'This email is sent to admin and vendor when booking is cancelled by the customer', 'dokan' );
 
         $this->template_base    = DOKAN_WC_BOOKING_DIR . '/templates/';
-        $this->template_html    = 'emails/customer-booking-cancelled.php';
-        $this->template_plain   = 'emails/plain/customer-booking-cancelled.php';
+        $this->template_html    = 'emails/dokan-customer-booking-cancelled.php';
+        $this->template_plain   = 'emails/plain/dokan-customer-booking-cancelled.php';
 
 
         // Triggers for this email

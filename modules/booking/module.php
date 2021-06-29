@@ -320,6 +320,7 @@ class Module {
 
         add_filter( 'woocommerce_email_classes', array( $this, 'load_dokan_booking_new_emails' ), 14 );
         add_filter( 'woocommerce_email_actions', array( $this, 'register_dokan_booking_new_actions' ) );
+        add_filter( 'dokan_email_list', array( $this, 'set_email_template_directory' ) );
     }
     public function load_dokan_booking_cancelled_emails( $wc_emails ) {
         $wc_emails['Dokan_Email_Booking_Cancelled'] = include DOKAN_WC_BOOKING_DIR . '/includes/emails/class-dokan-booking-email-cancelled.php';
@@ -1211,5 +1212,17 @@ class Module {
             );
         }
         return $url;
+    }
+
+    /**
+     * Set Proper template directory.
+     *
+     * @param array $template_array
+     *
+     * @return array
+     */
+    public function set_email_template_directory( $template_array ) {
+        array_push( $template_array, 'dokan-admin-new-booking.php', 'dokan-customer-booking-cancelled.php' );
+        return $template_array;
     }
 }

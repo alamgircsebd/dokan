@@ -34,8 +34,8 @@ class Dokan_Email_Booking_New extends WC_Email {
         $this->recipient     = "vendor@ofthe.product";
 
         $this->template_base  = DOKAN_WC_BOOKING_DIR . '/templates/';
-        $this->template_html  = 'emails/admin-new-booking.php';
-        $this->template_plain = 'emails/plain/admin-new-booking.php';
+        $this->template_html  = 'emails/dokan-admin-new-booking.php';
+        $this->template_plain = 'emails/plain/dokan-admin-new-booking.php';
 
 
         // Triggers for this email
