@@ -643,6 +643,7 @@ class Dokan_Pro {
             'refund-seller-mail.php',
             'vendor-disabled.php',
             'vendor-enabled.php',
+            'shipping-status.php',
         ];
 
         return array_merge( $dokan_pro_emails, $dokan_emails );
