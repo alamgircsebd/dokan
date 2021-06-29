@@ -481,6 +481,7 @@ class Module {
      */
     public function login_form() {
         ob_start();
+        $login_url = apply_filters( 'dokan_redirect_login', dokan_get_page_url( 'myaccount', 'woocommerce' ) );
         ?>
 
         <h2><?php esc_html_e( 'Please Login to Continue', 'dokan' ); ?></h2>
@@ -498,6 +499,9 @@ class Module {
             <div class="dokan-form-group">
                 <input id='support-submit-btn' type="submit" value="<?php esc_html_e( 'Login', 'dokan' ); ?>" class="dokan-w5 dokan-btn dokan-btn-theme"/>
             </div>
+            <p class="dokan-popup-create-an-account">
+                &nbsp;&nbsp; <?php esc_html_e( 'or', 'dokan' ); ?> &nbsp;&nbsp; <a href="<?php echo esc_url( $login_url ); ?>" class="dokan-btn dokan-btn-theme"><?php esc_html_e( 'Create an account', 'dokan' ); ?></a>
+            </p>
         </form>
         <div class="dokan-clearfix"></div>
         <?php
