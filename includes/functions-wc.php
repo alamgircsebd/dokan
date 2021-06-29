@@ -666,14 +666,21 @@ function dokan_variable_product_type_options() {
 if ( ! function_exists( 'dokan_user_update_to_seller' ) ) {
 
     function dokan_user_update_to_seller( $user, $data ) {
-        if ( ! dokan_is_user_customer( $user->ID ) ) {
+        if ( dokan_is_user_seller( $user->ID ) ) {
             return;
         }
 
         $user_id = $user->ID;
 
+        $current_roles = (array) $user->roles;
+
         // Remove role
         $user->remove_role( 'customer' );
+        if ( is_array( $current_roles ) ) {
+            foreach ( $current_roles as $current_role ) {
+                $user->remove_role( $current_role );
+            }
+        }
 
         // Add role
         $user->add_role( 'seller' );

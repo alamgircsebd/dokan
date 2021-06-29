@@ -428,7 +428,7 @@ class Dokan_Pro {
     public function dokan_account_migration_button() {
         $user = wp_get_current_user();
 
-        if ( dokan_is_user_customer( $user->ID ) ) {
+        if ( ! dokan_is_user_seller( $user->ID ) ) {
             dokan_get_template_part( 'global/account-migration-btn', '', [ 'pro' => true ] );
         }
     }
