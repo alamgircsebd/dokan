@@ -174,12 +174,13 @@
                 <select
                     id="filter-vendors"
                     style="width: 190px;"
-                    :data-placeholder="__('Filter by vendor', 'dokan')">
+                    :data-placeholder="__('Filter by store', 'dokan')">
                 </select>
 
                 <select
                     id="filter-status"
-                    style="width: 190px;">
+                    style="width: 190px;"
+                    :data-placeholder="__('Filter by status', 'dokan')">
                 </select>
 
                 <div class="search-by-order">
@@ -307,7 +308,7 @@ export default {
                     label: this.__( 'Order ID', 'dokan' ),
                 },
                 'vendor_id': {
-                    label: this.__( 'Vendor', 'dokan' )
+                    label: this.__( 'Store', 'dokan' )
                 },
                 'order_total': {
                     label: this.__( 'Order Total', 'dokan' )
@@ -803,13 +804,17 @@ export default {
                         };
                     },
                     processResults(data) {
+                        if ( data.length === 0 ) {
+                            return { results: data }
+                        }
+
                         return {
-                            results: data.map((store) => {
+                            results: [ { id: 0, text: 'Filter by store' } ].concat( data.map((store) => {
                                 return {
                                     id: store.id,
                                     text: store.store_name ? store.store_name : sprintf( '(%1$s) #%2$d', self.__( 'no name', 'dokan' ), store.id )
                                 };
-                            })
+                            }))
                         };
                     }
                 }
