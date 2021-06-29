@@ -295,7 +295,10 @@ class Dokan_RMA_Vendor {
             return;
         }
 
-        $data = $this->transform_rma_settings( wc_clean( $get_postdata ) );
+        $rma_policy_content              = wp_filter_post_kses( $get_postdata['warranty_policy'] );
+        $get_postdata                    = wc_clean( $get_postdata );
+        $get_postdata['warranty_policy'] = $rma_policy_content;
+        $data                            = $this->transform_rma_settings( $get_postdata );
 
         update_user_meta( dokan_get_current_user_id(), '_dokan_rma_settings', $data );
 

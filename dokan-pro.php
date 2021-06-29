@@ -428,7 +428,7 @@ class Dokan_Pro {
     public function dokan_account_migration_button() {
         $user = wp_get_current_user();
 
-        if ( dokan_is_user_customer( $user->ID ) ) {
+        if ( ! dokan_is_user_seller( $user->ID ) ) {
             dokan_get_template_part( 'global/account-migration-btn', '', [ 'pro' => true ] );
         }
     }
@@ -643,6 +643,7 @@ class Dokan_Pro {
             'refund-seller-mail.php',
             'vendor-disabled.php',
             'vendor-enabled.php',
+            'shipping-status.php',
         ];
 
         return array_merge( $dokan_pro_emails, $dokan_emails );

@@ -29,6 +29,7 @@ class Module {
 
         add_action( 'dokan_activated_module_vendor_staff', array( self::class, 'activate' ) );
         add_action( 'dokan_deactivated_module_vendor_staff', array( self::class, 'deactivate' ) );
+        add_filter( 'dokan_email_list', array( $this, 'set_email_template_directory' ) );
     }
 
     /**
@@ -324,5 +325,17 @@ class Module {
         $emails['Dokan_Staff_New_Order'] = include DOKAN_VENDOR_STAFF_INC_DIR . '/class-staff-new-order-email.php';
 
         return $emails;
+    }
+
+    /**
+     * Set Proper template directory.
+     *
+     * @param array $template_array
+     *
+     * @return array
+     */
+    public function set_email_template_directory( $template_array ) {
+        array_push( $template_array, 'staff-new-order.php' );
+        return $template_array;
     }
 }

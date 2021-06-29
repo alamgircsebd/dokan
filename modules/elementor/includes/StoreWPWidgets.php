@@ -20,7 +20,7 @@ class StoreWPWidgets {
      * @return void
      */
     public function boot() {
-        add_action( 'elementor/widgets/wordpress/widget_args', [ $this, 'add_widget_args' ], 10, 2 );
+        add_filter( 'elementor/widgets/wordpress/widget_args', [ $this, 'add_widget_args' ], 10, 2 );
         add_action( 'dokan_pro_widget_store_support_render', [ $this, 'widget_store_support' ], 10, 3 );
         add_action( 'dokan_widget_store_contact_form_render', [ $this, 'widget_store_contact_form' ], 10, 3 );
         add_action( 'dokan_widget_store_location_render', [ $this, 'widget_store_location' ], 10, 3 );
@@ -50,7 +50,6 @@ class StoreWPWidgets {
             $default_widget_args['after_widget']  = '</aside>';
             $default_widget_args['before_title']  = '<h3 class="widget-title">';
             $default_widget_args['after_title']   = '</h3>';
-            $default_widget_args['']   = '</h3>';
         }
 
         return $default_widget_args;

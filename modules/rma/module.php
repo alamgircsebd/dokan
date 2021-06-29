@@ -103,7 +103,7 @@ class Module {
 
         add_action( 'dokan_loaded', [ $this, 'load_emails' ], 20 );
         // dokan simple auciton email
-
+        add_filter( 'dokan_email_list', array( $this, 'set_email_template_directory' ) );
     }
 
     /**
@@ -221,6 +221,18 @@ class Module {
         $wp_roles->add_cap( 'shop_manager', 'dokan_view_store_rma_settings_menu' );
 
         self::create_tables();
+    }
+
+    /**
+     * Set Proper template directory.
+     *
+     * @param array $template_array
+     *
+     * @return array
+     */
+    public function set_email_template_directory( $template_array ) {
+        array_push( $template_array, 'send-coupon.php', 'send-warranty-request.php' );
+        return $template_array;
     }
 
     /**

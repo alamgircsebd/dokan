@@ -20,6 +20,10 @@ class Helper {
      * @return int|0 on failure
      */
     public static function get_vendor_remaining_products( $vendor_id ) {
+        if ( ! self::is_subscription_module_enabled() ) {
+            return true;
+        }
+
         $vendor = dokan()->vendor->get( $vendor_id )->subscription;
 
         if ( ! $vendor ) {
@@ -98,25 +102,6 @@ class Helper {
         }
 
         return false;
-
-        // old code is for reference only, will remove in future release
-        /*
-        $date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-        $validation_date = date( 'Y-m-d', strtotime( self::get_pack_end_date( dokan_get_current_user_id() ) ) );
-
-        $datetime1 = new \DateTime( $date );
-        $datetime2 = new \DateTime( $validation_date );
-
-        $interval = $datetime1->diff( $datetime2 );
-
-        $interval = $interval->format( '%r%d' );
-
-        if ( (int) $interval <= 3 && (int) $interval >= 0 && ( get_user_meta( get_current_user_id(), 'product_package_id', true ) == $product_id ) ) {
-            return true;
-        }
-
-        return false;
-        */
     }
 
 
@@ -129,7 +114,7 @@ class Helper {
      * @return string
      */
     public static function recurring_period( $period ) {
-        switch ($period) {
+        switch ( $period ) {
             case 'day':
                 return __( 'day', 'dokan' );
 
@@ -193,12 +178,14 @@ class Helper {
 
         $selected_period_types = $subscription->get_trial_period_types();
         $period_types_output   = '';
-        $period_types          = apply_filters( 'dokan_subscription_trial_period_types', [
-            'day'   => __( 'Day(s)', 'dokan' ),
-            'week'  => __( 'Week(s)', 'dokan' ),
-            'month' => __( 'Month(s)', 'dokan' ),
-            'year'  => __( 'Year(s)', 'dokan' )
-        ] );
+        $period_types          = apply_filters(
+            'dokan_subscription_trial_period_types', [
+                'day'   => __( 'Day(s)', 'dokan' ),
+                'week'  => __( 'Week(s)', 'dokan' ),
+                'month' => __( 'Month(s)', 'dokan' ),
+                'year'  => __( 'Year(s)', 'dokan' ),
+            ]
+        );
 
         $period_types_output .= '<select name="dokan_subscription_trial_period_types">';
 
@@ -281,7 +268,6 @@ class Helper {
      * @return string
      */
     public static function get_subscription_period_interval_strings( $interval = '' ) {
-
         $intervals = array( 1 => _x( 'every', 'period interval (eg "$10 _every_ 2 weeks")', 'dokan' ) );
 
         foreach ( range( 2, 6 ) as $i ) {
@@ -346,9 +332,7 @@ class Helper {
      * @since 3.2.0
      */
     public static function get_non_cached_subscription_ranges() {
-
         foreach ( array( 'day', 'week', 'month', 'year' ) as $period ) {
-
             $subscription_lengths = array(
                 _x( 'Never expire', 'Subscription length', 'dokan' ),
             );
@@ -394,9 +378,9 @@ class Helper {
      * @since 2.0
      */
     public static function get_subscription_period_strings( $number = 1, $period = '' ) {
-
         // phpcs:disable Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma
-        $translated_periods = apply_filters( 'dokan_pro_subscription_periods',
+        $translated_periods = apply_filters(
+            'dokan_pro_subscription_periods',
             array(
                 // translators: placeholder is number of days. (e.g. "Bill this every day / 4 days")
                 'day'   => sprintf( _nx( 'day',   '%s days',   $number, 'Subscription billing period.', 'dokan' ), $number ), // phpcs:ignore WordPress.WP.I18n.MissingSingularPlaceholder,WordPress.WP.I18n.MismatchedPlaceholders
@@ -489,7 +473,7 @@ class Helper {
     public static function cart_contains_subscription_renewal( $role = '' ) {
         $contains_renewal = false;
 
-        if ( !empty( WC()->cart->cart_contents ) ) {
+        if ( ! empty( WC()->cart->cart_contents ) ) {
             foreach ( WC()->cart->cart_contents as $cart_item ) {
                 if ( isset( $cart_item['subscription_renewal'] ) && ( empty( $role ) || $role === $cart_item['subscription_renewal']['role'] ) ) {
                     $contains_renewal = $cart_item;
@@ -512,10 +496,8 @@ class Helper {
         $contains_subscription = false;
 
         if ( self::cart_contains_subscription_renewal( 'child' ) ) {
-
             $contains_subscription = false;
-
-        } else if ( ! empty( WC()->cart->cart_contents ) ) {
+        } elseif ( ! empty( WC()->cart->cart_contents ) ) {
             foreach ( WC()->cart->cart_contents as $cart_item ) {
                 if ( self::is_subscription_product( $cart_item['product_id'] ) ) {
                     $contains_subscription = true;
@@ -533,7 +515,6 @@ class Helper {
      * @return void
      */
     public static function remove_subscriptions_from_cart() {
-
         foreach ( WC()->cart->cart_contents as $cart_item_key => $cart_item ) {
             if ( self::is_subscription_product( $cart_item['product_id'] ) ) {
                 WC()->cart->set_quantity( $cart_item_key, 0 );
@@ -547,7 +528,7 @@ class Helper {
      * @param string $message
      */
     public static function log( $message ) {
-        $message = sprintf( "[%s] %s: %s", date( 'd.m.Y h:i:s' ), __( 'Dokan Vendor Subscription: ', 'dokan' ), $message );
+        $message = sprintf( '[%s] %s: %s', date( 'd.m.Y h:i:s' ), __( 'Dokan Vendor Subscription: ', 'dokan' ), $message );
         dokan_log( $message );
     }
 
@@ -578,8 +559,8 @@ class Helper {
         delete_user_meta( $customer_id, '_customer_recurring_subscription' );
 
         // make product status draft after subscriptions is got cancelled.
-        if ( Helper::check_vendor_has_existing_product( $customer_id ) ) {
-            Helper::make_product_draft( $customer_id );
+        if ( self::check_vendor_has_existing_product( $customer_id ) ) {
+            self::make_product_draft( $customer_id );
         }
     }
 
@@ -613,7 +594,7 @@ class Helper {
         global $wpdb;
 
         $status = dokan_get_option( 'product_status_after_end', 'dokan_product_subscription', 'draft' );
-        self::log ( 'Product status check: As the package has expired of user #' . $user_id . ', we are changing his existing product status to ' . $status );
+        self::log( 'Product status check: As the package has expired of user #' . $user_id . ', we are changing his existing product status to ' . $status );
         $wpdb->query( "UPDATE $wpdb->posts SET post_status = '$status' WHERE post_author = '$user_id' AND post_type = 'product' AND post_status='publish'" );
     }
 

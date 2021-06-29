@@ -33,5 +33,6 @@ class Dokan_Follow_Store_Scripts {
 
         wp_enqueue_script( 'dokan-follow-store', DOKAN_FOLLOW_STORE_ASSETS . '/js/follow-store' . $suffix . '.js', array( 'jquery' ), DOKAN_FOLLOW_STORE_VERSION, true );
         wp_localize_script( 'dokan-follow-store', 'dokanFollowStore', $dokan_follow_store );
+        wp_enqueue_style( 'dokan-magnific-popup' );
     }
 }

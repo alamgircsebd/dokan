@@ -71,6 +71,7 @@ class Bootstrap extends ModuleBase {
             'StoreVacationMessage',
             'StoreCoupons',
             'StoreProductFilter',
+            'ProductReportAbuse',
         ];
     }
 
@@ -115,6 +116,7 @@ class Bootstrap extends ModuleBase {
             'StoreVacationMessage',
             'StoreCoupons',
             'StoreProductFilter',
+            'ProductReportAbuse',
         ];
 
         $module = dokan_elementor()->elementor()->dynamic_tags;

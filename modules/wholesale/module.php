@@ -93,6 +93,7 @@ class Module {
         add_filter( 'dokan_set_template_path', [ $this, 'load_wholesale_templates' ], 10, 3 );
         add_filter( 'dokan_rest_api_class_map', [ $this, 'rest_api_class_map' ] );
         add_filter( 'dokan_frontend_localize_script', [ $this, 'add_localize_data' ] );
+        add_filter( 'dokan_email_list', array( $this, 'set_email_template_directory' ) );
     }
 
     /**
@@ -211,5 +212,17 @@ class Module {
         $actions[] = 'dokan_wholesale_customer_register';
 
         return $actions;
+    }
+
+    /**
+     * Set Proper template directory.
+     *
+     * @param array $template_array
+     *
+     * @return array
+     */
+    public function set_email_template_directory( $template_array ) {
+        array_push( $template_array, 'customer-wholesale-register.php' );
+        return $template_array;
     }
 }

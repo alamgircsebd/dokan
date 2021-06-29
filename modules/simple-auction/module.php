@@ -85,6 +85,7 @@ class Module {
         add_action( 'dokan_activated_module_auction', array( self::class, 'activate' ) );
 
         add_filter( 'dokan_get_edit_product_url', [ $this, 'modify_edit_product_url' ], 10, 2 );
+        add_filter( 'dokan_email_list', array( $this, 'set_email_template_directory' ) );
     }
 
     /**
@@ -572,5 +573,18 @@ class Module {
             );
         }
         return $url;
+    }
+
+
+    /**
+     * Set Proper template directory.
+     *
+     * @param array $template_array
+     *
+     * @return array
+     */
+    public function set_email_template_directory( $template_array ) {
+        array_push( $template_array, 'auction-product-added.php' );
+        return $template_array;
     }
 }
