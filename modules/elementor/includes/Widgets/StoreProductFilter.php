@@ -138,7 +138,7 @@ class StoreProductFilter extends Widget_Base {
         }
 
         $show_default_orderby    = 'menu_order' === apply_filters( 'dokan_default_store_products_orderby', get_option( 'woocommerce_default_catalog_orderby', 'menu_order' ) );
-        $catalog_orderby_options = function_exists( 'dokan_store_product_catalog_orderby' ) ?dokan_store_product_catalog_orderby() : array();
+        $catalog_orderby_options = function_exists( 'dokan_store_product_catalog_orderby' ) ? dokan_store_product_catalog_orderby() : array();
 
         $default_orderby = wc_get_loop_prop( 'is_search' ) ? 'relevance' : apply_filters( 'dokan_default_store_products_orderby', get_option( 'woocommerce_default_catalog_orderby', '' ) );
         $orderby = isset( $_GET['product_orderby'] ) ? wc_clean( wp_unslash( $_GET['product_orderby'] ) ) : $default_orderby;
