@@ -178,7 +178,7 @@
                     </span>
                 </div>
 
-                <div class="dokan-form-group">
+                <div class="dokan-form-group" v-if="editShippingMethodData.is_tax_status == 'yes'">
                     <label for="method_tax_status">{{ __( 'Tax Status', 'dokan' ) }}</label>
                     <select v-model="editShippingMethodData.settings.tax_status" id="method_tax_status" class="dokan-form-control">
                         <option value="none">{{ __( 'None', 'dokan' ) }}</option>
@@ -380,9 +380,10 @@ export default {
 
         editShippingMethod( method ) {
             this.editShippingMethodData = {
-                instance_id : method.instance_id,
-                method_id   : method.id,
-                settings    : method.settings
+                instance_id   : method.instance_id,
+                method_id     : method.id,
+                settings      : method.settings,
+                is_tax_status : method.is_tax_status
             };
 
             this.editShippingMethodModal = true;

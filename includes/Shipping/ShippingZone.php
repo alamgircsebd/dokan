@@ -158,6 +158,19 @@ class ShippingZone {
         $sql = "SELECT * FROM {$wpdb->prefix}dokan_shipping_zone_methods WHERE `zone_id`={$zone_id} AND `seller_id`={$seller_id}";
         $results = $wpdb->get_results( $sql );
 
+        $zone_obj         = \WC_Shipping_Zones::get_zone_by( 'zone_id', $zone_id );
+        $shipping_methods = $zone_obj->get_shipping_methods(true);
+        $is_tax_status    = '';
+
+        if ( $shipping_methods ) {
+            foreach( $shipping_methods as $shipping_method ) {
+                if ( 'dokan_vendor_shipping' === $shipping_method->id ) {
+                    $is_tax_status = $shipping_method->tax_status;
+                    break;
+                }
+            }
+        }
+
         $method = array();
 
         foreach ( $results as $key => $result ) {
@@ -172,11 +185,12 @@ class ShippingZone {
             $settings = ! empty( $result->settings ) ? maybe_unserialize( $result->settings ) : array();
             $settings = wp_parse_args( $settings, $default_settings );
 
-            $method[ $method_id ]['instance_id'] = $result->instance_id;
-            $method[ $method_id ]['id']          = $result->method_id;
-            $method[ $method_id ]['enabled']     = ( $result->is_enabled ) ? 'yes' : 'no';
-            $method[ $method_id ]['title']       = $settings['title'];
-            $method[ $method_id ]['settings']    = array_map( 'stripslashes_deep', maybe_unserialize( $settings ) );
+            $method[ $method_id ]['instance_id']   = $result->instance_id;
+            $method[ $method_id ]['id']            = $result->method_id;
+            $method[ $method_id ]['enabled']       = ( $result->is_enabled ) ? 'yes' : 'no';
+            $method[ $method_id ]['title']         = $settings['title'];
+            $method[ $method_id ]['settings']      = array_map( 'stripslashes_deep', maybe_unserialize( $settings ) );
+            $method[ $method_id ]['is_tax_status'] = $is_tax_status === 'none' ? 'no' : 'yes';
 
             if ( 'flat_rate' === $result->method_id && ! isset( $method[ $method_id ]['settings']['calculation_type'] ) ) {
                 $method[ $method_id ]['settings']['calculation_type'] = 'class';
