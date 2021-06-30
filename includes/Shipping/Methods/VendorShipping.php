@@ -340,6 +340,7 @@ class VendorShipping extends WC_Shipping_Method {
                         'cost'      => $rate['cost'],
                         'meta_data' => array( 'description' => $rate['description'] ),
                         'package'   => $package,
+                        'taxes'     => $tax_rate,
                     )
                 );
 

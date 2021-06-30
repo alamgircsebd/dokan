@@ -60,14 +60,9 @@ class Dokan_SPMV_Products {
             return false;
         }
 
-        /** We are checking if vendor subscription is active,
-         * if true, we are getting the subscription of the vendor
-         * and checking if the vendor has remaining product based on active subscription
-         **/
-        if ( dokan_pro()->module->is_active( 'product_subscription' ) ) {
-            if ( ! \DokanPro\Modules\Subscription\Helper::get_vendor_remaining_products( $user_id ) ) {
-                return false;
-            }
+        // Check if the vendor can create new product based on the active subscription
+        if ( ! dokan_spmv_can_vendor_create_new_product( $user_id ) ) {
+            return false;
         }
 
         $product_author = get_post_field( 'post_author', $product_id );

@@ -173,3 +173,24 @@ function dokan_spmv_update_clone_visibilities( $map_id ) {
 
     return $clones;
 }
+
+/**
+ * We are checking if vendor subscription is active,
+ * if true, we are getting the subscription of the vendor
+ * and checking if the vendor has remaining product based on active subscription
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param $user_id
+ *
+ * @return bool
+ */
+function dokan_spmv_can_vendor_create_new_product( $user_id ) {
+    if ( dokan_pro()->module->is_active( 'product_subscription' ) ) {
+        if ( ! \DokanPro\Modules\Subscription\Helper::get_vendor_remaining_products( $user_id ) ) {
+            return false;
+        }
+    }
+
+    return true;
+}

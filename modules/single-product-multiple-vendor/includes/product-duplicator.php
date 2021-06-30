@@ -126,6 +126,11 @@ class Dokan_SPMV_Product_Duplicator {
             return false;
         }
 
+        // Check if the vendor can create new product based on the active subscription
+        if ( ! dokan_spmv_can_vendor_create_new_product( $vendor_id ) ) {
+            return false;
+        }
+
         $product_author = get_post_field( 'post_author', $product_id );
 
         if ( $vendor_id === absint( $product_author ) ) {
