@@ -362,21 +362,23 @@ class Dokan_RMA_Frontend {
             return;
         }
 
-        if ( empty( $_POST['message'] ) ) {
+        if ( ! isset( $_POST['message'] ) || ( isset( $_POST['message'] ) && '' == trim( $_POST['message'] ) ) ) {
             wc_add_notice( __( 'Please enter some text for messaging', 'dokan' ), 'error' );
-            return;
+            wp_redirect( $_POST['_wp_http_referer'] );
+            exit();
         }
 
         if ( empty( $_POST['request_id'] ) ) {
             wc_add_notice( __( 'No request found for conversation', 'dokan' ), 'error' );
-            return;
+            wp_redirect( $_POST['_wp_http_referer'] );
+            exit();
         }
 
         $data = [
-            'request_id' => $_POST['request_id'],
-            'from'       => $_POST['from'],
-            'to'         => $_POST['to'],
-            'message'    => sanitize_textarea_field( $_POST['message'] ),
+            'request_id' => intval( $_POST['request_id'] ),
+            'from'       => intval( $_POST['from'] ),
+            'to'         => intval( $_POST['to'] ),
+            'message'    => sanitize_textarea_field( wp_unslash( $_POST['message'] ) ),
             'created_at' => current_time( 'mysql' )
         ];
 

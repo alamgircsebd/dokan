@@ -71,6 +71,8 @@ class Bootstrap extends ModuleBase {
             'StoreVacationMessage',
             'StoreCoupons',
             'StoreProductFilter',
+            'ProductSPMV',
+            'ProductSPMVList',
             'ProductReportAbuse',
         ];
     }
@@ -116,6 +118,8 @@ class Bootstrap extends ModuleBase {
             'StoreVacationMessage',
             'StoreCoupons',
             'StoreProductFilter',
+            'ProductSPMV',
+            'ProductSPMVList',
             'ProductReportAbuse',
         ];
 

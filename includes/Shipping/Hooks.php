@@ -23,6 +23,7 @@ class Hooks {
      */
     public function __construct() {
         add_action( 'woocommerce_shipping_methods', array( $this, 'register_shipping' ) );
+        add_filter( 'dokan_settings_selling_option_vendor_capability', array( $this, 'add_settings_shipping_tab' ), 20 );
         add_action( 'woocommerce_product_tabs', array( $this, 'register_product_tab' ) );
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_country' ) );
         add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
@@ -30,7 +31,28 @@ class Hooks {
         add_filter( 'woocommerce_shipping_packages', array( $this, 'filter_packages' ) );
         add_action( 'woocommerce_delete_shipping_zone', array( $this, 'delete_shipping_zone_data' ), 35, 1 );
         add_action( 'woocommerce_after_shipping_zone_object_save', array( $this, 'vendor_zone_data_sync' ), 10, 2 );
+    }
 
+    /**
+     * Disable product shipping tab
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $settings_fields
+     *
+     * @return array
+     */
+    public function add_settings_shipping_tab( $settings_fields ) {
+        $settings_fields['disable_shipping_tab'] = array(
+            'name'               => 'disable_shipping_tab',
+            'label'              => __( 'Disable Shipping Tab', 'dokan' ),
+            'refresh_after_save' => true,
+            'desc'               => __( 'Disable shipping tab on single product page', 'dokan' ),
+            'type'               => 'checkbox',
+            'default'            => 'off',
+        );
+
+        return $settings_fields;
     }
 
     /**
@@ -273,6 +295,10 @@ class Hooks {
      * @return array
      */
     public function register_product_tab( $tabs ) {
+        if ( 'on' === dokan_get_option( 'disable_shipping_tab', 'dokan_selling', 'off' ) ) {
+            return $tabs;
+        }
+
         global $post;
 
         if ( get_post_meta( $post->ID, '_disable_shipping', true ) == 'yes' ) {
@@ -314,7 +340,7 @@ class Hooks {
 
         $shipping_zone = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT locations.zone_id, locations.seller_id, locations.location_type as vendor_location_type, locations.location_code  as vendor_location_code, wc_zones.location_code, wc_zones.location_type FROM {$wpdb->prefix}dokan_shipping_zone_locations as locations INNER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as wc_zones ON locations.zone_id = wc_zones.zone_id WHERE seller_id=%d ORDER BY wc_zones.zone_id ASC", $vendor_id
+                "SELECT locations.zone_id, locations.seller_id, locations.location_type as vendor_location_type, locations.location_code as vendor_location_code, wc_zones.location_code, wc_zones.location_type FROM {$wpdb->prefix}dokan_shipping_zone_locations as locations INNER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as wc_zones ON locations.zone_id = wc_zones.zone_id INNER JOIN {$wpdb->prefix}dokan_shipping_zone_methods as dokan_methods ON dokan_methods.zone_id = locations.zone_id AND dokan_methods.seller_id = locations.seller_id WHERE locations.seller_id =%d AND locations.location_type != 'postcode' ORDER BY wc_zones.zone_id ASC", $vendor_id,
             ), ARRAY_A
         );
 
@@ -495,13 +521,12 @@ class Hooks {
             $p_seller_id = isset( $package['seller_id'] ) ? (int) $package['seller_id'] : 0;
 
             foreach ( $package['contents'] as $content ) {
-
                 $product = ! empty( $content['product_id'] ) ? wc_get_product( $content['product_id'] ) : '';
                 if ( $product && $product->needs_shipping() ) {
                     $seller_id = (int) get_post_field( 'post_author', $content['product_id'] );
 
                     if ( isset( $p_seller_id ) && $p_seller_id !== $seller_id ) {
-                        $packages[$key]['seller_id'] = $seller_id;
+                        $packages[ $key ]['seller_id'] = $seller_id;
                     }
 
                     array_push( $package_to_keep, $key );

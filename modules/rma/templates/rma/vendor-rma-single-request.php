@@ -55,6 +55,8 @@
                     <div class="dokan-clearfix"></div>
                 </header>
 
+                <?php wc_print_notices(); ?>
+
                 <?php if ( ! $request ): ?>
                     <?php dokan_get_template_part( 'global/dokan-error', '', [ 'deleted' => false, 'message' => __( 'Invalid request id. Not found', 'dokan' ) ] ); ?>
                 <?php elseif( dokan_get_current_user_id() != $request['vendor']['store_id'] ): ?>

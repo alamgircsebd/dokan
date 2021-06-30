@@ -19,7 +19,7 @@
             <?php foreach ( $conversations as $conversation ): ?>
                 <li class="<?php echo dokan_get_current_user_id() == $conversation['to'] ? 'left' : 'right'; ?>">
                     <div class="message">
-                        <?php echo $conversation['message']; ?>
+                        <?php echo wp_unslash( $conversation['message'] ); ?>
                     </div>
                 </li>
             <?php endforeach ?>
