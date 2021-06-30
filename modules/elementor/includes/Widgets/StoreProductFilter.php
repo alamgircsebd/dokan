@@ -141,7 +141,7 @@ class StoreProductFilter extends Widget_Base {
         $catalog_orderby_options = function_exists( 'dokan_store_product_catalog_orderby' ) ? dokan_store_product_catalog_orderby() : array();
 
         $default_orderby = wc_get_loop_prop( 'is_search' ) ? 'relevance' : apply_filters( 'dokan_default_store_products_orderby', get_option( 'woocommerce_default_catalog_orderby', '' ) );
-        $orderby = isset( $_GET['product_orderby'] ) ? wc_clean( wp_unslash( $_GET['product_orderby'] ) ) : $default_orderby;
+        $orderby = isset( $_GET['product_orderby'] ) ? wc_clean( wp_unslash( $_GET['product_orderby'] ) ) : $default_orderby; //phpcs:ignore
 
         if ( wc_get_loop_prop( 'is_search' ) ) {
             $catalog_orderby_options = array_merge( array( 'relevance' => __( 'Relevance', 'dokan' ) ), $catalog_orderby_options );
