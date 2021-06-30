@@ -70,6 +70,8 @@ class Bootstrap extends ModuleBase {
             'StoreFollowButton',
             'StoreVacationMessage',
             'StoreCoupons',
+            'ProductSPMV',
+            'ProductSPMVList',
             'ProductReportAbuse',
         ];
     }
@@ -114,6 +116,8 @@ class Bootstrap extends ModuleBase {
             'StoreDummyProducts',
             'StoreVacationMessage',
             'StoreCoupons',
+            'ProductSPMV',
+            'ProductSPMVList',
             'ProductReportAbuse',
         ];
 
@@ -121,8 +125,8 @@ class Bootstrap extends ModuleBase {
 
         $module->register_group(
             self::DOKAN_GROUP, [
-                'title' => __( 'Dokan', 'dokan' ),
-            ]
+				'title' => __( 'Dokan', 'dokan' ),
+			]
         );
 
         foreach ( $tags as $tag ) {
