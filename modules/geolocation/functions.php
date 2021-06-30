@@ -106,6 +106,8 @@ function dokan_geo_enqueue_locations_map() {
  * @return void
  */
 function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
+    global $wp;
+
     dokan()->scripts->load_gmap_script();
 
     wp_enqueue_style( 'dokan-geo-filters' );
@@ -138,8 +140,7 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
         )
     );
 
-    $store_listing_page = dokan_get_permalink( 'store_listing' );
-    $wc_shop_page       = get_permalink( wc_get_page_id( 'shop' ) );
+    $get_current_page_url = home_url( $wp->request );
 
     $args = array(
         'scope'      => $scope,
@@ -162,8 +163,8 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
             'unit'     => ( 'km' === $distance_unit ) ? 'km' : 'miles',
         ),
         'wc_categories_args' => $wc_categories_args,
-        'wc_shop_page'       => $wc_shop_page,
-        'store_listing_page' => $store_listing_page,
+        'wc_shop_page'       => $get_current_page_url,
+        'store_listing_page' => $get_current_page_url,
     );
 
     if ( dokan_is_store_categories_feature_on() ) {

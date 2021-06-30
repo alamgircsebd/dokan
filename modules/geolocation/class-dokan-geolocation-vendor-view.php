@@ -197,16 +197,25 @@ class Dokan_Geolocation_Vendor_View {
      * @return void
      */
     public static function load_store_lists_filter() {
+        $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
+
+        if ( 'on' === $show_filters ) {
+            /** 
+             * Since here we removing top bar search filter which one comes from dokan lite
+             * because when geolocation use left or right then here we adding new search
+             * filter and removing top search area  
+             */
+            add_filter( 'dokan_load_store_lists_filter_search_bar', '__return_false', 99 );
+        }
+
         if ( 'top' !== self::$map_location ) {
             return;
         }
-        $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
 
         remove_action( 'dokan_before_seller_listing_loop', array( self::class, 'before_seller_listing_loop' ) );
         add_action( 'dokan_before_store_lists_filter_left', array( self::class, 'before_store_lists_filter_left' ) );
 
         if ( 'on' === $show_filters ) {
-            add_filter( 'dokan_load_store_lists_filter_search_bar', '__return_false' );
             add_action( 'dokan_before_store_lists_filter_category', array( self::class, 'before_store_lists_filter_category' ) );
         }
     }
