@@ -137,30 +137,7 @@ class StoreProductFilter extends Widget_Base {
             return;
         }
 
-        $show_default_orderby    = 'menu_order' === apply_filters( 'dokan_default_store_products_orderby', get_option( 'woocommerce_default_catalog_orderby', 'menu_order' ) );
-        $catalog_orderby_options = function_exists( 'dokan_store_product_catalog_orderby' ) ? dokan_store_product_catalog_orderby() : array();
-
-        $default_orderby = wc_get_loop_prop( 'is_search' ) ? 'relevance' : apply_filters( 'dokan_default_store_products_orderby', get_option( 'woocommerce_default_catalog_orderby', '' ) );
-        $orderby = isset( $_GET['product_orderby'] ) ? wc_clean( wp_unslash( $_GET['product_orderby'] ) ) : $default_orderby; //phpcs:ignore
-
-        if ( wc_get_loop_prop( 'is_search' ) ) {
-            $catalog_orderby_options = array_merge( array( 'relevance' => __( 'Relevance', 'dokan' ) ), $catalog_orderby_options );
-
-            unset( $catalog_orderby_options['menu_order'] );
-        }
-
-        if ( ! $show_default_orderby ) {
-            unset( $catalog_orderby_options['menu_order'] );
-        }
-
-        if ( ! wc_review_ratings_enabled() ) {
-            unset( $catalog_orderby_options['rating'] );
-        }
-
-        if ( ! array_key_exists( $orderby, $catalog_orderby_options ) ) {
-            $orderby = current( array_keys( $catalog_orderby_options ) );
-        }
-
+        $orderby_options     = function_exists( 'dokan_store_product_catalog_orderby' ) ? dokan_store_product_catalog_orderby() : array();
         $button_label        = $this->get_settings( 'text' );
         $filter_product      = $this->get_settings( 'filter_product_name' );
         $product_placeholder = $this->get_settings( 'filter_product_name_placeholder' );
@@ -175,10 +152,10 @@ class StoreProductFilter extends Widget_Base {
                     <div id="dokan-store-products-search-result" class="dokan-ajax-store-products-search-result"></div>
                     <input type="submit" name="search_store_products" class="search-store-products dokan-btn-theme" value="<?php echo esc_attr( $button_label ); ?>">
                 <?php endif; ?>
-                <?php if ( 'yes' === $filter_orderby ) : ?>
+                <?php if ( 'yes' === $filter_orderby && is_array( $orderby_options['catalogs'] ) && isset( $orderby_options['orderby'] ) ) : ?>
                     <select name="product_orderby" class="orderby orderby-search" aria-label="<?php esc_attr_e( 'Shop order', 'dokan' ); ?>" onchange='if(this.value != 0) { this.form.submit(); }'>
-                        <?php foreach ( $catalog_orderby_options as $id => $name ) : ?>
-                            <option value="<?php echo esc_attr( $id ); ?>" <?php selected( $orderby, $id ); ?>><?php echo esc_html( $name ); ?></option>
+                        <?php foreach ( $orderby_options['catalogs'] as $id => $name ) : ?>
+                            <option value="<?php echo esc_attr( $id ); ?>" <?php selected( $orderby_options['orderby'], $id ); ?>><?php echo esc_html( $name ); ?></option>
                         <?php endforeach; ?>
                     </select>
                 <?php endif; ?>
