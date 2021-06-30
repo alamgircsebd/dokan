@@ -88,7 +88,7 @@ function dokan_get_staff_id_by_order( $id ) {
         $author     = get_post_field( 'post_author', $product_id );
 
         $arg = array(
-            'number'    => 10000,
+            'number'    => -1,
             'vendor_id' => absint( $author ),
         );
 
@@ -96,7 +96,9 @@ function dokan_get_staff_id_by_order( $id ) {
 
         if ( $vendor_staffs['staffs'] ) {
             foreach ( $vendor_staffs['staffs'] as $staff ) {
-                array_push( $staff_ids, $staff->ID );
+                if ( ! in_array( $staff->ID, $staff_ids, true ) ) {
+                    array_push( $staff_ids, $staff->ID );
+                }
             }
         }
 
